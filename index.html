@@ -10367,7 +10367,79 @@
         if (!p.style.margin) p.style.margin = '16px 0';
       });
 
-      const cleanHtml = tempDiv.innerHTML;
+      // 🌟 [핵심 개선] 스마트 색상 자동 보정 엔진 (Color Contrast Auto-Inversion)
+      // 에디터(다크모드)에서는 흰색(#ffffff) 글씨여야 잘 보이지만, 네이버/티스토리는 흰 바탕이므로
+      // 흰색이나 매우 밝은 색상의 글씨를 네이버/티스토리 전용 선명한 짙은 먹색(#222222)으로 자동 변환합니다!
+      function isBrightColor(val) {
+        if (!val) return false;
+        const s = String(val).trim().toLowerCase();
+        // 대표적인 흰색/밝은색 명칭
+        const brightNames = ['white', '#fff', '#ffffff', '#fafafa', '#f8f9fa', '#f8fafc', '#f1f5f9', '#f3f4f6', '#f3f5f8', '#e2e8f0', '#cbd5e1', '#e5e7eb', '#d1d5db', 'snow', 'ghostwhite', 'whitesmoke', 'ivory'];
+        if (brightNames.includes(s)) return true;
+
+        // Hex (#rrggbb or #rgb)
+        if (s.startsWith('#')) {
+          let hex = s.substring(1);
+          if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+          if (hex.length === 6) {
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+              const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+              return yiq >= 180 || (r > 200 && g > 200 && b > 200);
+            }
+          }
+        }
+
+        // rgb / rgba
+        const rgbMatch = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (rgbMatch) {
+          const r = parseInt(rgbMatch[1], 10);
+          const g = parseInt(rgbMatch[2], 10);
+          const b = parseInt(rgbMatch[3], 10);
+          const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+          return yiq >= 180 || (r > 200 && g > 200 && b > 200);
+        }
+        return false;
+      }
+
+      // (1) 모든 노드를 순회하며 흰색/밝은 글씨를 짙은 먹색(#222222)으로 치환 (단, 빨강, 파랑 등 유채색 강조색은 원본 유지!)
+      const allElements = tempDiv.querySelectorAll('*');
+      allElements.forEach(el => {
+        // 인라인 style.color 검사
+        if (el.style && el.style.color && isBrightColor(el.style.color)) {
+          el.style.color = '#222222';
+        }
+        // <font color="..."> 속성 검사
+        const fontColor = el.getAttribute('color');
+        if (fontColor && isBrightColor(fontColor)) {
+          el.setAttribute('color', '#222222');
+          if (el.style) el.style.color = '#222222';
+        }
+        // 다크모드 배경색 박스가 들어간 경우 밝은 블로그용 스타일로 전환
+        if (el.style && el.style.backgroundColor) {
+          const bg = el.style.backgroundColor;
+          if (bg.includes('rgb(8, 9, 12)') || bg.includes('rgb(17, 22, 34)') || bg.includes('#08090c') || bg.includes('#111622') || bg.includes('#0f172a')) {
+            el.style.backgroundColor = '#f8fafc';
+            el.style.border = '1px solid #e2e8f0';
+            el.style.borderRadius = '8px';
+            el.style.padding = el.style.padding || '12px 16px';
+            el.style.color = '#222222';
+          }
+        }
+      });
+
+      // (2) 텍스트 블록(p, div, li, 제목들)에 기본 본문 색상(#222222) 확실히 보장
+      const textBlocks = tempDiv.querySelectorAll('p, div, li, h1, h2, h3, h4, h5, h6');
+      textBlocks.forEach(el => {
+        if (!el.style.color || isBrightColor(el.style.color)) {
+          el.style.color = '#222222';
+        }
+      });
+
+      // 네이버/티스토리 붙여넣기 최적화 래퍼로 포장
+      const cleanHtml = `<div style="color: #222222; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', '맑은 고딕', helvetica, sans-serif; font-size: 16px; line-height: 1.85;">${tempDiv.innerHTML}</div>`;
       const textContent = editor.innerText;
 
       let success = false;
