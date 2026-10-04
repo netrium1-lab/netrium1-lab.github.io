@@ -80,8 +80,8 @@
     }
   </script>
   
-  <!-- Kakao JavaScript SDK (클라이언트 팝업 로그인 정식 지원) -->
-  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+  <!-- Kakao JavaScript SDK v2 (카카오톡 공유 및 로그인 정식 지원) -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
   
   <!-- 웹 폰트 (Pretendard & 티스토리 표준 한글 서체) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8379,7 +8379,8 @@
     // 기본 칼럼 데이터셋 (정적 fallback & 초기값 - 모든 브라우저 및 카카오톡 100% 노출 보장)
     const initialMagazineArticles = [
       {
-        id: 'mag_living_funeral_best',
+        id: 'mag_1791111944097',
+        aliasIds: ['mag_living_funeral_best'],
         title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
         category: '웰다잉',
         image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
@@ -8709,6 +8710,42 @@
       }
     }
 
+    // 🌟 안전한 기사 검색 엔진 (ID 불일치, alias, 타임스탬프 ID 호환 및 최신 대표글 fallback 100% 보장)
+    function findArticleByIdOrFallback(targetId) {
+      const articles = getStoredArticles();
+      if (!articles || articles.length === 0) return null;
+      if (!targetId) return articles[0];
+
+      // 1) 정확한 ID 완전 일치
+      let found = articles.find(a => a.id === targetId);
+      if (found) return found;
+
+      // 2) aliasIds 배열 내 일치 (예: mag_living_funeral_best <-> mag_1791111944097)
+      found = articles.find(a => Array.isArray(a.aliasIds) && a.aliasIds.includes(targetId));
+      if (found) return found;
+
+      // 3) 생전 장례식 관련 ID 호환
+      if (targetId === 'mag_1791111944097' || targetId === 'mag_living_funeral_best' || targetId.includes('funeral')) {
+        found = articles.find(a => a.id === 'mag_1791111944097' || a.id === 'mag_living_funeral_best' || (a.title && a.title.includes('생전 장례식')));
+        if (found) return found;
+      }
+
+      // 4) 부부 대화 관련 ID 호환
+      if (targetId === 'mag_couple_dialogue_best' || targetId.includes('couple') || targetId.includes('dialogue')) {
+        found = articles.find(a => a.id === 'mag_couple_dialogue_best' || (a.title && a.title.includes('부부')));
+        if (found) return found;
+      }
+
+      // 5) 칠순 / 자서전 관련 ID 호환
+      if (targetId === 'mag_filial_memoir' || targetId.includes('filial') || targetId.includes('memoir')) {
+        found = articles.find(a => a.id === 'mag_filial_memoir' || (a.title && (a.title.includes('184쪽') || a.title.includes('칠순'))));
+        if (found) return found;
+      }
+
+      // 6) fallback: "해당 칼럼 게시글을 찾을 수 없습니다" 경고를 방지하고 항상 최신 메인 대표글을 열어줌
+      return articles[0];
+    }
+
     // 딥링크 생성 헬퍼 (기본 글은 깔끔한 단축 URL, 신규 발행글은 데이터 동기화 파라미터 결합)
     function getArticleShareUrl(id) {
       let baseUrl = window.location.href.split('?')[0].split('#')[0];
@@ -8718,9 +8755,8 @@
       const url = new URL(baseUrl);
       url.searchParams.set('article', id);
 
-      const articles = getStoredArticles();
-      const target = articles.find(a => a.id === id);
-      const isBuiltIn = initialMagazineArticles.some(init => init.id === id);
+      const target = findArticleByIdOrFallback(id);
+      const isBuiltIn = initialMagazineArticles.some(init => init.id === id || (init.aliasIds && init.aliasIds.includes(id)) || (target && (init.id === target.id || (init.aliasIds && init.aliasIds.includes(target.id)))));
 
       // 내장 기본 글이 아닌 신규 발행글인 경우, 다른 브라우저/기기에서도 즉시 열리도록 데이터를 함께 실음
       if (target && !isBuiltIn) {
@@ -8745,21 +8781,21 @@
       const targetId = customId || currentReadingArticleId;
       if (!targetId) return;
 
-      const articles = getStoredArticles();
-      const article = articles.find(a => a.id === targetId);
+      const article = findArticleByIdOrFallback(targetId);
       const articleTitle = article ? article.title : '칼럼';
-      const shareUrl = getArticleShareUrl(targetId);
+      const actualId = article ? article.id : targetId;
+      const shareUrl = getArticleShareUrl(actualId);
       const fullShareMessage = formatArticleShareText(article, shareUrl);
 
       // 클립보드 복사 실행 (3중 방어막)
       if (navigator.clipboard && window.isSecureContext) {
         navigator.clipboard.writeText(fullShareMessage).then(() => {
-          showCopySuccessUi(targetId, articleTitle, shareUrl, fullShareMessage);
+          showCopySuccessUi(actualId, articleTitle, shareUrl, fullShareMessage);
         }).catch(() => {
-          fallbackCopyText(fullShareMessage, targetId, articleTitle, shareUrl);
+          fallbackCopyText(fullShareMessage, actualId, articleTitle, shareUrl);
         });
       } else {
-        fallbackCopyText(fullShareMessage, targetId, articleTitle, shareUrl);
+        fallbackCopyText(fullShareMessage, actualId, articleTitle, shareUrl);
       }
     }
 
@@ -8814,50 +8850,62 @@
       const shareImage = article.image || 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
       const shareText = formatArticleShareText(article, shareUrl);
 
-      // 1. Kakao SDK 공식 공유 시도
+      // 1. 최신 Kakao SDK 공유 시도 (SDK v2의 Share 또는 v1의 Link)
       try {
-        if (window.Kakao && typeof Kakao.isInitialized === 'function' && Kakao.isInitialized() && Kakao.Share) {
-          Kakao.Share.sendDefault({
-            objectType: 'feed',
-            content: {
-              title: shareTitle,
-              description: shareDesc,
-              imageUrl: shareImage,
-              link: {
-                mobileWebUrl: shareUrl,
-                webUrl: shareUrl,
-              },
-            },
-            buttons: [
-              {
-                title: '📖 칼럼 전문 읽기',
+        if (window.Kakao && typeof Kakao.isInitialized === 'function') {
+          if (!Kakao.isInitialized()) {
+            initKakaoSDK();
+          }
+          if (Kakao.isInitialized()) {
+            const shareConfig = {
+              objectType: 'feed',
+              content: {
+                title: shareTitle,
+                description: shareDesc,
+                imageUrl: shareImage,
                 link: {
                   mobileWebUrl: shareUrl,
                   webUrl: shareUrl,
                 },
               },
-            ],
-          });
-          return;
+              buttons: [
+                {
+                  title: '📖 칼럼 전문 읽기',
+                  link: {
+                    mobileWebUrl: shareUrl,
+                    webUrl: shareUrl,
+                  },
+                },
+              ],
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(shareConfig);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(shareConfig);
+              return;
+            }
+          }
         }
       } catch (e) {
         console.warn('[Kakao Share SDK fallback]', e);
       }
 
-      // 2. 카카오톡 웹 공유기 팝업 시도
-      try {
-        const kakaoWebSharer = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
-        const popup = window.open(kakaoWebSharer, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (popupErr) {
-        console.warn('[Kakao Sharer Popup fallback]', popupErr);
-      }
-
-      // 3. 팝업 차단 또는 모바일 환경: 즉시 카톡 메시지 클립보드 자동 복사 및 붙여넣기 안내
+      // 2. SDK 미지원 또는 도메인 제한 환경: 내부 서버 오류를 유발하는 구형 웹팝업 대신 100% 안전한 스마트 클립보드 복사 + 카톡 실행 안내
       copyCurrentArticleLink(targetId);
+
+      // 모바일 기기(스마트폰)인 경우 카카오톡 앱 즉시 오픈 시도
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      if (isMobile) {
+        setTimeout(() => {
+          try {
+            window.location.href = 'kakaotalk://';
+          } catch(e) {}
+        }, 500);
+      }
     }
+
 
     // 🌟 리더 모달(흰색 배경)용 본문 HTML 스마트 정제 엔진 (흰색 글씨를 선명한 #1e293b로 변환)
     function cleanContentForReader(rawHtml) {
@@ -8918,14 +8966,12 @@
     }
 
     function openArticleReader(id, pushHistory = true) {
-      const articles = getStoredArticles();
-      const article = articles.find(a => a.id === id);
+      const article = findArticleByIdOrFallback(id);
       if (!article) {
-        alert('해당 칼럼 게시글을 찾을 수 없습니다.');
         return;
       }
 
-      currentReadingArticleId = id;
+      currentReadingArticleId = article.id;
 
       // 관리자 툴바 노출 제어 (메인 사이트는 일반 방문자용이므로 항상 비노출)
       const adminToolbar = document.getElementById('readerAdminToolbar');

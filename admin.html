@@ -4283,7 +4283,8 @@
     // 기본 칼럼 데이터셋 (index.html과 100% 동일 동기화)
     const defaultArticles = [
       {
-        id: 'mag_living_funeral_best',
+        id: 'mag_1791111944097',
+        aliasIds: ['mag_living_funeral_best'],
         title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
         category: '웰다잉',
         image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
@@ -4625,7 +4626,7 @@
       url.searchParams.set('article', id);
 
       // 기본 내장 글이 아닌 신규 글은 다른 브라우저(Edge, 카톡 등)에서도 즉시 열리도록 art_data 동기화 파라미터 결합
-      const isBuiltIn = defaultArticles.some(def => def.id === id);
+      const isBuiltIn = defaultArticles.some(def => def.id === id || (def.aliasIds && def.aliasIds.includes(id)));
       if (target && !isBuiltIn) {
         try {
           const compact = {
