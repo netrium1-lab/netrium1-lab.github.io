@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>여백과 결 | 통합 관리자 홈 (Admin Console)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1740,6 +1743,13 @@
       </div>
 
       <nav class="sidebar-nav">
+        <!-- AI 자동 글쓰기 스튜디오 전용 퀵 버튼 -->
+        <div style="padding: 0 10px 10px;">
+          <button type="button" onclick="openAiArticleGeneratorModal()" style="width: 100%; padding: 11px 14px; border-radius: 12px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-size: 0.88rem; font-weight: 850; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4); transition: transform 0.15s ease;">
+            <span>🪄 AI 자동 글쓰기</span>
+          </button>
+        </div>
+
         <button class="nav-tab-btn active" onclick="switchTab('tabSettings', this)">
           <span class="nav-tab-icon">⚙️</span>
           <span>환경설정 & 채널연동</span>
@@ -1992,13 +2002,13 @@
               <div class="stat-label">메인 전면 대표글 노출 중</div>
             </div>
           </div>
-          <div class="stat-card" style="display: flex; align-items: center; justify-content: space-between;">
+          <div class="stat-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
             <div>
-              <div style="font-size: 0.84rem; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">티스토리 + FIT-FLUENCE</div>
-              <div style="font-size: 1.05rem; font-weight: 850; color: var(--text-main);">프리미엄 글쓰기</div>
+              <div style="font-size: 0.84rem; color: #4338ca; font-weight: 750; margin-bottom: 4px;">웹·유튜브 스마트 글쓰기</div>
+              <div style="font-size: 1.05rem; font-weight: 850; color: #1e1b4b;">AI 맞춤 자동 글쓰기</div>
             </div>
-            <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 10px 18px; font-size: 0.92rem; background: linear-gradient(135deg, #2c5f46 0%, #1e4532 100%); box-shadow: 0 4px 12px rgba(44, 95, 70, 0.35);">
-              <span>✍️</span> 새 칼럼 작성하기
+            <button type="button" class="btn-save-setting" onclick="openAiArticleGeneratorModal()" style="padding: 10px 18px; font-size: 0.92rem; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-weight: 850; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+              <span>🪄</span> AI 글쓰기 시작
             </button>
           </div>
         </div>
@@ -2016,11 +2026,14 @@
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-save-setting" onclick="openAiArticleGeneratorModal()" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; padding: 9px 18px; font-size: 0.88rem; font-weight: 850; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);">
+                <span>🪄</span> AI 자동 글쓰기
+              </button>
+              <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 9px 18px; font-size: 0.88rem; background: #2c5f46; color: #fff;">
+                <span>+</span> 직접 글쓰기
+              </button>
               <button type="button" class="btn-save-setting" onclick="switchTab('tabSettings')" style="background: #f0fdf4; color: #047857; border: 1.5px solid #a7f3d0; padding: 9px 16px; font-size: 0.88rem; font-weight: 800;">
                 <span>⚙️ 블로그 연동 설정</span>
-              </button>
-              <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 9px 18px; font-size: 0.88rem;">
-                <span>+</span> 새 글 작성
               </button>
             </div>
           </div>
@@ -5603,6 +5616,14 @@
       updateMainThumbIndicator();
 
       closeAiArticleGeneratorModal();
+
+      // 에디터 모달 열기 보장 (어디서 실행했든 즉시 에디터 화면으로 전환)
+      const editorModal = document.getElementById('tistoryEditorModal');
+      if (editorModal && !editorModal.classList.contains('open')) {
+        editorModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
       alert(`🎉 [${p.title}]\n\n• AI 칼럼 본문이 에디터에 채워졌습니다!\n• 좌측 [사진 보관함]에 글 컨셉에 딱 맞는 감동 사진 5장이 담겼습니다!\n  (원하는 사진을 클릭해 [⭐ 대표]로 지정하거나 본문에 삽입하세요.)\n\n내용을 확인하신 후 상단의 [🚀 발행하기]를 누르시면 완료됩니다.`);
     }
 
@@ -5880,6 +5901,13 @@
       }
 
       closeAiArticleGeneratorModal();
+
+      // 에디터 모달 열기 보장 (어디서 실행했든 즉시 에디터 화면으로 전환)
+      const editorModal = document.getElementById('tistoryEditorModal');
+      if (editorModal && !editorModal.classList.contains('open')) {
+        editorModal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
 
       let successMsg = `🎉 [${generatedTitle}]\n\n• 맞춤 칼럼 본문이 에디터에 성공적으로 집필되었습니다!\n`;
       if (ytId) {
