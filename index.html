@@ -8475,7 +8475,7 @@
         id: 'mag_filial_memoir',
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         category: '웰라이프',
-        image: 'https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80',
+        image: 'images/showcase-senior-memoir.jpg',
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
         content: `
           <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
@@ -8485,9 +8485,19 @@
             "자식이 부모에게 드릴 수 있는 가장 위대한 효도는, 부모님이 걸어오신 험난했던 인생의 모든 굽이굽이를 '눈부신 역사'로 인정하고 기록해 드리는 것입니다."
           </blockquote>
 
+          <figure style="margin: 28px 0; text-align: center;">
+            <img src="images/showcase-senior-memoir.jpg" alt="자서전을 읽으며 지난 세월을 미소로 회상하시는 아버지" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ "내 70년 인생이 결코 헛되지 않았구나" - 완성된 자서전을 받아 드신 아버지의 온화한 미소</figcaption>
+          </figure>
+
           <h3>1. "내 인생에 쓸 게 뭐가 있냐" 하시던 아버지의 눈물</h3>
           <p>처음 자서전 제작 이야기를 꺼냈을 때, 아버지는 손사래를 치셨습니다. "대통령이나 재벌도 아닌데 평범한 내가 무슨 자서전이냐"고 하셨지요. 하지만 전문 구술 코칭스태프가 찾아와 옛날 흑백 사진첩을 한 장씩 넘기며 질문을 던지자, 아버지의 눈빛이 달라지기 시작했습니다.</p>
           <p>어린 시절 고향 마을의 풍경, 어머니를 처음 만났던 설레던 날, 자식들 등록금을 마련하려 밤낮없이 뛰었던 치열한 일터의 기억까지... 아버지는 평생 가슴에만 묻어두었던 이야기들을 밤이 깊도록 털어놓으시며 소년처럼 웃으시기도 하고, 남몰래 눈시울을 붉히시기도 했습니다.</p>
+
+          <figure style="margin: 28px 0; text-align: center;">
+            <img src="images/showcase-senior-happy-book.jpg" alt="나의 인생 이야기 자서전 책을 가슴에 품고 감동하시는 어머니" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 한 권의 책으로 빚어진 삶의 궤적을 소중히 품에 안은 부모님의 가슴 벅찬 감동</figcaption>
+          </figure>
 
           <h3>2. 4주간의 구술 녹음과 184쪽의 디지털 자서전 완성</h3>
           <p>녹음된 구술 음성은 AI 음성 텍스트 변환과 전문 에디터의 세심한 윤문을 거쳐 한 권의 품격 있는 책으로 빚어졌습니다. 낡은 앨범 속 빛바랜 사진들은 디지털로 복원되어 고화질로 실렸고, 아버지가 자식들과 손주들에게 남기고 싶은 따뜻한 인생 교훈과 당부의 말씀이 '인생 후반전 선언문'이라는 챕터로 갈무리되었습니다.</p>
@@ -8587,7 +8597,7 @@
     }
 
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
-    const CURRENT_ARTICLES_VERSION = '20261004_v5_restored_living_funeral_final';
+    const CURRENT_ARTICLES_VERSION = '20261004_v6_fix_photo_and_featured_toggle';
 
     // 🌟 기사 데이터 로드 및 저장 (모든 브라우저·카카오톡 동일 최신 동기화 보장)
     function getStoredArticles() {
@@ -8614,8 +8624,10 @@
           if (existIdx === -1) {
             list.splice(idx, 0, JSON.parse(JSON.stringify(initArt)));
           } else {
-            // 대표글 지정 및 내용/이미지 최신 상태 동기화
-            list[existIdx].isFeatured = true;
+            // 사용자가 설정한 isFeatured(전면 노출 여부)를 존중 (undefined인 경우만 기본값 적용)
+            if (list[existIdx].isFeatured === undefined) {
+              list[existIdx].isFeatured = (initArt.isFeatured !== false);
+            }
             list[existIdx].id = initArt.id;
             if (initArt.image) list[existIdx].image = initArt.image;
             if (initArt.readTime) list[existIdx].readTime = initArt.readTime;
@@ -8676,7 +8688,7 @@
         <article class="magazine-card" onclick="openArticleReader('${article.id}')" title="클릭하여 전문 읽기">
           ${article.image ? `
             <div class="mag-card-img-wrap">
-              <img src="${escapeHtml(article.image)}" onerror="if(this.src&&this.src.includes('maxresdefault.jpg')){this.src=this.src.replace('maxresdefault.jpg','hqdefault.jpg');}" alt="${escapeHtml(article.title)}" loading="lazy">
+              <img src="${escapeHtml(article.image)}" onerror="this.onerror=null; this.src='images/showcase-senior-memoir.jpg';" alt="${escapeHtml(article.title)}" loading="lazy">
             </div>
           ` : ''}
           <div>
@@ -9210,7 +9222,7 @@
       listContainer.innerHTML = filtered.map(a => `
         <div class="board-item-row" onclick="openArticleReader('${a.id}')" style="cursor: pointer;">
           ${a.image ? `
-            <img src="${escapeHtml(a.image)}" onerror="if(this.src&&this.src.includes('maxresdefault.jpg')){this.src=this.src.replace('maxresdefault.jpg','hqdefault.jpg');}" alt="대표사진" style="width: 68px; height: 52px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--border-color);">
+            <img src="${escapeHtml(a.image)}" onerror="this.onerror=null; this.src='images/showcase-senior-memoir.jpg';" alt="대표사진" style="width: 68px; height: 52px; object-fit: cover; border-radius: 8px; flex-shrink: 0; border: 1px solid var(--border-color);">
           ` : ''}
           <div class="board-item-left" style="flex: 1;">
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
