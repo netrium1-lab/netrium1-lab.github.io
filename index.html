@@ -8376,17 +8376,91 @@
     // 6. 여백의 서재 CMS 엔진 (게시판, 프리미엄 에디터, 뷰어, 사진 보관함)
     // =========================================================================
 
-    // 기본 칼럼 데이터셋 (정적 fallback & 초기값 - 품격 있는 웰라이프 대표 이미지 탑재)
+    // 기본 칼럼 데이터셋 (정적 fallback & 초기값 - 모든 브라우저 및 카카오톡 100% 노출 보장)
     const initialMagazineArticles = [
+      {
+        id: 'mag_living_funeral_best',
+        title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
+        category: '웰다잉',
+        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80',
+        excerpt: '"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다." 평생을 살아오며 빚진 고마움을 살아있을 때 온전히 전하는 새로운 고별 문화.',
+        content: `
+          <p class="article-lead">"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 따스한 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
+          <p>76세 은퇴 교사 최동호 씨의 생전 고별 잔치에서 낭독된 감사의 고백입니다. 3년 전 폐암 판정을 받은 동호 씨는 고통스러운 연명 치료에 매달리는 대신, 평생 동안 자신의 곁을 지켜준 소중한 가족과 지인들을 초대해 따뜻한 음식과 차를 대접하는 '인생 감사 축제'를 열었습니다. 눈물과 곡소리로 가득 찬 슬픈 장례식이 아니라, 서로의 손을 맞잡고 지난 삶의 눈부신 추억을 회상하는 유쾌하고 따뜻한 환송의 자리였습니다.</p>
+
+          <blockquote>"떠난 뒤 영전에 바쳐지는 백 송이의 국화꽃보다, 살아 숨 쉴 때 마주 잡는 따뜻한 손과 '그동안 참 고마웠다'는 한마디의 포옹이 백만 배 더 눈부십니다."</blockquote>
+
+          <h3>1. "내 마지막 날을 내가 준비한다" - 일본에서 시작된 생전 장례식의 미학</h3>
+          <p>초고령사회에 먼저 진입한 일본에서는 이미 수년 전부터 당사자가 건강할 때 지인들을 초대해 감사를 전하는 '생전장(生前葬)' 문화가 대세로 자리 잡았습니다. 내가 주인공인 자리인데 정작 나는 관 속에 누워 아무것도 보지 못하고, 유족들은 조문객을 맞느라 뜬눈으로 밤을 새우며 슬픔에 지쳐 쓰러지는 기존 장례의 모순을 극복하기 위함입니다.</p>
+          <p>생전 장례식에 참석한 조문객들은 검은 상복 대신 평상복이나 화사한 옷을 입고 옵니다. 주인공이 직접 선곡한 잔잔한 재즈 음악이 흐르고, 스크린에는 고인의 유년 시절부터 은퇴까지의 빛바랜 흑백 사진들이 파노라마처럼 펼쳐집니다.</p>
+
+          <h3>2. 눈물의 감사 편지와 따뜻한 찻잔의 온기</h3>
+          <p>동호 씨는 아내와 두 자녀, 그리고 평생의 벗들에게 직접 쓴 손편지를 한 장씩 낭독했습니다. <em>"가난했던 청춘에 나를 믿고 시집와 줘서 고마웠소. 못난 아비 밑에서 반듯하게 자라준 아이들아, 너희는 내 삶의 가장 찬란한 기적이었단다."</em> 편지를 읽어 내려가는 동안 잔치에 모인 모든 이들의 눈가에 눈물이 맺혔고, 곳곳에서 따뜻한 포옹이 이어졌습니다.</p>
+
+          <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px;">
+            <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 아름다운 생전 장례식 5단계 준비 가이드</h4>
+            <ul style="margin: 0; padding-left: 18px; font-size: 0.92rem; color: #334155; line-height: 1.7;">
+              <li><strong>초대 명단 작성:</strong> 평생 고마웠던 가족, 친구, 동료 20~30명 선별.</li>
+              <li><strong>인생 사진 슬라이드 제작:</strong> 청춘부터 현재까지의 눈부신 순간 디지털 복원.</li>
+              <li><strong>감사 손편지 쓰기:</strong> 남겨질 가족과 벗들에게 전하는 솔직한 고백.</li>
+              <li><strong>부의금 없는 다과회:</strong> 조의금 대신 정갈한 차와 음식을 나누는 파티.</li>
+              <li><strong>엔딩노트와 유언 갈무리:</strong> 사후 절차와 사전연명의료 의향서 가족 공유.</li>
+            </ul>
+          </div>
+
+          <h3>3. 두려움을 지우고 남은 날을 선물로 바꾸는 지혜</h3>
+          <p>생전 고별 파티를 마친 동호 씨는 말했습니다. <em>"평생 마음에 빚지고 살았던 고마운 인사를 내 입으로 다 전하고 나니, 죽음에 대한 막연한 두려움이 씻은 듯 사라졌습니다. 이제 매일 아침 눈을 뜨는 하루하루가 덤으로 주어진 축복 같습니다."</em> 사랑하는 이들의 온기를 느낄 수 있는 지금, 당신만의 따뜻한 감사의 기술을 준비해 보세요.</p>
+        `,
+        readTime: '읽는 시간 4분',
+        date: '2026.10.04',
+        isFeatured: true
+      },
+      {
+        id: 'mag_couple_dialogue_best',
+        title: "40년을 함께 살았어도 낯선 배우자, 황혼에 다시 시작하는 다정한 대화법",
+        category: '비움과 갈무리',
+        image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80',
+        excerpt: "40년이라는 세월을 머리 파뿌리가 되도록 함께 살았건만, 자식들을 다 떠나보내고 집안에 단둘이 남겨진 은퇴 후의 풍경은 생각보다 낯설고 서늘합니다. 은퇴 부부 갈등을 녹이는 '독립 서재'와 'I-Message' 대화법.",
+        content: `
+          <p class="article-lead">"'당신 종일 집에 있으니까 숨이 막혀 죽을 것 같아.' 40년을 함께 살아놓고 왜 우리는 하루 세 끼 밥상 앞에서 원수처럼 으르렁거릴까요?"</p>
+          <p>66세 동갑내기 오정식·박현주 부부의 절절한 고백입니다. 남편의 은퇴 후 하루 24시간을 한 지붕 아래서 부대끼기 시작하면서 부부 싸움이 폭발했습니다. "오늘 점심은 뭐 줄 거야?"라는 남편의 무심한 한마디에 아내는 가슴에 불이 났고, "내가 평생 돈 벌어다 준 죄밖에 더 있냐"는 남편의 반박에 집안은 살얼음판이 되었습니다. 졸혼이나 황혼 이혼 서류를 뽑아놓고 울던 현주 씨였습니다.</p>
+
+          <blockquote>"황혼의 부부는 같은 곳을 바라보는 전우가 아닙니다. 서로의 시린 등을 가만히 데워주고 쓸쓸함을 품어주는 생애 마지막 안식처여야 합니다."</blockquote>
+
+          <h3>1. '당신 때문'이라는 비난 대신 'I-Message(나 전달법)'</h3>
+          <p>부부 상담을 받은 두 사람은 말문을 바꾸었습니다. "당신은 왜 손가락 하나 까딱 안 해!"라는 공격형 말투를 멈추고, "당신이 하루 세 끼 밥을 찾으니 내가 하루 종일 부엌에 갇힌 것 같아 마음이 지치고 서운해요"라고 솔직한 속마음을 고백했습니다. 아내의 진심 어린 눈물을 본 남편 정식 씨는 충격을 받았고, 그날 이후 아침 식사와 설거지를 스스로 도맡기 시작했습니다.</p>
+
+          <h3>2. 24시간 밀착을 끝내는 '각자의 독립 서재와 시간'</h3>
+          <p>부부라고 해서 모든 시간을 함께할 필요는 없습니다. 작은 방 하나를 남편의 서재 겸 음악 감상실로 꾸미고, 거실은 아내의 자수와 차 공간으로 분리했습니다. 오전에는 각자의 공간에서 책을 읽거나 산책을 다녀오고, 오후 4시 티타임에만 만나 차 한 잔을 나누자 서로에 대한 애틋함이 마법처럼 되살아났습니다.</p>
+
+          <h3>3. 하루 한 번 배우자의 수고에 "고마워요" 표현하기</h3>
+          <p>"된장찌개 참 맛있네", "분리수거해 줘서 고마워요." 당연하게 여겼던 일상의 작은 수고에 감사를 표현하자 차가웠던 집안 공기에 봄볕 같은 온기가 돌기 시작했습니다.</p>
+
+          <div style="margin: 28px 0; padding: 22px; background: #fffbeb; border-left: 4px solid #d97706; border-radius: 8px;">
+            <h4 style="margin: 0 0 8px; color: #92400e; font-size: 1.05rem; font-weight: 800;">💡 황혼 부부 갈등을 녹이는 3대 골든 룰</h4>
+            <ul style="margin: 0; padding-left: 18px; font-size: 0.92rem; color: #334155; line-height: 1.7;">
+              <li><strong>옛날 서운한 일 소환 금지:</strong> 30년 전 시댁 일이나 과거 실수는 영원히 묻어두세요.</li>
+              <li><strong>말꼬리 잡기 멈추기:</strong> 배우자가 화를 낼 땐 3초간 심호흡하고 침묵으로 받아내기.</li>
+              <li><strong>일주일에 하루는 '각자 데이':</strong> 서로에게 간섭 없이 온전히 자유로운 하루를 허락하기.</li>
+            </ul>
+          </div>
+
+          <h3>다시 손잡고 걷는 황혼의 오솔길</h3>
+          <p>"40년 만에 아내의 손을 다시 잡았는데, 그 손이 참 따뜻하고 고마웠습니다." 정식 씨 부부는 이제 저녁마다 공원 손을 잡고 산책합니다. 젊은 날의 뜨거움보다 더 깊고 은은한 황혼의 다정한 동행, 오늘 저녁 배우자에게 따뜻한 차 한 잔을 건네보세요.</p>
+        `,
+        readTime: '읽는 시간 4분',
+        date: '2026.10.02',
+        isFeatured: true
+      },
       {
         id: 'mag_filial_memoir',
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         category: '웰라이프',
-        image: 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg',
+        image: 'https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80',
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
         content: `
-          <p>"아버지 칠순 때 무엇을 해드려야 할까?"</p>
-          <p>형제들과 몇 달을 고민했습니다. 고급 한정식집에서의 식사, 현금 돈 봉투, 해외여행... 모두 좋은 선물이었지만 며칠 지나면 기억 속에서 희미해질 일회성 이벤트에 불과하다는 아쉬움이 남았습니다. 평생을 우리 삼 남매를 위해 묵묵히 헌신해 오신 아버지의 삶에 '진짜 가치 있는 헌정'을 해드리고 싶었습니다.</p>
+          <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
+          <p>43세 직장인 박은정 씨의 가슴 먹먹한 고백입니다. 지난해 아버지의 칠순을 앞두고 삼 남매는 몇 달 동안 고민에 빠졌습니다. 고급 호텔 뷔페, 명품 안마의자, 두툼한 돈 봉투... 모두 그럴듯한 선물이었지만, 며칠만 지나면 기억 속에서 희미해질 '일회성 소비'에 불과하다는 아쉬움이 떠나지 않았습니다. 평생을 우리 삼 남매의 뒷바라지를 위해 묵묵히 희생해 오신 아버지의 삶에 진짜 보답할 수 있는 '생애 단 하나의 헌정'을 해드리고 싶었습니다.</p>
           
           <blockquote>
             "자식이 부모에게 드릴 수 있는 가장 위대한 효도는, 부모님이 걸어오신 험난했던 인생의 모든 굽이굽이를 '눈부신 역사'로 인정하고 기록해 드리는 것입니다."
@@ -8403,7 +8477,7 @@
           <p>칠순 당일, 양장본으로 제작된 184쪽의 자서전을 보자기에 싸서 건네드렸습니다. 책 표지에 박힌 본인의 존함과 사진을 어루만지시던 아버지의 손이 파르르 떨렸습니다. 손주들이 할아버지의 어린 시절 이야기를 소리 내어 읽자, 온 가족의 눈가에 눈물이 맺혔습니다.</p>
           <p>그날 아버지는 제 손을 꼭 잡고 말씀하셨습니다. <strong>"내가 살아온 70년 세월이 결코 헛되지 않았구나. 내 평생 받은 선물 중 가장 눈부시고 자랑스럽다."</strong></p>
 
-          <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px; color: #1e293b;">
+          <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px;">
             <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 부모님의 세월이 사라지기 전에, 이야기를 기록해 주세요</h4>
             <p style="margin: 0; font-size: 0.94rem; color: #334155; line-height: 1.65;">
               시간은 부모님을 기다려주지 않습니다. 부모님의 목소리와 온기가 남아있는 지금, 부모님의 찬란했던 인생의 결을 여백과 결 디지털 자서전으로 남겨보세요.
@@ -8438,29 +8512,7 @@
         `,
         readTime: '읽는 시간 3분',
         date: '2026.09.25',
-        isFeatured: true
-      },
-      {
-        id: 'mag_2',
-        title: "눈물 대신 웃음으로 건네는 인사, 일본의 '생전 장례식'",
-        category: '웰다잉',
-        image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=75',
-        excerpt: "내가 살아있을 때 소중한 사람들을 초대해 맛있는 음식을 대접하고 고마움을 전하는 인생 감사 파티의 품격 있는 미학.",
-        content: `
-          <p>내가 세상을 떠난 뒤, 나는 정작 볼 수도 들을 수도 없는 엄숙하고 슬픈 장례식 대신 살아 숨 쉬며 온전한 정신일 때 소중한 이들을 초대해 맛있는 음식을 나누는 문화가 선진국을 중심으로 확산되고 있습니다. 일본에서 시작된 '생전 장례식(生前葬)', 혹은 '인생 감사 축제'입니다.</p>
-          
-          <blockquote>
-            "떠난 후에 바쳐지는 백 송이의 국화꽃보다, 살아있을 때 마주 잡는 따뜻한 손과 '고마웠다'는 한마디의 포옹이 훨씬 눈부십니다."
-          </blockquote>
-          
-          <h3>슬픔을 지우고 감사를 채우는 파티</h3>
-          <p>생전 장례식의 핵심은 눈물과 슬픔이 아닙니다. 내가 살아온 여정에서 힘이 되어준 친구, 동료, 가족들을 초대해 내가 좋아하는 재즈 음악을 틀고, 함께 와인 한 잔을 기울이며 지난 추억을 회상하는 유쾌한 축제입니다.</p>
-          
-          <p>참석자들은 평상복이나 화사한 옷을 입고 오며, 주인공은 각 사람에게 자신이 직접 쓴 감사 편지를 낭독합니다. 이런 자리를 가진 이들은 하나같이 "남은 삶에 대한 두려움이 사라지고, 하루하루가 선물처럼 느껴진다"고 고백합니다.</p>
-        `,
-        readTime: '읽는 시간 4분',
-        date: '2026.09.24',
-        isFeatured: true
+        isFeatured: false
       },
       {
         id: 'mag_3',
@@ -8483,7 +8535,7 @@
         `,
         readTime: '읽는 시간 5분',
         date: '2026.09.23',
-        isFeatured: true
+        isFeatured: false
       },
       {
         id: 'mag_4',
@@ -8515,41 +8567,48 @@
       return '비움과 갈무리';
     }
 
-    // 기사 데이터 로드 및 저장 (3대 카테고리로 자동 마이그레이션)
+    // 🌟 기사 데이터 로드 및 저장 (모든 브라우저·카카오톡 동일 최신 동기화 보장)
     function getStoredArticles() {
       const stored = localStorage.getItem('yebaek_magazine_articles');
+      let list = [];
       if (stored) {
         try {
-          const list = JSON.parse(stored);
-          let migrated = false;
-          list.forEach(item => {
-            if (!VALID_MAGAZINE_CATEGORIES.includes(item.category)) {
-              item.category = normalizeMagazineCategory(item.category);
-              migrated = true;
-            }
-          });
-          list.forEach(item => {
-            if (item.content && (item.content.includes('var(--text-primary)') || item.content.includes('var(--text-secondary)'))) {
-              item.content = item.content.replace(/var\(--text-primary\)/g, '#0f172a').replace(/var\(--text-secondary\)/g, '#334155');
-              migrated = true;
-            }
-          });
-          initialMagazineArticles.forEach(initArt => {
-            if (!list.some(item => item.id === initArt.id)) {
-              list.unshift(initArt);
-              migrated = true;
-            }
-          });
-          if (migrated) {
-            localStorage.setItem('yebaek_magazine_articles', JSON.stringify(list));
-          }
-          return list;
+          list = JSON.parse(stored);
         } catch (e) {
           console.error('기사 데이터 파싱 오류:', e);
         }
       }
-      localStorage.setItem('yebaek_magazine_articles', JSON.stringify(initialMagazineArticles));
-      return initialMagazineArticles;
+
+      if (!Array.isArray(list) || list.length === 0) {
+        list = JSON.parse(JSON.stringify(initialMagazineArticles));
+      } else {
+        // 🌟 [핵심] 신규 대표 칼럼(생전 장례식, 40년 부부 대화, 칠순 서재 등)이 기존 캐시에 없으면 최상단에 자동 결합!
+        initialMagazineArticles.forEach((initArt, idx) => {
+          const existIdx = list.findIndex(item => item.id === initArt.id || item.title === initArt.title);
+          if (existIdx === -1) {
+            list.splice(idx, 0, JSON.parse(JSON.stringify(initArt)));
+          } else {
+            // 대표글 지정 및 이미지 최신 상태 동기화
+            if (initArt.isFeatured) list[existIdx].isFeatured = true;
+            if (initArt.image && (!list[existIdx].image || list[existIdx].image.includes('unsplash.com/photo-1511895426328'))) {
+              list[existIdx].image = initArt.image;
+            }
+          }
+        });
+      }
+
+      // 카테고리 및 다크모드 텍스트 정제
+      list.forEach(item => {
+        if (!VALID_MAGAZINE_CATEGORIES.includes(item.category)) {
+          item.category = normalizeMagazineCategory(item.category);
+        }
+        if (item.content && (item.content.includes('var(--text-primary)') || item.content.includes('var(--text-secondary)'))) {
+          item.content = item.content.replace(/var\(--text-primary\)/g, '#0f172a').replace(/var\(--text-secondary\)/g, '#334155');
+        }
+      });
+
+      localStorage.setItem('yebaek_magazine_articles', JSON.stringify(list));
+      return list;
     }
 
     function saveArticles(list) {
@@ -8612,14 +8671,76 @@
     let currentReadingArticleId = null;
     const defaultPageTitle = '여백과 결, 리셋 아카이브 | 인생 후반전 라이프 리셋 & 디지털 자서전';
 
-    // 딥링크 생성 헬퍼
-    function getArticleShareUrl(id) {
-      const currentUrl = new URL(window.location.href);
-      currentUrl.searchParams.set('article', id);
-      return currentUrl.toString();
+    // 🌟 칼럼 데이터 URL 패키징 (크로스 브라우저 & 카카오톡 자동 동기화용)
+    function encodeArticleData(article) {
+      try {
+        const compact = {
+          id: article.id,
+          title: article.title,
+          category: article.category,
+          image: article.image || '',
+          excerpt: article.excerpt || '',
+          content: article.content || '',
+          readTime: article.readTime || '읽는 시간 3분',
+          date: article.date || '',
+          isFeatured: true
+        };
+        const jsonStr = JSON.stringify(compact);
+        return encodeURIComponent(btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1))));
+      } catch (e) {
+        console.warn('기사 데이터 인코딩 생략:', e);
+        return '';
+      }
     }
 
-    // 칼럼 주소 클립보드 복사
+    function decodeArticleData(encodedStr) {
+      if (!encodedStr) return null;
+      try {
+        const raw = decodeURIComponent(encodedStr);
+        const jsonStr = decodeURIComponent(Array.prototype.map.call(atob(raw), c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+        return JSON.parse(jsonStr);
+      } catch (e) {
+        try {
+          return JSON.parse(decodeURIComponent(encodedStr));
+        } catch (e2) {
+          console.warn('기사 데이터 디코딩 실패:', e2);
+          return null;
+        }
+      }
+    }
+
+    // 딥링크 생성 헬퍼 (기본 글은 깔끔한 단축 URL, 신규 발행글은 데이터 동기화 파라미터 결합)
+    function getArticleShareUrl(id) {
+      let baseUrl = window.location.href.split('?')[0].split('#')[0];
+      if (baseUrl.endsWith('admin.html')) {
+        baseUrl = baseUrl.replace(/admin\.html$/, 'index.html');
+      }
+      const url = new URL(baseUrl);
+      url.searchParams.set('article', id);
+
+      const articles = getStoredArticles();
+      const target = articles.find(a => a.id === id);
+      const isBuiltIn = initialMagazineArticles.some(init => init.id === id);
+
+      // 내장 기본 글이 아닌 신규 발행글인 경우, 다른 브라우저/기기에서도 즉시 열리도록 데이터를 함께 실음
+      if (target && !isBuiltIn) {
+        const encData = encodeArticleData(target);
+        if (encData && encData.length < 3800) {
+          url.searchParams.set('art_data', encData);
+        }
+      }
+
+      return url.toString();
+    }
+
+    // 카카오톡 및 SNS 공유용 정갈한 안내문 생성기
+    function formatArticleShareText(article, shareUrl) {
+      const title = article ? article.title : '여백과 결 칼럼';
+      const excerpt = article && article.excerpt ? `"${article.excerpt}"\n\n` : '';
+      return `[여백과 결 칼럼] 🌿 ${title}\n\n${excerpt}👉 칼럼 전문 편안하게 읽기:\n${shareUrl}`;
+    }
+
+    // 칼럼 주소 및 카톡 메시지 클립보드 복사
     function copyCurrentArticleLink(customId) {
       const targetId = customId || currentReadingArticleId;
       if (!targetId) return;
@@ -8628,37 +8749,43 @@
       const article = articles.find(a => a.id === targetId);
       const articleTitle = article ? article.title : '칼럼';
       const shareUrl = getArticleShareUrl(targetId);
+      const fullShareMessage = formatArticleShareText(article, shareUrl);
 
-      // 클립보드 복사
+      // 클립보드 복사 실행 (3중 방어막)
       if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(shareUrl).then(() => {
-          showCopySuccessUi(targetId, articleTitle, shareUrl);
+        navigator.clipboard.writeText(fullShareMessage).then(() => {
+          showCopySuccessUi(targetId, articleTitle, shareUrl, fullShareMessage);
         }).catch(() => {
-          fallbackCopyText(shareUrl, targetId, articleTitle);
+          fallbackCopyText(fullShareMessage, targetId, articleTitle, shareUrl);
         });
       } else {
-        fallbackCopyText(shareUrl, targetId, articleTitle);
+        fallbackCopyText(fullShareMessage, targetId, articleTitle, shareUrl);
       }
     }
 
-    function fallbackCopyText(text, targetId, articleTitle) {
+    function fallbackCopyText(text, targetId, articleTitle, shareUrl) {
       const tempTextArea = document.createElement('textarea');
       tempTextArea.value = text;
       tempTextArea.style.position = 'fixed';
+      tempTextArea.style.left = '-9999px';
       tempTextArea.style.top = '-9999px';
       document.body.appendChild(tempTextArea);
       tempTextArea.focus();
       tempTextArea.select();
       try {
-        document.execCommand('copy');
-        showCopySuccessUi(targetId, articleTitle, text);
+        const successful = document.execCommand('copy');
+        if (successful) {
+          showCopySuccessUi(targetId, articleTitle, shareUrl, text);
+        } else {
+          prompt('아래 공유 메시지를 복사(Ctrl+C)하여 카톡에 붙여넣으세요:', text);
+        }
       } catch (err) {
-        prompt('아래 링크를 복사하여 공유하세요 (Ctrl+C):', text);
+        prompt('아래 공유 메시지를 복사(Ctrl+C)하여 카톡에 붙여넣으세요:', text);
       }
       document.body.removeChild(tempTextArea);
     }
 
-    function showCopySuccessUi(targetId, articleTitle, shareUrl) {
+    function showCopySuccessUi(targetId, articleTitle, shareUrl, fullText) {
       // 버튼 텍스트 일시 전환
       const btnTop = document.getElementById('btnCopyArticleTop');
       const btnBottom = document.getElementById('btnCopyArticleBottom');
@@ -8667,12 +8794,12 @@
       setTimeout(() => {
         if (btnTop) btnTop.innerHTML = '<span>🔗</span> 주소 복사';
         if (btnBottom) btnBottom.innerHTML = '<span>🔗</span> 글 링크 복사';
-      }, 2000);
+      }, 2500);
 
-      alert(`📋 [${articleTitle}]\n\n전용 공유 링크가 복사되었습니다!\n블로그, 카페, 카카오톡 등에 붙여넣어 홍보해보세요.\n\n🔗 ${shareUrl}`);
+      alert(`📋 [${articleTitle}]\n\n카카오톡 전용 공유 메시지가 복사되었습니다!\n카카오톡 대화방에 들어가서 [붙여넣기]하시면 예쁜 미리보기와 함께 바로 전송됩니다.\n\n🔗 ${shareUrl}`);
     }
 
-    // 카카오톡 공유
+    // 카카오톡 공유 (3중 안전 전송망)
     function shareCurrentArticleKakao(customId) {
       const targetId = customId || currentReadingArticleId;
       if (!targetId) return;
@@ -8685,10 +8812,11 @@
       const shareTitle = article.title;
       const shareDesc = article.excerpt || '여백과 결에서 전하는 인생 2막 라이프 리셋 칼럼입니다.';
       const shareImage = article.image || 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      const shareText = formatArticleShareText(article, shareUrl);
 
-      // 1. Kakao SDK를 통한 공식 공유 시도
+      // 1. Kakao SDK 공식 공유 시도
       try {
-        if (window.Kakao && Kakao.isInitialized() && Kakao.Share) {
+        if (window.Kakao && typeof Kakao.isInitialized === 'function' && Kakao.isInitialized() && Kakao.Share) {
           Kakao.Share.sendDefault({
             objectType: 'feed',
             content: {
@@ -8713,16 +8841,22 @@
           return;
         }
       } catch (e) {
-        console.warn('Kakao Share API fallbacking:', e);
+        console.warn('[Kakao Share SDK fallback]', e);
       }
 
-      // 2. Kakao SDK 미초기화 시 브라우저 카카오 공유 팝업 또는 링크 복사 fallback
-      const kakaoWebSharer = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
-      const popup = window.open(kakaoWebSharer, 'kakao_share', 'width=500,height=600,resizable=yes');
-      if (!popup || popup.closed || typeof popup.closed === 'undefined') {
-        // 팝업 차단된 경우 링크 복사로 유도
-        copyCurrentArticleLink(targetId);
+      // 2. 카카오톡 웹 공유기 팝업 시도
+      try {
+        const kakaoWebSharer = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
+        const popup = window.open(kakaoWebSharer, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (popupErr) {
+        console.warn('[Kakao Sharer Popup fallback]', popupErr);
       }
+
+      // 3. 팝업 차단 또는 모바일 환경: 즉시 카톡 메시지 클립보드 자동 복사 및 붙여넣기 안내
+      copyCurrentArticleLink(targetId);
     }
 
     // 🌟 리더 모달(흰색 배경)용 본문 HTML 스마트 정제 엔진 (흰색 글씨를 선명한 #1e293b로 변환)
@@ -8888,11 +9022,29 @@
       }
     });
 
-    // 외부 링크 접속 시 딥링크 자동 오픈 체크
+    // 🌟 외부 링크 접속 시 딥링크 자동 오픈 및 크로스 브라우저/카톡 자동 동기화
     function checkDeepLinkArticle() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const artId = urlParams.get('article');
+        const artDataParam = urlParams.get('art_data');
+
+        // URL에 담긴 신규 글 데이터가 있으면 즉시 현재 브라우저(Edge, 카톡 등)의 localStorage에 영구 동기화
+        if (artDataParam) {
+          const incomingArticle = decodeArticleData(artDataParam);
+          if (incomingArticle && incomingArticle.id) {
+            const list = getStoredArticles();
+            const existIdx = list.findIndex(a => a.id === incomingArticle.id);
+            if (existIdx === -1) {
+              list.unshift(incomingArticle);
+            } else {
+              list[existIdx] = Object.assign(list[existIdx], incomingArticle);
+            }
+            saveArticles(list);
+            renderFeaturedMagazine();
+          }
+        }
+
         if (artId) {
           setTimeout(() => {
             openArticleReader(artId, false);
