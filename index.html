@@ -5998,7 +5998,7 @@
             </span>
           </div>
           <!-- 업로드된 이미지 그리드 -->
-          <div id="photoImgGrid" class="photo-img-grid">
+          <div id="photoImgGrid" class="photo-img-grid" onmousedown="event.preventDefault()">
             <!-- JS 동적 렌더링 -->
           </div>
         </div>
@@ -9260,14 +9260,12 @@
       }
     }
 
-    // 본문에 이미지 삽입 (원하는 문단 사이에 독립된 블록으로 깔끔하게 안착)
+    // 본문에 이미지 삽입 (원하는 문단 사이 또는 지정된 커서 위치에 정확하게 안착)
     function insertBodyImg(src) {
       const editor = document.getElementById('editorContent');
       if (!editor) return;
 
-      editor.focus();
-
-      // 삽입할 독립된 이미지 블록 (<figure>)
+      // 1) 삽입할 독립된 이미지 블록 (<figure>) 및 후속 문단(<p>) 생성
       const figure = document.createElement('figure');
       figure.className = 'article-body-img-block';
       figure.style.cssText = 'margin: 28px auto; text-align: center; clear: both; display: block; max-width: 100%;';
@@ -9275,63 +9273,142 @@
         <img src="${src}" alt="본문 삽입 사진" style="max-width: 100%; height: auto; border-radius: 12px; display: block; margin: 0 auto; box-shadow: 0 4px 18px rgba(0,0,0,0.18);">
       `;
 
-      // 이미지 뒤에 사용자가 계속 글을 쓰거나 다음 줄로 넘어갈 수 있는 새 문단
       const nextP = document.createElement('p');
       nextP.innerHTML = '<br>';
 
-      // 커서 위치 확인 (실시간 selection 우선, 없으면 저장된 selection)
-      let range = null;
+      // 2) ⚠️ 중요: editor.focus()를 사전에 호출하면 브라우저 기본 동작으로 커서가 맨 끝으로 강제 이동되므로 호출하지 않음!
+      // 먼저 사용자가 에디터에서 지정해 둔 정확한 커서 위치(Range)를 확보합니다.
+      let targetRange = null;
       const sel = window.getSelection();
+
       if (sel && sel.rangeCount > 0) {
-        const testRange = sel.getRangeAt(0);
-        if (editor.contains(testRange.commonAncestorContainer)) {
-          range = testRange;
+        const curRange = sel.getRangeAt(0);
+        if (editor.contains(curRange.commonAncestorContainer)) {
+          targetRange = curRange.cloneRange();
         }
       }
-      if (!range && editorSavedSelection && editor.contains(editorSavedSelection.commonAncestorContainer)) {
-        range = editorSavedSelection;
+
+      if (!targetRange && editorSavedSelection && editor.contains(editorSavedSelection.commonAncestorContainer)) {
+        targetRange = editorSavedSelection.cloneRange();
       }
 
-      if (range && editor.contains(range.commonAncestorContainer)) {
-        // 커서가 위치한 블록 태그(p, h3, blockquote, div 등)를 탐색
-        let targetBlock = range.commonAncestorContainer;
-        if (targetBlock.nodeType === 3) {
-          targetBlock = targetBlock.parentNode; // 텍스트 노드면 부모 엘리먼트
-        }
+      let targetCaretNode = nextP;
 
-        // editor 직계 자식 블록 요소를 찾음
-        while (targetBlock && targetBlock.parentNode && targetBlock.parentNode !== editor && targetBlock !== editor) {
-          targetBlock = targetBlock.parentNode;
-        }
+      // 3) 지정된 커서 위치에 정밀 삽입
+      if (targetRange && editor.contains(targetRange.commonAncestorContainer)) {
+        let container = targetRange.commonAncestorContainer;
+        let node = (container.nodeType === Node.TEXT_NODE) ? container.parentNode : container;
 
-        if (targetBlock && targetBlock.parentNode === editor) {
-          // 해당 문단 바로 뒤에 이미지와 빈 문단을 순서대로 삽입!
-          targetBlock.parentNode.insertBefore(figure, targetBlock.nextSibling);
-          figure.parentNode.insertBefore(nextP, figure.nextSibling);
+        if (node === editor) {
+          // 커서가 에디터 루트 레벨에 직접 위치한 경우
+          let refChild = null;
+          if (container === editor) {
+            refChild = editor.childNodes[targetRange.startOffset] || null;
+          }
+          if (refChild) {
+            editor.insertBefore(figure, refChild);
+            editor.insertBefore(nextP, figure.nextSibling);
+          } else {
+            editor.appendChild(figure);
+            editor.appendChild(nextP);
+          }
+          targetCaretNode = nextP;
         } else {
-          // fallback: range 위치에 직접 삽입
-          range.collapse(false);
-          range.insertNode(nextP);
-          range.insertNode(figure);
+          // 커서가 위치한 에디터 직계 자식 블록(p, h2, h3, blockquote, div 등) 탐색
+          let block = node;
+          while (block && block.parentNode && block.parentNode !== editor) {
+            block = block.parentNode;
+          }
+
+          if (block && block.parentNode === editor) {
+            const blockText = (block.innerText || block.textContent || '').trim();
+            const hasMedia = !!block.querySelector('img, iframe, video');
+
+            if (blockText === '' && !hasMedia) {
+              // 케이스 A: 빈 문단(<p><br></p> 등)에 커서가 위치한 경우 -> 빈 문단 자체를 이미지로 치환!
+              block.parentNode.replaceChild(figure, block);
+              figure.parentNode.insertBefore(nextP, figure.nextSibling);
+              targetCaretNode = nextP;
+            } else {
+              // 케이스 B: 텍스트가 있는 문단 내부나 사이인 경우 -> 문단 분할(Split)하여 그 사이에 이미지 안착
+              try {
+                const splitRange = document.createRange();
+                splitRange.setStart(targetRange.startContainer, targetRange.startOffset);
+                splitRange.setEnd(block, block.childNodes.length);
+
+                const tailContent = splitRange.extractContents();
+
+                // 원래 문단 바로 뒤에 이미지 삽입
+                block.parentNode.insertBefore(figure, block.nextSibling);
+
+                const tailText = (tailContent.textContent || '').trim();
+                const hasTailMedia = tailContent.querySelectorAll ? tailContent.querySelectorAll('img, iframe, video').length > 0 : false;
+
+                if (tailText !== '' || hasTailMedia) {
+                  // 커서 뒤에 남은 텍스트가 있으면 새 문단 블록으로 만들어 이미지 뒤에 배치
+                  const tailBlock = document.createElement(block.tagName || 'p');
+                  if (block.className) tailBlock.className = block.className;
+                  if (block.style.cssText) tailBlock.style.cssText = block.style.cssText;
+                  tailBlock.appendChild(tailContent);
+                  figure.parentNode.insertBefore(tailBlock, figure.nextSibling);
+                  targetCaretNode = tailBlock;
+                } else {
+                  // 커서 뒤에 남은 텍스트가 없으면(문단 끝) 새 빈 문단 삽입
+                  figure.parentNode.insertBefore(nextP, figure.nextSibling);
+                  targetCaretNode = nextP;
+                }
+
+                // 만약 앞 블록이 완전히 비어버렸다면(커서가 문단 맨 앞이었던 경우) 정리
+                if ((block.textContent || '').trim() === '' && !block.querySelector('img, iframe, video')) {
+                  block.parentNode.removeChild(block);
+                }
+              } catch (splitErr) {
+                console.warn('문단 분할 삽입 폴백:', splitErr);
+                block.parentNode.insertBefore(figure, block.nextSibling);
+                figure.parentNode.insertBefore(nextP, figure.nextSibling);
+                targetCaretNode = nextP;
+              }
+            }
+          } else {
+            // 직계 자식을 찾을 수 없는 경우
+            try {
+              targetRange.collapse(false);
+              targetRange.insertNode(nextP);
+              targetRange.insertNode(figure);
+              targetCaretNode = nextP;
+            } catch (fallbackErr) {
+              editor.appendChild(figure);
+              editor.appendChild(nextP);
+              targetCaretNode = nextP;
+            }
+          }
         }
       } else {
-        // 커서가 없거나 선택된 적 없는 경우 에디터 맨 끝에 추가
+        // 커서 위치가 전혀 없거나 에디터 외부인 경우: 에디터 맨 끝에 추가
         editor.appendChild(figure);
         editor.appendChild(nextP);
+        targetCaretNode = nextP;
       }
 
-      // 커서를 이미지 바로 다음 빈 문단(<p>)으로 이동시켜 다음 입력/사진이 자연스럽게 이어지도록 설정
+      // 4) 커서를 이미지 바로 다음 문장/문단으로 정확하게 안착시키고 에디터 포커스 복원
       try {
+        editor.focus();
         const newRange = document.createRange();
-        newRange.setStart(nextP, 0);
+        if (targetCaretNode.firstChild && targetCaretNode.firstChild.nodeType === Node.TEXT_NODE) {
+          newRange.setStart(targetCaretNode.firstChild, 0);
+        } else {
+          newRange.setStart(targetCaretNode, 0);
+        }
         newRange.collapse(true);
-        if (sel) {
-          sel.removeAllRanges();
-          sel.addRange(newRange);
+
+        const activeSel = window.getSelection();
+        if (activeSel) {
+          activeSel.removeAllRanges();
+          activeSel.addRange(newRange);
         }
         editorSavedSelection = newRange.cloneRange();
-      } catch (e) {
-        console.warn('Selection move error:', e);
+      } catch (caretErr) {
+        console.warn('Caret positioning error:', caretErr);
       }
 
       saveEditorSelection();
@@ -9778,6 +9855,7 @@
 
     // 외부 이미지 URL 삽입
     function insertExternalImgPrompt() {
+      saveEditorSelection();
       const url = prompt('삽입할 이미지의 웹 주소(URL)를 입력해주세요:');
       if (url && url.trim()) {
         const cleanUrl = url.trim();
