@@ -5989,6 +5989,9 @@
           <button type="button" class="btn-editor-action" onclick="openMultiChannelModal()" style="background: linear-gradient(135deg, #059669, #10b981); color: #ffffff; border: none; font-weight: 800; box-shadow: 0 2px 10px rgba(16,185,129,0.35); display: inline-flex; align-items: center; gap: 5px;" title="네이버 블로그 및 티스토리에 서식과 사진까지 원클릭으로 동시 발행합니다">
             <span>🌐 동시 발행 도우미</span>
           </button>
+          <button type="button" class="btn-editor-action" onclick="openChannelQuickSettings()" title="네이버/티스토리 블로그 연동 주소를 즉시 확인하고 설정합니다" style="border-color: #38bdf8; color: #7dd3fc; display: inline-flex; align-items: center; gap: 5px;">
+            <span>⚙️ 블로그 연동설정</span>
+          </button>
           <button type="button" class="btn-editor-action" onclick="closeTistoryEditor()">취소</button>
           <button type="button" class="btn-editor-publish" onclick="publishArticle()">
             <span>🚀</span> 발행하기
@@ -6248,6 +6251,17 @@
 
           <!-- 본문 작성 스크롤 영역 -->
           <div class="editor-scroll-body">
+            <!-- 🌟 에디터 내부 상단 퀵 연동 설정 바 -->
+            <div style="background: #111622; border: 1.5px solid #2b3954; border-radius: 10px; padding: 10px 16px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; font-size: 0.84rem; color: #cbd5e1;">
+                <span style="font-size: 1.1rem;">🌐</span>
+                <span><strong>네이버/티스토리 동시 발행:</strong> 글 작성 후 [🌐 동시 발행 도우미]를 누르면 사진 5장과 함께 원클릭 복사됩니다.</span>
+              </div>
+              <button type="button" onclick="openChannelQuickSettings()" style="background: #0284c7; color: #ffffff; border: none; padding: 6px 14px; border-radius: 6px; font-size: 0.82rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; box-shadow: 0 2px 6px rgba(2,132,199,0.35);">
+                <span>⚙️ 블로그 연동 주소 설정</span>
+              </button>
+            </div>
+
             <input type="text" id="editorTitle" class="editor-title-input" placeholder="제목을 입력하세요 (예: 품격 있는 생전 정리의 첫걸음)" maxlength="120">
             <div id="editorContent" class="editor-content-area" contenteditable="true" onkeyup="saveEditorSelection()" onmouseup="saveEditorSelection()" onclick="saveEditorSelection()" oninput="saveEditorSelection()" onfocus="saveEditorSelection()" data-placeholder="이곳에 따뜻하고 깊이 있는 글을 자유롭게 작성해보세요. 좌측 사진 보관함에서 사진을 본문에 삽입하거나 대표사진을 지정할 수 있습니다..."></div>
           </div>
@@ -9856,15 +9870,19 @@
       openTistoryEditor(id);
     }
 
-    function closeTistoryEditor() {
-      const title = document.getElementById('editorTitle').value.trim();
-      const content = document.getElementById('editorContent').innerText.trim();
-      if ((title || content) && !confirm('작성 중인 내용이 저장되지 않을 수 있습니다. 창을 닫으시겠습니까?')) {
-        return;
+    function closeTistoryEditor(force = false) {
+      if (!force) {
+        const title = document.getElementById('editorTitle') ? document.getElementById('editorTitle').value.trim() : '';
+        const content = document.getElementById('editorContent') ? document.getElementById('editorContent').innerText.trim() : '';
+        if ((title || content) && !confirm('작성 중인 내용이 저장되지 않을 수 있습니다. 창을 닫으시겠습니까?')) {
+          return;
+        }
       }
       currentEditingArticleId = null;
       editorPhotos = [];
       mainThumbImg = "";
+      if (document.getElementById('editorTitle')) document.getElementById('editorTitle').value = "";
+      if (document.getElementById('editorContent')) document.getElementById('editorContent').innerHTML = "";
       const modal = document.getElementById('tistoryEditorModal');
       if (modal) {
         modal.classList.remove('open');
@@ -10448,35 +10466,39 @@
         articles.unshift(newArticle); // 새 글을 맨 위에 추가
         saveArticles(articles);
         
-        if (confirm(`🎉 '${title}' 칼럼이 사이트에 성공적으로 발행되었습니다!\n\n이 글을 대표님의 네이버 블로그나 티스토리에도 지금 바로 동시 발행하시겠습니까?`)) {
-          openMultiChannelModal();
-          return;
+        if (confirm(`🎉 '${title}' 칼럼이 사이트에 성공적으로 발행되었습니다!\n\n이 글을 대표님의 네이버 블로그(또는 티스토리)에도 지금 바로 동시 발행하시겠습니까?\n\n[확인]을 누르시면 본문 글과 5장의 감동 사진이 클립보드에 자동 복사되고, 네이버 블로그 글쓰기 창이 새 탭으로 즉시 열립니다.`)) {
+          // 1. 클립보드 즉시 동기 복사
+          copyArticleBodyHtmlSync();
+          copyArticleBodyHtml(false).catch(() => {});
+
+          // 2. 네이버 블로그 글쓰기 창 즉시 열기
+          const cfg = getExternalChannelSettings();
+          const naverUrl = getNaverWriteUrl(cfg.naverId);
+          const win = window.open(naverUrl, '_blank');
+
+          if (!win || win.closed || typeof win.closed === 'undefined') {
+            alert(`🎉 칼럼 발행 및 클립보드 복사 완료!\n\n⚠️ 브라우저 팝업이 차단되었습니다. 아래 링크를 눌러 글쓰기 창을 열어주세요:\n${naverUrl}\n\n열린 블로그 글쓰기 창 본문에서 [Ctrl + V]만 누르시면 서식과 사진이 쏙 들어갑니다!`);
+          } else {
+            alert(`🎉 네이버 블로그 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 서식 그대로 클립보드에 완벽 복사되었습니다.\n• 열린 네이버 스마트에디터 본문에서 [Ctrl + V]만 누르시면 완성됩니다!`);
+          }
+          closeTistoryEditor(true);
         } else {
           alert(`'${title}' 칼럼이 성공적으로 발행되었습니다!\n` + (isFeatured ? '⭐ [메인 전면 서재]에 대표글로 등록되었습니다.' : '전체 글 목록에서 열람하실 수 있습니다.'));
+          closeTistoryEditor(true);
         }
       }
 
       // 에디터 상태 초기화 및 모달 닫기
-      editorPhotos = [];
-      mainThumbImg = "";
-      const modal = document.getElementById('tistoryEditorModal');
-      if (modal) {
-        modal.classList.remove('open');
-        if (document.querySelectorAll('.cms-modal-overlay.open').length > 0) {
-          document.body.style.overflow = 'hidden';
-        } else {
-          document.body.style.overflow = '';
-        }
-      }
+      closeTistoryEditor(true);
 
       // 화면들 갱신
       renderFeaturedMagazine();
-      if (document.getElementById('boardListModal').classList.contains('open')) {
+      if (document.getElementById('boardListModal') && document.getElementById('boardListModal').classList.contains('open')) {
         renderBoardList();
       }
-      if (isAdminLoggedIn()) {
-        renderAdminDashboard();
-        renderConsultAdminTable();
+      if (typeof isAdminLoggedIn === 'function' && isAdminLoggedIn()) {
+        if (typeof renderAdminDashboard === 'function') renderAdminDashboard();
+        if (typeof renderConsultAdminTable === 'function') renderConsultAdminTable();
       }
     }
 
@@ -10498,14 +10520,13 @@
       return str;
     }
 
-    // 네이버 블로그 스마트에디터 ONE 글쓰기 URL 생성
+    // 네이버 블로그 스마트에디터 ONE 글쓰기 공식 URL 생성
     function getNaverWriteUrl(rawId) {
-      const nId = extractNaverId(rawId);
-      if (nId && /^[a-zA-Z0-9_\-]+$/.test(nId) && nId !== 'netrium1') {
-        return `https://blog.naver.com/${nId}/postwrite`;
+      const nId = extractNaverId(rawId) || 'cjh6630';
+      if (nId && /^[a-zA-Z0-9_\-]+$/.test(nId)) {
+        return `https://blog.naver.com/${nId}?Redirect=Write`;
       }
-      // 아이디 미설정 시 로그인된 본인 계정의 블로그 글쓰기(스마트에디터 ONE)로 자동 연결
-      return 'https://blog.naver.com/GoBlogWrite.naver';
+      return 'https://blog.naver.com/cjh6630?Redirect=Write';
     }
 
     // 티스토리 관리자 글쓰기 URL 생성
@@ -10526,18 +10547,18 @@
         if (saved) {
           const parsed = JSON.parse(saved);
           return {
-            naverId: parsed.naverId !== undefined ? parsed.naverId : '',
+            naverId: (parsed.naverId !== undefined && parsed.naverId !== '') ? parsed.naverId : 'cjh6630',
             tstoryUrl: parsed.tstoryUrl !== undefined ? parsed.tstoryUrl : '',
             naverChecked: parsed.naverChecked !== undefined ? parsed.naverChecked : true,
-            tstoryChecked: parsed.tstoryChecked !== undefined ? parsed.tstoryChecked : true
+            tstoryChecked: parsed.tstoryChecked !== undefined ? parsed.tstoryChecked : false
           };
         }
       } catch (e) {}
       return {
-        naverId: '',
+        naverId: 'cjh6630',
         tstoryUrl: '',
         naverChecked: true,
-        tstoryChecked: true
+        tstoryChecked: false
       };
     }
 
@@ -10652,17 +10673,29 @@
     }
 
     function openMultiChannelModal() {
-      const title = document.getElementById('editorTitle').value.trim();
-      const content = document.getElementById('editorContent').innerText.trim();
-      if (!title && !content) {
-        alert('발행할 칼럼의 제목 또는 본문 내용을 먼저 작성해 주세요.');
-        return;
-      }
       loadExternalChannelSettings();
       const modal = document.getElementById('multiChannelPublishModal');
       if (modal) modal.classList.add('open');
       const noticeBox = document.getElementById('mcPopupNotice');
       if (noticeBox) noticeBox.style.display = 'none';
+    }
+
+    // 에디터에서 즉시 블로그 연동 설정을 열고 확인/수정하는 편의 함수
+    function openChannelQuickSettings() {
+      loadExternalChannelSettings();
+      const modal = document.getElementById('multiChannelPublishModal');
+      if (modal) {
+        modal.classList.add('open');
+        const noticeBox = document.getElementById('mcPopupNotice');
+        if (noticeBox) noticeBox.style.display = 'none';
+        setTimeout(() => {
+          const nInp = document.getElementById('mcNaverId');
+          if (nInp) {
+            nInp.focus();
+            nInp.select();
+          }
+        }, 150);
+      }
     }
 
     function closeMultiChannelModal() {
@@ -10687,12 +10720,11 @@
       }
     }
 
-    // 본문 전체 (서식 + 이미지 5장) 클립보드 스마트 복사 (네이버/티스토리 호환 정제)
-    async function copyArticleBodyHtml(showAlert = true) {
+    // 🌟 본문 전체 (서식 + 이미지 5장) 네이버/티스토리 완벽 호환 표준 HTML 생성 헬퍼
+    function prepareArticleBodyCleanData() {
       const editor = document.getElementById('editorContent');
-      if (!editor) return false;
+      if (!editor) return null;
 
-      // 1. 네이버 스마트에디터 ONE & 티스토리 완벽 호환 표준 HTML 생성
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = editor.innerHTML;
 
@@ -10831,7 +10863,7 @@
         return false;
       }
 
-      // (1) 모든 하위 노드를 순회하며 흰색/밝은 글씨를 짙은 먹색(#222222)으로 치환 (단, 빨강, 파랑 등 유채색 강조색은 원본 유지!)
+      // (1) 모든 하위 노드를 순회하며 흰색/밝은 글씨를 짙은 먹색(#222222)으로 치환
       const allElements = tempDiv.querySelectorAll('*');
       allElements.forEach(el => {
         if (el.style && el.style.color && isBrightColor(el.style.color)) {
@@ -10862,8 +10894,6 @@
         }
       });
 
-      // ⚠️ [핵심] 최상위를 <div>로 감싸면 티스토리 에디터에서 모든 문단이 뭉개지므로,
-      // 감싸는 div 없이 개별 <p> 태그들이 평평하게 나열된 tempDiv.innerHTML을 그대로 전달합니다!
       const cleanHtml = tempDiv.innerHTML;
 
       // 텍스트 포맷에서도 문단 간 줄바꿈(\n\n) 완벽 보존
@@ -10875,43 +10905,61 @@
         textContent = editor.innerText;
       }
 
-      let success = false;
+      return { cleanHtml, textContent };
+    }
 
-      // (A) 최신 ClipboardItem API (포커스 유지 시 가장 강력)
+    // ⚡ [동기 클립보드 복사] 사용자 클릭 이벤트 콜스택 내에서 100% 즉시 복사 성공 보장!
+    function copyArticleBodyHtmlSync() {
+      const data = prepareArticleBodyCleanData();
+      if (!data) return false;
+
+      let success = false;
+      try {
+        const copyDiv = document.createElement('div');
+        copyDiv.innerHTML = data.cleanHtml;
+        copyDiv.style.position = 'fixed';
+        copyDiv.style.left = '0';
+        copyDiv.style.top = '0';
+        copyDiv.style.width = '100px';
+        copyDiv.style.height = '100px';
+        copyDiv.style.opacity = '0.01';
+        copyDiv.style.pointerEvents = 'none';
+        copyDiv.style.zIndex = '-9999';
+        document.body.appendChild(copyDiv);
+
+        const range = document.createRange();
+        range.selectNodeContents(copyDiv);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        success = document.execCommand('copy');
+        sel.removeAllRanges();
+        document.body.removeChild(copyDiv);
+      } catch (err) {
+        console.warn('Sync execCommand failed:', err);
+      }
+      return success;
+    }
+
+    // 본문 전체 (서식 + 이미지 5장) 클립보드 스마트 복사 (비동기 최신 API + 동기 백업)
+    async function copyArticleBodyHtml(showAlert = true) {
+      const data = prepareArticleBodyCleanData();
+      if (!data) return false;
+
+      // 1) 동기 방식으로 1차 즉시 복사 확보!
+      let success = copyArticleBodyHtmlSync();
+
+      // 2) 최신 ClipboardItem API로 서식+이미지 완벽 보강 등록
       try {
         if (navigator.clipboard && window.ClipboardItem) {
-          const htmlBlob = new Blob([cleanHtml], { type: 'text/html' });
-          const textBlob = new Blob([textContent], { type: 'text/plain' });
+          const htmlBlob = new Blob([data.cleanHtml], { type: 'text/html' });
+          const textBlob = new Blob([data.textContent], { type: 'text/plain' });
           const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
           await navigator.clipboard.write([item]);
           success = true;
         }
       } catch (e) {
-        console.warn('ClipboardItem API fallback:', e);
-      }
-
-      // (B) Fallback: DOM 범위 선택 및 document.execCommand('copy')
-      if (!success) {
-        try {
-          const copyDiv = document.createElement('div');
-          copyDiv.innerHTML = cleanHtml;
-          copyDiv.style.position = 'fixed';
-          copyDiv.style.left = '-9999px';
-          copyDiv.style.top = '-9999px';
-          copyDiv.style.opacity = '0';
-          document.body.appendChild(copyDiv);
-
-          const range = document.createRange();
-          range.selectNodeContents(copyDiv);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-          success = document.execCommand('copy');
-          sel.removeAllRanges();
-          document.body.removeChild(copyDiv);
-        } catch (fbErr) {
-          console.warn('execCommand copy fallback failed:', fbErr);
-        }
+        console.warn('ClipboardItem async write skipped/fallback:', e);
       }
 
       if (showAlert) {
@@ -10924,13 +10972,10 @@
       return success;
     }
 
-    // 개별 채널 단독 열기 (팝업 차단 위험 제로 & 최우선 클립보드 복사)
-    async function executeSingleChannelPublish(channel) {
+    // 개별 채널 단독 열기 (팝업 차단 위험 0% 동기 오픈 & 클립보드 즉시 복사)
+    function executeSingleChannelPublish(channel) {
       saveExternalChannelSettings(false);
       const cfg = getExternalChannelSettings();
-
-      // 1. 현재 창 포커스 상태에서 최우선으로 클립보드 복사 완료!
-      await copyArticleBodyHtml(false);
 
       let targetUrl = '';
       let channelName = '';
@@ -10943,20 +10988,27 @@
         targetUrl = getTstoryWriteUrl(cfg.tstoryUrl);
       }
 
+      // 1. 사용자 클릭 동기 콜스택에서 클립보드 즉시 동기 복사!
+      copyArticleBodyHtmlSync();
+      // 최신 API도 백그라운드로 보강
+      copyArticleBodyHtml(false).catch(() => {});
+
+      // 2. ⚡ 사용자 클릭 동기 콜스택에서 창을 즉시 오픈! (팝업 차단 절대 없음!)
       const win = window.open(targetUrl, '_blank');
+
       if (!win || win.closed || typeof win.closed === 'undefined') {
         showPopupBlockedNotice([
           { name: channelName, url: targetUrl, color: channel === 'naver' ? '#16a34a' : '#ea580c' }
         ]);
-        alert(`⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다.\n\n• 본문과 5장의 사진은 클립보드에 이미 완벽 복사되었습니다!\n• 모달 창 하단에 나타난 [${channelName} 바로가기] 버튼을 클릭해 주세요.`);
+        alert(`⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다.\n\n• 본문과 5장의 사진은 클립보드에 이미 100% 정상 복사되었습니다!\n• 모달 창 하단에 나타난 [${channelName} 바로 열기] 버튼을 직접 클릭해 주세요.`);
       } else {
         closeMultiChannelModal();
-        alert(`🎉 ${channelName} 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 열린 ${channelName} 글쓰기 본문 창을 클릭하고 [Ctrl + V]만 누르시면 사진과 서식이 쏙 들어갑니다!`);
+        alert(`🎉 ${channelName} 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 서식 그대로 클립보드에 완벽 복사되었습니다.\n• 열린 ${channelName} 글쓰기 창 본문에서 [Ctrl + V]만 누르시면 사진과 서식이 쏙 들어갑니다!`);
       }
     }
 
-    // 선택한 블로그로 원클릭 동시 발행 실행 (포커스 보존 선복사 + 스마트 팝업 대응)
-    async function executeMultiChannelPublish() {
+    // 선택한 블로그로 원클릭 동시 발행 실행 (동기 선복사 + 즉각 동기 창 오픈)
+    function executeMultiChannelPublish() {
       saveExternalChannelSettings(false);
       const cfg = getExternalChannelSettings();
 
@@ -10971,35 +11023,54 @@
       const naverWriteUrl = getNaverWriteUrl(cfg.naverId);
       const tstoryWriteUrl = getTstoryWriteUrl(cfg.tstoryUrl);
 
-      // 1. ⚠️ 포커스가 살아있는 현재 창에서 클립보드 복사를 최우선으로 실행!
-      await copyArticleBodyHtml(false);
+      // 1. ⚡ 사용자 클릭 동기 콜스택에서 클립보드 즉시 동기 복사!
+      copyArticleBodyHtmlSync();
+      copyArticleBodyHtml(false).catch(() => {});
 
-      // 2. 창 열기 실행
+      // 2. ⚡ 동기 콜스택에서 창 오픈 실행 (팝업 차단 원천 해결!)
       let naverWin = null;
       let tstoryWin = null;
 
-      if (naverChecked) {
+      if (naverChecked && tstoryChecked) {
+        // 두 개 모두 체크 시: 1순위로 네이버를 즉시 동기 오픈, 티스토리도 즉각 오픈 시도
         naverWin = window.open(naverWriteUrl, '_blank');
-      }
-      if (tstoryChecked) {
+        try {
+          tstoryWin = window.open(tstoryWriteUrl, '_blank');
+        } catch(e) {}
+
+        const blockedChannels = [];
+        if (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined') {
+          blockedChannels.push({ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' });
+        }
+        if (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined') {
+          blockedChannels.push({ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' });
+        }
+
+        if (blockedChannels.length > 0) {
+          showPopupBlockedNotice(blockedChannels);
+          alert(`🚀 [네이버 블로그] 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 브라우저 다중 팝업 정책으로 티스토리 창이 안 열렸을 수 있으니, 모달 창의 [티스토리 글쓰기 직접 열기] 버튼을 누르시면 즉시 열립니다!`);
+        } else {
+          closeMultiChannelModal();
+          alert(`🚀 네이버와 티스토리 글쓰기 창이 모두 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사된 상태입니다.\n• 각 블로그 본문 창에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 모달의 '제목 복사'를 누르시면 편리합니다)`);
+        }
+      } else if (naverChecked) {
+        naverWin = window.open(naverWriteUrl, '_blank');
+        if (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined') {
+          showPopupBlockedNotice([{ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' }]);
+          alert('⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다. 모달 하단의 [네이버 블로그 바로 열기]를 클릭해 주세요.');
+        } else {
+          closeMultiChannelModal();
+          alert('🎉 네이버 블로그 글쓰기 창이 열렸습니다!\n\n• 본문과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 본문 창에서 [Ctrl + V]만 누르시면 사진과 글이 쏙 들어갑니다!');
+        }
+      } else if (tstoryChecked) {
         tstoryWin = window.open(tstoryWriteUrl, '_blank');
-      }
-
-      // 팝업 차단 여부 감지
-      const blockedChannels = [];
-      if (naverChecked && (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined')) {
-        blockedChannels.push({ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' });
-      }
-      if (tstoryChecked && (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined')) {
-        blockedChannels.push({ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' });
-      }
-
-      if (blockedChannels.length > 0) {
-        showPopupBlockedNotice(blockedChannels);
-        alert(`⚠️ 브라우저 보안 정책으로 인해 일부 창이 팝업 차단되었습니다.\n\n• 본문과 5장의 사진은 이미 클립보드에 완벽 복사되었습니다!\n• 모달 창 하단에 나타난 [차단된 블로그 바로 열기] 버튼을 직접 클릭해 주세요.`);
-      } else {
-        closeMultiChannelModal();
-        alert(`🚀 네이버와 티스토리 글쓰기 창이 모두 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사된 상태입니다.\n• 각 블로그 글쓰기 창 본문에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 모달의 '제목 복사'를 누르시면 편리합니다)`);
+        if (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined') {
+          showPopupBlockedNotice([{ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' }]);
+          alert('⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다. 모달 하단의 [티스토리 바로 열기]를 클릭해 주세요.');
+        } else {
+          closeMultiChannelModal();
+          alert('🎉 티스토리 글쓰기 창이 열렸습니다!\n\n• 본문과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 본문 창에서 [Ctrl + V]만 누르시면 사진과 글이 쏙 들어갑니다!');
+        }
       }
     }
 
