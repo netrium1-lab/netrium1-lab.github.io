@@ -1905,28 +1905,70 @@
               <span style="color: #065f46; font-weight: 800;">외부 블로그 & SNS 동시 발행 채널 설정</span>
             </div>
             <p class="setting-hint" style="color: #047857;">
-              대표님의 네이버 블로그 아이디와 티스토리 주소를 등록해 두시면, 에디터에서 글을 쓸 때 <strong>[🌐 동시 발행 도우미]</strong> 버튼 한 번으로 사진과 서식까지 클립보드에 자동 복사되고 해당 블로그 글쓰기 창이 즉시 열립니다.
+              대표님의 네이버 블로그 아이디(또는 주소)와 티스토리 주소를 등록해 두시면, 칼럼 에디터에서 <strong>[🌐 동시 발행 도우미]</strong> 클릭 한 번으로 본문 글과 5장의 사진이 클립보드에 자동 복사되고 해당 블로그 글쓰기 창이 즉시 열립니다.
             </p>
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 12px;">
+              <!-- 네이버 블로그 설정 -->
               <div>
-                <label style="display: block; font-size: 0.84rem; font-weight: 750; color: #065f46; margin-bottom: 4px;">
-                  🟢 네이버 블로그 ID 또는 주소
-                </label>
-                <input type="text" id="settingNaverBlogId" class="setting-input" placeholder="예: netrium1 (또는 blog.naver.com/아이디)">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label style="font-size: 0.84rem; font-weight: 750; color: #065f46;">
+                    🟢 네이버 블로그 ID 또는 주소
+                  </label>
+                  <button type="button" onclick="testOpenNaverBlog()" style="background: #dcfce7; border: 1px solid #86efac; color: #166534; font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; cursor: pointer;">
+                    🔍 네이버 연동 테스트
+                  </button>
+                </div>
+                <input type="text" id="settingNaverBlogId" class="setting-input" oninput="syncChannelSettings('settings')" placeholder="예: netrium1 또는 https://blog.naver.com/아이디">
+                <div id="settingNaverStatus" style="font-size: 0.78rem; margin-top: 5px; color: #047857; font-weight: 600;">
+                  🟢 연동 대기 중...
+                </div>
               </div>
+              
+              <!-- 티스토리 블로그 설정 -->
               <div>
-                <label style="display: block; font-size: 0.84rem; font-weight: 750; color: #065f46; margin-bottom: 4px;">
-                  🟠 티스토리 블로그 주소
-                </label>
-                <input type="text" id="settingTstoryBlogUrl" class="setting-input" placeholder="예: https://myblog.tistory.com">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                  <label style="font-size: 0.84rem; font-weight: 750; color: #065f46;">
+                    🟠 티스토리 블로그 주소
+                  </label>
+                  <button type="button" onclick="testOpenTstoryBlog()" style="background: #ffedd5; border: 1px solid #fed7aa; color: #9a3412; font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 4px; cursor: pointer;">
+                    🔍 티스토리 연동 테스트
+                  </button>
+                </div>
+                <input type="text" id="settingTstoryBlogUrl" class="setting-input" oninput="syncChannelSettings('settings')" placeholder="예: https://myblog.tistory.com">
+                <div id="settingTstoryStatus" style="font-size: 0.78rem; margin-top: 5px; color: #c2410c; font-weight: 600;">
+                  🟠 연동 대기 중...
+                </div>
               </div>
             </div>
 
-            <div style="margin-top: 12px; display: flex; justify-content: flex-end;">
-              <button type="button" class="btn-save-setting" onclick="saveExternalChannelSettings(true)" style="background: #059669; color: #ffffff; padding: 8px 18px; font-size: 0.84rem;">
+            <div style="margin-top: 14px; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; border-top: 1px dashed #bbf7d0;">
+              <span style="font-size: 0.78rem; color: #059669;">
+                💾 주소를 입력하시면 타이핑하는 즉시 실시간 자동 저장되며, 에디터와 안전하게 동기화됩니다.
+              </span>
+              <button type="button" class="btn-save-setting" onclick="saveExternalChannelSettings(true, 'settings')" style="background: #059669; color: #ffffff; padding: 8px 18px; font-size: 0.84rem;">
                 💾 외부 채널 주소 저장
               </button>
+            </div>
+          </div>
+
+          <!-- 🤖 AI 글쓰기 & Google Gemini API 연동 설정 -->
+          <div class="setting-group-card" style="border: 1.5px solid #c7d2fe; background: #eef2ff; margin-top: 18px;">
+            <div class="setting-label-row">
+              <span>🤖</span>
+              <span style="color: #3730a3; font-weight: 800;">Google Gemini AI 연동 설정 (웹·유튜브 스마트 글쓰기)</span>
+            </div>
+            <p class="setting-hint" style="color: #4338ca;">
+              Google AI Studio에서 무료로 발급받은 Gemini API 키를 등록하시면, 웹 기사와 유튜브 영상을 실시간 분석하여 100% 독창적인 고품질 칼럼을 자동 생성합니다. (미등록 시에도 내장 스마트 지능형 엔진으로 다양한 주제 글쓰기가 지원됩니다)
+            </p>
+            <div style="margin-top: 10px;">
+              <label style="display: block; font-size: 0.84rem; font-weight: 750; color: #3730a3; margin-bottom: 4px;">
+                🔑 Google Gemini API Key
+              </label>
+              <input type="password" id="settingGeminiApiKey" class="setting-input" placeholder="예: AIzaSy... (Google AI Studio에서 무료 발급)" onchange="if(this.value.trim()){localStorage.setItem('yebaek_gemini_api_key', this.value.trim());}else{localStorage.removeItem('yebaek_gemini_api_key');}updateGeminiKeyBadge();">
+            </div>
+            <div style="margin-top: 8px; font-size: 0.8rem; color: #4f46e5;">
+              💡 API 키가 없으신가요? <a href="https://aistudio.google.com/app/apikey" target="_blank" style="color: #4338ca; text-decoration: underline; font-weight: 800;">Google AI Studio(무료 발급) ➔</a> 에서 10초 만에 무료 발급받으실 수 있습니다.
             </div>
           </div>
         </div>
@@ -2804,12 +2846,15 @@
               <span>📸 사진 보관함</span>
               <span id="photoCountBadge" style="font-size: 0.72rem; color: #94a3b8;">0장</span>
             </div>
-            <div style="display: flex; gap: 6px; width: 100%; margin: 4px 0 6px;">
-              <button type="button" class="btn-photo-upload" onmousedown="event.preventDefault()" onclick="document.getElementById('editorImgInput').click()" style="flex: 1; justify-content: center; padding: 7px 8px; font-size: 0.8rem;">
+            <div style="display: flex; gap: 5px; width: 100%; margin: 4px 0 6px;">
+              <button type="button" class="btn-photo-upload" onmousedown="event.preventDefault()" onclick="document.getElementById('editorImgInput').click()" style="flex: 1; justify-content: center; padding: 7px 6px; font-size: 0.78rem;">
                 <span>+ 내 사진</span>
               </button>
-              <button type="button" class="btn-photo-upload" onmousedown="event.preventDefault()" onclick="loadConceptPhotosForCurrentArticle(false)" style="flex: 1.4; justify-content: center; padding: 7px 8px; font-size: 0.8rem; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; font-weight: 800; box-shadow: 0 2px 6px rgba(79,70,229,0.35);" title="현재 글 제목과 내용에 완벽하게 어울리는 고화질 감동 사진 5장을 AI가 분석하여 즉시 제작/선별합니다">
-                <span>🪄 글 맞춤 AI 5장</span>
+              <button type="button" class="btn-photo-upload" onmousedown="event.preventDefault()" onclick="promptAndAddExternalPhoto()" style="flex: 1.1; justify-content: center; padding: 7px 6px; font-size: 0.78rem; background: #334155; color: #fff; border: 1px solid #475569;" title="웹 이미지 또는 유튜브 영상 링크를 입력하여 썸네일/사진을 보관함에 즉시 추가합니다">
+                <span>🔗 URL/유튜브</span>
+              </button>
+              <button type="button" class="btn-photo-upload" onmousedown="event.preventDefault()" onclick="loadConceptPhotosForCurrentArticle(false)" style="flex: 1.2; justify-content: center; padding: 7px 6px; font-size: 0.78rem; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; border: none; font-weight: 800; box-shadow: 0 2px 6px rgba(79,70,229,0.35);" title="현재 글 제목과 내용에 완벽하게 어울리는 고화질 감동 사진 5장을 AI가 분석하여 즉시 제작/선별합니다">
+                <span>🪄 글 맞춤 5장</span>
               </button>
             </div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -2947,45 +2992,182 @@
     </div>
   </div>
 
-  <!-- ================= 모달 2-1) 🪄 AI 황금키워드 자동 칼럼 생성기 모달 ================= -->
+  <!-- ================= 모달 2-1) 🪄 AI 스마트 글쓰기 & 웹·유튜브 레퍼런스 스튜디오 모달 ================= -->
   <div class="cms-modal-overlay" id="aiArticleGeneratorModal" onclick="closeAiArticleModalOnOverlay(event)">
-    <div class="auth-card" style="max-width: 680px; text-align: left; padding: 28px; max-height: 90vh; overflow-y: auto;">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 14px;">
+    <div class="auth-card" style="max-width: 820px; width: 95%; text-align: left; padding: 26px 28px; max-height: 92vh; overflow-y: auto;">
+      <!-- 모달 상단 헤더 -->
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 14px;">
         <div>
-          <h3 style="font-family: 'Noto Serif KR', serif; font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
-            <span>🪄</span> AI 황금키워드 칼럼 원클릭 자동 생성기
+          <h3 style="font-family: 'Noto Serif KR', serif; font-size: 1.35rem; font-weight: 850; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
+            <span>🪄</span> AI 맞춤 글쓰기 & 웹·유튜브 레퍼런스 스튜디오
           </h3>
-          <p style="font-size: 0.86rem; color: var(--text-muted); margin: 4px 0 0;">
-            네이버 데이터랩 및 4050 자녀·6070 시니어 검색 트렌드 기반의 고품질 칼럼을 에디터에 즉시 집필합니다.
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 4px 0 0;">
+            원하는 주제와 참고할 웹 기사·유튜브 영상을 키인(입력)하면, 깊이 있는 고유 칼럼과 감동 사진 5장을 맞춤 집필합니다.
           </p>
         </div>
-        <button type="button" onclick="closeAiArticleGeneratorModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">✕</button>
+        <button type="button" onclick="closeAiArticleGeneratorModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem; color: var(--text-main);">✕</button>
       </div>
 
-      <!-- 빠른 맞춤 키워드 직접 입력 -->
-      <div style="margin-bottom: 20px; padding: 14px 16px; background: #f8fafc; border-radius: 12px; border: 1.5px dashed #cbd5e1;">
-        <label style="font-size: 0.88rem; font-weight: 800; color: #1e293b; display: block; margin-bottom: 6px;">
-          🔍 원하는 특정 키워드로 즉석 맞춤 집필하기
-        </label>
-        <div style="display: flex; gap: 8px;">
-          <input type="text" id="aiCustomKeywordInput" class="setting-input" placeholder="예: 부모님 팔순 선물, 은퇴 후 자서전, 디지털 유품" style="background:#fff;">
-          <button type="button" onclick="generateAiCustomArticle()" style="padding: 10px 18px; border-radius: 10px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border: none; color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; white-space: nowrap; box-shadow: 0 2px 8px rgba(99,102,241,0.35);">
-            ⚡ 즉시 생성
-          </button>
+      <!-- 상단 탭 전환 바 -->
+      <div style="display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 2px solid var(--border-color); padding-bottom: 4px;">
+        <button type="button" id="aiTabBtnCustom" onclick="switchAiModalTab('custom')" style="padding: 9px 18px; border-radius: 10px 10px 0 0; border: none; background: var(--accent, #2b5a42); color: #fff; font-weight: 800; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <span>✏️ 맞춤 글쓰기 (웹·유튜브 참조)</span>
+        </button>
+        <button type="button" id="aiTabBtnPresets" onclick="switchAiModalTab('presets')" style="padding: 9px 18px; border-radius: 10px 10px 0 0; border: none; background: transparent; color: var(--text-muted); font-weight: 700; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+          <span>📚 다양한 황금 주제 프리셋 (16종)</span>
+        </button>
+      </div>
+
+      <!-- [패널 1] 맞춤 글쓰기 (웹·유튜브 레퍼런스 키인) -->
+      <div id="aiCustomPanel" style="display: block;">
+        <!-- 1. 주제 및 키워드 -->
+        <div style="margin-bottom: 16px; padding: 16px; background: #f8fafc; border-radius: 12px; border: 1.5px solid #e2e8f0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 800; color: #1e293b; display: flex; align-items: center; gap: 6px;">
+              <span>🎯</span> 글 주제 및 핵심 키워드 <span style="color: #ef4444;">*</span>
+            </label>
+            <span style="font-size: 0.78rem; color: #64748b;">원하는 주제를 자유롭게 입력하세요</span>
+          </div>
+          <input type="text" id="aiCustomKeywordInput" class="setting-input" placeholder="예: 5060 저속노화 식단, 시니어 관절 스트레칭, 스마트폰 사진 정리법, 은퇴 후 4주 리셋 등" style="background:#fff; margin-bottom: 8px;">
+          
+          <!-- 빠른 추천 주제 칩 -->
+          <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center;">
+            <span style="font-size: 0.76rem; color: #64748b; font-weight: 700;">추천 키워드:</span>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('5060 저속노화 식단', '웰라이프', '건강·식단')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🥗 저속노화 식단</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('시니어 관절 스트레칭', '웰라이프', '운동·활력')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🧘 관절 스트레칭</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('애착 물건 비우기와 미니멀 라이프', '비움과 갈무리', '정리·비움')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">📦 애착물건 비우기</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('스마트폰 사진 정리와 디지털 유품', '비움과 갈무리', '디지털')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">📱 디지털 유품정리</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('사전연명의료의향서와 엔딩노트 작성', '웰다잉', '웰다잉')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🕊️ 사전연명의료</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('정년퇴직 후 4주 라이프 리셋', '웰라이프', '은퇴·새출발')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🌱 은퇴 라이프 리셋</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('부모님 인생 인터뷰 10가지 질문', '웰라이프', '부모님·자서전')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🎙️ 부모님 인터뷰</button>
+            <button type="button" class="ai-chip-btn" onclick="setAiKeyword('60대 시니어 유튜브와 글쓰기 도전', '웰라이프', '크리에이터')" style="padding: 3px 8px; border-radius: 6px; border: 1px solid #cbd5e1; background: #ffffff; font-size: 0.76rem; cursor: pointer; color: #334155;">🎥 시니어 유튜브 도전</button>
+          </div>
+
+          <!-- 카테고리 & 글 스타일 선택 -->
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 750; color: #475569; display: block; margin-bottom: 4px;">카테고리</label>
+              <select id="aiCustomCategory" class="setting-input" style="background:#fff; padding: 9px 12px; font-size: 0.88rem;">
+                <option value="웰라이프" selected>웰라이프 (건강·은퇴·가족)</option>
+                <option value="비움과 갈무리">비움과 갈무리 (정리·유품·미니멀)</option>
+                <option value="웰다잉">웰다잉 (엔딩노트·사전연명·갈무리)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 750; color: #475569; display: block; margin-bottom: 4px;">글 스타일 & 어조</label>
+              <select id="aiCustomTone" class="setting-input" style="background:#fff; padding: 9px 12px; font-size: 0.88rem;">
+                <option value="professional" selected>전문 칼럼 & 깊이 있는 실천 가이드 (권장)</option>
+                <option value="essay">따뜻하고 감동적인 서사 에세이</option>
+                <option value="guide">친절하고 명확한 단계별 실천 팁</option>
+                <option value="interview">인터뷰 & 스토리텔링 형식</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 웹 참고 자료 키인 (Web Reference) -->
+        <div style="margin-bottom: 16px; padding: 14px 16px; background: #f0fdf4; border-radius: 12px; border: 1.5px solid #bbf7d0;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 800; color: #166534; display: flex; align-items: center; gap: 6px;">
+              <span>🌐</span> 웹 참고 자료 (인터넷 기사 / 블로그 / 전문 칼럼 키인)
+            </label>
+            <span style="font-size: 0.76rem; color: #15803d;">선택 사항</span>
+          </div>
+          <p style="font-size: 0.78rem; color: #166534; margin: 0 0 8px;">
+            참고하고 싶은 웹페이지 링크와 핵심 문구/통계 등을 입력하시면 본문 논거와 인용 박스에 유기적으로 반영됩니다.
+          </p>
+          <input type="url" id="aiWebUrl" class="setting-input" placeholder="https://... (웹 기사, 블로그 포스팅, 또는 참고 사이트 URL)" style="background:#fff; margin-bottom: 8px;">
+          <textarea id="aiWebContent" class="setting-textarea" rows="2" placeholder="웹 자료에서 꼭 다루고 싶은 핵심 내용, 통계 수치, 주요 명언이나 분석 포인트를 자유롭게 키인하세요." style="background:#fff; font-size: 0.86rem;"></textarea>
+        </div>
+
+        <!-- 3. 유튜브 참고 자료 키인 (YouTube Reference) -->
+        <div style="margin-bottom: 16px; padding: 14px 16px; background: #fff1f2; border-radius: 12px; border: 1.5px solid #fecdd3;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 800; color: #be123c; display: flex; align-items: center; gap: 6px;">
+              <span>📺</span> 유튜브 참고 자료 (추천 영상 / 쇼츠 링크 키인)
+            </label>
+            <span style="font-size: 0.76rem; color: #9f1239;">선택 사항</span>
+          </div>
+          <p style="font-size: 0.78rem; color: #be123c; margin: 0 0 8px;">
+            유튜브 영상 링크를 입력하시면 영상의 고화질 썸네일이 대표 사진으로 자동 추출되고, 영상 팁이 글에 녹아듭니다.
+          </p>
+          <input type="url" id="aiYoutubeUrl" class="setting-input" oninput="handleAiYoutubeUrlInput(this.value)" placeholder="https://www.youtube.com/watch?v=... 또는 https://youtu.be/... (쇼츠 링크도 가능)" style="background:#fff; margin-bottom: 8px;">
+          
+          <!-- 실시간 썸네일 감지 미리보기 -->
+          <div id="aiYoutubeThumbPreviewWrap" style="display: none; align-items: center; gap: 12px; margin-bottom: 8px; padding: 8px 12px; background: #ffffff; border-radius: 8px; border: 1px solid #fecdd3;">
+            <img id="aiYoutubeThumbImg" src="" alt="유튜브 썸네일 미리보기" style="width: 100px; height: 56px; object-fit: cover; border-radius: 6px; box-shadow: 0 1px 4px rgba(0,0,0,0.1);">
+            <div style="font-size: 0.8rem; color: #be123c; line-height: 1.4;">
+              <strong style="color: #9f1239;">✅ 유튜브 고화질 썸네일 감지 완료!</strong><br>
+              이 썸네일이 칼럼의 <strong>대표 사진</strong> 및 사진 보관함 1순위로 자동 등록됩니다.
+            </div>
+          </div>
+
+          <textarea id="aiYoutubeContent" class="setting-textarea" rows="2" placeholder="영상에서 강조된 핵심 팁, 추천 동작 루틴, 인상 깊은 코멘트를 자유롭게 키인하세요." style="background:#fff; font-size: 0.86rem;"></textarea>
+
+          <div style="display: flex; gap: 16px; margin-top: 8px; flex-wrap: wrap;">
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #881337; cursor: pointer;">
+              <input type="checkbox" id="aiIncludeYoutubeCard" checked style="accent-color: #e11d48;">
+              <span>본문에 유튜브 영상 미리보기 카드 자동 삽입</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 0.82rem; color: #166534; cursor: pointer;">
+              <input type="checkbox" id="aiIncludeWebBox" checked style="accent-color: #16a34a;">
+              <span>본문에 웹 자료 출처 & 분석 박스 자동 삽입</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 4. Google Gemini API 설정 (선택 사항) -->
+        <div style="margin-bottom: 18px; padding: 12px 16px; background: #f8fafc; border-radius: 10px; border: 1px dashed #cbd5e1;">
+          <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleGeminiSettingsAccordion()">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 0.84rem; font-weight: 750; color: #334155;">
+              <span>🤖</span> Google Gemini API 실시간 생성 (선택 확장)
+              <span id="geminiKeyBadge" style="font-size: 0.72rem; padding: 2px 6px; border-radius: 4px; background: #e2e8f0; color: #475569;">스마트 내장 엔진 사용중</span>
+            </div>
+            <span id="geminiAccordionArrow" style="font-size: 0.8rem; color: #64748b;">▼</span>
+          </div>
+          <div id="geminiSettingsWrap" style="display: none; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+            <p style="font-size: 0.78rem; color: #64748b; margin: 0 0 6px;">
+              Gemini API 키를 등록하시면 Google Gemini 최신 모델이 웹/유튜브 내용을 실시간으로 집필합니다. (미등록 시에도 내장 지능형 엔진으로 고품질 작성)
+            </p>
+            <div style="display: flex; gap: 8px;">
+              <input type="password" id="aiGeminiApiKey" class="setting-input" placeholder="Google AI Studio 발급 API 키 (AIzaSy...)" style="background:#fff; font-size: 0.84rem;">
+              <button type="button" onclick="saveGeminiApiKey()" style="padding: 8px 14px; border-radius: 8px; background: #334155; color: #fff; border: none; font-weight: 750; font-size: 0.82rem; cursor: pointer; white-space: nowrap;">
+                키 저장
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 실행 버튼 및 로딩 -->
+        <div id="aiLoadingBox" style="display: none; padding: 14px; text-align: center; background: #f1f5f9; border-radius: 10px; margin-bottom: 12px; color: #4338ca; font-weight: 750; font-size: 0.88rem;">
+          <span style="display: inline-block; margin-right: 6px;">⏳</span> 웹·유튜브 자료와 키워드를 종합 분석하여 맞춤 칼럼을 집필하고 감성 사진 5장을 선별 중입니다...
+        </div>
+
+        <button type="button" id="btnRunAiGenerate" onclick="generateSmartAiArticle()" style="width: 100%; padding: 14px 20px; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #fff; font-size: 1.02rem; font-weight: 850; border: none; border-radius: 12px; cursor: pointer; box-shadow: 0 4px 14px rgba(79,70,229,0.35); display: flex; align-items: center; justify-content: center; gap: 8px; transition: transform 0.15s ease;">
+          <span>🪄 웹·유튜브 반영 맞춤 칼럼 & 사진 5장 즉시 집필하기</span> ➔
+        </button>
+      </div>
+
+      <!-- [패널 2] 다양한 황금 주제 프리셋 16종 -->
+      <div id="aiPresetsPanel" style="display: none;">
+        <!-- 카테고리 칩 필터 -->
+        <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color);">
+          <button type="button" class="preset-filter-btn active" onclick="filterPresets('all', this)" style="padding: 5px 12px; border-radius: 999px; border: 1.5px solid var(--accent, #2b5a42); background: var(--accent, #2b5a42); color: #fff; font-size: 0.82rem; font-weight: 800; cursor: pointer;">전체 (16)</button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('웰라이프', this)" style="padding: 5px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; font-size: 0.82rem; font-weight: 700; cursor: pointer;">웰라이프·건강</button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('비움과 갈무리', this)" style="padding: 5px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; font-size: 0.82rem; font-weight: 700; cursor: pointer;">비움과 갈무리</button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('웰다잉', this)" style="padding: 5px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; font-size: 0.82rem; font-weight: 700; cursor: pointer;">웰다잉·엔딩노트</button>
+          <button type="button" class="preset-filter-btn" onclick="filterPresets('은퇴', this)" style="padding: 5px 12px; border-radius: 999px; border: 1.5px solid #cbd5e1; background: #fff; color: #334155; font-size: 0.82rem; font-weight: 700; cursor: pointer;">은퇴·새출발</button>
+        </div>
+
+        <!-- 프리셋 목록 컨테이너 -->
+        <div style="display: flex; flex-direction: column; gap: 12px; max-height: 520px; overflow-y: auto; padding-right: 4px;" id="aiPresetList">
+          <!-- JS로 동적 렌더링 -->
         </div>
       </div>
 
-      <div style="font-size: 0.92rem; font-weight: 800; color: var(--text-main); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
-        <span>🔥</span> 검증된 네이버 상위노출 황금 주제 프리셋 (클릭 시 원클릭 완성)
-      </div>
-
-      <!-- 프리셋 카드 목록 -->
-      <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px;" id="aiPresetList">
-        <!-- JS로 동적 렌더링 -->
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 8px;">
-        <button type="button" class="btn-save-setting" onclick="closeAiArticleGeneratorModal()" style="background: #64748b; color: #fff;">
+      <!-- 모달 하단 닫기 버튼 -->
+      <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 18px; padding-top: 12px; border-top: 1px solid var(--border-color);">
+        <button type="button" class="btn-save-setting" onclick="closeAiArticleGeneratorModal()" style="background: #64748b; color: #fff; padding: 9px 18px;">
           닫기
         </button>
       </div>
@@ -2994,14 +3176,14 @@
 
   <!-- ================= 모달 2-2) 🌐 외부 블로그(네이버/티스토리) 원클릭 동시 발행 모달 ================= -->
   <div class="cms-modal-overlay" id="multiChannelPublishModal" onclick="closeMultiChannelModalOnOverlay(event)" style="z-index: 10070;">
-    <div class="auth-card" style="max-width: 620px; text-align: left; padding: 28px; max-height: 90vh; overflow-y: auto;">
+    <div class="auth-card" style="max-width: 640px; text-align: left; padding: 28px; max-height: 90vh; overflow-y: auto;">
       <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 12px;">
         <div>
           <h3 style="font-family: 'Noto Serif KR', serif; font-size: 1.25rem; font-weight: 800; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
             <span>🌐</span> 네이버 블로그 & 티스토리 원클릭 동시 발행
           </h3>
           <p style="font-size: 0.84rem; color: var(--text-muted); margin: 4px 0 0;">
-            본문 글과 사진 5장이 클립보드에 자동 복사되어, 열린 블로그 창에서 <strong>Ctrl + V</strong>만 누르면 끝납니다.
+            본문 글과 5장의 감동 사진이 클립보드에 자동 복사되어, 열린 블로그 창에서 <strong>Ctrl + V</strong>만 누르면 끝납니다.
           </p>
         </div>
         <button type="button" onclick="closeMultiChannelModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">✕</button>
@@ -3011,7 +3193,7 @@
       <div style="background: #f8fafc; border-radius: 12px; padding: 14px 16px; border: 1.5px solid #e2e8f0; margin-bottom: 18px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
           <strong style="font-size: 0.88rem; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
-            <span>🔗</span> 내 발행 채널 주소 (선택 및 즉시 수정 가능)
+            <span>🔗</span> 내 발행 채널 주소 (실시간 자동 저장)
           </strong>
           <button type="button" onclick="goToSettingsTabFromEditor()" style="background: none; border: none; font-size: 0.78rem; color: var(--accent); font-weight: 800; cursor: pointer; text-decoration: underline;">
             ⚙️ 전체 환경설정 탭으로 이동 ➔
@@ -3019,32 +3201,65 @@
         </div>
         <div style="display: flex; flex-direction: column; gap: 10px;">
           <!-- 네이버 블로그 -->
-          <div style="display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #86efac;">
-            <input type="checkbox" id="mcCheckNaver" checked style="width: 18px; height: 18px; accent-color: #16a34a; cursor: pointer;">
-            <span style="font-size: 0.86rem; font-weight: 800; color: #15803d; width: 95px;">🟢 네이버 블로그</span>
-            <input type="text" id="mcNaverId" placeholder="네이버 아이디 (예: netrium1)" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.84rem;">
+          <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #86efac;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="mcCheckNaver" checked style="width: 18px; height: 18px; accent-color: #16a34a; cursor: pointer;">
+              <span style="font-size: 0.86rem; font-weight: 800; color: #15803d; width: 100px;">🟢 네이버 블로그</span>
+              <input type="text" id="mcNaverId" oninput="syncChannelSettings('modal')" placeholder="네이버 아이디 또는 주소 (예: netrium1)" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.84rem;">
+              <button type="button" onclick="testOpenNaverBlog()" style="background: #dcfce7; border: 1px solid #86efac; color: #166534; font-size: 0.74rem; font-weight: 800; padding: 5px 8px; border-radius: 5px; cursor: pointer; white-space: nowrap;">
+                🔍 테스트
+              </button>
+            </div>
+            <div id="mcNaverStatus" style="font-size: 0.76rem; margin-top: 4px; margin-left: 26px; color: #15803d; font-weight: 600;">
+              🟢 연동 확인 중...
+            </div>
           </div>
+
           <!-- 티스토리 -->
-          <div style="display: flex; align-items: center; gap: 10px; background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #fdba74;">
-            <input type="checkbox" id="mcCheckTstory" checked style="width: 18px; height: 18px; accent-color: #ea580c; cursor: pointer;">
-            <span style="font-size: 0.86rem; font-weight: 800; color: #c2410c; width: 95px;">🟠 티스토리</span>
-            <input type="text" id="mcTstoryUrl" placeholder="티스토리 주소 (예: https://myblog.tistory.com)" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.84rem;">
+          <div style="background: #ffffff; padding: 10px 14px; border-radius: 8px; border: 1.5px solid #fdba74;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="checkbox" id="mcCheckTstory" checked style="width: 18px; height: 18px; accent-color: #ea580c; cursor: pointer;">
+              <span style="font-size: 0.86rem; font-weight: 800; color: #c2410c; width: 100px;">🟠 티스토리</span>
+              <input type="text" id="mcTstoryUrl" oninput="syncChannelSettings('modal')" placeholder="티스토리 주소 (예: https://myblog.tistory.com)" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 0.84rem;">
+              <button type="button" onclick="testOpenTstoryBlog()" style="background: #ffedd5; border: 1px solid #fed7aa; color: #9a3412; font-size: 0.74rem; font-weight: 800; padding: 5px 8px; border-radius: 5px; cursor: pointer; white-space: nowrap;">
+                🔍 테스트
+              </button>
+            </div>
+            <div id="mcTstoryStatus" style="font-size: 0.76rem; margin-top: 4px; margin-left: 26px; color: #c2410c; font-weight: 600;">
+              🟠 연동 확인 중...
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- 원클릭 동시 발행 메인 액션 버튼 -->
-      <div style="margin-bottom: 20px;">
+      <!-- 원클릭 동시 발행 메인 액션 버튼 & 단독 발행 버튼 -->
+      <div style="margin-bottom: 18px;">
         <button type="button" onclick="executeMultiChannelPublish()" style="width: 100%; padding: 14px 20px; border-radius: 12px; background: linear-gradient(135deg, #059669 0%, #0d9488 100%); border: none; color: #ffffff; font-weight: 850; font-size: 1.05rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 15px rgba(5, 150, 105, 0.35);">
-          <span>🚀 선택한 블로그로 원클릭 동시 발행 시작</span>
+          <span>🚀 네이버 & 티스토리 동시 열기 (본문 자동복사)</span>
         </button>
+
+        <!-- 팝업 차단 걱정 없는 개별 채널 원클릭 버튼 -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+          <button type="button" onclick="executeSingleChannelPublish('naver')" style="padding: 11px 12px; border-radius: 10px; background: #ecfdf5; border: 1.5px solid #10b981; color: #065f46; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🟢 네이버만 열기 (본문복사)</span>
+          </button>
+          <button type="button" onclick="executeSingleChannelPublish('tstory')" style="padding: 11px 12px; border-radius: 10px; background: #fff7ed; border: 1.5px solid #f97316; color: #9a3412; font-weight: 800; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            <span>🟠 티스토리만 열기 (본문복사)</span>
+          </button>
+        </div>
+
+        <!-- 팝업 차단 감지 시 나타나는 긴급 안내 배너 -->
+        <div id="mcPopupNotice" style="display: none; margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: #fef2f2; border: 1.5px solid #fca5a5; font-size: 0.82rem; color: #991b1b; line-height: 1.5;">
+          <!-- 팝업 차단 시 동적으로 채널 바로가기 버튼 삽입 -->
+        </div>
+
         <p style="font-size: 0.78rem; color: #64748b; text-align: center; margin-top: 8px;">
-          (버튼 클릭 시: <strong>사진+서식 자동 복사</strong> ➔ <strong>네이버/티스토리 글쓰기 창이 새 탭으로 자동 오픈</strong>됩니다)
+          (버튼 클릭 시: <strong>사진+서식 자동 복사</strong> ➔ <strong>블로그 글쓰기 창이 새 탭으로 즉시 오픈</strong>됩니다)
         </p>
       </div>
 
-      <!-- 보조 도우미: 단계별 원클릭 복사 버튼들 -->
-      <div style="border-top: 1px dashed var(--border-color); padding-top: 16px;">
+      <!-- 보조 도우미: 단계별 수동 복사 버튼들 -->
+      <div style="border-top: 1px dashed var(--border-color); padding-top: 14px;">
         <div style="font-size: 0.82rem; font-weight: 750; color: var(--text-muted); margin-bottom: 8px;">
           🛠️ 세부 수동 복사 도우미 (필요 시 개별 클릭)
         </div>
@@ -3059,7 +3274,7 @@
       </div>
 
       <!-- 친절한 3단계 붙여넣기 팁 안내 -->
-      <div style="margin-top: 18px; padding: 14px 16px; background: #fffbeb; border-radius: 10px; border-left: 4px solid #f59e0b; font-size: 0.82rem; color: #92400e; line-height: 1.6;">
+      <div style="margin-top: 16px; padding: 14px 16px; background: #fffbeb; border-radius: 10px; border-left: 4px solid #f59e0b; font-size: 0.82rem; color: #92400e; line-height: 1.6;">
         📌 <strong>블로그 글쓰기 창에서 붙여넣는 방법 (10초 완료):</strong><br>
         1. 새 창으로 열린 네이버/티스토리 글쓰기 제목 란에 제목을 붙여넣습니다.<br>
         2. 본문 내용 란을 클릭하고 <strong>Ctrl + V</strong>를 누르면 <strong>글과 5장의 감동 사진이 서식 그대로 쏙</strong> 들어갑니다.<br>
@@ -3623,6 +3838,11 @@
         }
       }
       loadExternalChannelSettings();
+      // Gemini API 키 로드
+      const savedGeminiKey = localStorage.getItem('yebaek_gemini_api_key');
+      const elSettingGemini = document.getElementById('settingGeminiApiKey');
+      if (elSettingGemini && savedGeminiKey) elSettingGemini.value = savedGeminiKey;
+      if (typeof updateGeminiKeyBadge === 'function') updateGeminiKeyBadge();
     }
 
     function saveSiteSettings() {
@@ -3636,7 +3856,17 @@
         googleVerification: document.getElementById('settingGoogleVerification').value.trim(),
       };
       localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-      saveExternalChannelSettings(false);
+      saveExternalChannelSettings(false, 'settings');
+
+      // Gemini API 키 저장 동기화
+      const elSettingGemini = document.getElementById('settingGeminiApiKey');
+      if (elSettingGemini) {
+        const gKey = elSettingGemini.value.trim();
+        if (gKey) localStorage.setItem('yebaek_gemini_api_key', gKey);
+        else localStorage.removeItem('yebaek_gemini_api_key');
+        if (typeof updateGeminiKeyBadge === 'function') updateGeminiKeyBadge();
+      }
+
       alert('🌿 사이트 설정 변경사항이 안전하게 저장되었습니다!\n메인 화면에 즉시 적용됩니다.');
     }
 
@@ -4061,7 +4291,7 @@
       grid.innerHTML = editorPhotos.map((photo, idx) => `
         <div class="photo-item ${photo.src === mainThumbImg ? 'is-main' : ''}">
           <button type="button" class="photo-del-btn" onmousedown="event.preventDefault()" onclick="deletePhotoFromSidebar(${idx})" title="사진 삭제">✕</button>
-          <img src="${photo.src}" onmousedown="event.preventDefault()" onclick="insertBodyImg('${photo.src}')" title="클릭 시 본문에 삽입">
+          <img src="${photo.src}" onerror="if(this.src&&this.src.includes('maxresdefault.jpg')){this.src=this.src.replace('maxresdefault.jpg','hqdefault.jpg');}" onmousedown="event.preventDefault()" onclick="insertBodyImg('${photo.src}')" title="클릭 시 본문에 삽입">
           <div class="photo-item-controls">
             <button type="button" class="photo-btn photo-btn-ins" onmousedown="event.preventDefault()" onclick="insertBodyImg('${photo.src}')">본문 삽입</button>
             <button type="button" class="photo-btn photo-btn-rep ${photo.src === mainThumbImg ? 'active' : ''}" onmousedown="event.preventDefault()" onclick="setAsMainThumb('${photo.src}')">
@@ -4461,10 +4691,73 @@
     }
 
     // =========================================================================
-    // 📸 AI 스마트 고화질 감성 이미지 라이브러리 (주제별 70여 종 엄선 풀)
+    // 📸 AI 스마트 고화질 감성 이미지 라이브러리 (주제별 180여 종 엄선 풀)
     // =========================================================================
     const AI_IMAGE_LIBRARY = {
-      // 1. 부모님, 효도, 칠순/팔순, 가족 사랑
+      // 1. 건강 식단, 영양, 저속노화, 채소, 과일, 건강 요리
+      health_diet: [
+        "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1498837167922-ddd27525d352?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1543362906-acfc16c67564?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1550989460-0adf9ea622e2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 2. 시니어 운동, 산책, 관절 스트레칭, 요가, 활력
+      health_exercise: [
+        "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 3. 비움과 갈무리, 정리수납, 미니멀 라이프, 단정한 방
+      organizing: [
+        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 4. 디지털 라이프, 스마트폰 사진 정리, 앱, 계정 갈무리
+      digital: [
+        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1581291518655-9523c932deb3?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1534972195531-a756b112697e?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 5. 웰다잉, 엔딩노트, 마음의 평온, 사색, 치유, 노을
+      welldying: [
+        "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1528722828814-77b9b83aafb2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 6. 인생 2막, 은퇴, 새로운 시작, 활력, 도전
+      reset: [
+        "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 7. 부모님, 가족, 시니어, 효도, 따뜻한 온기
       family: [
         "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
@@ -4475,7 +4768,7 @@
         "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
       ],
-      // 2. 자서전, 글쓰기, 회고록, 만년필, 책, 서재
+      // 8. 자서전, 글쓰기, 회고록, 만년필, 책, 서재
       writing: [
         "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
@@ -4486,46 +4779,16 @@
         "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
       ],
-      // 3. 사진첩, 흑백 추억, 시간의 기억
+      // 9. 사진첩, 흑백 추억, 시간의 기억
       memories: [
         "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80"
+        "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80"
       ],
-      // 4. 비움과 갈무리, 정리수납, 미니멀 라이프
-      organizing: [
-        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 5. 웰다잉, 엔딩노트, 마음의 평온, 사색, 치유
-      welldying: [
-        "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1528722828814-77b9b83aafb2?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1447752875215-b2761acb3c5d?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 6. 인생 2막, 은퇴, 새로운 시작, 활력
-      reset: [
-        "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 7. 대화, 인터뷰, 경청, 차 한 잔
+      // 10. 대화, 인터뷰, 경청, 차 한 잔, 부부 소통
       dialogue: [
         "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
@@ -4533,47 +4796,261 @@
         "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=800&q=80"
       ],
-      // 8. 고향, 자연, 들꽃, 힐링
+      // 11. 고향, 자연, 들꽃, 힐링 풍경
       nature: [
         "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 12. 여행, 추억 순례, 바다, 한옥, 힐링
+      travel: [
+        "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 13. 취미, 화분 가꾸기, 원예, 마음챙김, 명상
+      hobby_mind: [
+        "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80"
       ]
     };
 
-    // 🧠 글 맥락 지능형 분석 및 최적 고화질 사진 5장 큐레이션 엔진
-    function generateSmartAiPhotos(text = '', category = '', avoidUrls = []) {
+    // 최근 사용된 사진 중복 방지 세션 히스토리
+    let recentPhotoHistory = [];
+
+    // =========================================================================
+    // 🛠️ 레퍼런스(웹·유튜브) 파싱 & 썸네일 자동 추출 헬퍼
+    // =========================================================================
+
+    // 유튜브 비디오 ID 추출 (일반 영상, 쇼츠, 모바일, embed 모두 지원)
+    function extractYoutubeVideoId(url) {
+      if (!url || typeof url !== 'string') return null;
+      const str = url.trim();
+      const regExp = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?|shorts)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i;
+      const match = str.match(regExp);
+      return (match && match[1]) ? match[1] : null;
+    }
+
+    // 웹 도메인 추출
+    function extractWebDomain(url) {
+      if (!url || typeof url !== 'string') return '';
+      try {
+        let clean = url.trim();
+        if (!/^https?:\/\//i.test(clean)) clean = 'https://' + clean;
+        const u = new URL(clean);
+        return u.hostname.replace(/^www\./i, '');
+      } catch (e) {
+        return '';
+      }
+    }
+
+    // 유튜브 URL 실시간 썸네일 감지 핸들러
+    function handleAiYoutubeUrlInput(url) {
+      const previewWrap = document.getElementById('aiYoutubeThumbPreviewWrap');
+      const previewImg = document.getElementById('aiYoutubeThumbImg');
+      if (!previewWrap || !previewImg) return;
+
+      const ytId = extractYoutubeVideoId(url);
+      if (ytId) {
+        previewImg.src = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+        previewWrap.style.display = 'flex';
+      } else {
+        previewWrap.style.display = 'none';
+      }
+    }
+
+    // 에디터 좌측 사진 보관함에서 직접 웹/유튜브 이미지 URL 추가하기
+    function promptAndAddExternalPhoto() {
+      const input = prompt('추가하실 이미지 URL 또는 유튜브 영상 링크를 입력해 주세요:\n\n(유튜브 영상 링크를 넣으시면 고화질 썸네일이 자동 추출되어 담깁니다)');
+      if (!input || !input.trim()) return;
+      const val = input.trim();
+      const ytId = extractYoutubeVideoId(val);
+      if (ytId) {
+        const thumbUrl = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+        addPhotoToSidebar(thumbUrl);
+        setAsMainThumb(thumbUrl);
+        alert('📺 유튜브 영상의 고화질 썸네일이 사진 보관함에 담기고 대표사진으로 지정되었습니다!');
+      } else if (/^https?:\/\//i.test(val)) {
+        addPhotoToSidebar(val);
+        alert('🖼️ 사진이 보관함에 성공적으로 추가되었습니다!');
+      } else {
+        alert('올바른 웹 URL(http:// 또는 https://)을 입력해 주세요.');
+      }
+    }
+
+    // AI 모달 탭 전환 & 칩 입력
+    function setAiKeyword(kw, cat, tag) {
+      const kwInput = document.getElementById('aiCustomKeywordInput');
+      const catInput = document.getElementById('aiCustomCategory');
+      if (kwInput) kwInput.value = kw;
+      if (catInput && cat) catInput.value = cat;
+      if (kwInput) kwInput.focus();
+    }
+
+    function switchAiModalTab(tabName) {
+      const btnCustom = document.getElementById('aiTabBtnCustom');
+      const btnPresets = document.getElementById('aiTabBtnPresets');
+      const panelCustom = document.getElementById('aiCustomPanel');
+      const panelPresets = document.getElementById('aiPresetsPanel');
+
+      if (tabName === 'custom') {
+        if (btnCustom) {
+          btnCustom.style.background = 'var(--accent, #2b5a42)';
+          btnCustom.style.color = '#fff';
+          btnCustom.style.fontWeight = '800';
+        }
+        if (btnPresets) {
+          btnPresets.style.background = 'transparent';
+          btnPresets.style.color = 'var(--text-muted)';
+          btnPresets.style.fontWeight = '700';
+        }
+        if (panelCustom) panelCustom.style.display = 'block';
+        if (panelPresets) panelPresets.style.display = 'none';
+      } else {
+        if (btnPresets) {
+          btnPresets.style.background = 'var(--accent, #2b5a42)';
+          btnPresets.style.color = '#fff';
+          btnPresets.style.fontWeight = '800';
+        }
+        if (btnCustom) {
+          btnCustom.style.background = 'transparent';
+          btnCustom.style.color = 'var(--text-muted)';
+          btnCustom.style.fontWeight = '700';
+        }
+        if (panelCustom) panelCustom.style.display = 'none';
+        if (panelPresets) panelPresets.style.display = 'block';
+        renderAiPresets();
+      }
+    }
+
+    let activePresetCategory = 'all';
+    function filterPresets(cat, btn) {
+      activePresetCategory = cat;
+      document.querySelectorAll('.preset-filter-btn').forEach(b => {
+        b.style.background = '#fff';
+        b.style.borderColor = '#cbd5e1';
+        b.style.color = '#334155';
+        b.style.fontWeight = '700';
+      });
+      if (btn) {
+        btn.style.background = 'var(--accent, #2b5a42)';
+        btn.style.borderColor = 'var(--accent, #2b5a42)';
+        btn.style.color = '#fff';
+        btn.style.fontWeight = '800';
+      }
+      renderAiPresets();
+    }
+
+    // =========================================================================
+    // 🤖 Google Gemini API 키 로컬 관리 & 연동
+    // =========================================================================
+    const GEMINI_API_KEY_STORAGE = 'yebaek_gemini_api_key';
+
+    function getSavedGeminiApiKey() {
+      try {
+        return localStorage.getItem(GEMINI_API_KEY_STORAGE) || '';
+      } catch (e) {
+        return '';
+      }
+    }
+
+    function saveGeminiApiKey() {
+      const input = document.getElementById('aiGeminiApiKey');
+      const key = input ? input.value.trim() : '';
+      if (!key) {
+        localStorage.removeItem(GEMINI_API_KEY_STORAGE);
+        updateGeminiKeyBadge();
+        alert('Gemini API 키가 삭제되었습니다. 스마트 내장 지능형 엔진으로 작동합니다.');
+        return;
+      }
+      localStorage.setItem(GEMINI_API_KEY_STORAGE, key);
+      updateGeminiKeyBadge();
+      alert('✨ Google Gemini API 키가 안전하게 저장되었습니다!\n앞으로 웹·유튜브 내용을 Gemini 최신 모델이 실시간으로 종합 분석하여 100% 독창적인 글을 집필합니다.');
+    }
+
+    function updateGeminiKeyBadge() {
+      const badge = document.getElementById('geminiKeyBadge');
+      const input = document.getElementById('aiGeminiApiKey');
+      const saved = getSavedGeminiApiKey();
+      if (input && saved) input.value = saved;
+      if (badge) {
+        if (saved) {
+          badge.textContent = '✨ Gemini AI 활성화됨';
+          badge.style.background = '#e0e7ff';
+          badge.style.color = '#4338ca';
+        } else {
+          badge.textContent = '스마트 내장 엔진 사용중';
+          badge.style.background = '#e2e8f0';
+          badge.style.color = '#475569';
+        }
+      }
+    }
+
+    function toggleGeminiSettingsAccordion() {
+      const wrap = document.getElementById('geminiSettingsWrap');
+      const arrow = document.getElementById('geminiAccordionArrow');
+      if (!wrap) return;
+      const isHidden = wrap.style.display === 'none';
+      wrap.style.display = isHidden ? 'block' : 'none';
+      if (arrow) arrow.textContent = isHidden ? '▲' : '▼';
+    }
+
+    // 🧠 글 맥락 지능형 분석 및 최적 고화질 사진 5장 스마트 큐레이션 엔진
+    function generateSmartAiPhotos(text = '', category = '', avoidUrls = [], youtubeUrl = '', webUrl = '') {
       const lower = (text + ' ' + category).toLowerCase();
-      
+      const result = [];
+
+      // 1) 유튜브 URL이 있는 경우, 최우선 1순위로 유튜브 고화질 썸네일 배정!
+      const ytId = extractYoutubeVideoId(youtubeUrl);
+      if (ytId) {
+        const ytThumb = `https://img.youtube.com/vi/${ytId}/maxresdefault.jpg`;
+        result.push(ytThumb);
+      }
+
+      // 2) 카테고리별 테마 점수 계산
       const scores = {
+        health_diet: 0,
+        health_exercise: 0,
+        organizing: 0,
+        digital: 0,
+        welldying: 0,
+        reset: 0,
         family: 0,
         writing: 0,
         memories: 0,
-        organizing: 0,
-        welldying: 0,
-        reset: 0,
         dialogue: 0,
-        nature: 0
+        nature: 0,
+        travel: 0,
+        hobby_mind: 0
       };
 
-      if (/칠순|팔순|환갑|부모님|어머니|아버지|엄마|아빠|가족|효도|손주|자녀|자식/.test(lower)) scores.family += 5;
-      if (/자서전|회고록|평전|글쓰기|원고|만년필|도서|책|출판|기록|집필/.test(lower)) scores.writing += 5;
-      if (/사진|앨범|추억|흑백|기억|청춘|세월|옛날|그리움|과거/.test(lower)) scores.memories += 5;
-      if (/정리|비움|옷장|수납|물건|유품|미니멀|공간|청소|갈무리/.test(lower)) scores.organizing += 5;
-      if (/웰다잉|엔딩노트|사전연명|임종|마지막|평온|안식|장례|죽음|사후/.test(lower)) scores.welldying += 5;
-      if (/은퇴|퇴직|인생2막|리셋|버킷리스트|루틴|5060|새로운|도전|활력/.test(lower)) scores.reset += 5;
-      if (/인터뷰|질문|대화|목소리|구술|경청|코치|상담|이야기/.test(lower)) scores.dialogue += 5;
-      if (/고향|지리산|자연|들꽃|산|강|꽃|풍경|사계절|들판/.test(lower)) scores.nature += 5;
+      if (/식단|음식|영양|저속노화|혈압|당뇨|단백질|채소|과일|식사|밥상|영양제|요리|레시피|지중해/.test(lower)) scores.health_diet += 7;
+      if (/운동|스트레칭|관절|걷기|산책|홈트|헬스|요가|체조|척추|허리|무릎|유산소|근력/.test(lower)) scores.health_exercise += 7;
+      if (/정리|비움|물건|옷장|수납|버리기|청소|미니멀|유품|나눔|서랍|방|살림/.test(lower)) scores.organizing += 7;
+      if (/스마트폰|사진|계정|클라우드|카톡|디지털|앱|인터넷|기기|컴퓨터|태블릿|백업/.test(lower)) scores.digital += 7;
+      if (/웰다잉|사전연명|엔딩노트|상속|유언|장례|임종|존엄사|갈무리|사후|마지막|고별/.test(lower)) scores.welldying += 7;
+      if (/은퇴|퇴직|인생2막|리셋|버킷리스트|재정|시니어\s*일자리|귀촌|창업|새로운|도전|활력/.test(lower)) scores.reset += 7;
+      if (/칠순|팔순|환갑|부모님|어머니|아버지|엄마|아빠|가족|효도|손주|자녀|자식/.test(lower)) scores.family += 7;
+      if (/자서전|회고록|평전|글쓰기|원고|만년필|도서|책|출판|기록|집필|서재|문학/.test(lower)) scores.writing += 7;
+      if (/사진첩|앨범|추억|흑백|기억|청춘|세월|옛날|그리움|과거|향수/.test(lower)) scores.memories += 7;
+      if (/인터뷰|질문|대화|목소리|구술|경청|코치|상담|이야기|부부|소통/.test(lower)) scores.dialogue += 7;
+      if (/고향|지리산|자연|들꽃|산|강|꽃|풍경|사계절|들판|숲|오솔길|바람/.test(lower)) scores.nature += 7;
+      if (/여행|순례|바다|기차|둘레길|한옥|배낭|휴식|풍경/.test(lower)) scores.travel += 7;
+      if (/취미|화분|원예|식물|그림|미술|음악|악기|도예|명상|다도|마음|평온/.test(lower)) scores.hobby_mind += 7;
 
-      if (category === '비움과 갈무리') { scores.organizing += 3; scores.memories += 2; }
-      if (category === '웰라이프') { scores.family += 2; scores.writing += 2; scores.reset += 2; }
-      if (category === '웰다잉') { scores.welldying += 3; scores.dialogue += 2; }
+      if (category === '비움과 갈무리') { scores.organizing += 3; scores.digital += 2; scores.memories += 2; }
+      if (category === '웰라이프') { scores.health_diet += 2; scores.health_exercise += 2; scores.family += 2; scores.reset += 2; }
+      if (category === '웰다잉') { scores.welldying += 4; scores.dialogue += 2; scores.memories += 2; }
 
       const sortedThemes = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-      const primaryTheme = sortedThemes[0] || 'family';
-      const secondaryTheme = sortedThemes[1] || 'writing';
+      const primaryTheme = sortedThemes[0] || 'health_diet';
+      const secondaryTheme = sortedThemes[1] || 'nature';
+      const tertiaryTheme = sortedThemes[2] || 'writing';
 
       const shuffle = arr => {
         const copy = [...arr];
@@ -4584,37 +5061,45 @@
         return copy;
       };
 
-      const filterUnused = list => {
-        const unused = list.filter(u => !avoidUrls.includes(u));
-        return unused.length >= 3 ? unused : list;
+      const allAvoid = new Set([...avoidUrls, ...recentPhotoHistory.slice(-15)]);
+
+      const getFilteredShuffled = theme => {
+        const pool = AI_IMAGE_LIBRARY[theme] || AI_IMAGE_LIBRARY.family || [];
+        const filtered = pool.filter(u => !allAvoid.has(u));
+        return shuffle(filtered.length >= 3 ? filtered : pool);
       };
 
-      const primaryPool = filterUnused(AI_IMAGE_LIBRARY[primaryTheme] || AI_IMAGE_LIBRARY.family);
-      const secondaryPool = filterUnused(AI_IMAGE_LIBRARY[secondaryTheme] || AI_IMAGE_LIBRARY.writing);
+      const pool1 = getFilteredShuffled(primaryTheme);
+      const pool2 = getFilteredShuffled(secondaryTheme);
+      const pool3 = getFilteredShuffled(tertiaryTheme);
 
-      const shuffledPrimary = shuffle(primaryPool);
-      const shuffledSecondary = shuffle(secondaryPool);
-
-      const result = [];
-      if (shuffledPrimary[0]) result.push(shuffledPrimary[0]);
-      if (shuffledSecondary[0]) result.push(shuffledSecondary[0]);
-      if (shuffledPrimary[1]) result.push(shuffledPrimary[1]);
-      if (shuffledSecondary[1]) result.push(shuffledSecondary[1]);
-      if (shuffledPrimary[2]) result.push(shuffledPrimary[2]);
-
-      if (result.length < 5) {
-        const allPhotos = shuffle(Object.values(AI_IMAGE_LIBRARY).flat());
-        for (const p of allPhotos) {
-          if (!result.includes(p)) result.push(p);
-          if (result.length >= 5) break;
+      const candidateLists = [pool1, pool2, pool3];
+      let listIdx = 0;
+      while (result.length < 5) {
+        const currentList = candidateLists[listIdx % candidateLists.length];
+        const candidate = currentList.find(img => !result.includes(img));
+        if (candidate) {
+          result.push(candidate);
+        } else {
+          const allShuffled = shuffle(Object.values(AI_IMAGE_LIBRARY).flat());
+          const fallbackImg = allShuffled.find(img => !result.includes(img));
+          if (fallbackImg) result.push(fallbackImg);
+          else break;
         }
+        listIdx++;
+        if (listIdx > 50) break;
+      }
+
+      recentPhotoHistory.push(...result);
+      if (recentPhotoHistory.length > 30) {
+        recentPhotoHistory = recentPhotoHistory.slice(-30);
       }
 
       return result.slice(0, 5);
     }
 
     // =========================================================================
-    // 🪄 AI 황금키워드 자동 칼럼 생성 프리셋 (테마별 완전 독립 고화질 사진 세트)
+    // 🪄 AI 황금키워드 자동 칼럼 생성 프리셋 (16종 다채로운 주제 & 독립 사진 세트)
     // =========================================================================
     const aiArticlePresets = [
       {
@@ -4637,16 +5122,14 @@
           <blockquote>"자식이 부모에게 드릴 수 있는 가장 위대한 효도는, 부모님이 걸어오신 험난했던 인생의 모든 굽이굽이를 '눈부신 역사'로 인정하고 기록해 드리는 것입니다."</blockquote>
           <h3>1. "내 인생에 쓸 게 뭐가 있냐" 하시던 아버지의 눈물</h3>
           <p>처음 자서전 제작 이야기를 꺼냈을 때, 아버지는 손사래를 치셨습니다. "대통령이나 재벌도 아닌데 평범한 내가 무슨 자서전이냐"고 하셨지요. 하지만 전문 구술 코칭스태프가 찾아와 옛날 흑백 사진첩을 한 장씩 넘기며 질문을 던지자, 아버지의 눈빛이 달라지기 시작했습니다.</p>
-          <p>어린 시절 고향 마을의 풍경, 어머니를 처음 만났던 설레던 날, 자식들 등록금을 마련하려 밤낮없이 뛰었던 치열한 일터의 기억까지... 아버지는 평생 가슴에만 묻어두었던 이야기들을 밤이 깊도록 털어놓으시며 소년처럼 웃으시기도 하고, 남몰래 눈시울을 붉히시기도 했습니다.</p>
           <h3>2. 4주간의 구술 녹음과 184쪽의 디지털 자서전 완성</h3>
-          <p>녹음된 구술 음성은 AI 음성 텍스트 변환과 전문 에디터의 세심한 윤문을 거쳐 한 권의 품격 있는 책으로 빚어졌습니다. 낡은 앨범 속 빛바랜 사진들은 디지털로 복원되어 고화질로 실렸고, 아버지가 자식들과 손주들에게 남기고 싶은 따뜻한 인생 교훈과 당부의 말씀이 '인생 후반전 선언문'이라는 챕터로 갈무리되었습니다.</p>
+          <p>녹음된 구술 음성은 AI 음성 텍스트 변환과 전문 에디터의 세심한 윤문을 거쳐 한 권의 품격 있는 책으로 빚어졌습니다. 낡은 앨범 속 빛바랜 사진들은 디지털로 복원되어 고화질로 실렸고, 아버지가 자식들과 손주들에게 남기고 싶은 따뜻한 인생 교훈이 '인생 후반전 선언문'으로 갈무리되었습니다.</p>
           <h3>3. 온 가족이 함께 눈물 흘린 칠순 헌정식</h3>
           <p>칠순 당일, 양장본으로 제작된 184쪽의 자서전을 보자기에 싸서 건네드렸습니다. 책 표지에 박힌 본인의 존함과 사진을 어루만지시던 아버지의 손이 파르르 떨렸습니다. 손주들이 할아버지의 어린 시절 이야기를 소리 내어 읽자, 온 가족의 눈가에 눈물이 맺혔습니다.</p>
-          <p>그날 아버지는 제 손을 꼭 잡고 말씀하셨습니다. <strong>"내가 살아온 70년 세월이 결코 헛되지 않았구나. 내 평생 받은 선물 중 가장 눈부시고 자랑스럽다."</strong></p>
           <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px; color: #1e293b;">
             <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 부모님의 세월이 사라지기 전에, 이야기를 기록해 주세요</h4>
             <p style="margin: 0; font-size: 0.94rem; color: #334155; line-height: 1.65;">
-              시간은 부모님을 기다려주지 않습니다. 부모님의 목소리와 온기가 남아있는 지금, 부모님의 찬란했던 인생의 결을 여백과 결 디지털 자서전으로 남겨보세요.
+              시간은 부모님을 기다려주지 않습니다. 부모님의 목소리와 온기가 남아있는 지금, 부모님의 찬란했던 인생의 결을 디지털 자서전으로 남겨보세요.
             </p>
           </div>
         `
@@ -4661,7 +5144,7 @@
         photos: [
           "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?auto=format&fit=crop&w=800&q=80"
         ],
@@ -4677,18 +5160,95 @@
         `
       },
       {
-        badge: "🌿 인생 2막 은퇴자 타깃 / 라이프 리셋",
-        keywords: "은퇴 후 버킷리스트, 5060 재취업, 라이프 리셋",
+        badge: "🥗 5060 건강 식단 / 저속노화",
+        keywords: "저속노화 식단, 통곡물 콩류 식단, 혈당 스파이크 방지, 시니어 영양",
+        category: "웰라이프",
+        title: "5060 뇌와 혈관을 10년 젊게 만드는 기적의 저속노화 식단 3원칙",
+        excerpt: "단순당과 정제 탄수화물을 줄이고 통곡물과 콩류 중심의 밥상으로 만성 염증을 줄이며 맑은 정신과 활력을 되찾는 식사법.",
+        image: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"요즘 들어 부쩍 기억력이 깜빡거리고 오후만 되면 몸이 천근만근 무거우신가요?"</p>
+          <p>많은 분들이 나이 탓이라 여기지만, 사실 이는 매일 우리가 먹는 밥상에서 비롯되는 '혈당 스파이크'와 만성 염증의 신호일 가능성이 높습니다. 노화의 속도는 유전이 아니라 식습관으로 조절할 수 있습니다.</p>
+          <blockquote>"저속노화 식단은 굶거나 맛없는 음식을 참는 고통이 아니라, 몸의 엔진에 가장 순수하고 지속력 있는 에너지를 채워 넣는 우아한 습관입니다."</blockquote>
+          <h3>1. 흰쌀밥을 렌틸콩·귀리·현미 통곡물 밥으로 교체하기</h3>
+          <p>혈당을 급격히 치솟게 만드는 흰쌀밥과 밀가루를 줄이고, 복합 탄수화물과 식이섬유가 풍부한 통곡물 밥으로 전환합니다. 포만감이 오래가며 뇌 혈관의 산화 스트레스를 현저히 낮춰줍니다.</p>
+          <h3>2. 나물과 올리브유, 신선한 녹황색 채소의 선식(先食)</h3>
+          <p>식사를 할 때 밥이나 고기보다 채소를 먼저 먹는 '채소 ➔ 단백질 ➔ 탄수화물' 순서 식사법만 지켜도 식후 혈당 스파이크를 절반 이하로 줄일 수 있습니다.</p>
+          <h3>3. 가공식품과 단순당 음료와의 품격 있는 결별</h3>
+          <p>믹스커피, 탄산음료, 과도한 과일 주스 대신 미온수와 무가당 차를 가까이하세요. 일주일만 실천해도 아침에 일어날 때 몸이 한결 가벼워지는 놀라운 변화를 체감하게 됩니다.</p>
+        `
+      },
+      {
+        badge: "🧘 관절 건강 / 시니어 홈트",
+        keywords: "시니어 관절 스트레칭, 아침 15분 루틴, 척추 유연성, 시니어 걷기",
+        category: "웰라이프",
+        title: "매일 아침 15분, 굳어가는 관절과 척추를 부드럽게 깨우는 시니어 스트레칭",
+        excerpt: "무리한 헬스나 격한 운동 대신, 침대와 거실에서 관절 통증 없이 몸의 유연성과 활력을 되살리는 3단계 부드러운 아침 루틴.",
+        image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1483721310020-03333e577078?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>아침에 눈을 떴을 때 손가락 마디마디가 뻣뻣하거나 허리가 굳어 바로 일어나기 힘드셨던 적이 있으신가요? 밤사이 체온이 내려가고 관절액의 순환이 둔해져 생기는 자연스러운 현상입니다.</p>
+          <blockquote>"운동의 핵심은 강도가 아니라 '지속성'입니다. 내 몸의 한계를 존중하며 호흡과 함께 부드럽게 몸을 깨워내는 시간이 하루의 질을 결정합니다."</blockquote>
+          <h3>1. 눈뜨자마자 누워서 하는 기지개와 발목 돌리기</h3>
+          <p>갑자기 벌떡 일어나는 것은 혈압과 척추에 무리를 줍니다. 이불 속에서 깊은 호흡과 함께 온몸을 위아래로 길게 늘이고, 발목을 안팎으로 20회씩 천천히 회전시켜 하체 혈액순환을 촉진합니다.</p>
+          <h3>2. 고관절과 엉덩이 근육을 풀어주는 무릎 가슴 당기기</h3>
+          <p>등을 대고 누운 상태에서 한쪽 무릎을 양손으로 감싸 가슴 쪽으로 지그시 당겨줍니다. 허리 기립근의 압박을 덜어주어 만성 요통을 예방하는 최고의 동작입니다.</p>
+          <h3>3. 따뜻한 물 한 잔과 함께하는 가벼운 어깨 돌리기</h3>
+          <p>미온수 한 잔을 천천히 마신 후, 바른 자세로 서서 어깨 견갑골을 뒤로 모으듯 크게 원을 그리며 회전합니다. 굽어 있던 가슴이 열리며 뇌로 가는 산소 공급이 활성화됩니다.</p>
+        `
+      },
+      {
+        badge: "📦 미니멀 라이프 / 비움",
+        keywords: "애착 물건 정리, 5060 미니멀 라이프, 물건 비우기, 마음 챙김",
+        category: "비움과 갈무리",
+        title: "30년 모은 애착 물건, 죄책감 없이 홀가분하게 비워내는 마음 정리법",
+        excerpt: "언젠가 쓰겠지 하며 쌓아둔 옷장과 서랍 속 물건들. 과거의 미련에서 벗어나 지금 내 삶의 공간과 마음에 여백을 선물하는 3단계 비움의 기술.",
+        image: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"아까워서 못 버리고, 추억이 깃들어 못 버리고..."</p>
+          <p>어느새 집안 곳곳을 가득 채운 물건들은 공간만 차지하는 것이 아니라 우리의 뇌와 마음에도 보이지 않는 피로감을 안겨줍니다. 물건을 비우는 것은 아까운 것을 버리는 행위가 아니라, '현재의 나'에게 집중하기 위한 결단입니다.</p>
+          <blockquote>"공간을 비우면 삶의 결이 보이고, 물건을 덜어내면 진짜 소중한 인연과 여유가 채워집니다."</blockquote>
+          <h3>1. '언젠가 쓰겠지' 박스를 만들어 3개월 유예 기간 두기</h3>
+          <p>당장 버리기 두려운 물건은 상자에 담아 날짜를 적어두세요. 3개월 동안 한 번도 그 상자를 열지 않았다면, 그 물건 없이도 내 일상은 충분히 완전하다는 뜻입니다.</p>
+          <h3>2. 사진으로 남기고 물건은 이별하기</h3>
+          <p>자녀들의 어린 시절 상장이나 오래된 여행 기념품은 스마트폰 고화질 사진으로 촬영하여 디지털 앨범에 보관하고, 실물은 고마운 마음을 전하며 보내주세요.</p>
+          <h3>3. 나눔과 기부로 물건에 두 번째 생명 불어넣기</h3>
+          <p>내가 쓰지 않는 양질의 옷과 서적을 아름다운가게나 이웃에게 나누면, 쓰레기가 되는 것이 아니라 누군가의 삶에 온기가 됩니다.</p>
+        `
+      },
+      {
+        badge: "🌱 은퇴 후 인생 2막 / 라이프 리셋",
+        keywords: "정년퇴직 후 4주 리셋, 은퇴 증후군 극복, 5060 루틴, 버킷리스트",
         category: "웰라이프",
         title: "정년퇴직 후 찾아온 텅 빈 하루, 나를 되찾는 4주 라이프 리셋 루틴",
         excerpt: "30년 넘게 일하던 직장을 떠나 마주한 공허함. 무기력에서 벗어나 내 삶의 주권을 회복하고 두 번째 황금기를 여는 4주간의 기록 여행.",
         image: "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=800&q=80",
         photos: [
           "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80"
+          "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80"
         ],
         content: `
           <p>매일 아침 7시면 울리던 알람이 더 이상 울리지 않는 첫 월요일. 30년 넘게 직장인으로 살아온 이들에게 은퇴의 첫 주는 자유로움이 아니라 가슴 한구석이 텅 비어버리는 낯선 공허함으로 다가옵니다.</p>
@@ -4704,22 +5264,22 @@
         `
       },
       {
-        badge: "🕊️ 웰다잉 엔딩노트 타깃",
-        keywords: "사전연명의료의향서, 엔딩노트 쓰는 법, 웰다잉 교육",
+        badge: "🕊️ 웰다잉 / 사전연명의료",
+        keywords: "사전연명의료의향서, 엔딩노트 쓰는 법, 웰다잉 교육, 존엄사",
         category: "웰다잉",
         title: "자식에게 짐 되지 않는 부모의 아름다운 퇴장, 사전연명의료와 엔딩노트",
         excerpt: "임종 직전 가족들이 겪는 죄책감과 갈등을 미리 덜어주는 현명한 부모의 사전 갈무리. 품격 있는 웰다잉 준비 가이드.",
         image: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
         photos: [
           "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1528722828814-77b9b83aafb2?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=800&q=80"
         ],
         content: `
           <p>"내가 만약 의식을 잃고 회복 불가능한 상태가 된다면, 자식들이 나를 어떻게 해야 할까?"</p>
-          <p>많은 부모님들이 이 질문 앞에서 망설입니다. 연명치료를 중단하자니 자식들이 패륜이라는 죄책감에 시달릴까 두렵고, 그렇다고 무의미한 호흡기 치료로 막대한 병원비와 고통을 안겨주고 싶지는 않기 때문입니다.</p>
+          <p>많은 부모님들이 이 질문 앞에서 망설입니다. 연명치료를 중단하자니 자식들이 불효라는 죄책감에 시달릴까 두렵고, 그렇다고 무의미한 호흡기 치료로 막대한 병원비와 고통을 안겨주고 싶지는 않기 때문입니다.</p>
           <blockquote>"가장 현명한 사랑은, 내가 결정할 수 있을 때 미리 내 삶의 마지막을 스스로 선택해 두는 것입니다."</blockquote>
           <h3>1. 사전연명의료의향서의 법적 효력</h3>
           <p>19세 이상 성인이라면 누구나 보건복지부 지정 등록기관에서 사전연명의료의향서를 작성할 수 있습니다. 심폐소생술, 인공호흡기, 혈액투석 등 무의미한 연명치료를 거부하고 존엄한 자연사를 선택할 수 있는 법적 권리입니다.</p>
@@ -4730,8 +5290,8 @@
         `
       },
       {
-        badge: "🎙️ 부모님 인터뷰 구술 타깃",
-        keywords: "부모님 자서전 질문, 부모님 인생 인터뷰, 생애 회고록",
+        badge: "🎙️ 부모님 인터뷰 / 구술 서사",
+        keywords: "부모님 자서전 질문, 부모님 인생 인터뷰, 생애 회고록, 구술 기록",
         category: "웰라이프",
         title: "부모님이 건강하실 때 꼭 여쭤봐야 할 10가지 인생 질문",
         excerpt: "시간이 더 흐르기 전에 부모님의 육성으로 듣고 기록해야 할 삶의 결정적 순간들. 감동적인 부모님 인터뷰 질문 리스트.",
@@ -4747,17 +5307,205 @@
           <p>우리는 부모님에 대해 얼마나 알고 있을까요? 부모님의 생년월일과 좋아하시는 음식은 알지만, 젊은 날 부모님이 품었던 가장 뜨거웠던 꿈이 무엇이었는지, 살면서 가장 깊이 후회했던 순간은 언제였는지 아는 자녀는 드뭅니다.</p>
           <blockquote>"부모님이라는 거대한 도서관이 사라지기 전에, 그 안의 귀중한 책들을 펼쳐 읽어야 합니다."</blockquote>
           <h3>질문 1: "어린 시절 가장 행복했던 기억은 무엇인가요?"</h3>
+          <p>고향 마을의 풍경, 골목길에서 친구들과 뛰놀던 이야기 등 부모님의 눈빛이 소년 소녀로 되돌아가는 마법 같은 질문입니다.</p>
           <h3>질문 2: "어머니/아버지를 처음 만났을 때 어떤 마음이 드셨나요?"</h3>
+          <p>수줍었던 첫 만남과 연애 시절의 에피소드는 부모님을 '남녀'라는 인격체로 새롭게 이해하게 해줍니다.</p>
           <h3>질문 3: "인생에서 가장 힘들었던 고비는 어떻게 버텨내셨나요?"</h3>
-          <h3>질문 4: "제가 태어났던 날, 어떤 기분이셨나요?"</h3>
-          <h3>질문 5: "다시 20대로 돌아간다면 꼭 도전해보고 싶은 것은 무엇인가요?"</h3>
-          <h3>질문 6: "인생을 살면서 가장 소중하게 지켜온 가치관은 무엇인가요?"</h3>
-          <p>스마트폰 음성 녹음기를 켜고 이번 주말, 부모님께 따뜻한 차 한 잔을 건네며 질문을 시작해 보세요. 한 번도 들어보지 못했던 부모님의 청춘 이야기가 마법처럼 펼쳐집니다.</p>
+          <p>자식들을 키우며 겪었던 치열한 생존의 기록은 자녀들에게 평생을 살아갈 가장 위대한 인생 교과서가 됩니다.</p>
+        `
+      },
+      {
+        badge: "🎥 시니어 크리에이터 / 도전",
+        keywords: "60대 유튜브 도전, 시니어 블로그 글쓰기, 인생 지혜 나눔, 디지털 창작",
+        category: "웰라이프",
+        title: "60대에 시작한 유튜브와 블로그: 내 지혜를 세상과 나누는 기쁨",
+        excerpt: "나이는 숫자에 불과하다! 스마트폰 하나로 시작하는 시니어 크리에이터의 일상과, 내 세월의 경험이 누군가에게 위로가 되는 가슴 벅찬 여정.",
+        image: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1534972195531-a756b112697e?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"이 나이에 내가 무슨 유튜브를 하고 블로그에 글을 쓰겠어..."</p>
+          <p>많은 분들이 처음엔 망설입니다. 하지만 화려한 영상 기술이나 거창한 장비는 필요 없습니다. 60년 넘게 살아오며 쌓아온 진솔한 삶의 이야기, 맛있는 밥상 끓이는 비법, 은퇴 후의 소소한 일상 브이로그만으로도 수많은 세대와 깊은 교감을 나눌 수 있습니다.</p>
+          <blockquote>"기록하는 시니어는 늙지 않습니다. 창작하는 순간 우리는 세상에서 가장 젊은 탐험가가 됩니다."</blockquote>
+          <h3>1. 스마트폰 카메라 켜고 말 한마디 건네기부터</h3>
+          <p>편집에 대한 부담을 내려놓고 오늘 산책길에서 마주친 들꽃, 오늘 손주에게 해주고 싶은 한마디를 영상이나 짤막한 일기로 기록해보세요.</p>
+          <h3>2. 나와 비슷한 동년배들과 소통하는 커뮤니티의 즐거움</h3>
+          <p>블로그와 유튜브 댓글을 통해 전국의 동년배들과 댓글로 안부를 묻고 응원을 주고받으며 사회적 고립감이 눈 녹듯 사라집니다.</p>
+        `
+      },
+      {
+        badge: "⚖️ 상속·유언 / 분쟁 예방",
+        keywords: "가족 갈등 없는 상속, 유언장 작성법, 공증 유언, 재산 갈무리",
+        category: "웰다잉",
+        title: "가족 갈등을 미리 예방하는 현명한 부모의 상속·유언 정리 가이드",
+        excerpt: "사후에 자녀들이 법적 분쟁에 휘말리지 않도록, 부모가 맑은 정신일 때 명확하고 평화롭게 재산과 뜻을 갈무리하는 법률 지혜.",
+        image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"우리 애들은 착해서 내가 떠나도 싸우지 않을 거야."</p>
+          <p>안타깝게도 법정에 서는 수많은 상속 분쟁의 부모님들도 생전엔 그렇게 믿으셨습니다. 상속 갈등은 돈의 액수 때문이 아니라 '부모의 뜻이 명확히 전해지지 않았을 때' 발생합니다.</p>
+          <blockquote>"가장 위대한 유산은 재산의 액수가 아니라, 부모가 떠난 후에도 형제들이 우애 있게 손잡을 수 있도록 남겨둔 지혜로운 배려입니다."</blockquote>
+          <h3>1. 유언의 5가지 법적 요건 갖추기</h3>
+          <p>자필증서, 녹음, 공정증서 등 법적 요건을 엄격히 갖추지 않은 유언장은 무효가 될 수 있습니다. 공증인 앞에서 작성하는 공정증서 유언이 가장 안전합니다.</p>
+          <h3>2. 자녀들과 미리 나누는 '가족회의'의 온기</h3>
+          <p>비밀리에 감춰두기보다 자녀들을 모아놓고 부모의 생각을 차분히 설명하고, 서운한 마음이 남지 않도록 공평한 사랑의 편지를 덧붙이세요.</p>
+        `
+      },
+      {
+        badge: "🎉 웰다잉 축제 / 생전 장례식",
+        keywords: "생전 장례식, 고별 파티, 살아있을 때 나누는 작별, 품격 있는 이별",
+        category: "웰다잉",
+        title: "눈물 대신 미소로 기억되는 나만의 생전 고별식 이야기",
+        excerpt: "내가 숨을 거둔 뒤 차려지는 적막한 장례식 대신, 온전히 의식이 있을 때 내가 사랑하는 사람들을 초대해 함께 웃고 인사하는 따뜻한 고별 축제.",
+        image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"내 장례식인데 왜 정작 나는 아무 말도 못 하고 누워만 있어야 할까?"</p>
+          <p>최근 북유럽과 일본을 중심으로 확산되고 있는 '생전 고별 파티'는 내가 살아 숨 쉬는 동안 소중한 친구들과 가족을 초대해 맛있는 차와 식사를 나누며 감사함을 직접 전하는 새로운 문화입니다.</p>
+          <blockquote>"작별 인사는 온기가 남아있을 때 눈을 맞추며 건네야 비로소 가슴에 영원한 빛으로 남습니다."</blockquote>
+          <h3>1. 좋아하는 음악과 사진으로 꾸미는 추억의 자리</h3>
+          <p>꽃상여 대신 내가 평생 좋아했던 음악이 흐르고, 젊은 날 함께 뛰놀던 빛바랜 흑백 사진들을 벽에 걸어둡니다.</p>
+          <h3>2. "너를 만나 내 인생이 참 눈부셨다" 한 사람씩 건네는 포옹</h3>
+          <p>마음속에 품어왔던 미안함과 고마움을 직접 육성으로 털어놓을 때, 남아있는 이들에게도 깊은 치유와 해방감이 찾아옵니다.</p>
+        `
+      },
+      {
+        badge: "🕊️ 유품 정리 / 평화로운 나눔",
+        keywords: "부모님 유품 정리, 유품 나눔, 마음 치유 유품정리, 갈등 예방",
+        category: "비움과 갈무리",
+        title: "부모님이 남기신 유품, 상처 없이 평화롭게 나누고 보관하는 방법",
+        excerpt: "부모님이 떠나신 후 남겨진 집과 물건들 앞에서 슬픔과 갈등에 빠지지 않고, 고인의 온기를 기리며 정돈하는 3단계 유품 갈무리.",
+        image: "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1540518614846-7ede433c4ef7?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>부모님의 장례를 마치고 텅 빈 부모님의 집에 들어서는 순간, 옷걸이에 걸린 외투 한 벌에도 눈물이 왈칵 쏟아집니다. 하지만 슬픔 속에서도 남겨진 물건들을 정리해야 하는 순간은 피할 수 없습니다.</p>
+          <blockquote>"유품 정리는 고인의 흔적을 지우는 청소가 아니라, 부모님이 남겨주신 사랑의 결을 자녀들의 마음에 안치하는 마지막 의식입니다."</blockquote>
+          <h3>1. 형제들이 함께 모여 '추억의 물건 1가지씩' 고르기</h3>
+          <p>혼자서 무단으로 정리하면 형제간 오해가 생깁니다. 다 함께 모여 부모님의 손때 묻은 시계, 만년필, 즐겨 입으시던 카디건 등 각자 간직하고 싶은 상징물을 하나씩 나눕니다.</p>
+          <h3>2. 전문 유품 정리사의 도움과 합법적 소각·기부</h3>
+          <p>감당하기 힘든 방대한 가구와 물품은 전문 정리 컨시어지의 도움을 받아 합법적이고 경건하게 처리하는 것이 유족들의 심리적 치유에 도움이 됩니다.</p>
+        `
+      },
+      {
+        badge: "🧠 뇌 건강 / 치매 예방",
+        keywords: "치매 예방 습관, 시니어 두뇌 트레이닝, 뇌 가소성, 맑은 정신",
+        category: "웰라이프",
+        title: "치매 걱정 없는 활기찬 노후: 뇌 세포를 깨우는 매일 10분 두뇌 트레이닝",
+        excerpt: "나이 들어도 뇌는 새로운 시냅스를 만듭니다! 기억력을 지키고 치매 위험을 획기적으로 낮추는 매일 10분 두뇌 자극 습관.",
+        image: "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"방금 뭘 가지러 안방에 들어왔더라?" 깜빡하는 순간마다 덜컥 치매가 아닐까 두려운 마음이 스칩니다. 그러나 단순 건망증과 치매는 다르며, 뇌는 쓰면 쓸수록 단단해지는 '가소성'을 지니고 있습니다.</p>
+          <blockquote>"뇌는 나이에 따라 노화하는 것이 아니라, 새로운 호기심과 도전을 멈출 때 굳어집니다."</blockquote>
+          <h3>1. 매일 왼손으로 양치질하거나 새로운 길로 산책하기</h3>
+          <p>늘 다니던 익숙한 동선에서 벗어나 낯선 골목길을 걷거나 다른 손을 사용할 때 뇌의 신경망이 활발히 깨어납니다.</p>
+          <h3>2. 손글씨로 적는 3줄 감사 일기와 독서</h3>
+          <p>스마트폰 화면만 쳐다보는 수동적 뇌 활동에서 벗어나, 하루 3줄씩 만년필이나 펜으로 오늘 감사했던 일을 적으면 전두엽이 극적으로 활성화됩니다.</p>
+        `
+      },
+      {
+        badge: "👨‍👩‍👧 가족 관계 / 성인 자녀 소통",
+        keywords: "성인 자녀 거리두기, 품 안의 자식, 부모 자녀 소통, 독립",
+        category: "웰라이프",
+        title: "다 자란 성인 자녀와 건강하게 거리두기: '품 안의 자식'을 존중하는 부모의 지혜",
+        excerpt: "결혼하고 독립한 자녀에게 지나친 간섭 대신 따뜻한 응원을 건네며, 부모 자신의 주체적인 황금기를 지켜내는 현명한 사랑법.",
+        image: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>평생을 자식 뒷바라지에 모든 것을 쏟아부었는데, 자녀가 독립한 후 서운함과 배신감이 밀려오시나요? 그것은 자연스러운 부모의 마음이지만, 성인 자녀에게 가장 훌륭한 부모는 '스스로 행복한 부모'입니다.</p>
+          <blockquote>"자식은 내 소유물이 아니라 내 생애를 잠시 스쳐간 가장 귀한 손님입니다. 손님이 떠나갈 땐 박수를 쳐주어야 합니다."</blockquote>
+          <h3>1. 묻지 않은 조언은 삼가고 경청하기</h3>
+          <p>자녀의 육아나 재정 관리에 시시콜콜 훈수 두기보다 자녀가 먼저 조언을 구할 때까지 기다려주는 침묵이 최고의 배려입니다.</p>
+          <h3>2. 자녀에게 기대지 않는 부모만의 취미와 서재 갖기</h3>
+          <p>자녀의 연락만 기다리며 하루를 보내지 말고, 나만의 친구들과 동호회, 나만의 배움의 여정에 몰입하세요. 자녀들도 부모님의 당당한 모습을 보며 깊은 존경을 보냅니다.</p>
+        `
+      },
+      {
+        badge: "🌲 자연 힐링 / 추억 순례길",
+        keywords: "지리산 둘레길, 나 홀로 순례 여행, 60대 힐링 여행, 숲길 사색",
+        category: "은퇴",
+        title: "60대에 떠나는 나 홀로 추억 순례길: 인생 전반전을 갈무리하는 숲길 걷기",
+        excerpt: "복잡한 도시와 가족의 기대에서 잠시 벗어나, 지리산 둘레길과 고즈넉한 숲길을 걸으며 오롯이 나와 마주한 어느 은퇴자의 여행 수기.",
+        image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>배낭 하나를 짊어지고 이른 아침 구례구역에 내렸을 때, 차가운 새벽 공기가 폐부 깊숙이 스며들었습니다. 늘 누군가의 아버지로, 회사의 부장으로만 살았던 30년의 짐을 내려놓고 온전히 '나'라는 사람으로 걷기 시작한 첫 걸음이었습니다.</p>
+          <blockquote>"길을 걷는다는 것은 풍경을 보는 것이 아니라, 내 안에 쌓여있던 세월의 앙금을 흙길 위에 털어내는 정화의 과정입니다."</blockquote>
+          <h3>1. 묵언(默言)으로 걷는 오솔길의 평화</h3>
+          <p>스마트폰 전원을 끄고 바람 소리, 낙엽 밟는 바스락 소리에만 귀를 기울입니다. 소음이 사라진 자리에 평생 잊고 지냈던 내 영혼의 목소리가 들리기 시작합니다.</p>
+          <h3>2. 산골 다원에서 마신 차 한 잔의 위로</h3>
+          <p>이름 모를 산길 찻집에서 만난 노주안이 건네주신 따뜻한 차 한 잔. "참 애쓰며 잘 살아오셨습니다"라는 한마디에 참아왔던 눈물이 주르륵 흘렀습니다.</p>
+        `
+      },
+      {
+        badge: "☕ 황혼 부부 / 다정한 대화",
+        keywords: "황혼 부부 대화법, 은퇴 부부 갈등 해결, 경청과 존중, 동반자",
+        category: "웰라이프",
+        title: "40년을 함께 살았어도 낯선 배우자, 황혼에 다시 시작하는 다정한 대화법",
+        excerpt: "은퇴 후 하루 24시간을 함께 보내며 사소한 말 한마디로 부딪히는 부부들을 위한 따뜻한 화해와 경청의 기술.",
+        image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+        photos: [
+          "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=800&q=80"
+        ],
+        content: `
+          <p>"눈만 마주치면 잔소리고 밥 차려주기도 숨 막혀요." 은퇴 후 남편이 집에 머물기 시작하면서 황혼 이혼을 고민하는 부부들의 대표적인 하소연입니다. 오랜 세월 가족을 위해 달려오느라 서로의 마음을 보듬는 법을 잊어버린 탓입니다.</p>
+          <blockquote>"부부는 같은 곳을 바라보는 동반자이기도 하지만, 서로의 외로움을 가만히 품어주는 생애 마지막 안식처여야 합니다."</blockquote>
+          <h3>1. '당신 때문' 대신 '내 마음은'으로 말하기 (I-Message)</h3>
+          <p>"당신은 왜 맨날 그래!"라는 비난 대신 "당신이 그렇게 말하니 내가 서운한 마음이 들었어"라고 내 감정을 솔직히 털어놓는 순간 대화의 물꼬가 트입니다.</p>
+          <h3>2. 각자만의 독립된 공간과 시간 보장하기</h3>
+          <p>하루 종일 붙어있지 않아도 됩니다. 남편은 서재에서 책을 읽고 아내는 산책을 다녀오며 서로의 사생활과 취미를 존중해 줄 때 부부 사이에도 신선한 바람이 통합니다.</p>
         `
       }
     ];
 
     function openAiArticleGeneratorModal() {
+      updateGeminiKeyBadge();
+      switchAiModalTab('custom');
       renderAiPresets();
       const modal = document.getElementById('aiArticleGeneratorModal');
       if (modal) {
@@ -4788,32 +5536,44 @@
       const container = document.getElementById('aiPresetList');
       if (!container) return;
 
-      container.innerHTML = aiArticlePresets.map((p, idx) => `
-        <div style="border: 1.5px solid var(--border-color); border-radius: 12px; padding: 16px; background: #ffffff; transition: all 0.2s ease; display: flex; flex-direction: column; gap: 8px;">
-          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
-            <span style="font-size: 0.82rem; font-weight: 800; color: #4338ca; background: #eef2ff; padding: 3px 8px; border-radius: 6px;">
-              ${escapeHtml(p.badge)}
-            </span>
-            <span style="font-size: 0.78rem; color: #64748b;">
-              🎯 핵심 키워드: <strong>${escapeHtml(p.keywords)}</strong>
-            </span>
+      let list = aiArticlePresets;
+      if (activePresetCategory !== 'all') {
+        if (activePresetCategory === '은퇴') {
+          list = aiArticlePresets.filter(p => p.badge.includes('은퇴') || p.keywords.includes('은퇴') || p.category === '은퇴');
+        } else {
+          list = aiArticlePresets.filter(p => p.category === activePresetCategory);
+        }
+      }
+
+      container.innerHTML = list.map((p) => {
+        const realIdx = aiArticlePresets.indexOf(p);
+        return `
+          <div style="border: 1.5px solid var(--border-color); border-radius: 12px; padding: 16px; background: #ffffff; transition: all 0.2s ease; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: #4338ca; background: #eef2ff; padding: 3px 8px; border-radius: 6px;">
+                ${escapeHtml(p.badge)}
+              </span>
+              <span style="font-size: 0.78rem; color: #64748b;">
+                🎯 핵심 키워드: <strong>${escapeHtml(p.keywords)}</strong>
+              </span>
+            </div>
+            <div style="font-size: 1.02rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">
+              ${escapeHtml(p.title)}
+            </div>
+            <p style="font-size: 0.86rem; color: var(--text-muted); margin: 0; line-height: 1.5;">
+              ${escapeHtml(p.excerpt)}
+            </p>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; gap: 8px;">
+              <span style="font-size: 0.8rem; color: #10b981; font-weight: 750;">
+                📸 추천 사진 5장 자동 담김 (대표 1장 + 본문 4장)
+              </span>
+              <button type="button" onclick="applyAiPreset(${realIdx})" style="padding: 8px 16px; border-radius: 8px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none; color: #fff; font-weight: 800; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">
+                <span>🪄 이 주제로 자동 집필하기</span> ➔
+              </button>
+            </div>
           </div>
-          <div style="font-size: 1.02rem; font-weight: 800; color: var(--text-main); line-height: 1.4;">
-            ${escapeHtml(p.title)}
-          </div>
-          <p style="font-size: 0.86rem; color: var(--text-muted); margin: 0; line-height: 1.5;">
-            ${escapeHtml(p.excerpt)}
-          </p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; flex-wrap: wrap; gap: 8px;">
-            <span style="font-size: 0.8rem; color: #10b981; font-weight: 750;">
-              📸 추천 사진 5장 자동 담김 (대표 1장 + 내용 4장)
-            </span>
-            <button type="button" onclick="applyAiPreset(${idx})" style="padding: 8px 16px; border-radius: 8px; background: linear-gradient(135deg, #4f46e5, #7c3aed); border: none; color: #fff; font-weight: 800; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(79,70,229,0.3);">
-              <span>🪄 이 주제로 자동 집필하기</span> ➔
-            </button>
-          </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function applyAiPreset(idx) {
@@ -4846,52 +5606,299 @@
       alert(`🎉 [${p.title}]\n\n• AI 칼럼 본문이 에디터에 채워졌습니다!\n• 좌측 [사진 보관함]에 글 컨셉에 딱 맞는 감동 사진 5장이 담겼습니다!\n  (원하는 사진을 클릭해 [⭐ 대표]로 지정하거나 본문에 삽입하세요.)\n\n내용을 확인하신 후 상단의 [🚀 발행하기]를 누르시면 완료됩니다.`);
     }
 
-    // 맞춤 키워드 직접 입력 생성
-    function generateAiCustomArticle() {
-      const input = document.getElementById('aiCustomKeywordInput');
-      const kw = input ? input.value.trim() : '';
+    // =========================================================================
+    // 🧠 AI 멀티 주제 & 웹·유튜브 스마트 맞춤 글쓰기 엔진 (Gemini API & 오프라인 듀얼 지원)
+    // =========================================================================
+    async function generateSmartAiArticle() {
+      const kwInput = document.getElementById('aiCustomKeywordInput');
+      const kw = kwInput ? kwInput.value.trim() : '';
+
       if (!kw) {
-        alert('원하시는 키워드나 주제를 입력해 주세요.\n예: 부모님 팔순 잔치, 은퇴 후 자서전, 디지털 유품');
-        if (input) input.focus();
+        alert('원하시는 글 주제나 핵심 키워드를 입력해 주세요.\n예: 5060 저속노화 식단, 시니어 관절 스트레칭, 스마트폰 사진 정리법 등');
+        if (kwInput) kwInput.focus();
         return;
       }
 
-      const customTitle = `${kw}, 뻔한 선물 대신 평생 남을 184쪽 인생 서재로 전하는 최고의 효도`;
-      const customExcerpt = `${kw}을(를) 고민하는 분들을 위해, 돈으로 환산할 수 없는 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드리는 가장 우아하고 감동적인 솔루션을 제안합니다.`;
-      const customContent = `
-        <p>"${escapeHtml(kw)}에 대해 많은 분들이 고민하십니다."</p>
-        <p>하지만 며칠 지나면 사라질 일회성 선물이나 형식적인 식사 자리 대신, 평생을 자식들을 위해 묵묵히 헌신해오신 부모님의 삶에 '진짜 가치 있는 헌정'을 해드리는 것은 어떨까요?</p>
-        <blockquote>"자식이 부모에게 드릴 수 있는 가장 위대한 효도는, 부모님이 걸어오신 험난했던 인생의 모든 굽이굽이를 '눈부신 역사'로 인정하고 기록해 드리는 것입니다."</blockquote>
-        <h3>1. "내 인생에 쓸 게 뭐가 있냐" 하시던 부모님의 눈물</h3>
-        <p>처음 이야기를 꺼냈을 때, 부모님은 대부분 손사래를 치십니다. "대통령이나 재벌도 아닌데 평범한 내가 무슨 자서전이냐"고 하시지요. 하지만 전문 구술 코칭스태프가 찾아와 옛날 흑백 사진첩을 한 장씩 넘기며 질문을 던지자, 부모님의 눈빛이 달라지기 시작했습니다.</p>
-        <h3>2. 4주간의 구술 녹음과 184쪽의 디지털 자서전 완성</h3>
-        <p>녹음된 구술 음성은 AI 음성 변환과 전문 에디터의 세심한 윤문을 거쳐 한 권의 품격 있는 양장본 책으로 빚어집니다. 낡은 앨범 속 빛바랜 사진들은 디지털로 복원되어 고화질로 실렸고, 자식들과 손주들에게 남기고 싶은 따뜻한 인생 교훈이 '인생 후반전 선언문'으로 갈무리됩니다.</p>
-        <h3>3. 온 가족이 함께 눈물 흘린 헌정의 순간</h3>
-        <p>양장본으로 제작된 184쪽의 자서전을 보자기에 싸서 건네드리는 날, 책 표지에 박힌 본인의 존함과 사진을 어루만지시던 부모님의 손이 파르르 떨립니다. "내가 살아온 세월이 결코 헛되지 않았구나. 내 평생 받은 선물 중 가장 눈부시고 자랑스럽다."</p>
-        <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px; color: #1e293b;">
-          <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 부모님의 세월이 사라지기 전에, 이야기를 기록해 주세요</h4>
-          <p style="margin: 0; font-size: 0.94rem; color: #334155; line-height: 1.65;">
-            시간은 부모님을 기다려주지 않습니다. 부모님의 목소리와 온기가 남아있는 지금, 부모님의 찬란했던 인생의 결을 여백과 결 디지털 자서전으로 남겨보세요.
-          </p>
-        </div>
-      `;
+      const category = (document.getElementById('aiCustomCategory') ? document.getElementById('aiCustomCategory').value : '웰라이프') || '웰라이프';
+      const tone = (document.getElementById('aiCustomTone') ? document.getElementById('aiCustomTone').value : 'professional') || 'professional';
+      const webUrl = (document.getElementById('aiWebUrl') ? document.getElementById('aiWebUrl').value.trim() : '') || '';
+      const webContent = (document.getElementById('aiWebContent') ? document.getElementById('aiWebContent').value.trim() : '') || '';
+      const youtubeUrl = (document.getElementById('aiYoutubeUrl') ? document.getElementById('aiYoutubeUrl').value.trim() : '') || '';
+      const youtubeContent = (document.getElementById('aiYoutubeContent') ? document.getElementById('aiYoutubeContent').value.trim() : '') || '';
+      const includeYtCard = document.getElementById('aiIncludeYoutubeCard') ? document.getElementById('aiIncludeYoutubeCard').checked : true;
+      const includeWebBox = document.getElementById('aiIncludeWebBox') ? document.getElementById('aiIncludeWebBox').checked : true;
 
-      document.getElementById('editorTitle').value = customTitle;
-      document.getElementById('editorExcerpt').value = customExcerpt;
-      document.getElementById('editorCategory').value = '웰라이프';
-      document.getElementById('editorContent').innerHTML = customContent.trim();
+      const ytId = extractYoutubeVideoId(youtubeUrl);
+      const webDomain = extractWebDomain(webUrl);
+
+      const loadingBox = document.getElementById('aiLoadingBox');
+      const runBtn = document.getElementById('btnRunAiGenerate');
+      if (loadingBox) loadingBox.style.display = 'block';
+      if (runBtn) {
+        runBtn.disabled = true;
+        runBtn.style.opacity = '0.6';
+      }
+
+      let generatedTitle = '';
+      let generatedExcerpt = '';
+      let generatedContent = '';
+      let isGeminiUsed = false;
+
+      const savedGeminiKey = getSavedGeminiApiKey() || (document.getElementById('aiGeminiApiKey') ? document.getElementById('aiGeminiApiKey').value.trim() : '');
+
+      // 1) Gemini API 사용 시도 (키가 등록된 경우)
+      if (savedGeminiKey) {
+        try {
+          const prompt = `
+            당신은 대한민국 최고의 시니어 라이프, 웰에이징, 웰다잉, 자서전 전문 수석 에디터입니다.
+            다음 정보와 레퍼런스를 바탕으로 네이버 블로그/티스토리 상위 노출에 최적화된 고품질 전문 칼럼을 작성하세요.
+
+            [입력 정보]
+            - 주제/키워드: ${kw}
+            - 카테고리: ${category}
+            - 글 스타일: ${tone}
+            ${webUrl ? `- 웹 참고 URL: ${webUrl}` : ''}
+            ${webContent ? `- 웹 참고 핵심 내용/메모: ${webContent}` : ''}
+            ${youtubeUrl ? `- 유튜브 참고 영상 URL: ${youtubeUrl}` : ''}
+            ${youtubeContent ? `- 유튜브 핵심 포인트/메모: ${youtubeContent}` : ''}
+
+            [작성 규칙]
+            1. 제목은 클릭을 유도하면서도 품격 있고 진정성 있는 25~45자 한국어로 지으세요.
+            2. 요약문(excerpt)은 2~3줄로 작성하세요.
+            3. 본문(content)은 유려한 HTML로 작성하되 반드시 아래 구조를 지키세요:
+               - 공감과 문제의식을 다루는 도입부 <p>...</p>
+               - 가슴을 울리는 핵심 명언 <blockquote>...</blockquote>
+               - 3개의 세부 분석 및 구체적 실천 솔루션 각각 <h3>소제목</h3> 및 2~3개의 <p>문단</p>
+               - 결론 및 따뜻한 마무리 실천 박스 (<div style="margin:26px 0; padding:20px; background:#faf8f5; border-left:4px solid #2b5a42; border-radius:8px;">...</div>)
+            4. 오직 아래 JSON 형식으로만 응답하세요(코드블록 \`\`\`json 제외, 순수 JSON):
+            {"title": "...", "excerpt": "...", "content": "..."}
+          `;
+
+          const geminiRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${savedGeminiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ role: 'user', parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.7, topP: 0.95 }
+            })
+          });
+
+          if (geminiRes.ok) {
+            const data = await geminiRes.json();
+            const textResponse = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            const cleanJsonStr = textResponse.replace(/^```json/i, '').replace(/```$/i, '').trim();
+            const parsed = JSON.parse(cleanJsonStr);
+            if (parsed.title && parsed.content) {
+              generatedTitle = parsed.title;
+              generatedExcerpt = parsed.excerpt || `${kw}에 대한 깊이 있는 분석과 실천 솔루션`;
+              generatedContent = parsed.content;
+              isGeminiUsed = true;
+            }
+          } else {
+            console.warn('Gemini API 응답 오류, 스마트 내장 엔진으로 대체 실행합니다.');
+          }
+        } catch (err) {
+          console.warn('Gemini API 호출 중 예외 발생, 스마트 내장 엔진으로 즉시 대체합니다:', err);
+        }
+      }
+
+      // 2) Gemini 미사용 또는 실패 시: 스마트 지능형 내장 생성 엔진 가동
+      if (!generatedTitle || !generatedContent) {
+        const lowerKw = (kw + ' ' + webContent + ' ' + youtubeContent).toLowerCase();
+
+        // 도메인 감지
+        let domain = 'general';
+        if (/식단|음식|영양|저속노화|혈압|당뇨|단백질|채소|과일|식사|밥상|영양제|요리|레시피/.test(lowerKw)) domain = 'health_diet';
+        else if (/운동|스트레칭|관절|걷기|산책|홈트|헬스|요가|체조|척추|허리|무릎|유산소/.test(lowerKw)) domain = 'health_exercise';
+        else if (/정리|비움|물건|옷장|수납|버리기|청소|미니멀|유품|나눔|살림/.test(lowerKw)) domain = 'organizing';
+        else if (/스마트폰|사진|계정|클라우드|카톡|디지털|앱|인터넷|기기|컴퓨터|태블릿/.test(lowerKw)) domain = 'digital';
+        else if (/웰다잉|사전연명|엔딩노트|상속|유언|장례|임종|존엄사|갈무리|사후|고별/.test(lowerKw)) domain = 'welldying';
+        else if (/은퇴|퇴직|인생2막|리셋|버킷리스트|재정|시니어\s*일자리|귀촌|창업/.test(lowerKw)) domain = 'retirement';
+        else if (/칠순|팔순|환갑|부모님|어머니|아버지|엄마|아빠|가족|효도|자서전|회고록|구술/.test(lowerKw)) domain = 'family_memoir';
+        else if (/마음|힐링|우울|고독|명상|사색|치유|부부|대화|친구|위로/.test(lowerKw)) domain = 'mindfulness';
+
+        // 도메인별 제목 생성 패턴
+        const titleTemplates = {
+          health_diet: [
+            `${kw}: 100세 시대를 활기차고 건강하게 누리는 기적의 식단과 일상 루틴`,
+            `몸의 활력과 맑은 정신을 되살리는 ${kw}의 핵심 원칙 3가지`,
+            `${kw}, 왜 지금 5060 세대에게 가장 시급한 건강 솔루션일까?`
+          ],
+          health_exercise: [
+            `${kw}: 굳어가는 관절을 깨우고 활력을 되살리는 매일 15분 실천 가이드`,
+            `무리 없는 동작으로 평생 건강을 지키는 ${kw}의 올바른 실천법`,
+            `${kw}, 아침 루틴 하나로 몸의 유연성과 에너지를 되살리는 비법`
+          ],
+          organizing: [
+            `${kw}: 물건에 얽매이지 않고 마음까지 홀가분해지는 비움의 미학`,
+            `공간이 비워져야 삶이 채워진다: ${kw} 3단계 실천 로드맵`,
+            `${kw}, 죄책감 없이 가뿐하게 정리하고 나를 되찾는 시간`
+          ],
+          digital: [
+            `${kw}: 복잡한 디지털 세상을 스마트하고 안전하게 갈무리하는 법`,
+            `스마트폰 속 소중한 기록을 지키고 정돈하는 ${kw} 실천 가이드`,
+            `${kw}, 현대인을 위한 가장 우아한 디지털 유산 정리의 기술`
+          ],
+          welldying: [
+            `${kw}: 가족에게 짐 되지 않는 품격 있는 삶의 마무리와 준비`,
+            `평온한 마음으로 내 삶의 마지막을 주체적으로 디자인하는 ${kw}`,
+            `${kw}, 남겨질 가족에게 전하는 가장 아름답고 눈부신 배려`
+          ],
+          retirement: [
+            `${kw}: 은퇴 후 찾아온 텅 빈 일상을 설렘으로 채우는 인생 2막 설계도`,
+            `새로운 30년을 맞이하는 지혜로운 ${kw}과 라이프 리셋 루틴`,
+            `${kw}, 직함을 떼어내고 온전한 나로 서는 두 번째 황금기`
+          ],
+          family_memoir: [
+            `${kw}: 세월이 흘러도 바래지 않는 부모님의 인생 서사를 기록하는 시간`,
+            `돈으로 환산할 수 없는 최고의 가치: ${kw}을 통해 엮어내는 가족의 역사`,
+            `${kw}, 뻔한 선물 대신 평생 남을 가슴 벅찬 인생 이야기`
+          ],
+          mindfulness: [
+            `${kw}: 지친 일상에 평온과 여백을 선물하는 따뜻한 마음 챙김`,
+            `나를 옥죄던 불안에서 벗어나 삶의 결을 다듬는 ${kw} 이야기`,
+            `${kw}, 하루 10분의 고요가 가져다주는 눈부신 내면의 회복`
+          ],
+          general: [
+            `${kw}: 삶의 깊이를 더하고 새로운 결을 만들어가는 지혜로운 여정`,
+            `${kw}을(를) 대하는 우리의 자세: 더 나은 일상을 위한 실천적 제안`,
+            `${kw}, 일상의 여백 속에서 발견한 진짜 가치와 실천 로드맵`
+          ]
+        };
+
+        const tList = titleTemplates[domain] || titleTemplates.general;
+        generatedTitle = tList[Math.floor(Math.random() * tList.length)];
+
+        generatedExcerpt = `${kw}을(를) 고민하는 분들을 위해, 최신 전문 인사이트와 삶의 지혜를 접목하여 일상에서 누구나 쉽고 품격 있게 실천할 수 있는 구체적인 가이드를 전해드립니다.`;
+
+        // 본문 조립
+        const intros = [
+          `<p>"${escapeHtml(kw)}에 대해 요즘 많은 분들이 깊은 관심을 기울이고 계십니다."</p><p>치열하게 앞만 보며 달려온 일상 속에서 잠시 멈추어 서서, 우리의 몸과 마음, 그리고 소중한 일상의 결을 정돈하는 것은 결코 사치가 아니라 지속 가능한 행복을 위한 가장 지혜로운 선택입니다.</p>`,
+          `<p>"나이가 들수록 ${escapeHtml(kw)}의 중요성을 절감하게 됩니다."</p><p>수많은 정보가 쏟아지는 시대이지만, 정작 나에게 꼭 맞는 본질적인 실천법을 찾기는 쉽지 않습니다. 복잡한 이론 대신 오늘 당장 내 삶에 적용할 수 있는 구체적인 지혜가 절실한 이유입니다.</p>`,
+          `<p>"우리의 하루는 작은 선택들이 모여 하나의 눈부신 서사를 완성합니다."</p><p>${escapeHtml(kw)} 역시 거창한 결심이 아니라 매일매일의 소소한 루틴과 올바른 방향성에서 시작됩니다.</p>`
+        ];
+        const chosenIntro = intros[Math.floor(Math.random() * intros.length)];
+
+        const quotes = [
+          `<blockquote>"지나온 세월의 결을 다듬고, 남은 인생의 여백을 내 손으로 그릴 때 삶은 가장 눈부신 황금기를 맞이합니다."</blockquote>`,
+          `<blockquote>"작은 루틴의 변화가 몸을 깨우고, 단정한 공간의 여백이 마음에 평온을 채워 넣습니다."</blockquote>`,
+          `<blockquote>"가장 늦었다고 생각할 때가 내 삶의 주권을 회복할 가장 눈부신 적기입니다."</blockquote>`
+        ];
+        const chosenQuote = quotes[Math.floor(Math.random() * quotes.length)];
+
+        let bodySection = `
+          <h3>1. 본질을 꿰뚫는 원인 분석과 새로운 시선</h3>
+          <p>${escapeHtml(kw)}을(를) 시작할 때 가장 흔히 겪는 실수는 조급함과 과도한 의욕입니다. 단기간에 모든 것을 바꾸려 하기보다는, 왜 지금까지 이것이 어려웠는지 나의 생활 패턴과 환경을 조용히 관찰하는 것부터 출발해야 합니다.</p>
+          <p>전문가들이 공통적으로 지적하듯, 지속 가능한 변화는 결심의 강도가 아니라 환경 설계와 작은 반복에서 나옵니다.</p>
+
+          <h3>2. 일상에서 누구나 성공하는 3단계 실천 로드맵</h3>
+          <p><strong>1단계 (비움):</strong> 불필요한 집착과 부담감을 내려놓고, 하루 10분씩 작은 단위로 실천의 문턱을 낮춥니다.<br>
+          <strong>2단계 (정렬):</strong> 내 몸과 마음의 신호에 귀 기울이며 무리가 가지 않는 편안한 리듬을 형성합니다.<br>
+          <strong>3단계 (축적):</strong> 작은 성취를 스스로 칭찬하고, 기록을 통해 내 삶의 변화를 시각적으로 확인합니다.</p>
+        `;
+
+        // 🌐 웹 참고 자료 블록 통합
+        let webBlockHtml = '';
+        if ((webContent || webUrl) && includeWebBox) {
+          webBlockHtml = `
+            <div style="margin: 26px 0; padding: 20px 22px; background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; color: #1e293b;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 850; color: #166534; font-size: 0.95rem;">
+                <span>🌐</span> [웹 자료 참고 & 심층 분석] ${webDomain ? escapeHtml(webDomain) : '전문 칼럼 및 기사 분석'}
+              </div>
+              <p style="margin: 0 0 10px; font-size: 0.93rem; color: #334155; line-height: 1.68;">
+                ${webContent ? escapeHtml(webContent).replace(/\n/g, '<br>') : `${escapeHtml(kw)}에 대한 최신 트렌드와 연구 결과를 면밀히 검토하여 본 칼럼의 핵심 논거로 반영하였습니다.`}
+              </p>
+              ${webUrl ? `<div style="font-size: 0.82rem; color: #059669; word-break: break-all;">🔗 원문 참고 출처: <a href="${escapeHtml(webUrl)}" target="_blank" style="color: #059669; text-decoration: underline; font-weight: 700;">${escapeHtml(webUrl)}</a></div>` : ''}
+            </div>
+          `;
+        }
+
+        // 📺 유튜브 참고 자료 블록 통합
+        let youtubeBlockHtml = '';
+        if ((youtubeContent || ytId) && includeYtCard) {
+          youtubeBlockHtml = `
+            <div style="margin: 28px 0; padding: 22px; background: #fff1f2; border: 1.5px solid #fecdd3; border-radius: 14px; color: #1e293b;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 6px;">
+                <div style="font-weight: 850; color: #be123c; font-size: 0.98rem; display: flex; align-items: center; gap: 8px;">
+                  <span>📺</span> [유튜브 추천 영상 & 핵심 인사이트]
+                </div>
+                <span style="font-size: 0.78rem; background: #ffe4e6; color: #9f1239; padding: 2px 8px; border-radius: 6px; font-weight: 750;">영상 포인트 요약</span>
+              </div>
+              <p style="margin: 0 0 14px; font-size: 0.93rem; color: #334155; line-height: 1.68;">
+                ${youtubeContent ? escapeHtml(youtubeContent).replace(/\n/g, '<br>') : `${escapeHtml(kw)}에 관해 쉽고 친절하게 설명하는 추천 영상의 핵심 팁을 함께 확인해 보세요.`}
+              </p>
+              ${ytId ? `
+                <div style="margin-top: 14px; text-align: center;">
+                  <a href="${escapeHtml(youtubeUrl)}" target="_blank" style="display: inline-block; position: relative; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.15); border: 2px solid #fda4af; max-width: 480px; width: 100%;">
+                    <img src="https://img.youtube.com/vi/${ytId}/hqdefault.jpg" alt="유튜브 추천 영상 썸네일" style="display: block; width: 100%; height: auto;">
+                    <span style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.38); color: #ffffff; font-weight: 850; font-size: 1rem; gap: 8px;">
+                      ▶️ 유튜브에서 추천 영상 바로보기
+                    </span>
+                  </a>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        }
+
+        const section3 = `
+          <h3>3. 지속 가능한 변화를 위한 마음가짐</h3>
+          <p>완벽하려고 애쓰지 마세요. 100점을 목표로 삼다가 지쳐 포기하는 것보다, 60점이라도 매일 웃으며 이어가는 것이 백 배 더 가치 있습니다. 어제보다 한 걸음 나아간 오늘을 스스로 격려해 주세요.</p>
+        `;
+
+        const conclusionBox = `
+          <div style="margin: 28px 0; padding: 22px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px; color: #1e293b;">
+            <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 오늘, 나를 위한 작은 여백 하나를 시작해 보세요</h4>
+            <p style="margin: 0; font-size: 0.94rem; color: #334155; line-height: 1.65;">
+              시간은 우리를 기다려주지 않지만, 우리가 내딛는 작은 결단은 남은 생애 전체를 우아하고 눈부시게 물들입니다. 지금 이 순간, ${escapeHtml(kw)}의 지혜로 삶에 따뜻한 온기를 선물해 보세요.
+            </p>
+          </div>
+        `;
+
+        generatedContent = chosenIntro + chosenQuote + bodySection + webBlockHtml + youtubeBlockHtml + section3 + conclusionBox;
+      }
+
+      // 3) 유튜브 썸네일 & 감성 사진 5장 스마트 자동 배정
+      const smartPhotos = generateSmartAiPhotos(kw + ' ' + generatedTitle + ' ' + generatedExcerpt, category, [], youtubeUrl, webUrl);
+      editorPhotos = smartPhotos.map(src => ({ src }));
+      mainThumbImg = smartPhotos[0]; // 유튜브 썸네일(있을 시) 또는 첫 번째 사진을 대표사진으로 자동 지정!
+
+      // 4) 에디터 필드에 채우기
+      document.getElementById('editorTitle').value = generatedTitle;
+      document.getElementById('editorExcerpt').value = generatedExcerpt;
+      document.getElementById('editorCategory').value = category;
+      document.getElementById('editorContent').innerHTML = generatedContent.trim();
       document.getElementById('editorIsFeatured').checked = true;
 
-      // 🧠 입력 키워드 및 본문 내용을 심층 분석하여 맞춤 감성 사진 5장 스마트 자동 배정
-      const smartPhotos = generateSmartAiPhotos(kw + ' ' + customTitle + ' ' + customExcerpt, '웰라이프');
-      editorPhotos = smartPhotos.map(src => ({ src }));
-      mainThumbImg = smartPhotos[0];
       renderPhotoSidebar();
       updateMainThumbIndicator();
 
+      if (loadingBox) loadingBox.style.display = 'none';
+      if (runBtn) {
+        runBtn.disabled = false;
+        runBtn.style.opacity = '1';
+      }
+
       closeAiArticleGeneratorModal();
-      if (input) input.value = '';
-      alert(`🎉 [${kw}] 맞춤 AI 칼럼이 에디터에 생성되었습니다!\n\n• 본문 내용과 입력하신 주제에 꼭 맞는 고화질 감동 사진 5장이 [사진 보관함]에 자동 배치되었습니다.\n• 좌측 보관함에서 원하는 사진을 [⭐ 대표]로 지정하거나 본문에 삽입해 보세요.\n• 마음에 들지 않을 경우 좌측 상단의 [🔄 다른 사진 5장]을 누르면 새로운 사진들로 언제든 교체할 수 있습니다.`);
+
+      let successMsg = `🎉 [${generatedTitle}]\n\n• 맞춤 칼럼 본문이 에디터에 성공적으로 집필되었습니다!\n`;
+      if (ytId) {
+        successMsg += `• 📺 유튜브 고화질 썸네일이 대표 사진으로 자동 배정되었습니다!\n`;
+      }
+      if (webUrl) {
+        successMsg += `• 🌐 웹 참고 자료 분석 박스가 본문에 포함되었습니다!\n`;
+      }
+      if (isGeminiUsed) {
+        successMsg += `• 🤖 Google Gemini AI 실시간 모델로 집필되었습니다!\n`;
+      }
+      successMsg += `• 좌측 [사진 보관함]에 고화질 사진 5장이 담겼으니 원하는 사진을 클릭해 본문에 삽입하거나 대표사진을 지정해 보세요.\n\n확인 후 상단의 [🚀 발행하기]를 누르시면 완료됩니다.`;
+
+      alert(successMsg);
+    }
+
+    // 구 버전 호환용 alias
+    function generateAiCustomArticle() {
+      return generateSmartAiArticle();
     }
 
     // 현재 작성 중인 글 컨셉 및 본문 내용을 분석하여 사진 보관함에 5장 채우기 (새로고침 지원)
@@ -4900,12 +5907,18 @@
       const excerpt = (document.getElementById('editorExcerpt') ? document.getElementById('editorExcerpt').value : '') || '';
       const cat = (document.getElementById('editorCategory') ? document.getElementById('editorCategory').value : '') || '';
       const content = (document.getElementById('editorContent') ? document.getElementById('editorContent').innerText : '') || '';
+      const contentHtml = (document.getElementById('editorContent') ? document.getElementById('editorContent').innerHTML : '') || '';
 
       const fullText = `${title} ${excerpt} ${content}`;
       const avoidUrls = forceRefresh ? editorPhotos.map(p => p.src) : [];
 
+      // 본문 속에 유튜브 링크가 포함되어 있는지 탐색
+      let foundYtUrl = '';
+      const ytMatch = contentHtml.match(/https?:\/\/(?:www\.)?(?:youtube\.com|youtu\.be)\/[^\s"']+/i);
+      if (ytMatch) foundYtUrl = ytMatch[0];
+
       // 🧠 지능형 큐레이션 엔진 호출
-      const set = generateSmartAiPhotos(fullText, cat, avoidUrls);
+      const set = generateSmartAiPhotos(fullText, cat, avoidUrls, foundYtUrl);
 
       editorPhotos = set.map(src => ({ src }));
       mainThumbImg = set[0];
@@ -5013,10 +6026,52 @@
     // =========================================================================
     const EXTERNAL_CHANNELS_KEY = 'yebaek_external_channels';
 
+    // 네이버 아이디 스마트 정규화 추출 함수
+    function extractNaverId(input) {
+      if (!input) return '';
+      let str = String(input).trim();
+      // https://blog.naver.com/아이디 또는 blog.naver.com/아이디 또는 m.blog.naver.com/아이디
+      const m1 = str.match(/(?:blog\.naver\.com\/)([a-zA-Z0-9_\-]+)/i);
+      if (m1 && m1[1]) return m1[1].replace(/postwrite.*/i, '').trim();
+      // naver.com/아이디
+      const m2 = str.match(/(?:naver\.com\/)([a-zA-Z0-9_\-]+)/i);
+      if (m2 && m2[1]) return m2[1].replace(/postwrite.*/i, '').trim();
+      // http/https 없는 순수 아이디 형태
+      str = str.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+      if (/^[a-zA-Z0-9_\-]+$/.test(str)) return str;
+      return str;
+    }
+
+    // 네이버 블로그 스마트에디터 ONE 글쓰기 URL 생성
+    function getNaverWriteUrl(rawId) {
+      const nId = extractNaverId(rawId);
+      if (nId && /^[a-zA-Z0-9_\-]+$/.test(nId)) {
+        return `https://blog.naver.com/${nId}?Redirect=Write`;
+      }
+      return 'https://blog.naver.com/GoBlogWrite.naver';
+    }
+
+    // 티스토리 관리자 글쓰기 URL 생성
+    function getTstoryWriteUrl(rawUrl) {
+      let url = String(rawUrl || '').trim();
+      if (!url) return 'https://www.tistory.com/member/blog';
+      if (!/^https?:\/\//i.test(url)) url = 'https://' + url;
+      url = url.replace(/\/manage\/newpost\/?$/i, '').replace(/\/$/, '');
+      return `${url}/manage/newpost/`;
+    }
+
     function getExternalChannelSettings() {
       try {
         const saved = localStorage.getItem(EXTERNAL_CHANNELS_KEY);
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return {
+            naverId: parsed.naverId !== undefined ? parsed.naverId : 'netrium1',
+            tstoryUrl: parsed.tstoryUrl !== undefined ? parsed.tstoryUrl : 'https://myblog.tistory.com',
+            naverChecked: parsed.naverChecked !== undefined ? parsed.naverChecked : true,
+            tstoryChecked: parsed.tstoryChecked !== undefined ? parsed.tstoryChecked : true
+          };
+        }
       } catch (e) {}
       return {
         naverId: 'netrium1',
@@ -5026,7 +6081,74 @@
       };
     }
 
-    function saveExternalChannelSettings(showAlert = false) {
+    // 실시간 양방향 채널 입력 동기화 (타이핑 시 즉각 반영 & 안전 저장)
+    function syncChannelSettings(source = 'settings') {
+      const settingNaver = document.getElementById('settingNaverBlogId');
+      const settingTstory = document.getElementById('settingTstoryBlogUrl');
+      const mcNaver = document.getElementById('mcNaverId');
+      const mcTstory = document.getElementById('mcTstoryUrl');
+
+      let currentNaver = '';
+      let currentTstory = '';
+
+      if (source === 'settings') {
+        currentNaver = settingNaver ? settingNaver.value : '';
+        currentTstory = settingTstory ? settingTstory.value : '';
+        if (mcNaver && mcNaver.value !== currentNaver) mcNaver.value = currentNaver;
+        if (mcTstory && mcTstory.value !== currentTstory) mcTstory.value = currentTstory;
+      } else if (source === 'modal') {
+        currentNaver = mcNaver ? mcNaver.value : '';
+        currentTstory = mcTstory ? mcTstory.value : '';
+        if (settingNaver && settingNaver.value !== currentNaver) settingNaver.value = currentNaver;
+        if (settingTstory && settingTstory.value !== currentTstory) settingTstory.value = currentTstory;
+      }
+
+      saveExternalChannelSettings(false, source);
+      updateChannelStatusBadges();
+    }
+
+    // 연동 상태 뱃지 업데이트
+    function updateChannelStatusBadges() {
+      const cfg = getExternalChannelSettings();
+      const nId = extractNaverId(cfg.naverId);
+      const tUrl = cfg.tstoryUrl ? cfg.tstoryUrl.trim() : '';
+
+      // 네이버 상태 표시
+      const naverStatusText = nId
+        ? `🟢 연동 완료: blog.naver.com/${nId} (글쓰기 준비 완료)`
+        : `⚠️ 네이버 아이디 또는 블로그 주소를 입력해 주세요`;
+      const naverColor = nId ? '#047857' : '#b45309';
+
+      const sNStatus = document.getElementById('settingNaverStatus');
+      if (sNStatus) {
+        sNStatus.innerHTML = naverStatusText;
+        sNStatus.style.color = naverColor;
+      }
+      const mcNStatus = document.getElementById('mcNaverStatus');
+      if (mcNStatus) {
+        mcNStatus.innerHTML = naverStatusText;
+        mcNStatus.style.color = naverColor;
+      }
+
+      // 티스토리 상태 표시
+      const tstoryStatusText = tUrl
+        ? `🟠 연동 완료: ${tUrl} (글쓰기 준비 완료)`
+        : `⚠️ 티스토리 블로그 주소를 입력해 주세요`;
+      const tstoryColor = tUrl ? '#c2410c' : '#b45309';
+
+      const sTStatus = document.getElementById('settingTstoryStatus');
+      if (sTStatus) {
+        sTStatus.innerHTML = tstoryStatusText;
+        sTStatus.style.color = tstoryColor;
+      }
+      const mcTStatus = document.getElementById('mcTstoryStatus');
+      if (mcTStatus) {
+        mcTStatus.innerHTML = tstoryStatusText;
+        mcTStatus.style.color = tstoryColor;
+      }
+    }
+
+    function saveExternalChannelSettings(showAlert = false, source = 'auto') {
       const naverInput = document.getElementById('settingNaverBlogId');
       const tstoryInput = document.getElementById('settingTstoryBlogUrl');
       const mcNaverInput = document.getElementById('mcNaverId');
@@ -5036,8 +6158,29 @@
 
       const current = getExternalChannelSettings();
 
-      const naverVal = (mcNaverInput && mcNaverInput.value.trim()) || (naverInput && naverInput.value.trim()) || current.naverId || '';
-      const tstoryVal = (mcTstoryInput && mcTstoryInput.value.trim()) || (tstoryInput && tstoryInput.value.trim()) || current.tstoryUrl || '';
+      let naverVal = current.naverId;
+      let tstoryVal = current.tstoryUrl;
+
+      if (source === 'settings') {
+        if (naverInput) naverVal = naverInput.value.trim();
+        if (tstoryInput) tstoryVal = tstoryInput.value.trim();
+      } else if (source === 'modal') {
+        if (mcNaverInput) naverVal = mcNaverInput.value.trim();
+        if (mcTstoryInput) tstoryVal = mcTstoryInput.value.trim();
+      } else {
+        // auto: 환경설정에 값이 있으면 우선 반영, 아니면 모달 값, 아니면 기존 값
+        if (naverInput && naverInput.value.trim()) {
+          naverVal = naverInput.value.trim();
+        } else if (mcNaverInput && mcNaverInput.value.trim()) {
+          naverVal = mcNaverInput.value.trim();
+        }
+
+        if (tstoryInput && tstoryInput.value.trim()) {
+          tstoryVal = tstoryInput.value.trim();
+        } else if (mcTstoryInput && mcTstoryInput.value.trim()) {
+          tstoryVal = mcTstoryInput.value.trim();
+        }
+      }
 
       const updated = {
         naverId: naverVal,
@@ -5049,13 +6192,16 @@
       localStorage.setItem(EXTERNAL_CHANNELS_KEY, JSON.stringify(updated));
 
       // 양방향 폼 값 동기화
-      if (naverInput) naverInput.value = updated.naverId;
-      if (tstoryInput) tstoryInput.value = updated.tstoryUrl;
-      if (mcNaverInput) mcNaverInput.value = updated.naverId;
-      if (mcTstoryInput) mcTstoryInput.value = updated.tstoryUrl;
+      if (naverInput && naverInput.value !== updated.naverId) naverInput.value = updated.naverId;
+      if (tstoryInput && tstoryInput.value !== updated.tstoryUrl) tstoryInput.value = updated.tstoryUrl;
+      if (mcNaverInput && mcNaverInput.value !== updated.naverId) mcNaverInput.value = updated.naverId;
+      if (mcTstoryInput && mcTstoryInput.value !== updated.tstoryUrl) mcTstoryInput.value = updated.tstoryUrl;
+
+      updateChannelStatusBadges();
 
       if (showAlert) {
-        alert('네이버 블로그 및 티스토리 주소 설정이 안전하게 저장되었습니다.');
+        const nId = extractNaverId(updated.naverId);
+        alert(`✅ 외부 블로그 채널 설정이 안전하게 저장되었습니다!\n\n• 네이버 블로그: ${nId ? 'blog.naver.com/' + nId : '(미설정)'}\n• 티스토리: ${updated.tstoryUrl || '(미설정)'}\n\n이제 에디터에서 [🌐 동시 발행 도우미]로 즉시 발행하실 수 있습니다.`);
       }
     }
 
@@ -5074,6 +6220,42 @@
       if (mcTstoryInput) mcTstoryInput.value = cfg.tstoryUrl || '';
       if (mcCheckNaver && typeof cfg.naverChecked === 'boolean') mcCheckNaver.checked = cfg.naverChecked;
       if (mcCheckTstory && typeof cfg.tstoryChecked === 'boolean') mcCheckTstory.checked = cfg.tstoryChecked;
+
+      updateChannelStatusBadges();
+    }
+
+    // 네이버 연동 즉시 테스트 열기
+    function testOpenNaverBlog() {
+      const cfg = getExternalChannelSettings();
+      const naverInput = document.getElementById('settingNaverBlogId');
+      const mcNaverInput = document.getElementById('mcNaverId');
+      const raw = (naverInput && naverInput.value.trim()) || (mcNaverInput && mcNaverInput.value.trim()) || cfg.naverId;
+      
+      const writeUrl = getNaverWriteUrl(raw);
+      const nId = extractNaverId(raw);
+      
+      const win = window.open(writeUrl, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        alert(`⚠️ 브라우저 팝업이 차단되었습니다.\n아래 링크를 클릭해 네이버 글쓰기를 열어주세요:\n${writeUrl}`);
+      } else {
+        alert(`🟢 네이버 블로그 글쓰기 창으로 연결합니다!\n\n• 대상 아이디: ${nId || '(네이버 기본 계정)'}\n• 연결 주소: ${writeUrl}\n\n새 창이 정상적으로 열리는지 확인해 주세요.`);
+      }
+    }
+
+    // 티스토리 연동 즉시 테스트 열기
+    function testOpenTstoryBlog() {
+      const cfg = getExternalChannelSettings();
+      const tstoryInput = document.getElementById('settingTstoryBlogUrl');
+      const mcTstoryInput = document.getElementById('mcTstoryUrl');
+      const raw = (tstoryInput && tstoryInput.value.trim()) || (mcTstoryInput && mcTstoryInput.value.trim()) || cfg.tstoryUrl;
+      
+      const writeUrl = getTstoryWriteUrl(raw);
+      const win = window.open(writeUrl, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        alert(`⚠️ 브라우저 팝업이 차단되었습니다.\n아래 링크를 클릭해 티스토리 글쓰기를 열어주세요:\n${writeUrl}`);
+      } else {
+        alert(`🟠 티스토리 글쓰기 관리 창으로 연결합니다!\n\n• 대상 블로그: ${raw || '(미설정)'}\n• 연결 주소: ${writeUrl}\n\n새 창이 정상적으로 열리는지 확인해 주세요.`);
+      }
     }
 
     function openMultiChannelModal() {
@@ -5086,6 +6268,8 @@
       loadExternalChannelSettings();
       const modal = document.getElementById('multiChannelPublishModal');
       if (modal) modal.classList.add('open');
+      const noticeBox = document.getElementById('mcPopupNotice');
+      if (noticeBox) noticeBox.style.display = 'none';
     }
 
     // 에디터에서 즉시 블로그 연동 설정을 열고 확인/수정하는 편의 함수
@@ -5094,6 +6278,8 @@
       const modal = document.getElementById('multiChannelPublishModal');
       if (modal) {
         modal.classList.add('open');
+        const noticeBox = document.getElementById('mcPopupNotice');
+        if (noticeBox) noticeBox.style.display = 'none';
         setTimeout(() => {
           const nInp = document.getElementById('mcNaverId');
           if (nInp) {
@@ -5125,6 +6311,8 @@
     function closeMultiChannelModal() {
       const modal = document.getElementById('multiChannelPublishModal');
       if (modal) modal.classList.remove('open');
+      const noticeBox = document.getElementById('mcPopupNotice');
+      if (noticeBox) noticeBox.style.display = 'none';
     }
 
     function closeMultiChannelModalOnOverlay(e) {
@@ -5192,9 +6380,45 @@
       return success;
     }
 
-    // 선택한 블로그로 원클릭 동시 발행 실행
+    // 개별 채널 단독 열기 (팝업 차단 위험 제로)
+    async function executeSingleChannelPublish(channel) {
+      saveExternalChannelSettings(false, 'modal');
+      const cfg = getExternalChannelSettings();
+
+      // 1. 본문 + 사진 전체 스마트 클립보드 복사
+      await copyArticleBodyHtml(false);
+
+      let targetUrl = '';
+      let channelName = '';
+
+      if (channel === 'naver') {
+        channelName = '네이버 블로그';
+        targetUrl = getNaverWriteUrl(cfg.naverId);
+      } else if (channel === 'tstory') {
+        channelName = '티스토리';
+        targetUrl = getTstoryWriteUrl(cfg.tstoryUrl);
+      }
+
+      if (!targetUrl) {
+        alert('연동 주소가 올바르지 않습니다. 주소를 먼저 확인해 주세요.');
+        return;
+      }
+
+      const win = window.open(targetUrl, '_blank');
+      if (!win || win.closed || typeof win.closed === 'undefined') {
+        showPopupBlockedNotice([
+          { name: channelName, url: targetUrl, color: channel === 'naver' ? '#16a34a' : '#ea580c' }
+        ]);
+        alert(`⚠️ 브라우저에 의해 팝업이 차단되었습니다.\n모달 창 하단에 나타난 [${channelName} 바로가기] 링크 버튼을 클릭해 주세요.`);
+      } else {
+        closeMultiChannelModal();
+        alert(`🎉 ${channelName} 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 열린 ${channelName} 글쓰기 본문 창을 클릭하고 [Ctrl + V]만 누르시면 사진과 서식이 쏙 들어갑니다!`);
+      }
+    }
+
+    // 선택한 블로그로 원클릭 동시 발행 실행 (팝업 차단 방지 기술 탑재)
     async function executeMultiChannelPublish() {
-      saveExternalChannelSettings(false);
+      saveExternalChannelSettings(false, 'modal');
       const cfg = getExternalChannelSettings();
 
       const naverChecked = document.getElementById('mcCheckNaver').checked;
@@ -5205,39 +6429,57 @@
         return;
       }
 
+      const naverWriteUrl = getNaverWriteUrl(cfg.naverId);
+      const tstoryWriteUrl = getTstoryWriteUrl(cfg.tstoryUrl);
+
+      // 브라우저 팝업 차단 방지: 사용자 직접 클릭 컨텍스트 내에서 창 즉시 열기 시도
+      let naverWin = null;
+      let tstoryWin = null;
+
+      if (naverChecked) {
+        naverWin = window.open(naverWriteUrl, '_blank');
+      }
+      if (tstoryChecked) {
+        tstoryWin = window.open(tstoryWriteUrl, '_blank');
+      }
+
       // 1. 본문 + 사진 전체 스마트 클립보드 복사
       await copyArticleBodyHtml(false);
 
-      // 2. 선택된 블로그 글쓰기 창 열기
-      let openedCount = 0;
-
-      if (naverChecked) {
-        let nId = (cfg.naverId || '').trim();
-        // ID 정규화 (URL 형태면 아이디 추출)
-        const match = nId.match(/blog\.naver\.com\/([a-zA-Z0-9_\-]+)/);
-        if (match && match[1]) nId = match[1];
-        nId = nId.replace(/https?:\/\//g, '').replace(/blog\.naver\.com\/?/g, '').replace(/\/postwrite.*/g, '');
-
-        let naverWriteUrl = 'https://blog.naver.com/GoBlogWrite.naver';
-        if (nId && !nId.includes('http')) {
-          naverWriteUrl = `https://blog.naver.com/${nId}/postwrite`;
-        }
-        window.open(naverWriteUrl, '_blank');
-        openedCount++;
+      // 팝업 차단 여부 감지
+      const blockedChannels = [];
+      if (naverChecked && (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined')) {
+        blockedChannels.push({ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' });
+      }
+      if (tstoryChecked && (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined')) {
+        blockedChannels.push({ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' });
       }
 
-      if (tstoryChecked) {
-        let tUrl = (cfg.tstoryUrl || '').trim();
-        if (!tUrl.startsWith('http')) tUrl = 'https://' + tUrl;
-        tUrl = tUrl.replace(/\/manage\/newpost\/?/g, '').replace(/\/$/, '');
-        const tstoryWriteUrl = `${tUrl}/manage/newpost/`;
-        window.open(tstoryWriteUrl, '_blank');
-        openedCount++;
+      if (blockedChannels.length > 0) {
+        showPopupBlockedNotice(blockedChannels);
+        alert(`⚠️ 브라우저 보안 정책으로 인해 일부 창이 팝업 차단되었습니다.\n\n• 본문과 5장의 사진은 이미 클립보드에 완벽 복사되었습니다!\n• 모달 창 하단에 나타난 [차단된 블로그 바로 열기] 버튼을 직접 클릭해 주세요.`);
+      } else {
+        closeMultiChannelModal();
+        alert(`🚀 네이버와 티스토리 글쓰기 창이 모두 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 복사된 상태입니다.\n• 각 블로그 글쓰기 창 본문에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 에디터 상단의 '제목 복사'를 누르시면 편리합니다)`);
       }
+    }
 
-      // 3. 안내 알림
-      closeMultiChannelModal();
-      alert(`🚀 선택하신 블로그 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 사진이 클립보드에 복사된 상태입니다.\n• 열린 블로그 글쓰기 창 본문에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 에디터 상단의 '제목 복사'를 누르시면 편리합니다)`);
+    function showPopupBlockedNotice(channels) {
+      const noticeBox = document.getElementById('mcPopupNotice');
+      if (!noticeBox) return;
+
+      let btnHtml = channels.map(c => `
+        <a href="${c.url}" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; padding: 9px 15px; background: ${c.color}; color: #ffffff; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 0.84rem; margin-right: 8px; margin-top: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+          🚀 ${c.name} 글쓰기 직접 열기 ➔
+        </a>
+      `).join('');
+
+      noticeBox.innerHTML = `
+        <div style="font-weight: 800; font-size: 0.88rem; margin-bottom: 6px;">⚠️ 브라우저 팝업 차단 감지 (1개 이상의 창이 차단됨)</div>
+        <div style="font-size: 0.8rem; color: #7f1d1d;">본문 글과 사진 5장은 이미 클립보드에 정상 복사 완료되었습니다!<br>아래 버튼을 누르시면 차단 없이 즉시 해당 블로그 글쓰기 창이 열립니다:</div>
+        <div style="margin-top: 6px; display: flex; flex-wrap: wrap;">${btnHtml}</div>
+      `;
+      noticeBox.style.display = 'block';
     }
 
     // ================= 칼럼 상세 뷰어 모달 =================
