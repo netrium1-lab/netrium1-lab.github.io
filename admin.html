@@ -1360,8 +1360,48 @@
     .reader-body {
       font-size: 1.08rem;
       line-height: 2.0;
-      color: var(--text-main);
+      color: #1e293b !important;
       word-break: keep-all;
+    }
+    .reader-body p,
+    .reader-body div,
+    .reader-body li {
+      color: #1e293b !important;
+      margin-bottom: 20px;
+      line-height: 2.0;
+    }
+    .reader-body h1, .reader-body h2, .reader-body h3, .reader-body h4 {
+      color: #0f172a !important;
+      font-weight: 800;
+    }
+    /* 에디터(다크모드)에서 작성된 흰색/밝은 글씨 인라인 스타일을 라이트 리더 모달에서 강제 다크(#1e293b)로 오버라이드 */
+    .reader-body [style*="color: rgb(255, 255, 255)"],
+    .reader-body [style*="color: #ffffff"],
+    .reader-body [style*="color: #fff"],
+    .reader-body [style*="color: white"],
+    .reader-body [style*="color:#ffffff"],
+    .reader-body [style*="color:#fff"],
+    .reader-body [style*="color:white"],
+    .reader-body [style*="color: rgb(243, 245, 248)"],
+    .reader-body [style*="color: #f3f5f8"],
+    .reader-body [style*="color: rgb(248, 250, 252)"],
+    .reader-body [style*="color: #f8fafc"],
+    .reader-body [style*="color: rgb(226, 232, 240)"],
+    .reader-body [style*="color: #e2e8f0"],
+    .reader-body font[color="#ffffff"],
+    .reader-body font[color="white"],
+    .reader-body font[color="#fff"] {
+      color: #1e293b !important;
+    }
+    /* 에디터 다크모드 배경 박스도 라이트 리더 모달에 맞게 밝은 카드로 변환 */
+    .reader-body div[style*="background: #08090c"],
+    .reader-body div[style*="background: #111622"],
+    .reader-body div[style*="background: rgb(8, 9, 12)"],
+    .reader-body div[style*="background-color: #08090c"],
+    .reader-body div[style*="background-color: #111622"] {
+      background: #f8fafc !important;
+      border: 1px solid #e2e8f0 !important;
+      color: #1e293b !important;
     }
     .reader-body blockquote {
       border-left: 4px solid var(--accent);
@@ -6955,8 +6995,29 @@
       let excerpt = (document.getElementById('editorExcerpt') ? document.getElementById('editorExcerpt').value.trim() : '');
       const category = document.getElementById('editorCategory').value;
       const isFeatured = document.getElementById('editorIsFeatured').checked;
-      const contentHtml = document.getElementById('editorContent').innerHTML.trim();
+      let contentHtml = document.getElementById('editorContent').innerHTML.trim();
       const contentText = document.getElementById('editorContent').innerText.trim();
+
+      // 에디터(다크모드)에서 들어간 흰색/밝은 글씨 인라인 스타일을 정제하여 저장
+      try {
+        const cleanDiv = document.createElement('div');
+        cleanDiv.innerHTML = contentHtml;
+        cleanDiv.querySelectorAll('*').forEach(el => {
+          if (el.style && el.style.color) {
+            const s = el.style.color.toLowerCase().trim();
+            if (s === 'white' || s === '#fff' || s === '#ffffff' || s === 'rgb(255, 255, 255)' || s === 'rgb(243, 245, 248)' || s === 'rgb(248, 250, 252)') {
+              el.style.color = '';
+            }
+          }
+          if (el.getAttribute('color')) {
+            const c = el.getAttribute('color').toLowerCase().trim();
+            if (c === 'white' || c === '#fff' || c === '#ffffff') el.removeAttribute('color');
+          }
+        });
+        contentHtml = cleanDiv.innerHTML;
+      } catch (e) {
+        console.warn('content sanitize error:', e);
+      }
 
       if (!title) {
         alert('칼럼 제목을 입력해 주세요.');
@@ -7683,6 +7744,64 @@
       noticeBox.style.display = 'block';
     }
 
+    // 🌟 리더 모달(흰색 배경)용 본문 HTML 스마트 정제 엔진 (흰색 글씨를 선명한 #1e293b로 변환)
+    function cleanContentForReader(rawHtml) {
+      if (!rawHtml || typeof rawHtml !== 'string') return '<p>본문 내용이 없습니다.</p>';
+      const div = document.createElement('div');
+      div.innerHTML = rawHtml;
+
+      function isBright(val) {
+        if (!val) return false;
+        const s = String(val).trim().toLowerCase();
+        const brightNames = ['white', '#fff', '#ffffff', '#fafafa', '#f8f9fa', '#f8fafc', '#f1f5f9', '#f3f4f6', '#f3f5f8', '#e2e8f0', '#cbd5e1', '#e5e7eb', '#d1d5db', 'snow', 'ghostwhite', 'whitesmoke', 'ivory'];
+        if (brightNames.includes(s)) return true;
+        if (s.startsWith('#')) {
+          let hex = s.substring(1);
+          if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+          if (hex.length === 6) {
+            const r = parseInt(hex.substring(0, 2), 16);
+            const g = parseInt(hex.substring(2, 4), 16);
+            const b = parseInt(hex.substring(4, 6), 16);
+            if (!isNaN(r) && !isNaN(g) && !isNaN(b)) {
+              const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+              return yiq >= 180 || (r > 200 && g > 200 && b > 200);
+            }
+          }
+        }
+        const rgbMatch = s.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+        if (rgbMatch) {
+          const r = parseInt(rgbMatch[1], 10);
+          const g = parseInt(rgbMatch[2], 10);
+          const b = parseInt(rgbMatch[3], 10);
+          const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+          return yiq >= 180 || (r > 200 && g > 200 && b > 200);
+        }
+        return false;
+      }
+
+      // 흰색/밝은 글씨를 선명한 짙은 차콜(#1e293b)로 교체
+      div.querySelectorAll('*').forEach(el => {
+        if (el.style && el.style.color && isBright(el.style.color)) {
+          el.style.color = '#1e293b';
+        }
+        const fc = el.getAttribute('color');
+        if (fc && isBright(fc)) {
+          el.setAttribute('color', '#1e293b');
+          if (el.style) el.style.color = '#1e293b';
+        }
+        if (el.style && el.style.backgroundColor) {
+          const bg = el.style.backgroundColor;
+          if (bg.includes('rgb(8, 9, 12)') || bg.includes('rgb(17, 22, 34)') || bg.includes('#08090c') || bg.includes('#111622') || bg.includes('#0f172a')) {
+            el.style.backgroundColor = '#f8fafc';
+            el.style.border = '1px solid #e2e8f0';
+            el.style.color = '#1e293b';
+          }
+        }
+      });
+
+      return div.innerHTML;
+    }
+
     // ================= 칼럼 상세 뷰어 모달 =================
     function openArticleReader(id) {
       const articles = getArticles();
@@ -7693,7 +7812,7 @@
       document.getElementById('readerTitle').textContent = a.title;
       document.getElementById('readerDate').textContent = a.date || '2026.09.25';
       document.getElementById('readerReadTime').textContent = a.readTime || '읽는 시간 3분';
-      document.getElementById('readerBody').innerHTML = a.content || '<p>본문 내용이 없습니다.</p>';
+      document.getElementById('readerBody').innerHTML = cleanContentForReader(a.content);
 
       const featuredBadge = document.getElementById('readerFeaturedBadge');
       if (featuredBadge) {
