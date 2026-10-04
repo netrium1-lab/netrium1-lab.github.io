@@ -83,10 +83,10 @@
   <!-- Kakao JavaScript SDK (클라이언트 팝업 로그인 정식 지원) -->
   <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   
-  <!-- 웹 폰트 (Pretendard & Noto Serif KR) -->
+  <!-- 웹 폰트 (Pretendard & 티스토리 표준 한글 서체) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800;900&family=Nanum+Gothic:wght@400;700;800&family=Nanum+Myeongjo:wght@400;700;800&family=Gowun+Batang:wght@400;700&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
   <style>
@@ -2928,6 +2928,36 @@
       margin: 0 4px;
     }
 
+    /* 티스토리 스타일 서식/글꼴/글자크기 드롭다운 */
+    .editor-select {
+      height: 32px;
+      background: #171c26;
+      color: #e2e8f0;
+      border: 1px solid #2f3747;
+      border-radius: 6px;
+      padding: 0 8px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      outline: none;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+    .editor-select:hover {
+      border-color: #d4af37;
+      color: #ffffff;
+      background: #1f2533;
+    }
+    .editor-select:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.25);
+    }
+    .editor-select option {
+      background: #171c26;
+      color: #e2e8f0;
+      padding: 6px 10px;
+    }
+
     .editor-popup-menu {
       display: none;
       position: absolute;
@@ -2955,17 +2985,28 @@
       gap: 6px;
     }
 
-    .color-chip {
+    .color-chip,
+    .bg-color-chip {
       width: 24px;
       height: 24px;
       border-radius: 4px;
       cursor: pointer;
       border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: transform 0.15s ease;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      position: relative;
     }
 
-    .color-chip:hover {
-      transform: scale(1.15);
+    .color-chip:hover,
+    .bg-color-chip:hover {
+      transform: scale(1.18);
+      z-index: 2;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* 흰색 컬러 칩 강조 테두리 (다크 에디터에서 즉시 식별 가능) */
+    .color-chip.white-chip {
+      border: 2px solid #38bdf8 !important;
+      box-shadow: 0 0 6px rgba(56, 189, 248, 0.6);
     }
 
     .editor-symbol-grid {
@@ -3065,6 +3106,34 @@
     .editor-content-area:empty::before {
       content: attr(data-placeholder);
       color: #555d6e;
+    }
+
+    .editor-content-area h2, .reader-body h2 {
+      font-size: 28px;
+      font-weight: 800;
+      line-height: 1.4;
+      margin: 26px 0 12px;
+      color: #ffffff;
+    }
+    .editor-content-area h3, .reader-body h3 {
+      font-size: 24px;
+      font-weight: 700;
+      line-height: 1.45;
+      margin: 20px 0 10px;
+      color: #f8fafc;
+    }
+    .editor-content-area h4, .reader-body h4 {
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.5;
+      margin: 16px 0 8px;
+      color: #e2e8f0;
+    }
+    .editor-content-area mark,
+    .editor-content-area span[style*="background-color"] {
+      color: #0f172a;
+      padding: 1px 4px;
+      border-radius: 3px;
     }
 
     /* 티스토리 스타일 인용구 블록 (프리미엄 골드 포인트) */
@@ -5903,6 +5972,43 @@
         <div class="editor-main-panel">
           <!-- 서식 툴바 (티스토리 + fitflunce 확장 도구) -->
           <div class="editor-toolbar">
+            <!-- 1. 본문 서식 스타일 셀렉트 (티스토리 표준) -->
+            <select id="editorFormatSelect" class="editor-select" onchange="execEditorFormatStyle(this.value)" title="서식 스타일 (티스토리 표준)">
+              <option value="p1" selected>본문 1 (기본 16px)</option>
+              <option value="p2">본문 2 (14px)</option>
+              <option value="p3">본문 3 (13px)</option>
+              <option value="h2">제목 1 (28px)</option>
+              <option value="h3">제목 2 (24px)</option>
+              <option value="h4">제목 3 (20px)</option>
+            </select>
+
+            <!-- 2. 글꼴 (서체) 셀렉트 (티스토리 대표 서체) -->
+            <select id="editorFontFamilySelect" class="editor-select" onchange="execEditorFontFamily(this.value)" title="글꼴 선택 (티스토리 서체)">
+              <option value="Pretendard, -apple-system, sans-serif" selected>본문 기본서체</option>
+              <option value="'Noto Sans KR', sans-serif">본고딕 (Noto Sans)</option>
+              <option value="'Nanum Gothic', sans-serif">나눔고딕</option>
+              <option value="'Nanum Myeongjo', serif">나눔명조</option>
+              <option value="'Gowun Batang', serif">고운바탕 (바탕체)</option>
+              <option value="'Noto Serif KR', serif">명조체 (Noto Serif)</option>
+              <option value="'Gungsuh', 'GungsuhChe', serif">궁서체</option>
+            </select>
+
+            <!-- 3. 글자 크기 (px) 셀렉트 -->
+            <select id="editorFontSizeSelect" class="editor-select" onchange="execEditorFontSizePx(this.value)" title="글자 크기 (px)">
+              <option value="12px">12px</option>
+              <option value="13px">13px</option>
+              <option value="14px">14px</option>
+              <option value="16px" selected>16px (기본)</option>
+              <option value="18px">18px</option>
+              <option value="20px">20px</option>
+              <option value="24px">24px</option>
+              <option value="28px">28px</option>
+              <option value="32px">32px</option>
+            </select>
+
+            <div class="tool-separator"></div>
+
+            <!-- 4. 기본 서식 버튼: B, I, U, S -->
             <div class="tool-group" style="display: flex; gap: 3px; align-items: center;">
               <button type="button" class="tool-btn" onclick="execEditorCmd('bold')" title="굵게 (Bold)"><b>B</b></button>
               <button type="button" class="tool-btn" onclick="execEditorCmd('italic')" title="기울임 (Italic)"><i>I</i></button>
@@ -5912,26 +6018,77 @@
 
             <div class="tool-separator"></div>
 
-            <!-- 글자색 팝업 팔레트 -->
+            <!-- 5. 글자색 팝업 팔레트 (순백색 #ffffff 최우선 제공) -->
             <div style="position: relative; display: inline-block;">
-              <button type="button" class="tool-btn" onclick="toggleColorPopup(event)" title="글자색 변경" style="font-weight: 800; color: var(--accent);">
-                🎨 색상
+              <button type="button" class="tool-btn" onclick="toggleColorPopup(event)" title="글자색 변경" style="font-weight: 800; color: #e5c158; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🎨</span> <span>글자색</span>
               </button>
-              <div id="editorColorMenu" class="editor-popup-menu" style="width: 160px;" onclick="event.stopPropagation()">
-                <span class="popup-menu-title">글자색 선택</span>
+              <div id="editorColorMenu" class="editor-popup-menu" style="width: 195px;" onclick="event.stopPropagation()">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="popup-menu-title" style="margin: 0;">글자색 선택</span>
+                  <button type="button" onclick="execEditorColor('#ffffff')" style="padding: 2px 7px; background: #38bdf8; color: #08090c; border: none; border-radius: 4px; font-size: 0.72rem; font-weight: 800; cursor: pointer;" title="흰색으로 즉시 복원">⚪ 흰색</button>
+                </div>
                 <div class="editor-color-grid">
-                  <div class="color-chip" style="background:#2c2a29;" onclick="execEditorColor('#2c2a29')" title="기본 먹색"></div>
-                  <div class="color-chip" style="background:#5e6b52;" onclick="execEditorColor('#5e6b52')" title="세이지 그린"></div>
+                  <!-- 1행: 밝은 화이트 계열 (다크 에디터 최적) -->
+                  <div class="color-chip white-chip" style="background:#ffffff;" onclick="execEditorColor('#ffffff')" title="순백색 (#ffffff) [기본 추천]"></div>
+                  <div class="color-chip" style="background:#f1f5f9;" onclick="execEditorColor('#f1f5f9')" title="밝은 화이트그레이"></div>
+                  <div class="color-chip" style="background:#fef08a;" onclick="execEditorColor('#fef08a')" title="크림 옐로우"></div>
+                  <div class="color-chip" style="background:#fed7aa;" onclick="execEditorColor('#fed7aa')" title="소프트 피치"></div>
+                  <div class="color-chip" style="background:#fbcfe8;" onclick="execEditorColor('#fbcfe8')" title="베이비 핑크"></div>
+                  
+                  <!-- 2행: 선명한 포인트 컬러 -->
+                  <div class="color-chip" style="background:#38bdf8;" onclick="execEditorColor('#38bdf8')" title="스카이 블루"></div>
+                  <div class="color-chip" style="background:#4ade80;" onclick="execEditorColor('#4ade80')" title="네온 그린"></div>
                   <div class="color-chip" style="background:#c29b38;" onclick="execEditorColor('#c29b38')" title="웜 골드"></div>
-                  <div class="color-chip" style="background:#d9534f;" onclick="execEditorColor('#d9534f')" title="레드"></div>
-                  <div class="color-chip" style="background:#2e7d32;" onclick="execEditorColor('#2e7d32')" title="그린"></div>
-                  <div class="color-chip" style="background:#1976d2;" onclick="execEditorColor('#1976d2')" title="블루"></div>
-                  <div class="color-chip" style="background:#7b1fa2;" onclick="execEditorColor('#7b1fa2')" title="퍼플"></div>
-                  <div class="color-chip" style="background:#8d6e63;" onclick="execEditorColor('#8d6e63')" title="브라운"></div>
-                  <div class="color-chip" style="background:#757575;" onclick="execEditorColor('#757575')" title="그레이"></div>
-                  <input type="color" style="width: 24px; height: 24px; padding: 0; border: none; background: none; cursor: pointer;" onchange="execEditorColor(this.value)" title="직접 선택">
+                  <div class="color-chip" style="background:#f87171;" onclick="execEditorColor('#f87171')" title="코랄 레드"></div>
+                  <div class="color-chip" style="background:#c084fc;" onclick="execEditorColor('#c084fc')" title="라이트 바이올렛"></div>
+
+                  <!-- 3행: 클래식 & 기타 컬러 -->
+                  <div class="color-chip" style="background:#94a3b8;" onclick="execEditorColor('#94a3b8')" title="미디엄 그레이"></div>
+                  <div class="color-chip" style="background:#5e6b52;" onclick="execEditorColor('#5e6b52')" title="세이지 그린"></div>
+                  <div class="color-chip" style="background:#1d4ed8;" onclick="execEditorColor('#1d4ed8')" title="딥 블루"></div>
+                  <div class="color-chip" style="background:#2c2a29;" onclick="execEditorColor('#2c2a29')" title="먹색 (라이트용)"></div>
+                  <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;" title="직접 컬러 선택">
+                    <input type="color" value="#ffffff" style="width: 24px; height: 24px; padding: 0; border: 1px solid #475569; border-radius: 4px; background: none; cursor: pointer;" onchange="execEditorColor(this.value)">
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <!-- 6. 형광펜 (배경색) 팔레트 (티스토리 시그니처) -->
+            <div style="position: relative; display: inline-block;">
+              <button type="button" class="tool-btn" onclick="toggleBgColorPopup(event)" title="형광펜 (글자 배경색)" style="font-weight: 800; color: #a3e635; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🖍️</span> <span>형광펜</span>
+              </button>
+              <div id="editorBgColorMenu" class="editor-popup-menu" style="width: 175px;" onclick="event.stopPropagation()">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span class="popup-menu-title" style="margin: 0;">형광펜 효과</span>
+                  <button type="button" onclick="execEditorBgColor('transparent')" style="padding: 2px 6px; background: #334155; color: #e2e8f0; border: none; border-radius: 4px; font-size: 0.72rem; cursor: pointer;" title="형광펜 지우기">지우기</button>
+                </div>
+                <div class="editor-color-grid" style="grid-template-columns: repeat(5, 24px);">
+                  <div class="bg-color-chip" style="background:#fef08a;" onclick="execEditorBgColor('#fef08a')" title="노랑 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#bbf7d0;" onclick="execEditorBgColor('#bbf7d0')" title="연두 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#bae6fd;" onclick="execEditorBgColor('#bae6fd')" title="하늘 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#fbcfe8;" onclick="execEditorBgColor('#fbcfe8')" title="핑크 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#fed7aa;" onclick="execEditorBgColor('#fed7aa')" title="주황 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#e9d5ff;" onclick="execEditorBgColor('#e9d5ff')" title="보라 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#fecdd3;" onclick="execEditorBgColor('#fecdd3')" title="로즈 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#d9f99d;" onclick="execEditorBgColor('#d9f99d')" title="라임 형광펜"></div>
+                  <div class="bg-color-chip" style="background:#e2e8f0;" onclick="execEditorBgColor('#e2e8f0')" title="회색 하이라이트"></div>
+                  <div style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;" title="직접 형광펜 선택">
+                    <input type="color" value="#fef08a" style="width: 24px; height: 24px; padding: 0; border: 1px solid #475569; border-radius: 4px; background: none; cursor: pointer;" onchange="execEditorBgColor(this.value)">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="tool-separator"></div>
+
+            <!-- 7. 텍스트 정렬 -->
+            <div class="tool-group" style="display: flex; gap: 2px;">
+              <button type="button" class="tool-btn" onclick="execEditorCmd('justifyLeft')" title="왼쪽 정렬">⫷ 좌</button>
+              <button type="button" class="tool-btn" onclick="execEditorCmd('justifyCenter')" title="가운데 정렬">≡ 중</button>
+              <button type="button" class="tool-btn" onclick="execEditorCmd('justifyRight')" title="오른쪽 정렬">⫸ 우</button>
             </div>
 
             <div class="tool-separator"></div>
@@ -9155,6 +9312,13 @@
 
       renderPhotoSidebar();
 
+      const fmtSel = document.getElementById('editorFormatSelect');
+      if (fmtSel) fmtSel.value = 'p1';
+      const fontSel = document.getElementById('editorFontFamilySelect');
+      if (fontSel) fontSel.selectedIndex = 0;
+      const sizeSel = document.getElementById('editorFontSizeSelect');
+      if (sizeSel) sizeSel.value = '16px';
+
       const modal = document.getElementById('tistoryEditorModal');
       if (modal) {
         modal.classList.add('open');
@@ -9234,12 +9398,72 @@
       saveEditorSelection();
     }
 
+    // 티스토리 스타일 문단 서식 (본문1~3, 제목1~3)
+    function execEditorFormatStyle(val) {
+      const editor = document.getElementById('editorContent');
+      if (!editor) return;
+      editor.focus();
+      restoreEditorSelection();
+
+      if (val === 'h2' || val === 'h3' || val === 'h4') {
+        document.execCommand('formatBlock', false, `<${val}>`);
+      } else if (val === 'p1') {
+        document.execCommand('formatBlock', false, '<p>');
+        execEditorFontSizePx('16px');
+      } else if (val === 'p2') {
+        document.execCommand('formatBlock', false, '<p>');
+        execEditorFontSizePx('14px');
+      } else if (val === 'p3') {
+        document.execCommand('formatBlock', false, '<p>');
+        execEditorFontSizePx('13px');
+      }
+      saveEditorSelection();
+    }
+
+    // 티스토리 글꼴 (서체) 변경
+    function execEditorFontFamily(fontFamily) {
+      if (!fontFamily) return;
+      const editor = document.getElementById('editorContent');
+      if (!editor) return;
+      editor.focus();
+      restoreEditorSelection();
+      document.execCommand('fontName', false, fontFamily);
+      saveEditorSelection();
+    }
+
+    // 글자 크기 (px 정밀 지정 - 현대적 contentEditable 브라우저 호환)
+    function execEditorFontSizePx(sizePx) {
+      if (!sizePx) return;
+      const editor = document.getElementById('editorContent');
+      if (!editor) return;
+      editor.focus();
+      restoreEditorSelection();
+
+      const sel = window.getSelection();
+      if (!sel || !sel.rangeCount) return;
+
+      // 브라우저 fontSize 명령으로 임시 font 태그 생성 후 span style로 정밀 치환
+      document.execCommand('fontSize', false, '7');
+      const fontTags = editor.querySelectorAll('font[size="7"]');
+      fontTags.forEach(f => {
+        const span = document.createElement('span');
+        span.style.fontSize = sizePx;
+        span.style.lineHeight = '1.6';
+        span.innerHTML = f.innerHTML;
+        f.parentNode.replaceChild(span, f);
+      });
+
+      saveEditorSelection();
+    }
+
     // 글자색 변경 팝업 제어
     function toggleColorPopup(e) {
       e.stopPropagation();
       saveEditorSelection();
       const menu = document.getElementById('editorColorMenu');
+      const bgMenu = document.getElementById('editorBgColorMenu');
       const symbolMenu = document.getElementById('editorSymbolMenu');
+      if (bgMenu) bgMenu.style.display = 'none';
       if (symbolMenu) symbolMenu.style.display = 'none';
       if (menu) {
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
@@ -9248,11 +9472,41 @@
 
     function execEditorColor(color) {
       const editor = document.getElementById('editorContent');
+      if (!editor) return;
       editor.focus();
       restoreEditorSelection();
       document.execCommand('foreColor', false, color);
       saveEditorSelection();
       const menu = document.getElementById('editorColorMenu');
+      if (menu) menu.style.display = 'none';
+    }
+
+    // 형광펜 (글자 배경색) 팝업 제어
+    function toggleBgColorPopup(e) {
+      e.stopPropagation();
+      saveEditorSelection();
+      const menu = document.getElementById('editorBgColorMenu');
+      const colorMenu = document.getElementById('editorColorMenu');
+      const symbolMenu = document.getElementById('editorSymbolMenu');
+      if (colorMenu) colorMenu.style.display = 'none';
+      if (symbolMenu) symbolMenu.style.display = 'none';
+      if (menu) {
+        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+      }
+    }
+
+    function execEditorBgColor(color) {
+      const editor = document.getElementById('editorContent');
+      if (!editor) return;
+      editor.focus();
+      restoreEditorSelection();
+      if (color === 'transparent') {
+        document.execCommand('hiliteColor', false, 'transparent');
+      } else {
+        document.execCommand('hiliteColor', false, color);
+      }
+      saveEditorSelection();
+      const menu = document.getElementById('editorBgColorMenu');
       if (menu) menu.style.display = 'none';
     }
 
@@ -9262,7 +9516,9 @@
       saveEditorSelection();
       const menu = document.getElementById('editorSymbolMenu');
       const colorMenu = document.getElementById('editorColorMenu');
+      const bgMenu = document.getElementById('editorBgColorMenu');
       if (colorMenu) colorMenu.style.display = 'none';
+      if (bgMenu) bgMenu.style.display = 'none';
       if (menu) {
         menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
       }
@@ -9270,6 +9526,7 @@
 
     function insertSymbolChar(sym) {
       const editor = document.getElementById('editorContent');
+      if (!editor) return;
       editor.focus();
       restoreEditorSelection();
       document.execCommand('insertText', false, sym);
@@ -9277,6 +9534,22 @@
       const menu = document.getElementById('editorSymbolMenu');
       if (menu) menu.style.display = 'none';
     }
+
+    // 에디터 외부 클릭 시 열려있는 툴바 팝업 닫기
+    document.addEventListener('click', function(e) {
+      const colorMenu = document.getElementById('editorColorMenu');
+      const bgMenu = document.getElementById('editorBgColorMenu');
+      const symbolMenu = document.getElementById('editorSymbolMenu');
+      if (colorMenu && colorMenu.style.display === 'block' && !e.target.closest('#editorColorMenu') && !e.target.closest('button[onclick*="toggleColorPopup"]')) {
+        colorMenu.style.display = 'none';
+      }
+      if (bgMenu && bgMenu.style.display === 'block' && !e.target.closest('#editorBgColorMenu') && !e.target.closest('button[onclick*="toggleBgColorPopup"]')) {
+        bgMenu.style.display = 'none';
+      }
+      if (symbolMenu && symbolMenu.style.display === 'block' && !e.target.closest('#editorSymbolMenu') && !e.target.closest('button[onclick*="toggleSymbolPopup"]')) {
+        symbolMenu.style.display = 'none';
+      }
+    });
 
     // 외부 이미지 URL 삽입
     function insertExternalImgPrompt() {
