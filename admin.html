@@ -4445,10 +4445,14 @@
     let adminBoardCategory = 'all';
     let adminSearchQuery = '';
 
+    // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
+    const CURRENT_ARTICLES_VERSION = '20261004_v3_funeral_couple_memoir';
+
     // 데이터 로드 & 기존 키와의 호환 병합 (모든 브라우저·카카오톡 동일 최신 동기화 보장)
     function getArticles() {
       // 1) 기본 저장소 확인
       let saved = localStorage.getItem(ARTICLES_KEY);
+      const syncVersion = localStorage.getItem('yebaek_articles_sync_version');
       let list = [];
       if (saved) {
         try {
@@ -4456,28 +4460,25 @@
         } catch (e) {}
       }
 
-      if (!Array.isArray(list) || list.length === 0) {
-        list = JSON.parse(JSON.stringify(defaultArticles));
+      if (!Array.isArray(list) || list.length === 0 || syncVersion !== CURRENT_ARTICLES_VERSION) {
+        const customArticles = (Array.isArray(list)) ? list.filter(item => !defaultArticles.some(def => def.id === item.id || def.title === item.title)) : [];
+        list = [...JSON.parse(JSON.stringify(defaultArticles)), ...customArticles];
         localStorage.setItem(ARTICLES_KEY, JSON.stringify(list));
+        localStorage.setItem('yebaek_articles_sync_version', CURRENT_ARTICLES_VERSION);
         return list;
       }
 
       // 최신 대표 칼럼 3편 자동 병합 및 보정
       let migrated = false;
       defaultArticles.forEach((defArt, idx) => {
-        const existIdx = list.findIndex(item => item.id === defArt.id || item.title === defArt.title);
+        const existIdx = list.findIndex(item => item.id === defArt.id || (item.aliasIds && item.aliasIds.includes(defArt.id)) || item.title === defArt.title);
         if (existIdx === -1) {
           list.splice(idx, 0, JSON.parse(JSON.stringify(defArt)));
           migrated = true;
         } else {
-          if (defArt.isFeatured && !list[existIdx].isFeatured) {
-            list[existIdx].isFeatured = true;
-            migrated = true;
-          }
-          if (defArt.image && (!list[existIdx].image || list[existIdx].image.includes('unsplash.com/photo-1511895426328'))) {
-            list[existIdx].image = defArt.image;
-            migrated = true;
-          }
+          list[existIdx].isFeatured = true;
+          list[existIdx].id = defArt.id;
+          if (defArt.image) list[existIdx].image = defArt.image;
         }
       });
 

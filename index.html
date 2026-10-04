@@ -8568,9 +8568,13 @@
       return '비움과 갈무리';
     }
 
+    // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
+    const CURRENT_ARTICLES_VERSION = '20261004_v3_funeral_couple_memoir';
+
     // 🌟 기사 데이터 로드 및 저장 (모든 브라우저·카카오톡 동일 최신 동기화 보장)
     function getStoredArticles() {
       const stored = localStorage.getItem('yebaek_magazine_articles');
+      const syncVersion = localStorage.getItem('yebaek_articles_sync_version');
       let list = [];
       if (stored) {
         try {
@@ -8580,20 +8584,22 @@
         }
       }
 
-      if (!Array.isArray(list) || list.length === 0) {
-        list = JSON.parse(JSON.stringify(initialMagazineArticles));
+      // 저장소가 비어있거나, 새 버전으로 업데이트된 경우 최신 대표글 3편 최상단 강제 동기화
+      if (!Array.isArray(list) || list.length === 0 || syncVersion !== CURRENT_ARTICLES_VERSION) {
+        const customArticles = (Array.isArray(list)) ? list.filter(item => !initialMagazineArticles.some(init => init.id === item.id || init.title === item.title)) : [];
+        list = [...JSON.parse(JSON.stringify(initialMagazineArticles)), ...customArticles];
+        localStorage.setItem('yebaek_articles_sync_version', CURRENT_ARTICLES_VERSION);
       } else {
-        // 🌟 [핵심] 신규 대표 칼럼(생전 장례식, 40년 부부 대화, 칠순 서재 등)이 기존 캐시에 없으면 최상단에 자동 결합!
+        // 기존 캐시가 있는 브라우저라도 최신 대표 칼럼 3편이 최상단에 존재하도록 보장
         initialMagazineArticles.forEach((initArt, idx) => {
-          const existIdx = list.findIndex(item => item.id === initArt.id || item.title === initArt.title);
+          const existIdx = list.findIndex(item => item.id === initArt.id || (item.aliasIds && item.aliasIds.includes(initArt.id)) || item.title === initArt.title);
           if (existIdx === -1) {
             list.splice(idx, 0, JSON.parse(JSON.stringify(initArt)));
           } else {
-            // 대표글 지정 및 이미지 최신 상태 동기화
-            if (initArt.isFeatured) list[existIdx].isFeatured = true;
-            if (initArt.image && (!list[existIdx].image || list[existIdx].image.includes('unsplash.com/photo-1511895426328'))) {
-              list[existIdx].image = initArt.image;
-            }
+            // 대표글 지정 및 내용/이미지 최신 상태 동기화
+            list[existIdx].isFeatured = true;
+            list[existIdx].id = initArt.id;
+            if (initArt.image) list[existIdx].image = initArt.image;
           }
         });
       }
@@ -8622,7 +8628,12 @@
       if (!grid) return;
 
       const articles = getStoredArticles();
-      const featured = articles.filter(a => a.isFeatured);
+      let featured = articles.filter(a => a.isFeatured);
+
+      // 대표글이 없으면 최신 글 3편을 자동으로 대표글로 승격하여 대문 공백 방지
+      if (featured.length === 0) {
+        featured = articles.slice(0, 3);
+      }
 
       if (featured.length === 0) {
         grid.innerHTML = `
