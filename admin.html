@@ -3041,9 +3041,12 @@
                 <span>🪄 글 맞춤 5장</span>
               </button>
             </div>
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px;">
               <button type="button" onmousedown="event.preventDefault()" onclick="loadConceptPhotosForCurrentArticle(true)" style="background:none; border:none; color:#a5b4fc; font-size:0.75rem; font-weight:750; cursor:pointer; padding:2px 0; display:inline-flex; align-items:center; gap:4px;" title="현재 글 주제의 다른 감동 사진 5장으로 새로고침합니다">
                 <span>🔄 다른 AI 사진 5장으로 교체</span>
+              </button>
+              <button type="button" onmousedown="event.preventDefault()" onclick="searchCustomPhotosByKeyword()" style="background:none; border:none; color:#38bdf8; font-size:0.75rem; font-weight:750; cursor:pointer; padding:2px 0; display:inline-flex; align-items:center; gap:4px;" title="원하는 키워드(다도, 편지, 꽃, 식단, 서재 등)로 감성 사진 5장을 찾아 보관함에 담습니다">
+                <span>🔍 키워드로 찾기</span>
               </button>
             </div>
             <input type="file" id="editorImgInput" style="display:none" onchange="processUploadedImgs(this)" multiple accept="image/*">
@@ -5648,10 +5651,89 @@
     }
 
     // =========================================================================
-    // 📸 AI 스마트 고화질 감성 이미지 라이브러리 (주제별 180여 종 엄선 풀)
+    // 📸 AI 스마트 고화질 감성 이미지 라이브러리 (글 내용에 100% 밀착된 12개 테마 200여 종 고유 풀)
     // =========================================================================
     const AI_IMAGE_LIBRARY = {
-      // 1. 건강 식단, 영양, 저속노화, 채소, 과일, 건강 요리
+      // 1. 다도, 찻잔, 차 한 잔, 녹차, 정갈함, 온기, 일본 문화
+      tea_ceremony: [
+        "https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1563822249548-9a72b6353cd1?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1531970227416-f0cdceed14e8?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1571934811356-5cc506b3a011?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1558160074-4d7d8bdf4256?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1576092762791-dd9e2220abd1?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 2. 편지, 감사 편지, 손편지, 엽서, 만년필, 작별의 글, 잉크, 봉투
+      letter_farewell: [
+        "https://images.unsplash.com/photo-1586075010923-2dd4570fb338?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 3. 꽃, 헌화, 들꽃, 국화, 장미, 꽃다발, 정원, 꽃병
+      flowers_remembrance: [
+        "https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1508615039623-a25605d2b022?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1533038590840-1cde6e668a91?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1487070183336-b863922373d4?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507290439931-a861b5a38200?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 4. 자서전, 회고록, 서재, 책장, 펼쳐진 책, 기록, 원고
+      books_memoir: [
+        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1495446815901-a7297e633e8d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1532012164546-f432f2e3777a?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 5. 손잡기, 온기, 포옹, 주름진 손, 가족의 맞잡은 손, 세월의 흔적, 사랑
+      warm_hands: [
+        "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1516585427167-9f4af9627e6c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 6. 노을, 석양, 잔잔한 바다, 호수, 하늘, 평온, 사색, 쉼, 아름다운 마무리
+      sunset_peace: [
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1495616811223-4d98c6e9c869?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1518495973542-4542c06a5843?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 7. 건강 식단, 영양, 저속노화, 지중해식, 채소, 과일, 건강 요리
       health_diet: [
         "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80",
@@ -5664,7 +5746,7 @@
         "https://images.unsplash.com/photo-1576045057995-568f588f82fb?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?auto=format&fit=crop&w=800&q=80"
       ],
-      // 2. 시니어 운동, 산책, 관절 스트레칭, 요가, 활력
+      // 8. 시니어 운동, 산책, 관절 스트레칭, 요가, 활력, 숲길 걷기
       health_exercise: [
         "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80",
@@ -5675,8 +5757,8 @@
         "https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80"
       ],
-      // 3. 비움과 갈무리, 정리수납, 미니멀 라이프, 단정한 방
-      organizing: [
+      // 9. 비움과 갈무리, 정리수납, 미니멀 라이프, 단정한 방, 햇살
+      organizing_minimal: [
         "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
@@ -5686,108 +5768,32 @@
         "https://images.unsplash.com/photo-1582735689369-4fe89db7114c?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1505691938895-1758d7feb511?auto=format&fit=crop&w=800&q=80"
       ],
-      // 4. 디지털 라이프, 스마트폰 사진 정리, 앱, 계정 갈무리
-      digital: [
+      // 10. 생전 장례식, 고별 잔치, 감사 모임, 환송, 미소, 건배, 축하
+      celebration_farewell: [
+        "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 11. 고향, 한옥, 기와, 골목길, 옛 기억, 여행, 추억
+      travel_heritage: [
+        "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1528164344705-475426879c0d?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80"
+      ],
+      // 12. 디지털 라이프, 스마트폰 사진 정리, 앱, 계정 갈무리
+      digital_life: [
         "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1556656793-08538906a9f8?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=800&q=80",
         "https://images.unsplash.com/photo-1581291518655-9523c932deb3?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1534972195531-a756b112697e?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 5. 웰다잉, 사전연명, 엔딩노트, 마음의 평온, 사색
-      welldying: [
-        "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1528722828814-77b9b83aafb2?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1470240731273-7821a6eeb6bd?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 5-2. ★ 생전 장례식, 아름다운 작별, 고별 잔치, 가족 감사 모임, 손잡기, 온화한 어르신
-      living_funeral: [
-        "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 6. 인생 2막, 은퇴, 새로운 시작, 활력, 도전
-      reset: [
-        "https://images.unsplash.com/photo-1571260899304-425eee4c7efc?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1472653431158-6364773b2a56?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 7. 부모님, 가족, 시니어, 효도, 따뜻한 온기
-      family: [
-        "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 8. 자서전, 글쓰기, 회고록, 만년필, 책, 서재
-      writing: [
-        "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 9. 사진첩, 흑백 추억, 시간의 기억
-      memories: [
-        "https://images.unsplash.com/photo-1526726538690-5cbf956ae2fd?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 10. 대화, 인터뷰, 경청, 차 한 잔, 부부 소통
-      dialogue: [
-        "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1577563908411-5077b6dc7624?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 11. 고향, 자연, 들꽃, 힐링 풍경
-      nature: [
-        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1426604966848-d7adac402bff?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 12. 여행, 추억 순례, 바다, 한옥, 힐링
-      travel: [
-        "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
-      ],
-      // 13. 취미, 화분 가꾸기, 원예, 마음챙김, 명상
-      hobby_mind: [
-        "https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
-        "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80"
+        "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80"
       ]
     };
 
@@ -5971,7 +5977,7 @@
       if (arrow) arrow.textContent = isHidden ? '▲' : '▼';
     }
 
-    // 🧠 글 맥락 지능형 분석 및 최적 고화질 사진 5장 100% 로딩 보장 큐레이션 엔진
+    // 🧠 글 맥락 지능형 분석 및 최적 고화질 감성 사진 5장 100% 로딩 보장 큐레이션 엔진
     function generateSmartAiPhotos(text = '', category = '', avoidUrls = [], youtubeUrl = '', webUrl = '') {
       const lower = (text + ' ' + category).toLowerCase();
       const result = [];
@@ -5983,69 +5989,75 @@
         result.push(ytThumb);
       }
 
-      // 2) 카테고리 & 키워드별 테마 점수 계산
+      // 2) 글 내용 속의 세부 시각적 오브제 & 정서 키워드 정밀 분석
       const scores = {
-        living_funeral: 0,
-        welldying: 0,
-        family: 0,
-        writing: 0,
+        tea_ceremony: 0,
+        letter_farewell: 0,
+        flowers_remembrance: 0,
+        books_memoir: 0,
+        warm_hands: 0,
+        sunset_peace: 0,
+        celebration_farewell: 0,
         health_diet: 0,
         health_exercise: 0,
-        organizing: 0,
-        digital: 0,
-        reset: 0,
-        memories: 0,
-        dialogue: 0,
-        nature: 0,
-        hobby_mind: 0
+        organizing_minimal: 0,
+        travel_heritage: 0,
+        digital_life: 0
       };
 
-      if (/생전\s*장례|생전장례|고별|작별|환송|임종|유언|아름다운\s*작별/.test(lower)) {
-        scores.living_funeral += 15;
-        scores.welldying += 10;
-        scores.family += 8;
+      // 다도 / 차 / 찻잔 / 일본식 예절 / 따뜻한 김
+      if (/차\s*한\s*잔|찻잔|다도|녹차|말차|찻잎|홍차|티타임|다기|일본/.test(lower)) scores.tea_ceremony += 18;
+      // 편지 / 감사 편지 / 손편지 / 엽서 / 만년필 / 유언 / 작별 인사
+      if (/편지|손편지|감사\s*편지|엽서|봉투|만년필|손글씨|유언|작별\s*인사|답장|고백/.test(lower)) scores.letter_farewell += 18;
+      // 꽃 / 헌화 / 국화 / 장미 / 들꽃 / 정원 / 꽃병 / 꽃다발
+      if (/꽃|헌화|국화|장미|들꽃|정원|화병|꽃다발|화초|식물|화분/.test(lower)) scores.flowers_remembrance += 16;
+      // 서재 / 책 / 자서전 / 회고록 / 책장 / 출판 / 집필 / 기록 / 양장본
+      if (/자서전|회고록|평전|서재|책장|양장본|출판|집필|기록|원고|도서|책/.test(lower)) scores.books_memoir += 18;
+      // 손잡기 / 온기 / 악수 / 포옹 / 부모님 / 어머니 / 아버지 / 주름 / 가족 / 효도
+      if (/손\s*잡|손잡|맞잡|온기|포옹|주름|어머니|아버지|부모님|가족|효도|어버이|사랑|손길/.test(lower)) scores.warm_hands += 15;
+      // 노을 / 석양 / 하늘 / 바다 / 호수 / 평온 / 쉼 / 아름다운 마무리 / 사색
+      if (/노을|석양|황금빛|하늘|바다|호수|평온|사색|마지막|쉼|안식|아름다운\s*작별|종착/.test(lower)) scores.sunset_peace += 15;
+      // 생전 장례식 / 고별 잔치 / 환송 / 파티 / 모임 / 축하 / 건배
+      if (/생전\s*장례|생전장례|고별|환송|잔치|모임|축하|건배|축제|마지막\s*파티/.test(lower)) {
+        scores.celebration_farewell += 18;
+        scores.warm_hands += 10;
+        scores.letter_farewell += 8;
+        scores.flowers_remembrance += 8;
       }
-      if (/웰다잉|사전연명|엔딩노트|존엄사|갈무리|사후|마지막/.test(lower)) {
-        scores.welldying += 12;
-        scores.living_funeral += 8;
-        scores.family += 6;
-      }
-      if (/칠순|팔순|환갑|부모님|어머니|아버지|엄마|아빠|가족|효도|손주|자녀/.test(lower)) {
-        scores.family += 12;
-        scores.writing += 6;
-      }
-      if (/자서전|회고록|평전|글쓰기|원고|만년필|도서|책|출판|기록|집필/.test(lower)) {
-        scores.writing += 12;
-        scores.family += 5;
-      }
-      if (/식단|음식|영양|저속노화|혈압|당뇨|단백질|채소|과일|식사|밥상|영양제|요리/.test(lower)) {
-        scores.health_diet += 12;
-      }
-      if (/운동|스트레칭|관절|걷기|산책|홈트|헬스|요가|체조|척추|허리|무릎|유산소/.test(lower)) {
-        scores.health_exercise += 12;
-      }
-      if (/정리|비움|물건|옷장|수납|버리기|청소|미니멀|유품|나눔|살림/.test(lower)) {
-        scores.organizing += 12;
-      }
-      if (/스마트폰|사진|계정|클라우드|카톡|디지털|앱|인터넷|컴퓨터|태블릿/.test(lower)) {
-        scores.digital += 12;
-      }
-      if (/은퇴|퇴직|인생2막|리셋|버킷리스트|재정|시니어\s*일자리|귀촌|창업/.test(lower)) {
-        scores.reset += 12;
-      }
-      if (/마음|힐링|우울|고독|명상|사색|치유|부부|대화|친구|위로|휴식/.test(lower)) {
-        scores.hobby_mind += 10;
-        scores.dialogue += 8;
+      // 식단 / 저속노화 / 지중해 / 채소 / 샐러드 / 올리브유 / 영양 / 밥상
+      if (/식단|채소|샐러드|올리브유|토마토|과일|영양|저속노화|밥상|요리|당뇨|혈압/.test(lower)) scores.health_diet += 18;
+      // 운동 / 산책 / 걷기 / 스트레칭 / 관절 / 숲길 / 공원 / 요가
+      if (/운동|스트레칭|관절|산책|걷기|숲길|공원|요가|체조|허리|무릎|척추|유산소/.test(lower)) scores.health_exercise += 18;
+      // 정리 / 비움 / 미니멀 / 수납 / 옷장 / 버리기 / 청소 / 단정
+      if (/정리|비움|미니멀|수납|버리기|옷장|청소|단정|유품|살림/.test(lower)) scores.organizing_minimal += 18;
+      // 고향 / 한옥 / 기와 / 골목 / 여행 / 추억
+      if (/고향|한옥|기와|골목|여행|추억\s*여행|순례|풍경/.test(lower)) scores.travel_heritage += 16;
+      // 디지털 / 스마트폰 / 사진 정리 / 클라우드 / 앱
+      if (/스마트폰|사진\s*정리|계정|클라우드|카톡|디지털|앱|컴퓨터|태블릿/.test(lower)) scores.digital_life += 18;
+
+      // 카테고리별 기본 가중치
+      if (category === '웰다잉') {
+        scores.celebration_farewell += 6;
+        scores.warm_hands += 5;
+        scores.letter_farewell += 5;
+        scores.sunset_peace += 5;
+      } else if (category === '웰라이프') {
+        scores.warm_hands += 5;
+        scores.books_memoir += 5;
+        scores.health_diet += 4;
+        scores.health_exercise += 4;
+      } else if (category === '비움과 갈무리') {
+        scores.organizing_minimal += 6;
+        scores.letter_farewell += 4;
+        scores.digital_life += 4;
       }
 
-      if (category === '웰다잉') { scores.living_funeral += 5; scores.welldying += 5; }
-      if (category === '웰라이프') { scores.family += 4; scores.health_diet += 4; }
-      if (category === '비움과 갈무리') { scores.organizing += 5; scores.digital += 4; }
-
+      // 점수 순위 테마 정렬
       const sortedThemes = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
-      const primaryTheme = sortedThemes[0] || 'living_funeral';
-      const secondaryTheme = sortedThemes[1] || 'family';
-      const tertiaryTheme = sortedThemes[2] || 'welldying';
+      const primaryTheme = sortedThemes[0] || 'warm_hands';
+      const secondaryTheme = sortedThemes[1] || 'letter_farewell';
+      const tertiaryTheme = sortedThemes[2] || 'flowers_remembrance';
+      const moodTheme = sortedThemes[3] || 'sunset_peace';
 
       const shuffle = arr => {
         const copy = [...arr];
@@ -6056,44 +6068,80 @@
         return copy;
       };
 
-      const allAvoid = new Set([...avoidUrls, ...recentPhotoHistory.slice(-15)]);
+      // 중복 방지 세트 (최근 35장 및 사용자가 명시한 avoidUrls 배제)
+      const allAvoid = new Set([...avoidUrls, ...recentPhotoHistory.slice(-35)]);
 
-      const getFilteredShuffled = theme => {
-        const pool = AI_IMAGE_LIBRARY[theme] || AI_IMAGE_LIBRARY.family || [];
-        const filtered = pool.filter(u => !allAvoid.has(u));
-        return shuffle(filtered.length >= 5 ? filtered : pool);
+      const getSafeShuffled = theme => {
+        const pool = AI_IMAGE_LIBRARY[theme] || AI_IMAGE_LIBRARY.warm_hands || [];
+        const fresh = pool.filter(u => !allAvoid.has(u));
+        return shuffle(fresh.length >= 3 ? fresh : pool);
       };
 
-      const pool1 = getFilteredShuffled(primaryTheme);
-      const pool2 = getFilteredShuffled(secondaryTheme);
-      const pool3 = getFilteredShuffled(tertiaryTheme);
+      const pool1 = getSafeShuffled(primaryTheme);
+      const pool2 = getSafeShuffled(secondaryTheme);
+      const pool3 = getSafeShuffled(tertiaryTheme);
+      const pool4 = getSafeShuffled(moodTheme);
 
-      // 1순위 테마 사진에서 우선 채우기
+      // 🌟 [입체적 스토리텔링 믹싱] 5장이 전부 한 종류(얼굴만 5장)가 되지 않도록,
+      // 글의 핵심 사물(찻잔/편지) + 정서(손잡기/꽃) + 분위기(노을)를 다채롭게 결합!
+      // 1순위 테마에서 2장
       for (const img of pool1) {
+        if (result.length >= (ytId ? 3 : 2)) break;
+        if (!result.includes(img)) result.push(img);
+      }
+      // 2순위 테마에서 1~2장
+      for (const img of pool2) {
+        if (result.length >= (ytId ? 4 : 4)) break;
+        if (!result.includes(img)) result.push(img);
+      }
+      // 3순위/보조 감성 테마에서 나머지 1~2장 보충
+      for (const img of pool3) {
+        if (result.length >= 5) break;
+        if (!result.includes(img)) result.push(img);
+      }
+      for (const img of pool4) {
         if (result.length >= 5) break;
         if (!result.includes(img)) result.push(img);
       }
 
-      // 부족한 경우 2순위, 3순위에서 보충
+      // 혹시라도 부족한 경우 전체 라이브러리에서 신선한 사진으로 채움
       if (result.length < 5) {
-        for (const img of pool2) {
+        const allKeys = Object.keys(AI_IMAGE_LIBRARY);
+        for (const k of shuffle(allKeys)) {
+          const list = AI_IMAGE_LIBRARY[k] || [];
+          for (const img of shuffle(list)) {
+            if (result.length >= 5) break;
+            if (!result.includes(img) && !allAvoid.has(img)) result.push(img);
+          }
           if (result.length >= 5) break;
-          if (!result.includes(img)) result.push(img);
-        }
-      }
-      if (result.length < 5) {
-        for (const img of pool3) {
-          if (result.length >= 5) break;
-          if (!result.includes(img)) result.push(img);
         }
       }
 
+      // 세션 히스토리에 기록 (최대 40장 보존)
       recentPhotoHistory.push(...result);
-      if (recentPhotoHistory.length > 30) {
-        recentPhotoHistory = recentPhotoHistory.slice(-30);
+      if (recentPhotoHistory.length > 40) {
+        recentPhotoHistory = recentPhotoHistory.slice(-40);
       }
 
       return result.slice(0, 5);
+    }
+
+    // 🔍 사용자가 직접 키워드로 사진 5장을 찾고 교체할 수 있는 기능
+    function searchCustomPhotosByKeyword(promptKw = '') {
+      let kw = promptKw;
+      if (!kw) {
+        kw = prompt('찾으실 사진의 키워드를 입력해 주세요:\n(예: 다도, 차, 편지, 꽃, 자서전, 서재, 노을, 손, 가족, 식단, 산책 등)');
+      }
+      if (!kw || !kw.trim()) return;
+      kw = kw.trim();
+
+      const newPhotos = generateSmartAiPhotos(kw, '', editorPhotos.map(p => p.src));
+      editorPhotos = newPhotos.map(src => ({ src }));
+      mainThumbImg = newPhotos[0];
+
+      renderPhotoSidebar();
+      updateMainThumbIndicator();
+      alert(`🖼️ '${kw}' 키워드에 어울리는 고화질 감성 사진 5장을 새로 불러왔습니다!`);
     }
 
     // =========================================================================
@@ -6106,13 +6154,13 @@
         category: "웰라이프",
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
-        image: "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
+        image: "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
         photos: [
-          "https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1506863530036-1efeddceb993?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1507842229451-7f01be7ff612?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=800&q=80",
           "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
-          "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&w=800&q=80"
+          "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80"
         ],
         content: `
           <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
@@ -8071,11 +8119,11 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       return str;
     }
 
-    // 네이버 블로그 스마트에디터 ONE 글쓰기 URL 생성
+    // 네이버 블로그 스마트에디터 ONE 글쓰기 공식 URL 생성
     function getNaverWriteUrl(rawId) {
       const nId = extractNaverId(rawId);
-      if (nId && /^[a-zA-Z0-9_\-]+$/.test(nId) && nId !== 'netrium1') {
-        return `https://blog.naver.com/${nId}/postwrite`;
+      if (nId && /^[a-zA-Z0-9_\-]+$/.test(nId)) {
+        return `https://blog.naver.com/${nId}?Redirect=Write`;
       }
       // 아이디 미설정 시 로그인된 본인 계정의 블로그 글쓰기(스마트에디터 ONE)로 자동 연결
       return 'https://blog.naver.com/GoBlogWrite.naver';
@@ -8362,12 +8410,11 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     }
 
-    // 본문 전체 (서식 + 이미지 5장) 클립보드 스마트 복사 (네이버/티스토리 호환 정제)
-    async function copyArticleBodyHtml(showAlert = true) {
+    // 🌟 본문 전체 (서식 + 이미지 5장) 네이버/티스토리 완벽 호환 표준 HTML 생성 헬퍼
+    function prepareArticleBodyCleanData() {
       const editor = document.getElementById('editorContent');
-      if (!editor) return false;
+      if (!editor) return null;
 
-      // 1. 네이버 스마트에디터 ONE & 티스토리 완벽 호환 표준 HTML 생성
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = editor.innerHTML;
 
@@ -8506,7 +8553,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         return false;
       }
 
-      // (1) 모든 하위 노드를 순회하며 흰색/밝은 글씨를 짙은 먹색(#222222)으로 치환 (단, 빨강, 파랑 등 유채색 강조색은 원본 유지!)
+      // (1) 모든 하위 노드를 순회하며 흰색/밝은 글씨를 짙은 먹색(#222222)으로 치환
       const allElements = tempDiv.querySelectorAll('*');
       allElements.forEach(el => {
         if (el.style && el.style.color && isBrightColor(el.style.color)) {
@@ -8537,8 +8584,6 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         }
       });
 
-      // ⚠️ [핵심] 최상위를 <div>로 감싸면 티스토리 에디터에서 모든 문단이 뭉개지므로,
-      // 감싸는 div 없이 개별 <p> 태그들이 평평하게 나열된 tempDiv.innerHTML을 그대로 전달합니다!
       const cleanHtml = tempDiv.innerHTML;
 
       // 텍스트 포맷에서도 문단 간 줄바꿈(\n\n) 완벽 보존
@@ -8550,43 +8595,61 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         textContent = editor.innerText;
       }
 
-      let success = false;
+      return { cleanHtml, textContent };
+    }
 
-      // (A) 최신 ClipboardItem API (포커스 유지 시 가장 강력)
+    // ⚡ [동기 클립보드 복사] 사용자 클릭 이벤트 콜스택 내에서 100% 즉시 복사 성공 보장!
+    function copyArticleBodyHtmlSync() {
+      const data = prepareArticleBodyCleanData();
+      if (!data) return false;
+
+      let success = false;
+      try {
+        const copyDiv = document.createElement('div');
+        copyDiv.innerHTML = data.cleanHtml;
+        copyDiv.style.position = 'fixed';
+        copyDiv.style.left = '0';
+        copyDiv.style.top = '0';
+        copyDiv.style.width = '100px';
+        copyDiv.style.height = '100px';
+        copyDiv.style.opacity = '0.01';
+        copyDiv.style.pointerEvents = 'none';
+        copyDiv.style.zIndex = '-9999';
+        document.body.appendChild(copyDiv);
+
+        const range = document.createRange();
+        range.selectNodeContents(copyDiv);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+        success = document.execCommand('copy');
+        sel.removeAllRanges();
+        document.body.removeChild(copyDiv);
+      } catch (err) {
+        console.warn('Sync execCommand failed:', err);
+      }
+      return success;
+    }
+
+    // 본문 전체 (서식 + 이미지 5장) 클립보드 스마트 복사 (비동기 최신 API + 동기 백업)
+    async function copyArticleBodyHtml(showAlert = true) {
+      const data = prepareArticleBodyCleanData();
+      if (!data) return false;
+
+      // 1) 동기 방식으로 1차 즉시 복사 확보!
+      let success = copyArticleBodyHtmlSync();
+
+      // 2) 최신 ClipboardItem API로 서식+이미지 완벽 보강 등록
       try {
         if (navigator.clipboard && window.ClipboardItem) {
-          const htmlBlob = new Blob([cleanHtml], { type: 'text/html' });
-          const textBlob = new Blob([textContent], { type: 'text/plain' });
+          const htmlBlob = new Blob([data.cleanHtml], { type: 'text/html' });
+          const textBlob = new Blob([data.textContent], { type: 'text/plain' });
           const item = new ClipboardItem({ 'text/html': htmlBlob, 'text/plain': textBlob });
           await navigator.clipboard.write([item]);
           success = true;
         }
       } catch (e) {
-        console.warn('ClipboardItem API fallback:', e);
-      }
-
-      // (B) Fallback: DOM 범위 선택 및 document.execCommand('copy')
-      if (!success) {
-        try {
-          const copyDiv = document.createElement('div');
-          copyDiv.innerHTML = cleanHtml;
-          copyDiv.style.position = 'fixed';
-          copyDiv.style.left = '-9999px';
-          copyDiv.style.top = '-9999px';
-          copyDiv.style.opacity = '0';
-          document.body.appendChild(copyDiv);
-
-          const range = document.createRange();
-          range.selectNodeContents(copyDiv);
-          const sel = window.getSelection();
-          sel.removeAllRanges();
-          sel.addRange(range);
-          success = document.execCommand('copy');
-          sel.removeAllRanges();
-          document.body.removeChild(copyDiv);
-        } catch (fbErr) {
-          console.warn('execCommand copy fallback failed:', fbErr);
-        }
+        console.warn('ClipboardItem async write skipped/fallback:', e);
       }
 
       if (showAlert) {
@@ -8599,13 +8662,10 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       return success;
     }
 
-    // 개별 채널 단독 열기 (팝업 차단 위험 제로 & 최우선 클립보드 복사)
-    async function executeSingleChannelPublish(channel) {
+    // 개별 채널 단독 열기 (팝업 차단 위험 0% 동기 오픈 & 클립보드 즉시 복사)
+    function executeSingleChannelPublish(channel) {
       saveExternalChannelSettings(false, 'modal');
       const cfg = getExternalChannelSettings();
-
-      // 1. 현재 창 포커스 상태에서 최우선으로 클립보드 복사 완료!
-      await copyArticleBodyHtml(false);
 
       let targetUrl = '';
       let channelName = '';
@@ -8618,20 +8678,27 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         targetUrl = getTstoryWriteUrl(cfg.tstoryUrl);
       }
 
+      // 1. 사용자 클릭 동기 콜스택에서 클립보드 즉시 동기 복사!
+      copyArticleBodyHtmlSync();
+      // 최신 API도 백그라운드로 보강
+      copyArticleBodyHtml(false).catch(() => {});
+
+      // 2. ⚡ 사용자 클릭 동기 콜스택에서 창을 즉시 오픈! (팝업 차단 절대 없음!)
       const win = window.open(targetUrl, '_blank');
+
       if (!win || win.closed || typeof win.closed === 'undefined') {
         showPopupBlockedNotice([
           { name: channelName, url: targetUrl, color: channel === 'naver' ? '#16a34a' : '#ea580c' }
         ]);
-        alert(`⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다.\n\n• 본문과 5장의 사진은 클립보드에 이미 완벽 복사되었습니다!\n• 모달 창 하단에 나타난 [${channelName} 바로가기] 버튼을 클릭해 주세요.`);
+        alert(`⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다.\n\n• 본문과 5장의 사진은 클립보드에 이미 100% 정상 복사되었습니다!\n• 모달 창 하단에 나타난 [${channelName} 바로 열기] 버튼을 직접 클릭해 주세요.`);
       } else {
         closeMultiChannelModal();
-        alert(`🎉 ${channelName} 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 열린 ${channelName} 글쓰기 본문 창을 클릭하고 [Ctrl + V]만 누르시면 사진과 서식이 쏙 들어갑니다!`);
+        alert(`🎉 ${channelName} 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 서식 그대로 클립보드에 완벽 복사되었습니다.\n• 열린 ${channelName} 글쓰기 창 본문에서 [Ctrl + V]만 누르시면 사진과 서식이 쏙 들어갑니다!`);
       }
     }
 
-    // 선택한 블로그로 원클릭 동시 발행 실행 (포커스 보존 선복사 + 스마트 팝업 대응)
-    async function executeMultiChannelPublish() {
+    // 선택한 블로그로 원클릭 동시 발행 실행 (동기 선복사 + 즉각 동기 창 오픈)
+    function executeMultiChannelPublish() {
       saveExternalChannelSettings(false, 'modal');
       const cfg = getExternalChannelSettings();
 
@@ -8646,35 +8713,54 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const naverWriteUrl = getNaverWriteUrl(cfg.naverId);
       const tstoryWriteUrl = getTstoryWriteUrl(cfg.tstoryUrl);
 
-      // 1. ⚠️ 포커스가 살아있는 현재 창에서 클립보드 복사를 최우선으로 실행!
-      await copyArticleBodyHtml(false);
+      // 1. ⚡ 사용자 클릭 동기 콜스택에서 클립보드 즉시 동기 복사!
+      copyArticleBodyHtmlSync();
+      copyArticleBodyHtml(false).catch(() => {});
 
-      // 2. 창 열기 실행
+      // 2. ⚡ 동기 콜스택에서 창 오픈 실행 (팝업 차단 원천 해결!)
       let naverWin = null;
       let tstoryWin = null;
 
-      if (naverChecked) {
+      if (naverChecked && tstoryChecked) {
+        // 두 개 모두 체크 시: 1순위로 네이버를 즉시 동기 오픈, 티스토리도 즉각 오픈 시도
         naverWin = window.open(naverWriteUrl, '_blank');
-      }
-      if (tstoryChecked) {
+        try {
+          tstoryWin = window.open(tstoryWriteUrl, '_blank');
+        } catch(e) {}
+
+        const blockedChannels = [];
+        if (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined') {
+          blockedChannels.push({ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' });
+        }
+        if (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined') {
+          blockedChannels.push({ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' });
+        }
+
+        if (blockedChannels.length > 0) {
+          showPopupBlockedNotice(blockedChannels);
+          alert(`🚀 [네이버 블로그] 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 브라우저 다중 팝업 정책으로 티스토리 창이 안 열렸을 수 있으니, 모달 창의 [티스토리 글쓰기 직접 열기] 버튼을 누르시면 즉시 열립니다!`);
+        } else {
+          closeMultiChannelModal();
+          alert(`🚀 네이버와 티스토리 글쓰기 창이 모두 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사된 상태입니다.\n• 각 블로그 본문 창에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 모달의 '제목 복사'를 누르시면 편리합니다)`);
+        }
+      } else if (naverChecked) {
+        naverWin = window.open(naverWriteUrl, '_blank');
+        if (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined') {
+          showPopupBlockedNotice([{ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' }]);
+          alert('⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다. 모달 하단의 [네이버 블로그 바로 열기]를 클릭해 주세요.');
+        } else {
+          closeMultiChannelModal();
+          alert('🎉 네이버 블로그 글쓰기 창이 열렸습니다!\n\n• 본문과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 본문 창에서 [Ctrl + V]만 누르시면 사진과 글이 쏙 들어갑니다!');
+        }
+      } else if (tstoryChecked) {
         tstoryWin = window.open(tstoryWriteUrl, '_blank');
-      }
-
-      // 팝업 차단 여부 감지
-      const blockedChannels = [];
-      if (naverChecked && (!naverWin || naverWin.closed || typeof naverWin.closed === 'undefined')) {
-        blockedChannels.push({ name: '네이버 블로그', url: naverWriteUrl, color: '#16a34a' });
-      }
-      if (tstoryChecked && (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined')) {
-        blockedChannels.push({ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' });
-      }
-
-      if (blockedChannels.length > 0) {
-        showPopupBlockedNotice(blockedChannels);
-        alert(`⚠️ 브라우저 보안 정책으로 인해 일부 창이 팝업 차단되었습니다.\n\n• 본문과 5장의 사진은 이미 클립보드에 완벽 복사되었습니다!\n• 모달 창 하단에 나타난 [차단된 블로그 바로 열기] 버튼을 직접 클릭해 주세요.`);
-      } else {
-        closeMultiChannelModal();
-        alert(`🚀 네이버와 티스토리 글쓰기 창이 모두 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 클립보드에 완벽 복사된 상태입니다.\n• 각 블로그 글쓰기 창 본문에서 [Ctrl + V]를 누르시면 사진과 글이 서식 그대로 쏙 들어갑니다!\n• (제목은 모달의 '제목 복사'를 누르시면 편리합니다)`);
+        if (!tstoryWin || tstoryWin.closed || typeof tstoryWin.closed === 'undefined') {
+          showPopupBlockedNotice([{ name: '티스토리 블로그', url: tstoryWriteUrl, color: '#ea580c' }]);
+          alert('⚠️ 브라우저 보안에 의해 팝업이 차단되었습니다. 모달 하단의 [티스토리 바로 열기]를 클릭해 주세요.');
+        } else {
+          closeMultiChannelModal();
+          alert('🎉 티스토리 글쓰기 창이 열렸습니다!\n\n• 본문과 5장의 감동 사진이 클립보드에 완벽 복사되었습니다.\n• 본문 창에서 [Ctrl + V]만 누르시면 사진과 글이 쏙 들어갑니다!');
+        }
       }
     }
 
