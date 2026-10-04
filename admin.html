@@ -3705,9 +3705,17 @@
         <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
           <span>📖</span> 여백의 서재 칼럼 미리보기
         </span>
-        <button type="button" onclick="closeArticleReader()" style="padding: 6px 14px; border-radius: 999px; background: var(--accent-light); border: 1.5px solid var(--accent); color: var(--accent); font-weight: 800; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" aria-label="닫기">
-          <span>✕ 닫기</span>
-        </button>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button type="button" onclick="editCurrentArticleFromReader()" style="padding: 6px 12px; border-radius: 999px; background: #e0f2fe; border: 1.5px solid #38bdf8; color: #0284c7; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            <span>✏️ 글 수정</span>
+          </button>
+          <button type="button" onclick="deleteCurrentArticleFromReader()" style="padding: 6px 12px; border-radius: 999px; background: #fee2e2; border: 1.5px solid #f87171; color: #dc2626; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            <span>🗑️ 글 삭제</span>
+          </button>
+          <button type="button" onclick="closeArticleReader()" style="padding: 6px 14px; border-radius: 999px; background: var(--accent-light); border: 1.5px solid var(--accent); color: var(--accent); font-weight: 800; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" aria-label="닫기">
+            <span>✕ 닫기</span>
+          </button>
+        </div>
       </div>
 
       <div class="reader-header">
@@ -3733,10 +3741,15 @@
         <!-- 동적 삽입 -->
       </div>
 
-      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
-        <button type="button" class="btn-action-sm edit" id="readerEditBtn" style="padding: 9px 18px; font-size: 0.9rem;">
-          ✏️ 이 글 수정하기
-        </button>
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; gap: 8px;">
+          <button type="button" class="btn-action-sm edit" onclick="editCurrentArticleFromReader()" style="padding: 9px 18px; font-size: 0.9rem;">
+            ✏️ 이 글 수정하기
+          </button>
+          <button type="button" class="btn-action-sm del" onclick="deleteCurrentArticleFromReader()" style="padding: 9px 18px; font-size: 0.9rem; background: #fee2e2; color: #dc2626; border-color: #fca5a5; font-weight: 800;">
+            🗑️ 이 글 삭제하기
+          </button>
+        </div>
         <button type="button" class="btn-save-setting" onclick="closeArticleReader()" style="padding: 9px 20px; background: #64748b; font-size: 0.9rem;">
           ✕ 닫고 돌아가기
         </button>
@@ -4484,13 +4497,32 @@
     let adminSearchQuery = '';
 
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
-    const CURRENT_ARTICLES_VERSION = '20261004_v6_fix_photo_and_featured_toggle';
+    const CURRENT_ARTICLES_VERSION = '20261004_v7_fix_articles_overwrite_and_delete';
+    const DELETED_ARTICLES_KEY = 'yebaek_deleted_article_ids';
 
-    // 데이터 로드 & 기존 키와의 호환 병합 (모든 브라우저·카카오톡 동일 최신 동기화 보장)
+    // 삭제된 칼럼 ID 영구 보존 헬퍼 (삭제된 글이 다시 부활하는 현상 원천 차단)
+    function getDeletedArticleIds() {
+      try {
+        const raw = localStorage.getItem(DELETED_ARTICLES_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function addDeletedArticleId(id) {
+      if (!id) return;
+      const ids = getDeletedArticleIds();
+      if (!ids.includes(id)) {
+        ids.push(id);
+        localStorage.setItem(DELETED_ARTICLES_KEY, JSON.stringify(ids));
+      }
+    }
+
+    // 데이터 로드 & 기존 키와의 호환 병합 (사용자 작성/수정글 100% 보존 & 삭제글 부활 방지)
     function getArticles() {
-      // 1) 기본 저장소 확인
+      const deletedIds = getDeletedArticleIds();
       let saved = localStorage.getItem(ARTICLES_KEY);
-      const syncVersion = localStorage.getItem('yebaek_articles_sync_version');
       let list = [];
       if (saved) {
         try {
@@ -4498,33 +4530,29 @@
         } catch (e) {}
       }
 
-      if (!Array.isArray(list) || list.length === 0 || syncVersion !== CURRENT_ARTICLES_VERSION) {
-        const customArticles = (Array.isArray(list)) ? list.filter(item => !defaultArticles.some(def => def.id === item.id || def.title === item.title)) : [];
-        list = [...JSON.parse(JSON.stringify(defaultArticles)), ...customArticles];
-        localStorage.setItem(ARTICLES_KEY, JSON.stringify(list));
+      // 저장소가 비어있을 때만 기본 글(단, 사용자가 삭제하지 않은 글)로 초기화
+      if (!Array.isArray(list) || list.length === 0) {
+        const initialList = defaultArticles.filter(def => !deletedIds.includes(def.id));
+        localStorage.setItem(ARTICLES_KEY, JSON.stringify(initialList));
         localStorage.setItem('yebaek_articles_sync_version', CURRENT_ARTICLES_VERSION);
-        return list;
+        return initialList;
       }
 
-      // 최신 대표 칼럼 3편 자동 병합 및 보정
+      // 이미 저장된 글 중 사용자가 삭제한 글은 확실하게 제외
+      list = list.filter(item => !deletedIds.includes(item.id));
+
+      // 기본 글 중 삭제되지 않았고 목록에 없는 신규 기본 글만 안전하게 보충 (기존 글의 content/image는 절대 덮어쓰지 않음!)
       let migrated = false;
-      defaultArticles.forEach((defArt, idx) => {
-        const existIdx = list.findIndex(item => item.id === defArt.id || (item.aliasIds && item.aliasIds.includes(defArt.id)) || item.title === defArt.title);
+      defaultArticles.forEach(defArt => {
+        if (deletedIds.includes(defArt.id)) return;
+        const existIdx = list.findIndex(item => item.id === defArt.id || (item.aliasIds && item.aliasIds.includes(defArt.id)));
         if (existIdx === -1) {
-          list.splice(idx, 0, JSON.parse(JSON.stringify(defArt)));
+          list.push(JSON.parse(JSON.stringify(defArt)));
           migrated = true;
-        } else {
-          // 사용자가 설정한 isFeatured(전면 노출 여부)를 존중 (undefined인 경우만 기본값 적용)
-          if (list[existIdx].isFeatured === undefined) {
-            list[existIdx].isFeatured = (defArt.isFeatured !== false);
-          }
-          list[existIdx].id = defArt.id;
-          if (defArt.image) list[existIdx].image = defArt.image;
-          if (defArt.readTime) list[existIdx].readTime = defArt.readTime;
-          if (defArt.content) list[existIdx].content = defArt.content;
         }
       });
 
+      // 다크모드 텍스트 정제
       list.forEach(item => {
         if (item.content && (item.content.includes('var(--text-primary)') || item.content.includes('var(--text-secondary)'))) {
           item.content = item.content.replace(/var\(--text-primary\)/g, '#0f172a').replace(/var\(--text-secondary\)/g, '#334155');
@@ -4768,8 +4796,12 @@
       if (!target) return;
 
       if (confirm(`'${target.title}' 칼럼을 정말로 삭제하시겠습니까?\n삭제된 칼럼은 복구할 수 없습니다.`)) {
+        addDeletedArticleId(id);
         const updated = articles.filter(a => a.id !== id);
         saveArticles(updated);
+        if (typeof closeArticleReader === 'function') {
+          closeArticleReader();
+        }
         alert('칼럼이 안전하게 삭제되었습니다.');
       }
     }
@@ -7036,6 +7068,7 @@
     ];
 
     function openAiArticleGeneratorModal() {
+      currentEditingArticleId = null; // 신규 AI 작성이므로 수정 모드 ID 확실히 초기화
       updateGeminiKeyBadge();
       switchAiModalTab('custom');
       renderAiPresets();
@@ -7668,6 +7701,12 @@ ${currentContent}
         return;
       }
 
+      currentEditingArticleId = null; // 신규 작성이므로 수정 모드 ID 확실히 초기화!
+      const topTitle = document.querySelector('#tistoryEditorModal .editor-top-title');
+      const publishBtn = document.querySelector('#tistoryEditorModal .btn-editor-publish');
+      if (topTitle) topTitle.innerHTML = '<span>✍️</span> 여백의 서재 프리미엄 에디터 <span class="editor-top-badge">PREMIUM BLACK</span>';
+      if (publishBtn) publishBtn.innerHTML = '<span>🚀</span> 발행하기';
+
       document.getElementById('editorTitle').value = p.title;
       const excerptPresetEl = document.getElementById('editorExcerpt');
       if (excerptPresetEl) excerptPresetEl.value = p.excerpt;
@@ -8112,6 +8151,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       editorPhotos = smartPhotos.map(src => ({ src }));
       mainThumbImg = smartPhotos[0]; // 유튜브 썸네일(있을 시) 또는 첫 번째 맞춤 사진을 대표사진으로 자동 지정!
 
+      currentEditingArticleId = null; // 신규 작성이므로 수정 모드 ID 확실히 초기화!
+      const topTitle = document.querySelector('#tistoryEditorModal .editor-top-title');
+      const publishBtn = document.querySelector('#tistoryEditorModal .btn-editor-publish');
+      if (topTitle) topTitle.innerHTML = '<span>✍️</span> 여백의 서재 프리미엄 에디터 <span class="editor-top-badge">PREMIUM BLACK</span>';
+      if (publishBtn) publishBtn.innerHTML = '<span>🚀</span> 발행하기';
+
       // 7) 에디터 필드에 채우기
       document.getElementById('editorTitle').value = generatedTitle;
       const genExcerptEl = document.getElementById('editorExcerpt');
@@ -8252,12 +8297,18 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           articles[targetIndex].isFeatured = isFeatured;
           articles[targetIndex].image = mainThumbImg || articles[targetIndex].image || '';
           saveArticles(articles);
+          currentEditingArticleId = null;
+          alert(`'${title}' 칼럼 수정이 완료되었습니다.`);
+          closeTistoryEditor(true);
+          return;
+        } else {
+          // 기존 글을 찾지 못한 경우 ID 오염을 방지하고 신규 글로 안전하게 발행
+          currentEditingArticleId = null;
         }
-        currentEditingArticleId = null;
-        alert(`'${title}' 칼럼 수정이 완료되었습니다.`);
-      } else {
-        // 신규 글 발행
-        const now = new Date();
+      }
+
+      // 신규 글 발행 (고유 타임스탬프 ID 부여)
+      const now = new Date();
         const yyyy = now.getFullYear();
         const mm = String(now.getMonth() + 1).padStart(2, '0');
         const dd = String(now.getDate()).padStart(2, '0');
@@ -9042,10 +9093,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     }
 
     // ================= 칼럼 상세 뷰어 모달 =================
+    let currentReadingArticleId = null;
+
     function openArticleReader(id) {
       const articles = getArticles();
       const a = articles.find(item => item.id === id);
       if (!a) return;
+
+      currentReadingArticleId = id;
 
       document.getElementById('readerCategory').textContent = `[${a.category}]`;
       document.getElementById('readerTitle').textContent = a.title;
@@ -9068,14 +9123,6 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         }
       }
 
-      const editBtn = document.getElementById('readerEditBtn');
-      if (editBtn) {
-        editBtn.onclick = () => {
-          closeArticleReader();
-          openTistoryEditor(a.id);
-        };
-      }
-
       const modal = document.getElementById('articleReaderModal');
       if (modal) {
         modal.classList.add('open');
@@ -9083,7 +9130,23 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     }
 
+    function editCurrentArticleFromReader() {
+      if (currentReadingArticleId) {
+        const idToEdit = currentReadingArticleId;
+        closeArticleReader();
+        openTistoryEditor(idToEdit);
+      }
+    }
+
+    function deleteCurrentArticleFromReader() {
+      if (currentReadingArticleId) {
+        const idToDelete = currentReadingArticleId;
+        deleteArticle(idToDelete);
+      }
+    }
+
     function closeArticleReader() {
+      currentReadingArticleId = null;
       const modal = document.getElementById('articleReaderModal');
       if (modal) {
         modal.classList.remove('open');
