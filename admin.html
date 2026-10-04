@@ -3207,7 +3207,6 @@
             </div>
 
             <input type="text" id="editorTitle" class="editor-title-input" placeholder="제목을 입력하세요 (예: 품격 있는 생전 정리의 첫걸음)" maxlength="120">
-            <textarea id="editorExcerpt" class="editor-excerpt-input" placeholder="글 요약 한 줄을 적어주세요 (메인 카드 미리보기에 노출됩니다)" rows="2"></textarea>
             <div id="editorContent" class="editor-content-area" contenteditable="true" onkeyup="saveEditorSelection()" onmouseup="saveEditorSelection()" onclick="saveEditorSelection()" oninput="saveEditorSelection()" onfocus="saveEditorSelection()" data-placeholder="이곳에 따뜻하고 깊이 있는 글을 자유롭게 작성해보세요. 좌측 사진 보관함에서 사진을 본문에 삽입하거나 대표사진을 지정할 수 있습니다..."></div>
           </div>
         </div>
@@ -4739,7 +4738,8 @@
         }
 
         document.getElementById('editorTitle').value = target.title || '';
-        document.getElementById('editorExcerpt').value = target.excerpt || '';
+        const excerptEl = document.getElementById('editorExcerpt');
+        if (excerptEl) excerptEl.value = target.excerpt || '';
         document.getElementById('editorCategory').value = target.category || '비움과 갈무리';
         document.getElementById('editorIsFeatured').checked = !!target.isFeatured;
         document.getElementById('editorContent').innerHTML = target.content || '';
@@ -4755,7 +4755,8 @@
       } else {
         // 신규 작성 모드
         document.getElementById('editorTitle').value = '';
-        document.getElementById('editorExcerpt').value = '';
+        const excerptEl = document.getElementById('editorExcerpt');
+        if (excerptEl) excerptEl.value = '';
         document.getElementById('editorContent').innerHTML = '';
         document.getElementById('editorCategory').selectedIndex = 0;
         document.getElementById('editorIsFeatured').checked = true;
@@ -5199,7 +5200,9 @@
     function saveEditorDraft() {
       const title = document.getElementById('editorTitle').value.trim() || '제목 없는 임시글';
       const content = document.getElementById('editorContent').innerHTML;
-      const excerpt = document.getElementById('editorExcerpt').value.trim();
+      const excerptEl = document.getElementById('editorExcerpt');
+      const contentText = document.getElementById('editorContent').innerText.trim();
+      const excerpt = (excerptEl ? excerptEl.value.trim() : '') || (contentText.slice(0, 110) + (contentText.length > 110 ? '...' : ''));
       const category = document.getElementById('editorCategory').value;
       const isFeatured = document.getElementById('editorIsFeatured').checked;
 
@@ -5258,7 +5261,8 @@
       if (!target) return;
 
       document.getElementById('editorTitle').value = target.title || '';
-      document.getElementById('editorExcerpt').value = target.excerpt || '';
+      const loadExcerptEl = document.getElementById('editorExcerpt');
+      if (loadExcerptEl) loadExcerptEl.value = target.excerpt || '';
       document.getElementById('editorCategory').value = target.category || '비움과 갈무리';
       document.getElementById('editorIsFeatured').checked = !!target.isFeatured;
       document.getElementById('editorContent').innerHTML = target.content || '';
@@ -6463,7 +6467,8 @@
       }
 
       document.getElementById('editorTitle').value = p.title;
-      document.getElementById('editorExcerpt').value = p.excerpt;
+      const excerptPresetEl = document.getElementById('editorExcerpt');
+      if (excerptPresetEl) excerptPresetEl.value = p.excerpt;
       document.getElementById('editorCategory').value = p.category;
       document.getElementById('editorContent').innerHTML = p.content.trim();
       document.getElementById('editorIsFeatured').checked = true;
@@ -6868,7 +6873,8 @@
 
       // 4) 에디터 필드에 채우기
       document.getElementById('editorTitle').value = generatedTitle;
-      document.getElementById('editorExcerpt').value = generatedExcerpt;
+      const genExcerptEl = document.getElementById('editorExcerpt');
+      if (genExcerptEl) genExcerptEl.value = generatedExcerpt;
       document.getElementById('editorCategory').value = category;
       document.getElementById('editorContent').innerHTML = generatedContent.trim();
       document.getElementById('editorIsFeatured').checked = true;
@@ -6946,7 +6952,7 @@
     // 칼럼 발행 또는 수정 저장 (대표사진 image 필드 포함)
     function publishArticle() {
       const title = document.getElementById('editorTitle').value.trim();
-      let excerpt = document.getElementById('editorExcerpt').value.trim();
+      let excerpt = (document.getElementById('editorExcerpt') ? document.getElementById('editorExcerpt').value.trim() : '');
       const category = document.getElementById('editorCategory').value;
       const isFeatured = document.getElementById('editorIsFeatured').checked;
       const contentHtml = document.getElementById('editorContent').innerHTML.trim();
