@@ -5041,7 +5041,7 @@
             <span>📱</span>
             <span>코치앱</span>
           </a>
-          <a href="admin.html" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈 (비밀번호: 1223)" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
+          <a href="admin.html" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
             <span>⚙️</span>
             <span>관리자홈</span>
           </a>
@@ -5066,7 +5066,7 @@
       <a href="academy.html" class="mobile-cat-item" data-target="programs" title="코치 아카데미"><span>🎓</span> <span>아카데미</span></a>
       <a href="my-room.html?mode=sample" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 800;" title="김순옥 어르신 완성 서재 체험"><span>👵</span> <span>샘플서재</span></a>
       <a href="javascript:void(0)" onclick="openLoginModal(event)" class="mobile-cat-item" data-target="archive"><span>🏛️</span> <span>나의서재</span></a>
-      <a href="admin.html" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈 (ADMIN 1223)"><span>⚙️</span> <span>관리자</span></a>
+      <a href="admin.html" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈"><span>⚙️</span> <span>관리자</span></a>
     </nav>
   </header>
 
@@ -5148,9 +5148,9 @@
         <a href="admin.html" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35); margin-top: 6px;">
           <div class="drawer-item-left">
             <span class="drawer-icon">⚙️</span>
-            <span style="color: var(--accent-gold); font-weight: 850;">통합 관리자 홈 (ADMIN)</span>
+            <span style="color: var(--accent-gold); font-weight: 850;">통합 관리자 홈</span>
           </div>
-          <span class="drawer-badge" style="background: var(--accent-gold); color: #fff;">1223</span>
+          <span class="drawer-badge" style="background: var(--accent-gold); color: #fff;">ADMIN</span>
         </a>
         <a href="#login" class="drawer-nav-item drawer-login-btn" onclick="closeMobileDrawer(); openLoginModal(event)">
           <div class="drawer-item-left" style="justify-content: center; width: 100%;">
@@ -5931,7 +5931,7 @@
       </div>
       <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <p>© 2026 메타큐 라이프 · 여백과 결, 리셋 아카이브 (MetaQ Life). 모든 권리 보유.</p>
-        <a href="admin.html" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: var(--transition);" title="전체 사이트 운영 관리자 홈 (비밀번호: 1223)">
+        <a href="admin.html" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: var(--transition);" title="전체 사이트 운영 관리자 홈">
           <span>⚙️ 통합 관리자 홈</span>
         </a>
       </div>
@@ -6555,7 +6555,7 @@
     </div>
   </div>
 
-  <!-- ================= 모달 4) 관리자 인증 비밀번호 모달 (비밀번호: 1223) ================= -->
+  <!-- ================= 모달 4) 관리자 인증 비밀번호 모달 ================= -->
   <div class="cms-modal-overlay" id="adminAuthModal" onclick="closeAdminAuthOnOverlay(event)">
     <div class="admin-auth-card">
       <button class="modal-close-btn" onclick="closeAdminAuthModal()" aria-label="닫기">✕</button>
@@ -6574,10 +6574,7 @@
           관리자 홈 입장하기
         </button>
       </form>
-      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 14px; margin-bottom: 12px;">
-        (설정된 기본 관리자 비밀번호: 1223)
-      </p>
-      <button type="button" onclick="closeAdminAuthModal()" style="width: 100%; padding: 10px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-size: 0.88rem; font-weight: 700; cursor: pointer;">
+      <button type="button" onclick="closeAdminAuthModal()" style="margin-top: 14px; width: 100%; padding: 10px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-muted); font-size: 0.88rem; font-weight: 700; cursor: pointer;">
         취소하고 닫기
       </button>
     </div>
@@ -9354,7 +9351,7 @@
       }
     }
 
-    // 관리자 비밀번호 검증 (비밀번호: 1223)
+    // 관리자 비밀번호 검증
     function handleAdminLoginSubmit(e) {
       e.preventDefault();
       const pwdInput = document.getElementById('adminPasswordInput');
@@ -9367,7 +9364,7 @@
         openAdminDashboardModal();
         alert('🌿 관리자 홈에 성공적으로 접속되었습니다.');
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.\n(설정된 관리자 비밀번호: 1223)');
+        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
         pwdInput.value = '';
         pwdInput.focus();
       }

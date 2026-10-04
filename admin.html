@@ -1878,8 +1878,7 @@
         <input type="password" id="authInput" class="auth-input" placeholder="비밀번호 4자리" maxlength="8" autofocus required>
         <button type="submit" class="auth-submit-btn">관리자 대시보드 입장하기</button>
       </form>
-      <div style="font-size: 0.8rem; color: #94a3b8; margin-top: 14px;">(관리자 ADMIN 기본 비밀번호: 1223)</div>
-      <a href="index.html" class="auth-home-link">← 사용자 메인 사이트로 돌아가기</a>
+      <a href="index.html" class="auth-home-link" style="margin-top: 18px;">← 사용자 메인 사이트로 돌아가기</a>
     </div>
   </div>
 
@@ -4189,7 +4188,7 @@
       }
     }
 
-    // 비밀번호 제출 처리 (비밀번호: 1223)
+    // 비밀번호 제출 처리
     function handleAuthSubmit(e) {
       e.preventDefault();
       const input = document.getElementById('authInput');
@@ -4199,7 +4198,7 @@
         sessionStorage.setItem('yebaek_is_admin', 'true');
         checkAuth();
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.\n(관리자 비밀번호: 1223)');
+        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
         if (input) {
           input.value = '';
           input.focus();
