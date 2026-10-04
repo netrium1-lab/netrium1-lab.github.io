@@ -4622,8 +4622,9 @@
         baseUrl = baseUrl + 'index.html';
       }
 
+      const canonicalId = (id === 'mag_living_funeral_best') ? 'mag_1791111944097' : id;
       const url = new URL(baseUrl);
-      url.searchParams.set('article', id);
+      url.searchParams.set('article', canonicalId);
 
       // 기본 내장 글이 아닌 신규 글은 다른 브라우저(Edge, 카톡 등)에서도 즉시 열리도록 art_data 동기화 파라미터 결합
       const isBuiltIn = defaultArticles.some(def => def.id === id || (def.aliasIds && def.aliasIds.includes(id)));
