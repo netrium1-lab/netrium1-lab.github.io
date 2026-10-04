@@ -7250,18 +7250,115 @@ ${currentContent}
       alert(`🎉 [${p.title}]\n\n• AI 칼럼 본문이 에디터에 채워졌습니다!\n• 좌측 [사진 보관함]에 글 컨셉에 딱 맞는 감동 사진 5장이 담겼습니다!\n  (원하는 사진을 클릭해 [⭐ 대표]로 지정하거나 본문에 삽입하세요.)\n\n내용을 확인하신 후 상단의 [🚀 발행하기]를 누르시면 완료됩니다.`);
     }
 
+    // 🧹 사용자가 긴 지시문/프롬프트를 입력했을 때 순수 핵심 주제어만 정제 추출하는 지능형 필터
+    function extractCleanTopic(rawInput) {
+      if (!rawInput) return '생전 장례식';
+      let s = rawInput.trim();
+
+      // 만약 이미 12자 이내의 짧은 명사구라면 그대로 사용
+      if (s.length <= 12 && !/(?:써줘|해줘|알아보고|작성|소개|글)/.test(s)) {
+        return s;
+      }
+
+      const lower = s.toLowerCase();
+      // 주제별 시그니처 매칭
+      if (/일본.*생전\s*장례|생전\s*장례.*일본/.test(lower)) return '일본의 생전 장례식 문화';
+      if (/생전\s*장례|생전장례/.test(lower)) return '생전 장례식';
+      if (/웰다잉|존엄사|아름다운\s*작별/.test(lower)) return '웰다잉과 존엄한 작별';
+      if (/사전연명|엔딩노트/.test(lower)) return '사전연명의료의향서와 엔딩노트';
+      if (/저속노화|식단|혈당/.test(lower)) return '5060 저속노화 건강 식단';
+      if (/관절|스트레칭|운동/.test(lower)) return '시니어 관절 스트레칭';
+      if (/정리|비움|미니멀|유품/.test(lower)) return '비움과 미니멀 라이프';
+      if (/스마트폰|디지털|사진\s*정리/.test(lower)) return '디지털 유품과 사진 정리';
+      if (/자서전|회고록|인터뷰|부모님\s*인생/.test(lower)) return '부모님 자서전과 인생 구술';
+      if (/은퇴|퇴직|라이프\s*리셋/.test(lower)) return '은퇴 후 라이프 리셋';
+
+      // 지시어/어미/불필요 문구 제거
+      let cleaned = s
+        .replace(/웹검색을\s*통하여\s*알아보고/g, '')
+        .replace(/웹검색을\s*통해\s*알아보고/g, '')
+        .replace(/웹검색을\s*통하여/g, '')
+        .replace(/알아보고/g, '')
+        .replace(/소개하는\s*글을\s*써줘/g, '')
+        .replace(/소개하는\s*글/g, '')
+        .replace(/글을\s*써줘/g, '')
+        .replace(/글을\s*작성해줘/g, '')
+        .replace(/작성해줘/g, '')
+        .replace(/써줘/g, '')
+        .replace(/해줘/g, '')
+        .replace(/글의\s*분량은\s*길\s*수록\s*좋아/g, '')
+        .replace(/구체적으로\s*작성해줘/g, '')
+        .replace(/구체적으로/g, '')
+        .replace(/흥미를\s*끌\s*수\s*있도록/g, '')
+        .replace(/흥미를\s*끌수\s*있도록/g, '')
+        .replace(/에피소드라든지/g, '')
+        .replace(/필요성\s*및\s*컨텐츠/g, '')
+        .replace(/컨텐츠를/g, '')
+        .replace(/이벤트/g, '')
+        .replace(/에\s*대해/g, '')
+        .replace(/[.,~!?…]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      if (cleaned.length > 15) {
+        if (cleaned.includes('생전 장례식') || cleaned.includes('생전장례식')) return '생전 장례식';
+        if (cleaned.includes('웰다잉')) return '웰다잉';
+        cleaned = cleaned.slice(0, 12).trim();
+      }
+
+      return cleaned || '생전 장례식';
+    }
+
+    // 🎨 품격 있는 완성형 칼럼 제목 생성 함수 (프롬프트 날것 노출 원천 차단)
+    function generateSmartTitle(cleanTopic, domain, userPrompt = '') {
+      const p = (userPrompt || '').toLowerCase();
+
+      if (domain === 'welldying') {
+        if (p.includes('일본')) {
+          return "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술";
+        }
+        if (p.includes('편지') || p.includes('감사')) {
+          return "떠난 뒤의 통곡 대신 살아있을 때 온기를: '생전 장례식'과 눈물의 감사 편지";
+        }
+        return `${cleanTopic}: 가족에게 짐이 아닌 눈부신 사랑으로 남는 가장 아름답고 존엄한 작별의 기술`;
+      }
+      if (domain === 'health_diet') {
+        return `${cleanTopic}: 뇌와 혈관을 10년 젊게 되돌리는 5060 기적의 저속노화 건강 밥상`;
+      }
+      if (domain === 'health_exercise') {
+        return `${cleanTopic}: 굳어가는 관절과 척추를 부드럽게 깨우는 매일 아침 15분 시니어 활력 가이드`;
+      }
+      if (domain === 'organizing') {
+        return `${cleanTopic}: 30년 묵은 물건을 비우고 홀가분한 인생 후반전을 맞이하는 단정한 여백의 미학`;
+      }
+      if (domain === 'digital') {
+        return `${cleanTopic}: 스마트폰 속 소중한 추억을 지키고 정돈하는 현대 시니어의 우아한 디지털 라이프`;
+      }
+      if (domain === 'retirement') {
+        return `${cleanTopic}: 직함을 내려놓고 진짜 나로 서는 두 번째 황금기 인생 설계도`;
+      }
+      if (domain === 'family_memoir') {
+        return `${cleanTopic}: 평생을 헌신해 오신 부모님의 70년 인생 서사를 엮어드리는 가장 특별한 효도`;
+      }
+      return `${cleanTopic}: 더 나은 삶과 평온을 위한 지혜로운 실천 칼럼`;
+    }
+
     // =========================================================================
     // 🧠 AI 멀티 주제 & 웹·유튜브 스마트 맞춤 글쓰기 엔진 (Gemini 2.0 & 무료 AI 듀얼 지원)
     // =========================================================================
     async function generateSmartAiArticle() {
       const kwInput = document.getElementById('aiCustomKeywordInput');
-      const kw = kwInput ? kwInput.value.trim() : '';
+      const rawUserPrompt = kwInput ? kwInput.value.trim() : '';
 
-      if (!kw) {
+      if (!rawUserPrompt) {
         alert('원하시는 글 주제나 핵심 키워드를 입력해 주세요.\n예: 생전 장례식, 5060 저속노화 식단, 부모님 칠순 자서전, 시니어 관절 스트레칭 등');
         if (kwInput) kwInput.focus();
         return;
       }
+
+      // 🎯 사용자 입력에서 2~10글자 순수 핵심 주제어 정제 추출!
+      const cleanTopic = extractCleanTopic(rawUserPrompt);
+      const kw = cleanTopic; // 템플릿 변수에 들어갈 정제된 명사 키워드
 
       const category = (document.getElementById('aiCustomCategory') ? document.getElementById('aiCustomCategory').value : '웰라이프') || '웰라이프';
       const tone = (document.getElementById('aiCustomTone') ? document.getElementById('aiCustomTone').value : 'professional') || 'professional';
@@ -7295,7 +7392,8 @@ ${currentContent}
 포털(네이버/다음) 블로그와 티스토리 독자들의 가슴을 깊이 적시고 눈시울을 붉히게 만드는 감동 대작 칼럼을 집필하세요.
 
 [필수 집필 주제 및 지침]
-- 핵심 주제/키워드: ${kw}
+- 핵심 주제/키워드: ${cleanTopic}
+- 사용자 상세 요청 및 메모: ${rawUserPrompt}
 - 카테고리: ${category}
 - 글의 톤앤매너: ${tone === 'emotional' ? '따뜻하고 가슴 뭉클한 감성 에세이' : tone === 'practical' ? '명쾌하고 실천적인 팁 중심 가이드' : '품격 있고 깊이 있는 전문 칼럼'}
 ${youtubeContent ? `- ★ [최우선 반영 필수 지침 / 유튜브 참고 핵심 내용]: ${youtubeContent}` : ''}
@@ -7303,7 +7401,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
 [글자수 및 풍성도 - 최우선 절대 규칙]
 1. 절대로 간결하거나 짧게 요약하지 마세요! 독자가 읽으면서 깊은 공감과 울림을 느낄 수 있도록 '최소 2,500자 ~ 3,500자 이상의 매우 풍성하고 깊이 있는 장문 칼럼'으로 작성하세요.
-2. 제목(title): 클릭을 유도하면서도 품격과 깊이가 넘치는 25~45자 한국어 제목.
+2. 제목(title): 클릭을 유도하면서도 품격과 깊이가 넘치는 25~45자 한국어 제목. (사용자의 지시문 어미 '~써줘', '~알아보고' 등은 절대 제목에 넣지 마세요)
 3. 요약(excerpt): 본문의 핵심 서사와 감동을 압축한 3~4줄 요약문.
 4. 본문(content) 필수 구성:
    - [도입부]: 나이 듦과 삶의 마무리에 대한 깊은 성찰과 현실 화두를 다루는 3개 이상의 문단 <p class="article-lead">...</p><p>...</p><p>...</p>
@@ -7312,7 +7410,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
    - [본문 소제목 4개 이상]: 각각의 <h3>소제목</h3> 아래에 3~4개의 충실하고 구체적인 문단으로 실천 절차, 가족 간의 대화법, 준비 가이드, 법적·실무적 배려(엔딩노트, 사전연명의료 등)를 풍성하게 서술.
    - [실천 체크리스트 박스]: 구체적 식순(5단계)이나 실천 Do & Don't 가이드 박스 (<div style="margin:26px 0; padding:22px; background:#f0fdf4; border-left:4px solid #16a34a; border-radius:8px;">...</div>)
    - [결론 및 여백서재 마무리 박스]: 독자가 부모님이나 가족에게 지금 바로 안부 전화를 걸고 싶어질 만큼 따뜻한 여운과 감동을 주는 격려 박스 (<div style="margin:26px 0; padding:22px; background:#faf8f5; border-left:4px solid #2b5a42; border-radius:8px;">...</div>)
-5. ★ 절대 주의: 사용자가 전달한 참고 내용/메모(예: '이 동영상을 참조하여 생전 장례식글 작성해줘')는 글의 내용과 서사를 구성하기 위한 지침입니다. 사용자의 지시문이나 메모 문장 자체를 본문에 그대로 인용하거나 노출하지 마시고, 전문 에디터의 유려한 칼럼 문장으로 완전하게 승화시켜 작성하세요!
+5. ★ 절대 주의: 사용자가 전달한 참고 내용/메모("${rawUserPrompt.slice(0, 30)}...")는 글의 내용과 서사를 구성하기 위한 지침입니다. 사용자의 지시문이나 메모 문장 자체를 본문이나 제목에 그대로 인용하거나 노출하지 마시고, 전문 에디터의 유려한 칼럼 문장으로 완전하게 승화시켜 작성하세요!
 6. 응답 형식: 반드시 마크다운 백틱 없이 순수한 JSON 단일 객체로만 응답하세요:
 {"title": "...", "excerpt": "...", "content": "..."}`;
 
@@ -7335,8 +7433,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
                 const rawText = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
                 const parsedResult = parseAiEditResponse(rawText, kw, '');
                 if (parsedResult && parsedResult.content && validateKoreanArticleQuality(parsedResult.content)) {
-                  generatedTitle = parsedResult.title || kw;
-                  generatedExcerpt = `${kw}에 대한 깊이 있는 분석과 지혜로운 이야기`;
+                  let finalTitle = (parsedResult.title || '').trim();
+                  // 제목에 사용자 지시어('~써줘', '~작성해', '~알아보고', '~분량은' 등)가 포함되어 있거나 비어있을 경우 완성형 제목으로 스마트 보정
+                  if (!finalTitle || /(?:써줘|해줘|알아보고|작성|분량은|소개하는\s*글|웹검색)/.test(finalTitle) || finalTitle.length > 55) {
+                    finalTitle = generateSmartTitle(cleanTopic, 'welldying', rawUserPrompt);
+                  }
+                  generatedTitle = finalTitle;
+                  generatedExcerpt = parsedResult.excerpt || `${cleanTopic}에 대한 깊은 분석과 지혜로운 이야기`;
                   generatedContent = parsedResult.content;
                   usedEngineName = `Google Gemini (${model})`;
                   break;
@@ -7357,7 +7460,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       // 3) 3순위: 네트워크 완전 단절 시 정밀 지능형 내장 생성 엔진 (풍성한 3,000자 대작 칼럼)
       if (!generatedTitle || !generatedContent) {
         usedEngineName = '스마트 내장 지능형 엔진';
-        const lowerKw = (kw + ' ' + webContent + ' ' + youtubeContent).toLowerCase();
+        const lowerKw = (kw + ' ' + webContent + ' ' + youtubeContent + ' ' + rawUserPrompt).toLowerCase();
 
         let domain = 'general';
         if (/장례|생전|웰다잉|사전연명|임종|존엄사|갈무리|사후|고별|유언/.test(lowerKw)) domain = 'welldying';
@@ -7368,28 +7471,17 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         else if (/은퇴|퇴직|인생2막|리셋|버킷리스트|재정|시니어\s*일자리|귀촌/.test(lowerKw)) domain = 'retirement';
         else if (/칠순|팔순|환갑|부모님|어머니|아버지|가족|효도|자서전|회고록|구술/.test(lowerKw)) domain = 'family_memoir';
 
-        const customTitleMap = {
-          welldying: `${kw}: 가족에게 짐이 아닌 눈부신 사랑으로 남는 가장 아름답고 존엄한 작별의 기술`,
-          health_diet: `${kw}: 뇌와 혈관을 10년 젊게 되돌리는 5060 기적의 저속노화 건강 밥상`,
-          health_exercise: `${kw}: 굳어가는 관절과 척추를 부드럽게 깨우는 매일 아침 15분 시니어 활력 가이드`,
-          organizing: `${kw}: 30년 묵은 물건을 비우고 홀가분한 인생 후반전을 맞이하는 단정한 여백의 미학`,
-          digital: `${kw}: 스마트폰 속 소중한 추억을 지키고 정돈하는 현대 시니어의 우아한 디지털 라이프`,
-          retirement: `${kw}: 직함을 내려놓고 진짜 나로 서는 두 번째 황금기 인생 설계도`,
-          family_memoir: `${kw}: 평생을 헌신해 오신 부모님의 70년 인생 서사를 엮어드리는 가장 특별한 효도`,
-          general: `${kw}: 삶의 깊이를 더하고 새로운 결을 만들어가는 지혜로운 여정`
-        };
-
-        generatedTitle = customTitleMap[domain] || `${kw}: 더 나은 삶과 평온을 위한 지혜로운 실천 칼럼`;
-        generatedExcerpt = `${kw}에 대한 깊은 성찰과 실제 가족들의 가슴 뭉클한 감동 사연, 그리고 일상에서 품격 있게 실천할 수 있는 구체적인 가이드를 풍성하게 담아 전해드립니다.`;
+        generatedTitle = generateSmartTitle(cleanTopic, domain, rawUserPrompt);
+        generatedExcerpt = `${cleanTopic}에 대한 깊은 성찰과 실제 가족들의 가슴 뭉클한 감동 사연, 그리고 일상에서 품격 있게 실천할 수 있는 구체적인 가이드를 풍성하게 담아 전해드립니다.`;
 
         // 도메인 맞춤 대작 서사 (최소 3,000자 이상)
         if (domain === 'welldying') {
           generatedContent = `
-            <p class="article-lead">"내가 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
+            <p class="article-lead">"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 따스한 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
             
-            <p>우리는 누구나 삶의 마지막을 마주하지만, 죽음을 미리 이야기하는 것은 오랫동안 우리 사회에서 불길한 금기로 여겨져 왔습니다. 병원 중환자실의 차가운 기계음 속에서 가족들과 눈 한 번 제대로 마주치지 못한 채 홀로 떠나는 임종, 그리고 고인의 뜻과는 무관하게 쏟아지는 조문객들 사이에서 상주들이 탈진하는 장례식장 문화... 이것이 과연 우리가 평생을 치열하게 살아온 소중한 삶의 마지막 모습이어야 할까요?</p>
+            <p>우리는 누구나 삶의 마지막을 마주하지만, 죽음을 미리 이야기하는 것은 오랫동안 우리 사회에서 불길한 금기로 여겨져 왔습니다. 병원 중환자실의 차가운 기계음 속에서 가족들과 눈 한 번 제대로 마주치지 못한 채 홀로 떠나는 임종, 그리고 고인의 뜻과는 무관하게 쏟아지는 조문객들 사이에서 상주들이 탈진하는 형식적 장례식장 문화... 이것이 과연 우리가 평생을 치열하게 살아온 소중한 삶의 마지막 모습이어야 할까요?</p>
 
-            <p>최근 우리 사회 506070 세대를 중심으로 조용하지만 거대한 인식의 변화가 일어나고 있습니다. 바로 세상을 떠나기 전, 내가 아직 온전한 정신과 미소를 지니고 있을 때 사랑하는 이들을 초대해 따뜻한 차 한 잔을 나누며 감사의 인사를 건네는 <strong>'${escapeHtml(kw)}'</strong>입니다. 이는 죽음을 재촉하는 쓸쓸한 의식이 아니라, 내가 걸어온 인생의 모든 굽이굽이를 가족들과 함께 눈부신 축제로 완성하는 가장 숭고한 사랑의 고백입니다.</p>
+            <p>최근 우리 사회 506070 세대를 중심으로 조용하지만 거대한 인식의 변화가 일어나고 있습니다. 바로 세상을 떠나기 전, 내가 아직 온전한 정신과 미소를 지니고 있을 때 사랑하는 이들을 초대해 따뜻한 차 한 잔을 나누며 감사의 인사를 건네는 <strong>'${escapeHtml(cleanTopic)}'</strong>입니다. 특히 이웃나라 일본에서는 이미 1990년대부터 연예인과 지식인들을 중심으로 시작되어 현재 시니어들 사이에 새로운 추억의 문화로 자리 잡은 <strong>'지젠소(事前葬, 사전장례)'</strong>가 큰 반향을 일으키고 있습니다. 이는 죽음을 재촉하는 쓸쓸한 의식이 아니라, 내가 걸어온 인생의 모든 굽이굽이를 소중한 이들과 함께 눈부신 축제로 완성하는 가장 숭고한 사랑의 고백입니다.</p>
 
             <blockquote>"인생의 참된 축복은 살아온 날들의 화려함에 있는 것이 아니라, 사랑했던 이들의 손을 꼭 쥐고 미소 지으며 '참 고마웠다'고 말할 수 있는 용기에 있습니다."</blockquote>
 
@@ -7398,23 +7490,23 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             <p>그렇게 열린 어느 가을날의 생전 고별 잔치. 아담한 한옥 카페에는 김 어르신이 40년간 아끼던 서재의 책들과 손수 찍은 가족사진들이 정갈하게 전시되었습니다. 42세 큰딸은 아버지가 꽁보리밥을 드시며 자식들을 대학에 보냈던 옛이야기를 꺼내며 편지를 낭독했고, 장내는 금세 눈물바다가 되었습니다. 하지만 그 눈물은 비통한 절망의 눈물이 아닌, 평생 가슴에 묻어두었던 뜨거운 존경과 사랑의 감사였습니다.</p>
             <p>김 어르신은 손주들의 손을 하나하나 잡으며 말씀하셨습니다. "할아버지는 너희들의 부모여서 참으로 행복했다. 아무런 미련도, 후회도 없다." 3시간 동안 이어진 웃음과 눈물의 시간 끝에 가족들은 서로를 힘껏 껴안았고, 죽음의 공포는 어느새 깊은 평온과 단단한 화해로 바뀌어 있었습니다.</p>
 
-            <h3>2. 형식과 격식을 깬 4단계 준비 가이드: 장소 선정부터 추억 전시까지</h3>
-            <p>${escapeHtml(kw)}을 성공적으로 준비하기 위해서는 거창한 비용이나 복잡한 절차가 필요하지 않습니다. 오히려 형식적인 허례허식을 걷어내고 '진심'과 '추억'에 집중하는 것이 핵심입니다.</p>
+            <h3>2. 일본의 '지젠소(事前葬)' 트렌드에서 배우는 생전 작별의 진정한 가치</h3>
+            <p>초고령사회에 먼저 진입한 일본에서는 최근 형식적인 장례 절차 대신, 본인이 직접 기획하여 삶의 마지막을 완성하는 생전장례식(事前葬)이 폭발적인 공감을 얻고 있습니다. 병원 영안실의 차가운 유리가 가로막기 전, 평생 꼭 만나고 싶었던 친구, 은사, 친척들을 한자리에 초대하여 고마운 기억을 나누는 자리입니다.</p>
+            <p>참석자들은 검은 상복 대신 밝고 단정한 평상복을 입고 참석하여, 고인이 될 주인공과 함께 옛 음악을 듣고 식사를 나눕니다. "떠난 후 수많은 조문객이 찾아온들 내 영혼이 무슨 기쁨을 느끼겠는가. 살아있을 때 내 손을 잡고 건네는 한마디의 따뜻한 위로가 천 배 만 배 값지다"라는 한 참가자의 고백처럼, 생전 장례식은 남겨진 가족들에게도 죄책감 없는 아름다운 이별을 선물합니다.</p>
+
+            <h3>3. 형식과 격식을 깬 4단계 준비 가이드: 장소 선정부터 추억 전시까지</h3>
+            <p>${escapeHtml(cleanTopic)}을 성공적으로 준비하기 위해서는 거창한 비용이나 복잡한 절차가 필요하지 않습니다. 오히려 형식적인 허례허식을 걷어내고 '진심'과 '추억'에 집중하는 것이 핵심입니다.</p>
             <p><strong>1단계 (아늑한 공간 선정):</strong> 차갑고 삭막한 병원 장례식장을 벗어나, 주인공의 손때가 묻은 자택 거실, 햇살이 드는 아담한 정원, 또는 평소 자주 찾던 따뜻한 분위기의 찻집이나 소규모 대관 공간을 선택합니다.<br>
             <strong>2단계 (70년 인생의 기억 헌정전):</strong> 주인공의 유년 시절 흑백사진, 젊은 날의 청춘이 담긴 앨범, 즐겨 쓰던 만년필과 안경, 자녀들의 어린 시절 공책 등을 작은 테이블에 정성스럽게 전시합니다. 잔잔한 배경음악과 함께 10분 내외의 회고 영상을 곁들이면 깊은 몰입감을 줍니다.<br>
             <strong>3단계 (감사와 용서의 고백 시간):</strong> 살아있을 때가 아니면 영원히 전하지 못할 말들을 나눕니다. "그때 참 미안했다", "아버지의 묵묵한 등판이 제 인생의 가장 든든한 버팀목이었습니다"라는 진솔한 고백은 가족의 마음에 평생 아물지 않던 상처를 치유합니다.<br>
             <strong>4단계 (마지막 축복과 유산의 나눔):</strong> 주인공이 아끼던 책, 손목시계, 손때 묻은 다이어리 등을 자녀와 손주들에게 선물로 건네며 삶의 정신적 가치를 전수합니다.</p>
 
-            <h3>3. 남겨질 가족에게 주는 가장 크고 다정한 배려: 엔딩노트와 사전의향서</h3>
+            <h3>4. 남겨질 가족에게 주는 가장 크고 다정한 배려: 엔딩노트와 사전의향서</h3>
             <p>많은 이들이 임종의 순간 가족 간의 다툼과 죄책감으로 고통받습니다. 의식을 잃은 부모의 산소호흡기를 뗄 것인가를 두고 형제들이 병원 복도에서 고성을 지르며 절규하는 비극은, 부모가 자신의 마지막 뜻을 명확히 밝히지 않았기 때문에 발생합니다.</p>
-            <p>${escapeHtml(kw)}의 자리에서 부모는 자신의 <strong>'엔딩노트'</strong>와 <strong>'사전연명의료의향서'</strong> 등록 사실을 차분하고 단단하게 공유해야 합니다. 내가 뇌사나 임종기에 접어들었을 때 무의미한 연명치료(심폐소생술, 인공호흡기, 혈액투석 등)를 받지 않겠다는 뜻을 분명히 밝히는 것은, 자녀들에게서 '불효의 멍에'를 벗겨주는 가장 큰 자비입니다. 또한 통장 비밀번호, 상속의 기준, 희망하는 유골 안치 방식(자연장, 수목장 등)을 사전에 명시해 두면 남겨진 이들의 혼란을 원천적으로 막을 수 있습니다.</p>
-
-            <h3>4. 사회적 편견을 넘어 아름다운 웰다잉 문화로 나아가는 길</h3>
-            <p>일부에서는 "아직 살아있는 사람을 두고 어떻게 장례를 치르느냐"며 거부감을 갖기도 합니다. 하지만 미국과 일본, 유럽 등 선진 복지 국가에서는 이미 '리빙 퓨너럴(Living Funeral)'이 삶의 주권을 완성하는 가장 성숙한 문화로 자리 잡았습니다.</p>
-            <p>죽음을 부정하고 회피할수록 마지막 순간의 고통과 후회는 커집니다. 반면 내 삶의 마지막을 주체적으로 기획하고 사랑하는 이들과 눈을 맞추며 작별할 때, 남은 날들은 하루하루가 눈부신 기적이 됩니다. 생전 장례식은 소멸을 향한 카운트다운이 아니라, 내 존재의 모든 흔적을 감사로 물들이는 가장 거룩한 마침표입니다.</p>
+            <p>${escapeHtml(cleanTopic)}의 자리에서 부모는 자신의 <strong>'엔딩노트'</strong>와 <strong>'사전연명의료의향서'</strong> 등록 사실을 차분하고 단단하게 공유해야 합니다. 내가 뇌사나 임종기에 접어들었을 때 무의미한 연명치료(심폐소생술, 인공호흡기, 혈액투석 등)를 받지 않겠다는 뜻을 분명히 밝히는 것은, 자녀들에게서 '불효의 멍에'를 벗겨주는 가장 큰 자비입니다. 또한 통장 비밀번호, 상속의 기준, 희망하는 유골 안치 방식(자연장, 수목장 등)을 사전에 명시해 두면 남겨진 이들의 혼란을 원천적으로 막을 수 있습니다.</p>
 
             <div style="margin: 28px 0; padding: 22px; background: #ecfdf5; border-left: 4px solid #059669; border-radius: 8px;">
-              <h4 style="margin: 0 0 10px; color: #065f46; font-size: 1.05rem; font-weight: 800;">💡 ${escapeHtml(kw)} 추천 식순 5단계 & 초대장 가이드</h4>
+              <h4 style="margin: 0 0 10px; color: #065f46; font-size: 1.05rem; font-weight: 800;">💡 ${escapeHtml(cleanTopic)} 추천 식순 5단계 & 초대장 가이드</h4>
               <ul style="margin: 0; padding-left: 18px; font-size: 0.92rem; color: #1e293b; line-height: 1.8;">
                 <li><strong>1단계 개식 및 회고 영상 (15분):</strong> 고요한 음악과 함께 주인공의 70년 인생 여정을 담은 사진 영상 상영.</li>
                 <li><strong>2단계 주인공의 감사의 말씀 (20분):</strong> 살아온 날들의 소회와 가족, 벗들에게 전하는 진심 어린 감사.</li>
@@ -7431,7 +7523,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             <div style="margin: 28px 0; padding: 24px; background: #faf8f5; border-left: 4px solid var(--accent, #2b5a42); border-radius: 8px; color: #1e293b;">
               <h4 style="margin: 0 0 8px; color: #0f172a; font-size: 1.05rem; font-weight: 800;">🌿 여백서재가 전하는 마음의 한마디</h4>
               <p style="margin: 0; font-size: 0.94rem; color: #334155; line-height: 1.75;">
-                진정한 삶의 품격은 더 많은 것을 소유하고 축적하는 데 있지 않습니다. 나를 사랑해 준 이들의 마음에 따뜻한 온기와 평온을 남겨주고 떠나는 것, 그것이야말로 인간이 이 세상에 남길 수 있는 가장 위대한 기적입니다. 오늘 하루, ${escapeHtml(kw)}의 지혜로 당신의 소중한 가족들에게 다정한 안부와 사랑을 전해보세요.
+                진정한 삶의 품격은 더 많은 것을 소유하고 축적하는 데 있지 않습니다. 나를 사랑해 준 이들의 마음에 따뜻한 온기와 평온을 남겨주고 떠나는 것, 그것이야말로 인간이 이 세상에 남길 수 있는 가장 위대한 기적입니다. 오늘 하루, ${escapeHtml(cleanTopic)}의 지혜로 당신의 소중한 가족들에게 다정한 안부와 사랑을 전해보세요.
               </p>
             </div>
           `;
