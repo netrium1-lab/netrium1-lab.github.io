@@ -8461,15 +8461,15 @@
     // 기본 칼럼 데이터셋 (정적 fallback & 초기값 - 모든 브라우저 및 카카오톡 100% 노출 보장)
     const initialMagazineArticles = [
       {
-        id: 'mag_1791208879438',
-        aliasIds: ['mag_1791200706701', 'mag_care_beauty_reset', 'mag_senior_beauty_reset'],
+        id: 'mag_1791210612447',
+        aliasIds: ['mag_1791208879438', 'mag_1791200706701', 'mag_1791208784105', 'mag_care_beauty_reset'],
         title: "거울 속에서 되찾는 품격, “오늘이 내 인생 가장 빛나는 날”",
-        category: '웰라이프',
-        image: 'https://netrium1-lab.github.io/images/care-beauty-wheelchair.jpg',
+        category: '비움과 갈무리',
+        image: 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg',
         excerpt: "나이가 들어 거동이 불편해지면, 자연스럽게 외출이나 꾸밈과는 멀어지게 됩니다. \"이제 와서 화장해서 어디에 쓰겠어...\" 스스로의 아름다움을 장롱 속에 고이 접어두신 부모님께 인생 가장 찬란했던 시절의 품격과 자존감을 되찾아 드리는 일본 선진 개호미용(Care Beauty)과 웰니스 방문 맞춤 리셋 케어.",
         content: `
           <figure style="margin: 0 0 28px; text-align: center;">
-            <img src="https://netrium1-lab.github.io/images/care-beauty-wheelchair.jpg" alt="거울 속에서 되찾은 환한 미소와 자존감" style="width: 100%; max-height: 540px; object-fit: cover; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
+            <img src="https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg" alt="거울 속에서 되찾은 환한 미소와 자존감" style="width: 100%; max-height: 540px; object-fit: cover; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ "나 아직 이렇게 고왔네" - 거울 속 바뀐 자신의 모습에 환한 미소를 되찾으신 어르신</figcaption>
           </figure>
 
@@ -8766,21 +8766,21 @@
     }
 
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
-    const CURRENT_ARTICLES_VERSION = '20261005_v13_clean_purge_and_keep_exact_published';
+    const CURRENT_ARTICLES_VERSION = '20261005_v14_care_beauty_3panel_og_perfect';
     const DELETED_ARTICLES_KEY = 'yebaek_deleted_article_ids';
 
     // 🌟 카카오톡 & SNS 공유용 이미지 절대 HTTPS URL 정규화 헬퍼 (대용량 PNG 자동 감지 및 JPEG 치환)
     function toAbsoluteImageUrl(imgUrl) {
       if (!imgUrl || typeof imgUrl !== 'string') {
-        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
       }
       let trimmed = imgUrl.trim();
       if (!trimmed || trimmed.startsWith('data:')) {
-        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
       }
       // 대용량 원본 PNG를 가볍고 선명한 웹 최적화 JPEG로 스마트 치환
       if (trimmed.includes('care-beauty-hero')) {
-        return 'https://netrium1-lab.github.io/images/care-beauty-wheelchair.jpg';
+        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
       }
       if (trimmed.includes('living-funeral-party-4.png')) {
         return 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
@@ -9083,19 +9083,14 @@
     // 딥링크 생성 헬퍼 (정적 OG 카카오톡 전용 페이지 연동 및 단축 URL 보장)
     function getArticleShareUrl(id) {
       const target = findArticleByIdOrFallback(id, true);
-      const canonicalId = target ? target.id : (id || 'mag_1791200706701');
+      const canonicalId = target ? target.id : (id || 'mag_1791210612447');
 
-      // 정적 OG 공유 페이지가 존재하는 글은 전용 공유 URL을 사용하여 카카오톡/SNS 봇 미리보기 카드 100% 보장
-      const STATIC_SHARE_IDS = ['mag_1791200706701', 'mag_1791111944097', 'mag_couple_dialogue_best', 'mag_filial_memoir'];
-      if (STATIC_SHARE_IDS.includes(canonicalId)) {
+      // 모든 칼럼은 카카오톡/SNS 봇이 대표이미지와 제목을 100% 읽을 수 있도록 articles/{id}.html 전용 OG 정적 페이지로 연결
+      if (canonicalId && canonicalId.startsWith('mag_')) {
         return `https://netrium1-lab.github.io/articles/${canonicalId}.html`;
       }
 
       let baseUrl = 'https://netrium1-lab.github.io/index.html';
-      if (typeof window !== 'undefined' && window.location && window.location.protocol === 'https:' && window.location.hostname === 'netrium1-lab.github.io') {
-        baseUrl = window.location.origin + window.location.pathname.replace(/\/admin\.html$/, '/index.html');
-      }
-
       const url = new URL(baseUrl);
       url.searchParams.set('article', canonicalId);
       return url.toString();
