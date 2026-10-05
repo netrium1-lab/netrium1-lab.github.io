@@ -12,6 +12,8 @@
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
   <!-- 📄 정식 출판 자서전 PDF 고화질 렌더러 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- 💬 카카오톡 공유 SDK v2 -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
   <style>
     :root {
       --bg-body: #f1f5f9;
@@ -3704,7 +3706,13 @@
         <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px;">
           <span>📖</span> 여백의 서재 칼럼 미리보기
         </span>
-        <div style="display: flex; gap: 8px; align-items: center;">
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+          <button type="button" onclick="shareArticleKakao(currentReadingArticleId)" style="padding: 6px 14px; border-radius: 999px; background: #fee500; border: 1.5px solid #e5d800; color: #191600; font-weight: 850; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            <span>💬 카톡 공유</span>
+          </button>
+          <button type="button" onclick="copyArticleShareLink(currentReadingArticleId)" style="padding: 6px 12px; border-radius: 999px; background: #eef2ff; border: 1.5px solid #c7d2fe; color: #4338ca; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+            <span>🔗 주소 복사</span>
+          </button>
           <button type="button" onclick="editCurrentArticleFromReader()" style="padding: 6px 12px; border-radius: 999px; background: #e0f2fe; border: 1.5px solid #38bdf8; color: #0284c7; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
             <span>✏️ 글 수정</span>
           </button>
@@ -4309,7 +4317,7 @@
         aliasIds: ['mag_living_funeral_best'],
         title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
         category: '웰다잉',
-        image: 'images/living-funeral-party-4.png',
+        image: 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg',
         excerpt: '"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다." 평생을 살아오며 빚진 고마움을 살아있을 때 온전히 전하는 새로운 고별 문화.',
         content: `
           <p class="article-lead">"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 따스한 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
@@ -4318,7 +4326,7 @@
           <blockquote>"떠난 뒤 영전에 바쳐지는 백 송이의 국화꽃보다, 살아 숨 쉴 때 마주 잡는 따뜻한 손과 '그동안 참 고마웠다'는 한마디의 포옹이 백만 배 더 눈부십니다."</blockquote>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-1.png" alt="온 가족이 함께 모여 따뜻한 미소로 축하하는 생전 장례식 풍경" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-1.jpg" alt="온 가족이 함께 모여 따뜻한 미소로 축하하는 생전 장례식 풍경" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 차가운 빈소가 아닌, 은은한 꽃향기와 감사의 미소가 가득한 생전 고별 잔치 현장</figcaption>
           </figure>
 
@@ -4327,7 +4335,7 @@
           <p>생전 장례식에 참석한 조문객들은 검은 상복 대신 평상복이나 화사한 옷을 입고 옵니다. 주인공이 직접 선곡한 잔잔한 재즈 음악이나 추억의 명곡이 흐르고, 스크린에는 고인의 유년 시절부터 은퇴까지의 빛바랜 사진들이 파노라마처럼 펼쳐집니다. 주인공은 건강한 모습으로 손님 한 분 한 분의 눈을 맞추며, 지난 삶에서 신세 졌던 고마움과 미안함을 직접 전합니다.</p>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-2.png" alt="평생의 추억이 담긴 흑백 사진들을 감상하며 회상하는 가족들" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-2.jpg" alt="평생의 추억이 담긴 흑백 사진들을 감상하며 회상하는 가족들" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 낡은 앨범 속 청춘의 흑백 사진들을 가족들과 함께 넘겨보며 인생의 눈부신 여정을 회상하는 순간</figcaption>
           </figure>
 
@@ -4347,7 +4355,7 @@
           </div>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-3.png" alt="어르신의 주름진 손을 맞잡고 따뜻한 온기를 나누는 가족" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-3.jpg" alt="어르신의 주름진 손을 맞잡고 따뜻한 온기를 나누는 가족" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ "살아있을 때 맞잡은 손의 온기가 영원한 위로가 됩니다" - 생전 장례식에서 나눈 따뜻한 악수</figcaption>
           </figure>
 
@@ -4401,7 +4409,7 @@
         id: 'mag_filial_memoir',
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         category: '웰라이프',
-        image: 'images/showcase-senior-memoir.jpg',
+        image: 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg',
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
         content: `
           <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
@@ -4496,8 +4504,39 @@
     let adminSearchQuery = '';
 
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
-    const CURRENT_ARTICLES_VERSION = '20261004_v7_fix_articles_overwrite_and_delete';
+    const CURRENT_ARTICLES_VERSION = '20261005_v8_fix_kakao_og_image_and_share';
     const DELETED_ARTICLES_KEY = 'yebaek_deleted_article_ids';
+
+    // 🌟 카카오톡 & SNS 공유용 이미지 절대 HTTPS URL 정규화 헬퍼 (대용량 PNG 자동 감지 및 JPEG 치환)
+    function toAbsoluteImageUrl(imgUrl) {
+      if (!imgUrl || typeof imgUrl !== 'string') {
+        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      }
+      let trimmed = imgUrl.trim();
+      if (!trimmed || trimmed.startsWith('data:')) {
+        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      }
+      // 대용량 원본 PNG를 가볍고 선명한 웹 최적화 JPEG로 스마트 치환
+      if (trimmed.includes('living-funeral-party-4.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-1.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-1.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-2.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-2.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-3.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-3.jpg';
+      }
+      // 이미 http/https URL인 경우 안전한 https://로 보정
+      if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+        return trimmed.replace(/^http:\/\//, 'https://');
+      }
+      // 상대경로인 경우 루트 도메인 결합
+      const cleanPath = trimmed.replace(/^\.?\//, '');
+      return `https://netrium1-lab.github.io/${cleanPath}`;
+    }
 
     // 삭제된 칼럼 ID 영구 보존 헬퍼 (삭제된 글이 다시 부활하는 현상 원천 차단)
     function getDeletedArticleIds() {
@@ -4551,11 +4590,20 @@
         }
       });
 
-      // 다크모드 텍스트 정제
+      // 다크모드 텍스트 정제 및 이미지 경로를 카카오톡 호환 절대 HTTPS URL로 스마트 마이그레이션
       list.forEach(item => {
         if (item.content && (item.content.includes('var(--text-primary)') || item.content.includes('var(--text-secondary)'))) {
           item.content = item.content.replace(/var\(--text-primary\)/g, '#0f172a').replace(/var\(--text-secondary\)/g, '#334155');
           migrated = true;
+        }
+        if (item.image && typeof item.image === 'string') {
+          if (item.image.includes('living-funeral-party-4.png')) {
+            item.image = 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+            migrated = true;
+          } else if (!item.image.startsWith('http://') && !item.image.startsWith('https://') && !item.image.startsWith('data:')) {
+            item.image = toAbsoluteImageUrl(item.image);
+            migrated = true;
+          }
         }
       });
 
@@ -4660,7 +4708,10 @@
             </button>
           </td>
           <td style="text-align: center;">
-            <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: center;">
+            <div style="display: inline-flex; gap: 6px; align-items: center; justify-content: center; flex-wrap: wrap;">
+              <button type="button" class="btn-action-sm" onclick="shareArticleKakao('${a.id}')" style="background: #fee500; color: #191600; border: 1.5px solid #e5d800; font-weight: 850;" title="카카오톡으로 대형 이미지 카드 전송">
+                💬 카톡
+              </button>
               <button type="button" class="btn-action-sm" onclick="copyArticleShareLink('${a.id}')" style="background: #eef2ff; color: #4338ca; border: 1.5px solid #c7d2fe; font-weight: 750;" title="블로그, 카페, 카카오톡 홍보용 딥링크 복사">
                 🔗 공유
               </button>
@@ -4679,18 +4730,131 @@
       `).join('');
     }
 
+    // 🌟 카카오톡 SDK 초기화 (관리자 화면용)
+    function initAdminKakaoSDK() {
+      try {
+        if (window.Kakao && typeof Kakao.init === 'function') {
+          if (!Kakao.isInitialized()) {
+            Kakao.init('34a3a5001a59423bdbba8969871f0054');
+            console.log('[여백과 결 관리자] 카카오 SDK 초기화 완료');
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Admin SDK Init Error]', e);
+      }
+    }
+
+    // 🌟 카카오톡 대화방 원터치 이미지 카드 공유 (최신 SDK 피드 카드 -> 공식 웹 공유기 -> 클립보드 복사 3중 안전망)
+    function shareArticleKakao(id) {
+      if (!id) return;
+      const articles = getArticles();
+      const target = articles.find(a => a.id === id || (a.aliasIds && a.aliasIds.includes(id)));
+      if (!target) {
+        alert('공유할 칼럼을 찾을 수 없습니다.');
+        return;
+      }
+
+      // canonical 공유 URL 생성 (반드시 실서버 index.html 기준)
+      const canonicalId = (target.id === 'mag_living_funeral_best') ? 'mag_1791111944097' : target.id;
+      let shareUrl = `https://netrium1-lab.github.io/index.html?article=${canonicalId}`;
+      const isBuiltIn = defaultArticles.some(def => def.id === target.id || (def.aliasIds && def.aliasIds.includes(target.id)));
+      if (!isBuiltIn) {
+        try {
+          const compact = {
+            id: target.id,
+            title: target.title,
+            category: target.category,
+            image: target.image || '',
+            excerpt: target.excerpt || '',
+            content: target.content || '',
+            readTime: target.readTime || '읽는 시간 3분',
+            date: target.date || '',
+            isFeatured: true
+          };
+          const jsonStr = JSON.stringify(compact);
+          const encData = encodeURIComponent(btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1))));
+          if (encData && encData.length < 3800) {
+            shareUrl += `&art_data=${encData}`;
+          }
+        } catch (e) {}
+      }
+
+      const shareTitle = target.title;
+      const shareDesc = target.excerpt || '여백과 결에서 전하는 인생 2막 라이프 리셋 칼럼입니다.';
+      const shareImage = toAbsoluteImageUrl(target.image);
+
+      // 1. 카카오톡 SDK 공식 피드 카드 공유 (이미지+제목+버튼 전송)
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initAdminKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
+            const feedPayload = {
+              objectType: 'feed',
+              content: {
+                title: shareTitle,
+                description: shareDesc,
+                imageUrl: shareImage,
+                imageWidth: 1200,
+                imageHeight: 630,
+                link: {
+                  mobileWebUrl: shareUrl,
+                  webUrl: shareUrl,
+                },
+              },
+              buttons: [
+                {
+                  title: '📖 칼럼 전문 읽기',
+                  link: {
+                    mobileWebUrl: shareUrl,
+                    webUrl: shareUrl,
+                  },
+                },
+              ],
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(feedPayload);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(feedPayload);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Admin Share Error]', e);
+      }
+
+      // 2. 카카오톡 웹 공유기 팝업 fallback
+      try {
+        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
+        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (e) {}
+
+      // 3. 주소 복사로 자동 대체
+      copyArticleShareLink(id);
+    }
+
     // 칼럼 홍보 및 외부 공유 링크 복사 (카카오톡 최적화 & 크로스 브라우저 동기화)
     function copyArticleShareLink(id) {
       const articles = getArticles();
       const target = articles.find(a => a.id === id);
       const title = target ? target.title : '칼럼';
 
-      // admin.html 경로를 메인 경로(index.html)로 치환
-      let baseUrl = window.location.href.split('?')[0].split('#')[0];
-      if (baseUrl.endsWith('admin.html')) {
-        baseUrl = baseUrl.replace(/admin\.html$/, 'index.html');
-      } else if (baseUrl.endsWith('/')) {
-        baseUrl = baseUrl + 'index.html';
+      // admin.html 경로를 메인 경로(index.html)로 치환 (외부 공유는 항상 라이브 도메인 기준 보장)
+      let baseUrl = 'https://netrium1-lab.github.io/index.html';
+      if (window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
+        baseUrl = window.location.href.split('?')[0].split('#')[0];
+        if (baseUrl.endsWith('admin.html')) {
+          baseUrl = baseUrl.replace(/admin\.html$/, 'index.html');
+        } else if (baseUrl.endsWith('/')) {
+          baseUrl = baseUrl + 'index.html';
+        }
       }
 
       const canonicalId = (id === 'mag_living_funeral_best') ? 'mag_1791111944097' : id;
@@ -11738,6 +11902,7 @@ ${coachAppUrl}
 
     // 초기 실행
     window.addEventListener('DOMContentLoaded', () => {
+      initAdminKakaoSDK();
       checkAuth();
     });
   </script>

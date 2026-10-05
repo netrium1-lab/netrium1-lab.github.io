@@ -22,15 +22,18 @@
   <meta property="og:title" id="ogTitle" content="여백과 결, 리셋 아카이브 | 인생 후반전 라이프 리셋 & 디지털 자서전">
   <meta property="og:description" id="ogDesc" content="지나온 세월의 결을 다듬고, 남은 인생의 여백을 내 손으로 그리다. 디지털 자서전, 품격 있는 종활 준비와 4주 코호트.">
   <meta property="og:url" id="ogUrl" content="https://netrium1-lab.github.io/">
-  <meta property="og:image" id="ogImage" content="https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg">
+  <meta property="og:image" id="ogImage" content="https://netrium1-lab.github.io/images/og-share-cover.jpg">
+  <meta property="og:image:secure_url" content="https://netrium1-lab.github.io/images/og-share-cover.jpg">
+  <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="여백과 결, 리셋 아카이브 대표 이미지">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="여백과 결, 리셋 아카이브 | 인생 후반전 라이프 리셋 & 디지털 자서전">
   <meta name="twitter:description" content="지나온 세월의 결을 다듬고, 남은 인생의 여백을 내 손으로 그리다.">
-  <meta name="twitter:image" content="https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg">
+  <meta name="twitter:image" content="https://netrium1-lab.github.io/images/og-share-cover.jpg">
 
   <!-- 구조화 데이터 Schema.org (Google & Naver 검색엔진 최적화) -->
   <script type="application/ld+json">
@@ -6403,29 +6406,8 @@
           <span>📖</span> 여백의 서재 칼럼 전문
         </span>
         <div style="display: flex; gap: 8px; align-items: center;">
-          <button type="button" onclick="editCurrentArticleFromReader()" style="padding: 6px 12px; border-radius: 999px; background: #e0f2fe; border: 1.5px solid #38bdf8; color: #0284c7; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-            <span>✏️ 글 수정</span>
-          </button>
-          <button type="button" onclick="deleteCurrentArticleFromReader()" style="padding: 6px 12px; border-radius: 999px; background: #fee2e2; border: 1.5px solid #f87171; color: #dc2626; font-weight: 800; font-size: 0.84rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-            <span>🗑️ 글 삭제</span>
-          </button>
           <button type="button" onclick="closeArticleReader()" class="btn-modal-close-back" style="padding: 6px 14px; border-radius: 999px; background: var(--accent-light); border: 1.5px solid var(--accent); color: var(--accent); font-weight: 800; font-size: 0.86rem; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" aria-label="닫기">
             <span>✕ 닫고 돌아가기</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- 관리자 전용 글 수정/삭제 액션바 (관리자 로그인 시 노출) -->
-      <div id="readerAdminToolbar" class="reader-admin-toolbar" style="display: none;">
-        <div style="font-weight: 800; font-size: 0.9rem; color: var(--accent-gold); display: flex; align-items: center; gap: 6px;">
-          <span>👑 관리자 편집 모드</span>
-        </div>
-        <div style="display: flex; gap: 8px;">
-          <button type="button" class="admin-btn-action admin-btn-edit" onclick="editCurrentArticleFromReader()" title="이 글 수정하기">
-            ✏️ 이 글 수정하기
-          </button>
-          <button type="button" class="admin-btn-action admin-btn-delete" onclick="deleteCurrentArticleFromReader()" title="이 글 영구 삭제">
-            🗑️ 삭제하기
           </button>
         </div>
       </div>
@@ -6505,16 +6487,8 @@
           </a>
         </div>
         <!-- 하단 전용 액션 버튼들 -->
-        <div style="margin-top: 24px; display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
-          <div style="display: flex; gap: 8px;">
-            <button type="button" onclick="editCurrentArticleFromReader()" style="padding: 10px 18px; border-radius: 10px; background: #e0f2fe; border: 1.5px solid #38bdf8; color: #0284c7; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-              <span>✏️ 이 글 수정하기</span>
-            </button>
-            <button type="button" onclick="deleteCurrentArticleFromReader()" style="padding: 10px 18px; border-radius: 10px; background: #fee2e2; border: 1.5px solid #f87171; color: #dc2626; font-size: 0.9rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
-              <span>🗑️ 이 글 삭제하기</span>
-            </button>
-          </div>
-          <button type="button" onclick="closeArticleReader()" style="padding: 10px 20px; background: var(--bg-secondary); border: 1.5px solid var(--border-color); border-radius: 10px; color: var(--text-primary); font-size: 0.9rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+        <div style="margin-top: 24px; display: flex; gap: 10px; justify-content: center; align-items: center;">
+          <button type="button" onclick="closeArticleReader()" style="padding: 10px 24px; background: var(--bg-secondary); border: 1.5px solid var(--border-color); border-radius: 10px; color: var(--text-primary); font-size: 0.9rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
             <span>✕ 글 닫고 돌아가기</span>
           </button>
         </div>
@@ -8412,7 +8386,7 @@
         aliasIds: ['mag_living_funeral_best'],
         title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
         category: '웰다잉',
-        image: 'images/living-funeral-party-4.png',
+        image: 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg',
         excerpt: '"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다." 평생을 살아오며 빚진 고마움을 살아있을 때 온전히 전하는 새로운 고별 문화.',
         content: `
           <p class="article-lead">"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 따스한 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
@@ -8421,7 +8395,7 @@
           <blockquote>"떠난 뒤 영전에 바쳐지는 백 송이의 국화꽃보다, 살아 숨 쉴 때 마주 잡는 따뜻한 손과 '그동안 참 고마웠다'는 한마디의 포옹이 백만 배 더 눈부십니다."</blockquote>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-1.png" alt="온 가족이 함께 모여 따뜻한 미소로 축하하는 생전 장례식 풍경" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-1.jpg" alt="온 가족이 함께 모여 따뜻한 미소로 축하하는 생전 장례식 풍경" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 차가운 빈소가 아닌, 은은한 꽃향기와 감사의 미소가 가득한 생전 고별 잔치 현장</figcaption>
           </figure>
 
@@ -8430,7 +8404,7 @@
           <p>생전 장례식에 참석한 조문객들은 검은 상복 대신 평상복이나 화사한 옷을 입고 옵니다. 주인공이 직접 선곡한 잔잔한 재즈 음악이나 추억의 명곡이 흐르고, 스크린에는 고인의 유년 시절부터 은퇴까지의 빛바랜 사진들이 파노라마처럼 펼쳐집니다. 주인공은 건강한 모습으로 손님 한 분 한 분의 눈을 맞추며, 지난 삶에서 신세 졌던 고마움과 미안함을 직접 전합니다.</p>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-2.png" alt="평생의 추억이 담긴 흑백 사진들을 감상하며 회상하는 가족들" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-2.jpg" alt="평생의 추억이 담긴 흑백 사진들을 감상하며 회상하는 가족들" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 낡은 앨범 속 청춘의 흑백 사진들을 가족들과 함께 넘겨보며 인생의 눈부신 여정을 회상하는 순간</figcaption>
           </figure>
 
@@ -8450,7 +8424,7 @@
           </div>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="images/living-funeral-party-3.png" alt="어르신의 주름진 손을 맞잡고 따뜻한 온기를 나누는 가족" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="images/living-funeral-party-3.jpg" alt="어르신의 주름진 손을 맞잡고 따뜻한 온기를 나누는 가족" style="width: 100%; max-height: 480px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ "살아있을 때 맞잡은 손의 온기가 영원한 위로가 됩니다" - 생전 장례식에서 나눈 따뜻한 악수</figcaption>
           </figure>
 
@@ -8504,7 +8478,7 @@
         id: 'mag_filial_memoir',
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         category: '웰라이프',
-        image: 'images/showcase-senior-memoir.jpg',
+        image: 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg',
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
         content: `
           <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
@@ -8626,8 +8600,39 @@
     }
 
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
-    const CURRENT_ARTICLES_VERSION = '20261004_v7_fix_articles_overwrite_and_delete';
+    const CURRENT_ARTICLES_VERSION = '20261005_v8_fix_kakao_og_image_and_share';
     const DELETED_ARTICLES_KEY = 'yebaek_deleted_article_ids';
+
+    // 🌟 카카오톡 & SNS 공유용 이미지 절대 HTTPS URL 정규화 헬퍼 (대용량 PNG 자동 감지 및 JPEG 치환)
+    function toAbsoluteImageUrl(imgUrl) {
+      if (!imgUrl || typeof imgUrl !== 'string') {
+        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      }
+      let trimmed = imgUrl.trim();
+      if (!trimmed || trimmed.startsWith('data:')) {
+        return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      }
+      // 대용량 원본 PNG를 가볍고 선명한 웹 최적화 JPEG로 스마트 치환
+      if (trimmed.includes('living-funeral-party-4.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-1.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-1.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-2.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-2.jpg';
+      }
+      if (trimmed.includes('living-funeral-party-3.png')) {
+        return 'https://netrium1-lab.github.io/images/living-funeral-party-3.jpg';
+      }
+      // 이미 http/https URL인 경우 안전한 https://로 보정
+      if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+        return trimmed.replace(/^http:\/\//, 'https://');
+      }
+      // 상대경로인 경우 루트 도메인 결합
+      const cleanPath = trimmed.replace(/^\.?\//, '');
+      return `https://netrium1-lab.github.io/${cleanPath}`;
+    }
 
     // 삭제된 칼럼 ID 영구 보존 헬퍼 (삭제된 글이 다시 부활하는 현상 원천 차단)
     function getDeletedArticleIds() {
@@ -8683,7 +8688,7 @@
         }
       });
 
-      // 카테고리 및 다크모드 텍스트 정제
+      // 카테고리 및 다크모드 텍스트 정제 + 이미지 경로 절대 HTTPS URL 정규화
       list.forEach(item => {
         if (!VALID_MAGAZINE_CATEGORIES.includes(item.category)) {
           item.category = normalizeMagazineCategory(item.category);
@@ -8692,6 +8697,16 @@
         if (item.content && (item.content.includes('var(--text-primary)') || item.content.includes('var(--text-secondary)'))) {
           item.content = item.content.replace(/var\(--text-primary\)/g, '#0f172a').replace(/var\(--text-secondary\)/g, '#334155');
           migrated = true;
+        }
+        // 이미지 경로를 카카오톡 호환 고화질 절대 HTTPS URL로 스마트 마이그레이션
+        if (item.image && typeof item.image === 'string') {
+          if (item.image.includes('living-funeral-party-4.png')) {
+            item.image = 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+            migrated = true;
+          } else if (!item.image.startsWith('http://') && !item.image.startsWith('https://') && !item.image.startsWith('data:')) {
+            item.image = toAbsoluteImageUrl(item.image);
+            migrated = true;
+          }
         }
       });
 
@@ -8842,12 +8857,12 @@
 
     // 딥링크 생성 헬퍼 (기본 글은 깔끔한 단축 URL, 신규 발행글은 데이터 동기화 파라미터 결합)
     function getArticleShareUrl(id) {
-      let baseUrl = window.location.href.split('?')[0].split('#')[0];
-      if (baseUrl.endsWith('admin.html')) {
-        baseUrl = baseUrl.replace(/admin\.html$/, 'index.html');
+      let baseUrl = 'https://netrium1-lab.github.io/index.html';
+      if (typeof window !== 'undefined' && window.location && window.location.protocol === 'https:' && window.location.hostname === 'netrium1-lab.github.io') {
+        baseUrl = window.location.origin + window.location.pathname.replace(/\/admin\.html$/, '/index.html');
       }
       const target = findArticleByIdOrFallback(id);
-      const canonicalId = target ? target.id : id;
+      const canonicalId = target ? target.id : (id || 'mag_1791111944097');
 
       const url = new URL(baseUrl);
       url.searchParams.set('article', canonicalId);
@@ -8927,37 +8942,39 @@
         if (btnBottom) btnBottom.innerHTML = '<span>🔗</span> 글 링크 복사';
       }, 2000);
 
-      alert(`📋 [${articleTitle}]\n\n칼럼 인터넷 주소(URL)가 복사되었습니다!\n원하시는 곳에 붙여넣기(Ctrl+V)하세요.\n\n🔗 ${shareUrl}`);
+      alert(`📋 [${articleTitle}]\n\n칼럼 인터넷 주소(URL)가 복사되었습니다!\n카카오톡 또는 SNS에 붙여넣기(Ctrl+V)하시면 예쁜 카드 미리보기와 함께 전달됩니다.\n\n🔗 ${shareUrl}`);
     }
 
-    // 카카오톡 공유 (3중 안전 전송망)
+    // 카카오톡 공유 (3중 안전 전송망: 최신 SDK 피드 카드 -> 공식 웹공유기 -> 스마트 클립보드)
     function shareCurrentArticleKakao(customId) {
       const targetId = customId || currentReadingArticleId;
-      if (!targetId) return;
+      const article = findArticleByIdOrFallback(targetId);
+      if (!article) {
+        alert('공유할 칼럼 게시글을 찾을 수 없습니다.');
+        return;
+      }
 
-      const articles = getStoredArticles();
-      const article = articles.find(a => a.id === targetId);
-      if (!article) return;
-
-      const shareUrl = getArticleShareUrl(targetId);
+      const shareUrl = getArticleShareUrl(article.id);
       const shareTitle = article.title;
       const shareDesc = article.excerpt || '여백과 결에서 전하는 인생 2막 라이프 리셋 칼럼입니다.';
-      const shareImage = article.image || 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
+      const shareImage = toAbsoluteImageUrl(article.image);
       const shareText = formatArticleShareText(article, shareUrl);
 
-      // 1. 최신 Kakao SDK 공유 시도 (SDK v2의 Share 또는 v1의 Link)
+      // 1. 최신 Kakao SDK 공식 카드 공유 시도 (SDK v2의 Share 또는 v1의 Link)
       try {
-        if (window.Kakao && typeof Kakao.isInitialized === 'function') {
-          if (!Kakao.isInitialized()) {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
             initKakaoSDK();
           }
-          if (Kakao.isInitialized()) {
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
             const shareConfig = {
               objectType: 'feed',
               content: {
                 title: shareTitle,
                 description: shareDesc,
                 imageUrl: shareImage,
+                imageWidth: 1200,
+                imageHeight: 630,
                 link: {
                   mobileWebUrl: shareUrl,
                   webUrl: shareUrl,
@@ -8984,11 +9001,22 @@
           }
         }
       } catch (e) {
-        console.warn('[Kakao Share SDK fallback]', e);
+        console.warn('[Kakao Share SDK execution error]', e);
       }
 
-      // 2. SDK 미지원 또는 도메인 제한 환경: 내부 서버 오류를 유발하는 구형 웹팝업 대신 100% 안전한 스마트 클립보드 복사 + 카톡 실행 안내
-      copyCurrentArticleLink(targetId);
+      // 2. SDK 미지원 또는 팝업 허용 환경: 카카오톡 공식 웹 공유기 팝업 시도
+      try {
+        const kakaoWebSharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
+        const popup = window.open(kakaoWebSharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (popupErr) {
+        console.warn('[Kakao Web Sharer fallback]', popupErr);
+      }
+
+      // 3. 브라우저 보안 또는 차단 환경: 안전한 스마트 클립보드 복사 + 카카오톡 앱 즉시 오픈
+      copyCurrentArticleLink(article.id);
 
       // 모바일 기기(스마트폰)인 경우 카카오톡 앱 즉시 오픈 시도
       const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -9068,12 +9096,6 @@
 
       currentReadingArticleId = article.id;
 
-      // 관리자 툴바 노출 제어 (메인 사이트는 일반 방문자용이므로 항상 비노출)
-      const adminToolbar = document.getElementById('readerAdminToolbar');
-      if (adminToolbar) {
-        adminToolbar.style.display = 'none';
-      }
-
       document.getElementById('readerCategory').textContent = `[${article.category}]`;
       document.getElementById('readerTitle').textContent = article.title;
       document.getElementById('readerDate').textContent = article.date || '2026.09.25';
@@ -9104,6 +9126,8 @@
       if (metaOgDesc) metaOgDesc.content = article.excerpt || article.title;
       const metaOgUrl = document.getElementById('ogUrl');
       if (metaOgUrl) metaOgUrl.content = getArticleShareUrl(id);
+      const metaOgImage = document.getElementById('ogImage');
+      if (metaOgImage) metaOgImage.content = toAbsoluteImageUrl(article.image);
 
       // 브라우저 히스토리 딥링크 푸시 (뒤로가기 지원)
       if (pushHistory) {
@@ -9122,6 +9146,15 @@
     function closeArticleReader(updateHistory = true) {
       currentReadingArticleId = null;
       document.title = defaultPageTitle;
+
+      const metaOgTitle = document.getElementById('ogTitle');
+      if (metaOgTitle) metaOgTitle.content = '여백과 결, 리셋 아카이브 | 인생 후반전 라이프 리셋 & 디지털 자서전';
+      const metaOgDesc = document.getElementById('ogDesc');
+      if (metaOgDesc) metaOgDesc.content = '지나온 세월의 결을 다듬고, 남은 인생의 여백을 내 손으로 그리다. 디지털 자서전, 품격 있는 종활 준비와 4주 코호트.';
+      const metaOgUrl = document.getElementById('ogUrl');
+      if (metaOgUrl) metaOgUrl.content = 'https://netrium1-lab.github.io/';
+      const metaOgImage = document.getElementById('ogImage');
+      if (metaOgImage) metaOgImage.content = 'https://netrium1-lab.github.io/images/og-share-cover.jpg';
 
       // 브라우저 URL 파라미터 정리
       if (updateHistory) {
@@ -9287,9 +9320,6 @@
           </div>
           <div class="board-item-right" style="display: flex; align-items: center; gap: 8px; flex-shrink: 0;">
             <span style="font-size: 0.84rem; color: var(--accent); font-weight: 750;">전문 읽기 ➔</span>
-            <button type="button" onclick="event.stopPropagation(); deleteArticle('${a.id}');" title="이 글 삭제" style="padding: 4px 10px; border-radius: 6px; background: #fee2e2; border: 1px solid #f87171; color: #dc2626; font-size: 0.8rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;">
-              <span>🗑️</span> 삭제
-            </button>
           </div>
         </div>
       `).join('');
