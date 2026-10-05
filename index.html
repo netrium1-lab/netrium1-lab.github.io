@@ -8742,6 +8742,46 @@
       }
     }
 
+    // 🌟 서버 articles.json 실시간 동기화 엔진 (모든 방문자 기기/스마트폰에 최신 발행 칼럼 자동 전파)
+    async function syncArticlesFromServer() {
+      try {
+        const res = await fetch('articles.json?_t=' + Date.now());
+        if (!res.ok) return null;
+        const serverArticles = await res.json();
+        if (!Array.isArray(serverArticles) || serverArticles.length === 0) return null;
+
+        const deletedIds = getDeletedArticleIds();
+        let currentList = getStoredArticles();
+        let hasChange = false;
+
+        serverArticles.forEach(serverArt => {
+          if (deletedIds.includes(serverArt.id)) return;
+          const idx = currentList.findIndex(item => item.id === serverArt.id || (item.aliasIds && item.aliasIds.includes(serverArt.id)));
+          if (idx === -1) {
+            currentList.push(serverArt);
+            hasChange = true;
+          } else {
+            const local = currentList[idx];
+            if (local.title !== serverArt.title || local.image !== serverArt.image || local.content !== serverArt.content || local.category !== serverArt.category) {
+              currentList[idx] = Object.assign({}, local, serverArt);
+              hasChange = true;
+            }
+          }
+        });
+
+        if (hasChange) {
+          saveArticles(currentList);
+          renderFeaturedMagazine();
+          if (typeof renderBoardList === 'function') renderBoardList();
+          console.log('[여백과 결] 서버 최신 칼럼 자동 동기화 성공:', currentList.length + '편');
+        }
+        return currentList;
+      } catch (err) {
+        console.warn('[Server Sync] 로컬 파일 또는 오프라인 모드:', err);
+        return null;
+      }
+    }
+
     // 🌟 기사 데이터 로드 및 저장 (사용자 작성/수정글 100% 보존 & 삭제글 부활 방지)
     function getStoredArticles() {
       const deletedIds = getDeletedArticleIds();
@@ -8924,10 +8964,10 @@
     }
 
     // 🌟 안전한 기사 검색 엔진 (ID 불일치, alias, 타임스탬프 ID 호환 및 최신 대표글 fallback 100% 보장)
-    function findArticleByIdOrFallback(targetId) {
+    function findArticleByIdOrFallback(targetId, allowFallback = true) {
       const articles = getStoredArticles();
       if (!articles || articles.length === 0) return null;
-      if (!targetId) return articles[0];
+      if (!targetId) return allowFallback ? articles[0] : null;
 
       // 1) 정확한 ID 완전 일치
       let found = articles.find(a => a.id === targetId);
@@ -8949,44 +8989,40 @@
         if (found) return found;
       }
 
-      // 4) 부부 대화 관련 ID 호환
+      // 5) 부부 대화 관련 ID 호환
       if (targetId === 'mag_couple_dialogue_best' || targetId.includes('couple') || targetId.includes('dialogue')) {
         found = articles.find(a => a.id === 'mag_couple_dialogue_best' || (a.title && a.title.includes('부부')));
         if (found) return found;
       }
 
-      // 5) 칠순 / 자서전 관련 ID 호환
+      // 6) 칠순 / 자서전 관련 ID 호환
       if (targetId === 'mag_filial_memoir' || targetId.includes('filial') || targetId.includes('memoir')) {
         found = articles.find(a => a.id === 'mag_filial_memoir' || (a.title && (a.title.includes('184쪽') || a.title.includes('칠순'))));
         if (found) return found;
       }
 
-      // 6) fallback: "해당 칼럼 게시글을 찾을 수 없습니다" 경고를 방지하고 항상 최신 메인 대표글을 열어줌
-      return articles[0];
+      // 7) fallback: 명시적으로 허용된 경우에만 최신 대표글을 열어줌
+      return allowFallback ? articles[0] : null;
     }
 
-    // 딥링크 생성 헬퍼 (기본 글은 깔끔한 단축 URL, 신규 발행글은 데이터 동기화 파라미터 결합)
+    // 딥링크 생성 헬퍼 (정적 OG 카카오톡 전용 페이지 연동 및 단축 URL 보장)
     function getArticleShareUrl(id) {
+      const target = findArticleByIdOrFallback(id, true);
+      const canonicalId = target ? target.id : (id || 'mag_1791200706701');
+
+      // 정적 OG 공유 페이지가 존재하는 글은 전용 공유 URL을 사용하여 카카오톡/SNS 봇 미리보기 카드 100% 보장
+      const STATIC_SHARE_IDS = ['mag_1791200706701', 'mag_1791111944097', 'mag_couple_dialogue_best', 'mag_filial_memoir'];
+      if (STATIC_SHARE_IDS.includes(canonicalId)) {
+        return `https://netrium1-lab.github.io/articles/${canonicalId}.html`;
+      }
+
       let baseUrl = 'https://netrium1-lab.github.io/index.html';
       if (typeof window !== 'undefined' && window.location && window.location.protocol === 'https:' && window.location.hostname === 'netrium1-lab.github.io') {
         baseUrl = window.location.origin + window.location.pathname.replace(/\/admin\.html$/, '/index.html');
       }
-      const target = findArticleByIdOrFallback(id);
-      const canonicalId = target ? target.id : (id || 'mag_1791111944097');
 
       const url = new URL(baseUrl);
       url.searchParams.set('article', canonicalId);
-
-      const isBuiltIn = initialMagazineArticles.some(init => init.id === canonicalId || (init.aliasIds && init.aliasIds.includes(canonicalId)));
-
-      // 내장 기본 글이 아닌 신규 발행글인 경우, 다른 브라우저/기기에서도 즉시 열리도록 데이터를 함께 실음
-      if (target && !isBuiltIn) {
-        const encData = encodeArticleData(target);
-        if (encData && encData.length < 3800) {
-          url.searchParams.set('art_data', encData);
-        }
-      }
-
       return url.toString();
     }
 
@@ -9306,8 +9342,8 @@
       }
     });
 
-    // 🌟 외부 링크 접속 시 딥링크 자동 오픈 및 크로스 브라우저/카톡 자동 동기화
-    function checkDeepLinkArticle() {
+    // 🌟 외부 링크 접속 시 딥링크 자동 오픈 및 크로스 브라우저/카톡 자동 동기화 (서버 실시간 조회 지원)
+    async function checkDeepLinkArticle() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
         const artId = urlParams.get('article');
@@ -9330,9 +9366,25 @@
         }
 
         if (artId) {
-          setTimeout(() => {
-            openArticleReader(artId, false);
-          }, 350);
+          // 1차: 로컬 검색 (fallback 비허용)
+          let target = findArticleByIdOrFallback(artId, false);
+
+          // 2차: 로컬에 없으면 서버 articles.json에서 실시간 다운로드!
+          if (!target) {
+            await syncArticlesFromServer();
+            target = findArticleByIdOrFallback(artId, false);
+          }
+
+          // 3차: 그래도 없으면 대표글 fallback 허용
+          if (!target) {
+            target = findArticleByIdOrFallback(artId, true);
+          }
+
+          if (target) {
+            setTimeout(() => {
+              openArticleReader(target.id, false);
+            }, 300);
+          }
         }
       } catch (err) {
         console.warn('Deep link parse error:', err);
@@ -12552,6 +12604,7 @@
     initKakaoSDK();
     renderHeaderLoginState();
     renderFeaturedMagazine();
+    syncArticlesFromServer(); // 🌟 서버 articles.json 비동기 최신 동기화
     updateAdminUI();
     updateConsultBadges();
     updateMemoirBadges();

@@ -2201,8 +2201,30 @@
               <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 9px 18px; font-size: 0.88rem; background: #2c5f46; color: #fff;">
                 <span>+</span> 직접 글쓰기
               </button>
+              <button type="button" class="btn-save-setting" onclick="exportArticlesJsonFile()" style="background: #0284c7; color: #ffffff; border: none; padding: 9px 16px; font-size: 0.88rem; font-weight: 850; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);" title="현재 등록된 모든 글을 articles.json 파일로 저장하여 사이트 전체에 영구 배포합니다">
+                <span>🚀 사이트 전체 반영 (articles.json 저장)</span>
+              </button>
               <button type="button" class="btn-save-setting" onclick="switchTab('tabSettings')" style="background: #f0fdf4; color: #047857; border: 1.5px solid #a7f3d0; padding: 9px 16px; font-size: 0.88rem; font-weight: 800;">
                 <span>⚙️ 블로그 연동 설정</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- 📢 사이트 전체 실시간 반영 및 배포 안내 바 -->
+          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 1.4rem;">💡</span>
+              <div style="font-size: 0.88rem; color: #166534; line-height: 1.5;">
+                <strong>새 글을 발행하거나 수정한 후에는?</strong><br>
+                우측의 <strong>[🚀 사이트 전체 반영]</strong> 버튼을 눌러 <code style="background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold;">articles.json</code>을 저장하신 뒤, 폴더 안의 <strong>'배포하기.bat'</strong>을 실행하시면 모든 방문자의 스마트폰과 카카오톡에 즉시 실시간 반영됩니다.
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button type="button" onclick="exportArticlesJsonFile()" style="padding: 7px 14px; background: #16a34a; color: #fff; border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
+                📥 articles.json 저장
+              </button>
+              <button type="button" onclick="syncAdminArticlesFromServer()" style="padding: 7px 14px; background: #fff; color: #166534; border: 1px solid #86efac; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
+                🔄 서버 데이터 불러오기
               </button>
             </div>
           </div>
@@ -4723,6 +4745,92 @@
       renderArticlesTable();
     }
 
+    // 🌟 서버 articles.json 실시간 동기화
+    async function syncAdminArticlesFromServer() {
+      try {
+        const res = await fetch('articles.json?_t=' + Date.now());
+        if (!res.ok) {
+          alert('서버 또는 로컬 articles.json 파일을 찾을 수 없습니다.');
+          return;
+        }
+        const serverArticles = await res.json();
+        if (!Array.isArray(serverArticles) || serverArticles.length === 0) {
+          alert('articles.json 파일에 등록된 기사가 없습니다.');
+          return;
+        }
+
+        const deletedIds = getDeletedArticleIds();
+        let currentList = getArticles();
+        let addedCount = 0;
+
+        serverArticles.forEach(serverArt => {
+          if (deletedIds.includes(serverArt.id)) return;
+          const idx = currentList.findIndex(item => item.id === serverArt.id || (item.aliasIds && item.aliasIds.includes(serverArt.id)));
+          if (idx === -1) {
+            currentList.push(serverArt);
+            addedCount++;
+          } else {
+            currentList[idx] = Object.assign({}, currentList[idx], serverArt);
+          }
+        });
+
+        saveArticles(currentList);
+        alert(`🎉 서버 articles.json 동기화 완료!\n총 ${currentList.length}편의 칼럼이 최신화되었습니다.`);
+      } catch (e) {
+        console.warn('동기화 오류:', e);
+        alert('서버 데이터 동기화에 실패했습니다. (오프라인이거나 로컬 파일 모드)');
+      }
+    }
+
+    // 🚀 최신 전체 칼럼을 articles.json 파일로 저장/내보내기 (File System API 또는 다운로드)
+    async function exportArticlesJsonFile(promptSuccess = true) {
+      const articles = getArticles();
+      if (!articles || articles.length === 0) {
+        alert('내보낼 칼럼 데이터가 없습니다.');
+        return;
+      }
+
+      const jsonStr = JSON.stringify(articles, null, 2);
+
+      // 1. Chrome/Edge의 현대적 파일 시스템 API 지원 확인
+      if ('showSaveFilePicker' in window) {
+        try {
+          const handle = await window.showSaveFilePicker({
+            suggestedName: 'articles.json',
+            types: [{
+              description: 'JSON 파일',
+              accept: { 'application/json': ['.json'] }
+            }]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(jsonStr);
+          await writable.close();
+          if (promptSuccess) {
+            alert(`🎉 articles.json 파일이 성공적으로 저장되었습니다!\n\n이제 프로젝트 폴더에서 [배포하기.bat]을 실행하시면 10초 만에 전 세계 모든 방문자와 카카오톡에 최신 글이 실시간 반영됩니다.`);
+          }
+          return;
+        } catch (err) {
+          if (err.name === 'AbortError') return; // 사용자가 취소함
+          console.warn('showSaveFilePicker 실패, 일반 다운로드로 대체:', err);
+        }
+      }
+
+      // 2. 일반 브라우저 자동 다운로드 방식
+      const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'articles.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      if (promptSuccess) {
+        alert(`📥 'articles.json' 파일이 다운로드되었습니다!\n\n이 파일을 프로젝트 폴더(c:\\Users\\User1\\구글드라이브\\antigravity)에 덮어쓰신 후, [배포하기.bat]을 더블클릭하시면 전 세계 모든 방문자와 카카오톡에 즉시 실시간 반영됩니다.`);
+      }
+    }
+
     // 카테고리 필터링
     function filterAdminMagazineCategory(cat, btn) {
       adminBoardCategory = cat;
@@ -4962,35 +5070,18 @@
       }
 
       const canonicalId = (id === 'mag_living_funeral_best') ? 'mag_1791111944097' : id;
-      const url = new URL(baseUrl);
-      url.searchParams.set('article', canonicalId);
 
-      // 기본 내장 글이 아닌 신규 글은 다른 브라우저(Edge, 카톡 등)에서도 즉시 열리도록 art_data 동기화 파라미터 결합
-      const isBuiltIn = defaultArticles.some(def => def.id === id || (def.aliasIds && def.aliasIds.includes(id)));
-      if (target && !isBuiltIn) {
-        try {
-          const compact = {
-            id: target.id,
-            title: target.title,
-            category: target.category,
-            image: target.image || '',
-            excerpt: target.excerpt || '',
-            content: target.content || '',
-            readTime: target.readTime || '읽는 시간 3분',
-            date: target.date || '',
-            isFeatured: true
-          };
-          const jsonStr = JSON.stringify(compact);
-          const encData = encodeURIComponent(btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1))));
-          if (encData && encData.length < 3800) {
-            url.searchParams.set('art_data', encData);
-          }
-        } catch (e) {
-          console.warn('관리자 공유 데이터 인코딩 생략:', e);
-        }
+      // 정적 OG 공유 페이지가 존재하는 글은 전용 공유 URL을 사용하여 카카오톡/SNS 봇 미리보기 카드 100% 보장
+      const STATIC_SHARE_IDS = ['mag_1791200706701', 'mag_1791111944097', 'mag_couple_dialogue_best', 'mag_filial_memoir'];
+      let shareUrl = '';
+      if (STATIC_SHARE_IDS.includes(canonicalId)) {
+        shareUrl = `https://netrium1-lab.github.io/articles/${canonicalId}.html`;
+      } else {
+        const url = new URL(baseUrl);
+        url.searchParams.set('article', canonicalId);
+        shareUrl = url.toString();
       }
 
-      const shareUrl = url.toString();
       const excerpt = target && target.excerpt ? `"${target.excerpt}"\n\n` : '';
       const fullShareMessage = `[여백과 결 칼럼] 🌿 ${title}\n\n${excerpt}👉 칼럼 전문 편안하게 읽기:\n${shareUrl}`;
 
@@ -8566,6 +8657,9 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           saveArticles(articles);
           currentEditingArticleId = null;
           alert(`'${title}' 칼럼 수정이 완료되었습니다.`);
+          if (confirm(`수정된 내용을 사이트 전체에 반영하기 위해 [articles.json] 파일을 지금 바로 저장하시겠습니까?\n\n(저장 후 '배포하기.bat'을 실행하시면 배포가 완료됩니다)`)) {
+            exportArticlesJsonFile(false);
+          }
           closeTistoryEditor(true);
           return;
         } else {
@@ -8596,7 +8690,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         articles.unshift(newArticle); // 새 글을 맨 위에 추가
         saveArticles(articles);
         
-        if (confirm(`🎉 '${title}' 칼럼이 사이트에 성공적으로 발행되었습니다!\n\n이 글을 대표님의 네이버 블로그(또는 티스토리)에도 지금 바로 동시 발행하시겠습니까?\n\n[확인]을 누르시면 본문 글과 5장의 감동 사진이 클립보드에 자동 복사되고, 네이버 블로그 글쓰기 창이 새 탭으로 즉시 열립니다.`)) {
+        // 🚀 사이트 전체 실시간 반영용 articles.json 자동 저장 안내
+        const wantExport = confirm(`🎉 '${title}' 칼럼이 사이트에 성공적으로 등록되었습니다!\n\n이 글을 모든 방문자의 스마트폰과 카카오톡에 즉시 실시간 반영하기 위해\n[articles.json] 데이터 파일로 지금 바로 저장하시겠습니까?\n\n[확인]: 파일 저장창 오픈 (저장 후 '배포하기.bat' 실행하시면 배포 완료)\n[취소]: 현재 브라우저에만 저장하고 나중에 배포`);
+        
+        if (wantExport) {
+          exportArticlesJsonFile(false);
+        }
+
+        if (confirm(`📢 발행된 칼럼을 대표님의 네이버 블로그(또는 티스토리)에도 지금 바로 동시 발행하시겠습니까?\n\n[확인]을 누르시면 본문 글과 감동 사진들이 클립보드에 자동 복사되고, 네이버 블로그 글쓰기 창이 새 탭으로 즉시 열립니다.`)) {
           // 1. 클립보드 즉시 동기 복사
           copyArticleBodyHtmlSync();
           copyArticleBodyHtml(false).catch(() => {});
@@ -8607,9 +8708,9 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           const win = window.open(naverUrl, '_blank');
 
           if (!win || win.closed || typeof win.closed === 'undefined') {
-            alert(`🎉 칼럼 발행 및 클립보드 복사 완료!\n\n⚠️ 브라우저 팝업이 차단되었습니다. 아래 링크를 눌러 글쓰기 창을 열어주세요:\n${naverUrl}\n\n열린 블로그 글쓰기 창 본문에서 [Ctrl + V]만 누르시면 서식과 사진이 쏙 들어갑니다!`);
+            alert(`🎉 칼럼 등록 및 클립보드 복사 완료!\n\n⚠️ 브라우저 팝업이 차단되었습니다. 아래 링크를 눌러 글쓰기 창을 열어주세요:\n${naverUrl}\n\n열린 블로그 글쓰기 창 본문에서 [Ctrl + V]만 누르시면 서식과 사진이 쏙 들어갑니다!`);
           } else {
-            alert(`🎉 네이버 블로그 글쓰기 창이 열렸습니다!\n\n• 본문 글과 5장의 감동 사진이 서식 그대로 클립보드에 완벽 복사되었습니다.\n• 열린 네이버 스마트에디터 본문에서 [Ctrl + V]만 누르시면 완성됩니다!`);
+            alert(`🎉 네이버 블로그 글쓰기 창이 열렸습니다!\n\n• 본문 글과 사진이 서식 그대로 클립보드에 완벽 복사되었습니다.\n• 열린 네이버 스마트에디터 본문에서 [Ctrl + V]만 누르시면 완성됩니다!`);
           }
           closeTistoryEditor(true);
           return;
@@ -11985,6 +12086,7 @@ ${coachAppUrl}
     function loadAllData() {
       loadSiteSettings();
       renderArticlesTable();
+      syncAdminArticlesFromServer().catch(() => {}); // 🌟 서버 articles.json 백그라운드 동기화
       renderUnburdenTable();
       renderMemoirTable();
       renderAcademyTable();
