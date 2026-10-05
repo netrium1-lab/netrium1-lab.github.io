@@ -8517,8 +8517,8 @@
         isFeatured: true
       },
       {
-        id: 'mag_1791200706701',
-        aliasIds: ['mag_care_beauty_reset', 'mag_senior_beauty_reset'],
+        id: 'mag_1791208879438',
+        aliasIds: ['mag_1791200706701', 'mag_care_beauty_reset', 'mag_senior_beauty_reset'],
         title: "거울 속에서 되찾는 품격, “오늘이 내 인생 가장 빛나는 날”",
         category: '웰라이프',
         image: 'https://netrium1-lab.github.io/images/care-beauty-wheelchair.jpg',
@@ -8779,8 +8779,8 @@
         return 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg';
       }
       // 대용량 원본 PNG를 가볍고 선명한 웹 최적화 JPEG로 스마트 치환
-      if (trimmed.includes('care-beauty-hero.png')) {
-        return 'https://netrium1-lab.github.io/images/care-beauty-hero.jpg';
+      if (trimmed.includes('care-beauty-hero')) {
+        return 'https://netrium1-lab.github.io/images/care-beauty-wheelchair.jpg';
       }
       if (trimmed.includes('living-funeral-party-4.png')) {
         return 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
@@ -8897,20 +8897,7 @@
         }
       });
 
-      // 🌟 개호미용 칼럼(mag_1791200706701) 최신 실물 데이터 동기화 보장 (구버전 캐시 덮어쓰기)
-      const careArt = list.find(item => item.id === 'mag_1791200706701' || (item.title && item.title.includes('거울 속에서')));
-      const defCare = initialMagazineArticles.find(a => a.id === 'mag_1791200706701');
-      if (defCare && careArt) {
-        if (!careArt.image || !careArt.image.includes('care-beauty-wheelchair') || !careArt.content || !careArt.content.includes('care-beauty-styling')) {
-          careArt.title = defCare.title;
-          careArt.image = defCare.image;
-          careArt.content = defCare.content;
-          careArt.excerpt = defCare.excerpt;
-          careArt.category = defCare.category;
-          careArt.readTime = defCare.readTime;
-          migrated = true;
-        }
-      }
+
 
       // 카테고리 및 다크모드 텍스트 정제 + 이미지 경로 절대 HTTPS URL 정규화
       list.forEach(item => {
