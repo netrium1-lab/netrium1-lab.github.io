@@ -14,6 +14,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- 💬 카카오톡 공유 SDK v2 -->
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+  <!-- 🌟 Firebase SDK (v10 Compat: App + Firestore 실시간 클라우드 DB) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
   <style>
     :root {
       --bg-body: #f1f5f9;
@@ -2219,7 +2222,10 @@
                 우측의 <strong>[🚀 사이트 전체 반영]</strong> 버튼을 눌러 <code style="background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold;">articles.json</code>을 저장하신 뒤, 폴더 안의 <strong>'배포하기.bat'</strong>을 실행하시면 모든 방문자의 스마트폰과 카카오톡에 즉시 실시간 반영됩니다.
               </div>
             </div>
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" onclick="uploadAllArticlesToFirebase()" style="padding: 7px 14px; background: #ea580c; color: #fff; border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 850; cursor: pointer; box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);" title="현재 저장된 모든 칼럼을 Firebase 클라우드 DB에 즉시 일괄 등록합니다">
+                ☁️ Firebase 클라우드 전체 동기화
+              </button>
               <button type="button" onclick="exportArticlesJsonFile()" style="padding: 7px 14px; background: #16a34a; color: #fff; border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
                 📥 articles.json 저장
               </button>
@@ -4611,6 +4617,63 @@
     let adminBoardCategory = 'all';
     let adminSearchQuery = '';
 
+    // =========================================================================
+    // 🌟 구글 Firebase Firestore 실시간 클라우드 DB 연동
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyB97-Jn6faTYXjpyH5PrSeMZ8MaVStnLtc",
+      authDomain: "yebaek-bfa2c.firebaseapp.com",
+      projectId: "yebaek-bfa2c",
+      storageBucket: "yebaek-bfa2c.firebasestorage.app",
+      messagingSenderId: "450270290519",
+      appId: "1:450270290519:web:0fbc1abf869f51e7797912",
+      measurementId: "G-BF3TQWGRWH"
+    };
+
+    let fbApp = null;
+    let fbDb = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+          fbApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          fbApp = firebase.app();
+        }
+        fbDb = firebase.firestore();
+        console.log('[Firebase Admin] 클라우드 DB 연결 성공 (yebaek-bfa2c)');
+      }
+    } catch (fbErr) {
+      console.warn('[Firebase Admin] 초기화 알림:', fbErr);
+    }
+
+    // 🌟 현재 저장된 모든 칼럼을 Firebase 클라우드 DB에 일괄 동기화 (원클릭)
+    async function uploadAllArticlesToFirebase() {
+      if (!fbDb) {
+        alert('Firebase DB가 연결되지 않았습니다. Firestore Database를 활성화해 주세요.');
+        return;
+      }
+      const articles = getArticles();
+      if (!articles || articles.length === 0) {
+        alert('업로드할 칼럼 데이터가 없습니다.');
+        return;
+      }
+
+      try {
+        let count = 0;
+        const batch = fbDb.batch();
+        articles.forEach(art => {
+          const docRef = fbDb.collection('articles').doc(art.id);
+          batch.set(docRef, art, { merge: true });
+          count++;
+        });
+        await batch.commit();
+        alert(`🎉 총 ${count}편의 칼럼이 Firebase 클라우드 DB에 성공적으로 동기화되었습니다!\n이제 어떤 스마트폰이나 PC에서도 새로고침 없이 실시간으로 최신 글이 즉시 노출됩니다.`);
+      } catch (err) {
+        console.error('[Firebase Batch Error]', err);
+        alert('Firebase 업로드 중 오류가 발생했습니다: ' + (err.message || err));
+      }
+    }
+
     // 🌟 최신 칼럼 데이터 동기화 버전 키 (엣지/카톡 브라우저 캐시 강제 갱신)
     const CURRENT_ARTICLES_VERSION = '20261005_v10_sync_care_beauty_real_content';
     const DELETED_ARTICLES_KEY = 'yebaek_deleted_article_ids';
@@ -5157,6 +5220,12 @@
         addDeletedArticleId(id);
         const updated = articles.filter(a => a.id !== id);
         saveArticles(updated);
+        
+        // 🌟 Firebase 실시간 클라우드 DB에서도 즉시 삭제
+        if (fbDb) {
+          fbDb.collection('articles').doc(id).delete().catch(e => console.warn(e));
+        }
+
         if (typeof closeArticleReader === 'function') {
           closeArticleReader();
         }
@@ -8655,6 +8724,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           articles[targetIndex].isFeatured = isFeatured;
           articles[targetIndex].image = mainThumbImg || articles[targetIndex].image || '';
           saveArticles(articles);
+          
+          // 🌟 Firebase 실시간 클라우드 DB 즉시 수정 저장
+          if (fbDb) {
+            fbDb.collection('articles').doc(articles[targetIndex].id).set(articles[targetIndex], { merge: true })
+              .then(() => console.log('[Firebase] 클라우드 DB 수정 저장 완료:', articles[targetIndex].id))
+              .catch(e => console.warn('[Firebase] 수정 저장 알림:', e));
+          }
+
           currentEditingArticleId = null;
           alert(`'${title}' 칼럼 수정이 완료되었습니다.`);
           if (confirm(`수정된 내용을 사이트 전체에 반영하기 위해 [articles.json] 파일을 지금 바로 저장하시겠습니까?\n\n(저장 후 '배포하기.bat'을 실행하시면 배포가 완료됩니다)`)) {
@@ -8690,11 +8767,11 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         articles.unshift(newArticle); // 새 글을 맨 위에 추가
         saveArticles(articles);
         
-        // 🚀 사이트 전체 실시간 반영용 articles.json 자동 저장 안내
-        const wantExport = confirm(`🎉 '${title}' 칼럼이 사이트에 성공적으로 등록되었습니다!\n\n이 글을 모든 방문자의 스마트폰과 카카오톡에 즉시 실시간 반영하기 위해\n[articles.json] 데이터 파일로 지금 바로 저장하시겠습니까?\n\n[확인]: 파일 저장창 오픈 (저장 후 '배포하기.bat' 실행하시면 배포 완료)\n[취소]: 현재 브라우저에만 저장하고 나중에 배포`);
-        
-        if (wantExport) {
-          exportArticlesJsonFile(false);
+        // 🌟 Firebase 실시간 클라우드 DB 즉시 자동 저장 (0.1초 만에 전 세계 실시간 전파!)
+        if (fbDb) {
+          fbDb.collection('articles').doc(newArticle.id).set(newArticle, { merge: true })
+            .then(() => console.log('[Firebase] 클라우드 DB 자동 저장 완료:', newArticle.id))
+            .catch(e => console.warn('[Firebase] 클라우드 저장 알림:', e));
         }
 
         if (confirm(`📢 발행된 칼럼을 대표님의 네이버 블로그(또는 티스토리)에도 지금 바로 동시 발행하시겠습니까?\n\n[확인]을 누르시면 본문 글과 감동 사진들이 클립보드에 자동 복사되고, 네이버 블로그 글쓰기 창이 새 탭으로 즉시 열립니다.`)) {

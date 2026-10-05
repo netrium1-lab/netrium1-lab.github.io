@@ -56,6 +56,10 @@
   }
   </script>
   
+  <!-- Firebase SDK (v10 Compat: App + Firestore 실시간 클라우드 DB) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <!-- Google tag (gtag.js) - Google Ads: AW-443015087 (여백과 결) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-443015087"></script>
   <script>
@@ -8376,6 +8380,80 @@
     }
 
     // =========================================================================
+    // 🌟 구글 Firebase Firestore 실시간 클라우드 DB 연동 (0.1초 즉시 자동 반영)
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyB97-Jn6faTYXjpyH5PrSeMZ8MaVStnLtc",
+      authDomain: "yebaek-bfa2c.firebaseapp.com",
+      projectId: "yebaek-bfa2c",
+      storageBucket: "yebaek-bfa2c.firebasestorage.app",
+      messagingSenderId: "450270290519",
+      appId: "1:450270290519:web:0fbc1abf869f51e7797912",
+      measurementId: "G-BF3TQWGRWH"
+    };
+
+    let fbApp = null;
+    let fbDb = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+          fbApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          fbApp = firebase.app();
+        }
+        fbDb = firebase.firestore();
+        console.log('[Firebase] 클라우드 DB 연결 성공 (yebaek-bfa2c)');
+      }
+    } catch (fbErr) {
+      console.warn('[Firebase] 초기화 알림:', fbErr);
+    }
+
+    // 🌟 Firebase 실시간 칼럼 감시자 (관리자가 글 발행/수정 시 방문자 화면에 새로고침 없이 0.1초 만에 즉시 뜸!)
+    function initFirebaseArticleListener() {
+      if (!fbDb) return;
+      try {
+        fbDb.collection('articles').onSnapshot((snapshot) => {
+          if (!snapshot || snapshot.empty) return;
+          const serverList = [];
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (data && data.id) serverList.push(data);
+          });
+          if (serverList.length > 0) {
+            const deletedIds = getDeletedArticleIds();
+            let currentList = getStoredArticles();
+            let hasChange = false;
+
+            serverList.forEach(serverArt => {
+              if (deletedIds.includes(serverArt.id)) return;
+              const idx = currentList.findIndex(item => item.id === serverArt.id || (item.aliasIds && item.aliasIds.includes(serverArt.id)));
+              if (idx === -1) {
+                currentList.push(serverArt);
+                hasChange = true;
+              } else {
+                if (JSON.stringify(currentList[idx]) !== JSON.stringify(serverArt)) {
+                  currentList[idx] = Object.assign({}, currentList[idx], serverArt);
+                  hasChange = true;
+                }
+              }
+            });
+
+            if (hasChange) {
+              saveArticles(currentList);
+              renderFeaturedMagazine();
+              if (typeof renderBoardList === 'function') renderBoardList();
+              console.log('[Firebase] 실시간 칼럼 자동 업데이트 완료:', currentList.length + '편');
+            }
+          }
+        }, (err) => {
+          console.warn('[Firebase Listener Warning]', err);
+        });
+      } catch (e) {
+        console.warn('[Firebase] 실시간 리스너 오류:', e);
+      }
+    }
+
+    // =========================================================================
     // 6. 여백의 서재 CMS 엔진 (게시판, 프리미엄 에디터, 뷰어, 사진 보관함)
     // =========================================================================
 
@@ -12605,6 +12683,7 @@
     renderHeaderLoginState();
     renderFeaturedMagazine();
     syncArticlesFromServer(); // 🌟 서버 articles.json 비동기 최신 동기화
+    initFirebaseArticleListener(); // 🌟 Firebase 실시간 클라우드 DB 리스너 가동
     updateAdminUI();
     updateConsultBadges();
     updateMemoirBadges();
