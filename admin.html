@@ -14,6 +14,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <!-- 💬 카카오톡 공유 SDK v2 -->
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+  <!-- 📍 카카오/다음 우편번호 & 도로명 주소 검색 서비스 -->
+  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
   <!-- 🌟 Firebase SDK (v10 Compat: App + Firestore 실시간 클라우드 DB) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -3831,7 +3833,7 @@
           </div>
           <div>
             <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">활동 연락처 *</label>
-            <input type="text" id="inputCoachPhone" class="setting-input" placeholder="010-0000-0000" required>
+            <input type="text" id="inputCoachPhone" class="setting-input" placeholder="010-0000-0000" oninput="this.value = formatPhoneNumber(this.value)" maxlength="13" required>
           </div>
         </div>
 
@@ -3887,7 +3889,7 @@
           </div>
           <div>
             <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">고객 연락처 *</label>
-            <input type="text" id="inputDispClientPhone" class="setting-input" placeholder="010-0000-0000" required>
+            <input type="text" id="inputDispClientPhone" class="setting-input" placeholder="010-0000-0000" oninput="this.value = formatPhoneNumber(this.value)" maxlength="13" required>
           </div>
         </div>
 
@@ -3903,14 +3905,68 @@
             </select>
           </div>
           <div>
-            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">방문 희망일시 *</label>
-            <input type="text" id="inputDispSchedule" class="setting-input" placeholder="예: 2026.09.28 오전 10:00" required>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">📅 방문 희망일시 *</label>
+            <div style="display: flex; gap: 6px;">
+              <input type="date" id="inputDispDate" class="setting-input" style="flex: 1.25; padding: 9px 8px; font-weight: 700; cursor: pointer; background: #fff;" required onchange="syncScheduleDateTime()">
+              <select id="inputDispTime" class="setting-input" style="flex: 1; padding: 9px 6px; font-weight: 750; background: #fff; cursor: pointer;" onchange="syncScheduleDateTime()">
+                <option value="오전 09:00">오전 09:00</option>
+                <option value="오전 09:30">오전 09:30</option>
+                <option value="오전 10:00" selected>오전 10:00</option>
+                <option value="오전 10:30">오전 10:30</option>
+                <option value="오전 11:00">오전 11:00</option>
+                <option value="오전 11:30">오전 11:30</option>
+                <option value="오후 12:00">오후 12:00</option>
+                <option value="오후 01:00">오후 01:00</option>
+                <option value="오후 01:30">오후 01:30</option>
+                <option value="오후 02:00">오후 02:00</option>
+                <option value="오후 02:30">오후 02:30</option>
+                <option value="오후 03:00">오후 03:00</option>
+                <option value="오후 03:30">오후 03:30</option>
+                <option value="오후 04:00">오후 04:00</option>
+                <option value="오후 04:30">오후 04:30</option>
+                <option value="오후 05:00">오후 05:00</option>
+                <option value="오후 05:30">오후 05:30</option>
+                <option value="오후 06:00">오후 06:00</option>
+                <option value="오후 07:00">오후 07:00</option>
+              </select>
+            </div>
+            <input type="hidden" id="inputDispSchedule">
           </div>
         </div>
 
         <div>
-          <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">방문 장소 / 고객 주소 *</label>
-          <input type="text" id="inputDispLocation" class="setting-input" placeholder="예: 서울 강남구 도곡동 타워팰리스 B동 1204호" required>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); margin: 0;">📍 방문 장소 / 고객 주소 *</label>
+            <div style="display: flex; gap: 6px;">
+              <button type="button" class="btn-action-sm" onclick="openDaumPostcodeForDispatch()" style="background: var(--accent); color: #fff; font-size: 0.78rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+                <span>🔍</span> 주소 찾기
+              </button>
+              <button type="button" class="btn-action-sm" onclick="toggleExistingClientSelector()" style="background: #f1f5f9; color: #334155; border: 1px solid #cbd5e1; font-size: 0.78rem; font-weight: 750; padding: 4px 8px; border-radius: 6px; cursor: pointer;" title="홈페이지 신청 고객 목록에서 주소 및 정보 자동 불러오기">
+                <span>📋</span> 기존 신청고객에서 찾기
+              </button>
+            </div>
+          </div>
+
+          <!-- 기존 신청고객 빠른 선택 패널 (토글) -->
+          <div id="existingClientSelectPanel" style="display: none; background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 10px 12px; margin-bottom: 8px;">
+            <div style="font-size: 0.78rem; font-weight: 800; color: var(--accent); margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+              <span>홈페이지 접수 고객 선택 시 성함·연락처·주소 자동 채우기:</span>
+              <button type="button" onclick="toggleExistingClientSelector()" style="border: none; background: transparent; font-size: 0.8rem; cursor: pointer; color: #94a3b8;">✕ 닫기</button>
+            </div>
+            <select id="selectExistingClient" class="setting-input" style="background: #fff; font-size: 0.85rem;" onchange="applyExistingClientToForm(this.value)">
+              <option value="">-- 불러올 신청 고객을 선택하세요 --</option>
+            </select>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="inputDispLocation" class="setting-input" placeholder="도로명/지번 기본 주소 (우측 '주소 찾기' 클릭)" style="flex: 1;" required>
+              <button type="button" class="btn-save-setting" onclick="openDaumPostcodeForDispatch()" style="padding: 0 14px; background: #e2e8f0; color: #1e293b; font-size: 0.82rem; font-weight: 800; border: 1px solid #cbd5e1; cursor: pointer; white-space: nowrap;">
+                주소 검색
+              </button>
+            </div>
+            <input type="text" id="inputDispLocationDetail" class="setting-input" placeholder="상세 주소 (예: 타워팰리스 B동 1204호, 2층 201호 등)">
+          </div>
         </div>
 
         <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px;">
@@ -3927,26 +3983,21 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <div>
-            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">진행 상태</label>
-            <select id="selectDispStatus" class="setting-input" style="background:#fff; font-weight: 700;">
-              <option value="배정대기">⏳ 배정대기</option>
-              <option value="배정완료">🤝 배정완료</option>
-              <option value="진행중">🏃 현장 진행중 (도착)</option>
-              <option value="서비스완료">✓ 서비스완료 (검수대기)</option>
-              <option value="정산완료">💰 송금 및 정산완료</option>
-            </select>
+        <!-- 진행 상태는 리스트 테이블에서 직접 제어되므로 폼에서는 히든 처리 -->
+        <input type="hidden" id="selectDispStatus" value="배정대기">
+
+        <!-- 코치 카톡 바로 전송 & 복사 배너 -->
+        <div style="background: #fdf8eb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
+          <div style="font-size: 0.82rem; color: #854d0e; font-weight: 750; display: flex; align-items: center; gap: 6px;">
+            <span>💬</span> 코치님께 배정 알림을 카카오톡으로 바로 전송할 수 있습니다.
           </div>
-          <div style="display: flex; align-items: flex-end;">
-            <div style="display: flex; gap: 6px; width: 100%;">
-              <button type="button" class="btn-save-setting" onclick="sendCoachKakaoFromForm()" style="flex: 1; background: #fef01b; color: #181600; border: 1px solid #e5d800; padding: 10px 10px; font-weight: 850; justify-content: center; font-size: 0.84rem;">
-                <span>💬</span> 카톡 바로 전송
-              </button>
-              <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgFromForm()" style="background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; padding: 10px 12px; font-weight: 800; justify-content: center; font-size: 0.84rem;" title="클립보드 텍스트 복사">
-                <span>📋</span> 복사
-              </button>
-            </div>
+          <div style="display: flex; gap: 6px;">
+            <button type="button" class="btn-save-setting" onclick="sendCoachKakaoFromForm()" style="background: #fef01b; color: #181600; border: 1px solid #e5d800; padding: 8px 14px; font-weight: 850; font-size: 0.82rem;">
+              <span>💬</span> 카톡 바로 전송
+            </button>
+            <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgFromForm()" style="background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; padding: 8px 12px; font-weight: 800; font-size: 0.82rem;" title="클립보드 텍스트 복사">
+              <span>📋</span> 복사
+            </button>
           </div>
         </div>
 
@@ -9925,6 +9976,38 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         .replace(/'/g, '&#039;');
     }
 
+    // 📞 연락처(전화번호) 하이픈(-) 자동 완성 유틸 (010, 02, 대표번호 등 스마트 포맷)
+    function formatPhoneNumber(val) {
+      if (!val) return '';
+      const clean = String(val).replace(/[^0-9]/g, '');
+      if (clean.length === 0) return '';
+      
+      // 서울 지역번호 (02)
+      if (clean.startsWith('02')) {
+        if (clean.length <= 2) return clean;
+        if (clean.length <= 5) return clean.replace(/^(\d{2})(\d+)/, '$1-$2');
+        if (clean.length <= 9) return clean.replace(/^(\d{2})(\d{3})(\d+)/, '$1-$2-$3');
+        return clean.slice(0, 10).replace(/^(\d{2})(\d{4})(\d{4})$/, '$1-$2-$3');
+      }
+      
+      // 전국 대표번호 (15xx, 16xx, 18xx 등 8자리)
+      if (/^(15|16|18)\d{2}/.test(clean) && clean.length <= 8) {
+        if (clean.length <= 4) return clean;
+        return clean.replace(/^(\d{4})(\d+)/, '$1-$2');
+      }
+
+      // 일반 휴대폰 (010, 011 등) 및 전국 지역번호 (031, 051 등)
+      if (clean.length <= 3) {
+        return clean;
+      } else if (clean.length <= 6) {
+        return clean.replace(/^(\d{3})(\d+)/, '$1-$2');
+      } else if (clean.length <= 10) {
+        return clean.replace(/^(\d{3})(\d{3})(\d+)/, '$1-$2-$3');
+      } else {
+        return clean.slice(0, 11).replace(/^(\d{3})(\d{4})(\d{4})$/, '$1-$2-$3');
+      }
+    }
+
     // ================= 7. 맞춤 리셋 진단 테마별 칼럼 링크 관리 =================
     const DIAG_COLUMN_LINKS_KEY = 'yebaek_diag_column_links';
     const DEFAULT_DIAG_LINKS = {
@@ -10517,7 +10600,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           if (nameInput) nameInput.value = target.name || '';
           if (cohortInput) cohortInput.value = target.cohort || '1기 수료';
           if (specialtySelect) specialtySelect.value = target.specialty || '💄 웰니스 & 시니어 뷰티';
-          if (phoneInput) phoneInput.value = target.phone || '';
+          if (phoneInput) phoneInput.value = formatPhoneNumber(target.phone || '');
           if (regionInput) regionInput.value = target.region || '';
           if (statusSelect) statusSelect.value = target.status || '활동중';
           if (introInput) introInput.value = target.intro || '';
@@ -10566,7 +10649,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           target.name = name;
           target.cohort = cohortInput ? cohortInput.value.trim() : '1기 수료';
           target.specialty = specialtySelect ? specialtySelect.value : '';
-          target.phone = phoneInput ? phoneInput.value.trim() : '';
+          target.phone = phoneInput ? formatPhoneNumber(phoneInput.value.trim()) : '';
           target.region = regionInput ? regionInput.value.trim() : '';
           target.status = statusSelect ? statusSelect.value : '활동중';
           target.intro = introInput ? introInput.value.trim() : '';
@@ -10577,7 +10660,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           name: name,
           cohort: cohortInput ? cohortInput.value.trim() : '1기 수료',
           specialty: specialtySelect ? specialtySelect.value : '💄 웰니스 & 시니어 뷰티',
-          phone: phoneInput ? phoneInput.value.trim() : '',
+          phone: phoneInput ? formatPhoneNumber(phoneInput.value.trim()) : '',
           region: regionInput ? regionInput.value.trim() : '서울 / 수도권',
           rating: '5.0',
           status: statusSelect ? statusSelect.value : '활동중',
@@ -11227,31 +11310,253 @@ ${coachAppUrl}
       });
     }
 
-    function sendCoachKakaoFromForm() {
-      const name = document.getElementById('inputDispClientName').value || '고객';
-      const phone = document.getElementById('inputDispClientPhone').value || '';
-      const svc = document.getElementById('selectDispServiceType').value || '';
-      const schedule = document.getElementById('inputDispSchedule').value || '';
-      const loc = document.getElementById('inputDispLocation').value || '';
+    // 📅 방문 희망 일시 달력/시간 파싱 및 동기화 유틸
+    function parseScheduleToDateTime(str) {
+      let datePart = '';
+      let timePart = '오전 10:00';
+      if (str) {
+        const dateMatch = str.match(/(\d{4})[.-](\d{1,2})[.-](\d{1,2})/);
+        if (dateMatch) {
+          const y = dateMatch[1];
+          const m = String(dateMatch[2]).padStart(2, '0');
+          const d = String(dateMatch[3]).padStart(2, '0');
+          datePart = `${y}-${m}-${d}`;
+        }
+        const timeMatch = str.match(/(오전|오후)\s*(\d{1,2}:\d{2})/);
+        if (timeMatch) {
+          timePart = `${timeMatch[1]} ${timeMatch[2]}`;
+        } else {
+          const hhmmMatch = str.match(/(\d{1,2}):(\d{2})/);
+          if (hhmmMatch) {
+            let h = parseInt(hhmmMatch[1], 10);
+            const m = hhmmMatch[2];
+            const ampm = h >= 12 ? '오후' : '오전';
+            if (h > 12) h -= 12;
+            timePart = `${ampm} ${String(h).padStart(2, '0')}:${m}`;
+          }
+        }
+      }
+      if (!datePart) {
+        const tom = new Date(Date.now() + 86400000);
+        datePart = `${tom.getFullYear()}-${String(tom.getMonth()+1).padStart(2,'0')}-${String(tom.getDate()).padStart(2,'0')}`;
+      }
+      return { datePart, timePart };
+    }
+
+    function syncScheduleDateTime() {
+      const dateEl = document.getElementById('inputDispDate');
+      const timeEl = document.getElementById('inputDispTime');
+      const schedEl = document.getElementById('inputDispSchedule');
+      if (!dateEl || !schedEl) return;
+      const d = dateEl.value;
+      const t = timeEl ? timeEl.value : '오전 10:00';
+      if (d) {
+        schedEl.value = `${d.replace(/-/g, '.')} ${t}`;
+      } else {
+        schedEl.value = '';
+      }
+    }
+
+    // 🔍 다음/카카오 도로명 주소 검색 팝업
+    function openDaumPostcodeForDispatch() {
+      if (typeof daum === 'undefined' || !daum.Postcode) {
+        const manual = prompt('주소 검색 서비스를 불러올 수 없습니다. 도로명 주소를 직접 입력해주세요:', document.getElementById('inputDispLocation')?.value || '');
+        if (manual !== null) {
+          const loc = document.getElementById('inputDispLocation');
+          if (loc) loc.value = manual.trim();
+        }
+        return;
+      }
+
+      new daum.Postcode({
+        oncomplete: function(data) {
+          let addr = (data.userSelectedType === 'R') ? data.roadAddress : data.jibunAddress;
+          let extraAddr = '';
+          if (data.userSelectedType === 'R') {
+            if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+              extraAddr += data.bname;
+            }
+            if (data.buildingName !== '' && data.apartment === 'Y') {
+              extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+            if (extraAddr !== '') {
+              extraAddr = ' (' + extraAddr + ')';
+            }
+          }
+
+          const fullRoad = addr + extraAddr;
+          const locInput = document.getElementById('inputDispLocation');
+          const detailInput = document.getElementById('inputDispLocationDetail');
+
+          if (locInput) locInput.value = fullRoad;
+          if (detailInput) {
+            detailInput.focus();
+          }
+        }
+      }).open();
+    }
+
+    // 📋 기존 신청고객에서 찾기 (접수 풀 통합 선택)
+    let existingClientCandidates = [];
+
+    function toggleExistingClientSelector() {
+      const panel = document.getElementById('existingClientSelectPanel');
+      const select = document.getElementById('selectExistingClient');
+      if (!panel || !select) return;
+
+      if (panel.style.display === 'none' || !panel.style.display) {
+        existingClientCandidates = [];
+        const seenMap = new Set();
+
+        // 1. 기존 배정 내역
+        const dispatches = getDispatches();
+        dispatches.forEach(d => {
+          if (d.customerName && !seenMap.has(d.customerName + (d.phone || ''))) {
+            seenMap.add(d.customerName + (d.phone || ''));
+            existingClientCandidates.push({
+              source: '배정내역',
+              name: d.customerName,
+              phone: d.phone || '',
+              address: d.address || '',
+              service: d.serviceType || '',
+              notes: d.notes || ''
+            });
+          }
+        });
+
+        // 2. 상담 신청 내역
+        if (typeof getConsultRequests === 'function') {
+          const consults = getConsultRequests();
+          consults.forEach(c => {
+            if (c.name && !seenMap.has(c.name + (c.phone || ''))) {
+              seenMap.add(c.name + (c.phone || ''));
+              existingClientCandidates.push({
+                source: '상담신청',
+                name: c.name,
+                phone: c.phone || '',
+                address: c.address || '',
+                service: c.category || '',
+                notes: c.memo || ''
+              });
+            }
+          });
+        }
+
+        // 3. 진단 예약자
+        if (typeof getDiagReservations === 'function') {
+          const diags = getDiagReservations();
+          diags.forEach(d => {
+            const dName = d.role || d.name || '진단 신청고객';
+            if (!seenMap.has(dName + (d.phone || ''))) {
+              seenMap.add(dName + (d.phone || ''));
+              existingClientCandidates.push({
+                source: '진단예약',
+                name: dName,
+                phone: d.phone || '',
+                address: d.address || '',
+                service: d.category || '',
+                notes: d.note || ''
+              });
+            }
+          });
+        }
+
+        // 4. 나의 서재 신청자
+        if (typeof getArchiveClients === 'function') {
+          const archives = getArchiveClients();
+          archives.forEach(a => {
+            if (a.name && !seenMap.has(a.name + (a.phone || ''))) {
+              seenMap.add(a.name + (a.phone || ''));
+              existingClientCandidates.push({
+                source: '서재신청',
+                name: a.name,
+                phone: a.phone || '',
+                address: a.address || '',
+                service: a.category || '',
+                notes: a.memo || ''
+              });
+            }
+          });
+        }
+
+        select.innerHTML = '<option value="">-- 불러올 신청 고객을 선택하세요 (' + existingClientCandidates.length + '명 등록됨) --</option>' +
+          existingClientCandidates.map((c, idx) => {
+            const addrSummary = c.address ? ` [📍 ${c.address.slice(0, 18)}...]` : '';
+            return `<option value="${idx}">[${c.source}] ${escapeHtml(c.name)} (${escapeHtml(c.phone)})${escapeHtml(addrSummary)}</option>`;
+          }).join('');
+
+        panel.style.display = 'block';
+      } else {
+        panel.style.display = 'none';
+      }
+    }
+
+    function applyExistingClientToForm(idx) {
+      if (idx === '' || idx === null || idx === undefined) return;
+      const item = existingClientCandidates[Number(idx)];
+      if (!item) return;
+
+      const nameInput = document.getElementById('inputDispClientName');
+      const phoneInput = document.getElementById('inputDispClientPhone');
+      const serviceSelect = document.getElementById('selectDispServiceType');
+      const locInput = document.getElementById('inputDispLocation');
+      const locDetailInput = document.getElementById('inputDispLocationDetail');
+      const memoInput = document.getElementById('inputDispMemo');
+
+      if (nameInput) nameInput.value = item.name;
+      if (phoneInput) phoneInput.value = formatPhoneNumber(item.phone);
+      if (item.address && locInput) {
+        locInput.value = item.address;
+        if (locDetailInput) locDetailInput.value = '';
+      }
+      if (item.service && serviceSelect) {
+        for (let opt of serviceSelect.options) {
+          if (opt.value.includes(item.service) || item.service.includes(opt.value.replace(/^[^\s]+ /, ''))) {
+            serviceSelect.value = opt.value;
+            break;
+          }
+        }
+      }
+      if (item.notes && memoInput) {
+        memoInput.value = item.notes;
+      }
+
+      const panel = document.getElementById('existingClientSelectPanel');
+      if (panel) panel.style.display = 'none';
+    }
+
+    // 모달 폼 데이터 추출 유틸 (날짜 동기화 및 상세주소 결합)
+    function getDispatchFormData() {
+      syncScheduleDateTime();
+      const name = document.getElementById('inputDispClientName')?.value.trim() || '고객';
+      const phone = formatPhoneNumber(document.getElementById('inputDispClientPhone')?.value.trim() || '');
+      const svc = document.getElementById('selectDispServiceType')?.value || '';
+      const schedule = document.getElementById('inputDispSchedule')?.value.trim() || '';
+      const baseLoc = document.getElementById('inputDispLocation')?.value.trim() || '';
+      const detailLoc = document.getElementById('inputDispLocationDetail')?.value.trim() || '';
+      const fullLoc = baseLoc && detailLoc ? `${baseLoc} ${detailLoc}` : (baseLoc || detailLoc);
       const coachSelect = document.getElementById('selectDispCoach');
       const coach = coachSelect ? coachSelect.value : '';
-      const fee = Number(document.getElementById('inputDispFee').value) || 150000;
-      const memo = document.getElementById('inputDispMemo').value || '';
+      const fee = Number(document.getElementById('inputDispFee')?.value) || 150000;
+      const memo = document.getElementById('inputDispMemo')?.value.trim() || '';
 
-      const tempD = {
+      return {
         customerName: name,
         phone: phone,
         serviceType: svc,
         preferredDate: schedule,
-        address: loc,
+        address: fullLoc,
         coach: coach,
         fee: fee,
         notes: memo
       };
+    }
 
+    function sendCoachKakaoFromForm() {
+      const tempD = getDispatchFormData();
       const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
-      const cleanCoachName = (coach || '코치').replace(/ 코치$/, '');
-      const feeStr = fee.toLocaleString();
+      const cleanCoachName = (tempD.coach || '코치').replace(/ 코치$/, '');
+      const feeStr = tempD.fee.toLocaleString();
 
       copyCoachKakaoMsgFromForm(true);
 
@@ -11308,27 +11613,7 @@ ${coachAppUrl}
     }
 
     function copyCoachKakaoMsgFromForm(isSilent = false) {
-      const name = document.getElementById('inputDispClientName').value || '고객';
-      const phone = document.getElementById('inputDispClientPhone').value || '';
-      const svc = document.getElementById('selectDispServiceType').value || '';
-      const schedule = document.getElementById('inputDispSchedule').value || '';
-      const loc = document.getElementById('inputDispLocation').value || '';
-      const coachSelect = document.getElementById('selectDispCoach');
-      const coach = coachSelect ? coachSelect.value : '';
-      const fee = Number(document.getElementById('inputDispFee').value) || 150000;
-      const memo = document.getElementById('inputDispMemo').value || '';
-
-      const tempD = {
-        customerName: name,
-        phone: phone,
-        serviceType: svc,
-        preferredDate: schedule,
-        address: loc,
-        coach: coach,
-        fee: fee,
-        notes: memo
-      };
-
+      const tempD = getDispatchFormData();
       const text = generateKakaoMsgText(tempD);
       navigator.clipboard.writeText(text).then(() => {
         if (!isSilent) {
@@ -11360,11 +11645,15 @@ ${coachAppUrl}
       const nameInput = document.getElementById('inputDispClientName');
       const phoneInput = document.getElementById('inputDispClientPhone');
       const serviceSelect = document.getElementById('selectDispServiceType');
-      const scheduleInput = document.getElementById('inputDispSchedule');
+      const dateInput = document.getElementById('inputDispDate');
+      const timeSelect = document.getElementById('inputDispTime');
       const locationInput = document.getElementById('inputDispLocation');
+      const locationDetailInput = document.getElementById('inputDispLocationDetail');
       const feeInput = document.getElementById('inputDispFee');
-      const statusSelect = document.getElementById('selectDispStatus');
+      const statusInput = document.getElementById('selectDispStatus');
       const memoInput = document.getElementById('inputDispMemo');
+      const clientPanel = document.getElementById('existingClientSelectPanel');
+      if (clientPanel) clientPanel.style.display = 'none';
 
       if (dispId) {
         const dispatches = getDispatches();
@@ -11373,25 +11662,37 @@ ${coachAppUrl}
           if (titleEl) titleEl.textContent = `🤝 [${target.customerName}] 서비스 배정 수정`;
           if (idInput) idInput.value = target.id;
           if (nameInput) nameInput.value = target.customerName || '';
-          if (phoneInput) phoneInput.value = target.phone || '';
+          if (phoneInput) phoneInput.value = formatPhoneNumber(target.phone || '');
           if (serviceSelect) serviceSelect.value = target.serviceType || '💄 화려한 외출 (시니어 메이크업)';
-          if (scheduleInput) scheduleInput.value = target.preferredDate || '';
+          
+          const parsed = parseScheduleToDateTime(target.preferredDate || '');
+          if (dateInput) dateInput.value = parsed.datePart;
+          if (timeSelect) {
+            timeSelect.value = parsed.timePart;
+            if (!timeSelect.value) timeSelect.value = '오전 10:00';
+          }
+          syncScheduleDateTime();
+
           if (locationInput) locationInput.value = target.address || '';
+          if (locationDetailInput) locationDetailInput.value = '';
           if (coachSelect) coachSelect.value = target.coach || '';
           if (feeInput) feeInput.value = target.fee || 150000;
-          if (statusSelect) statusSelect.value = target.step || '배정대기';
+          if (statusInput) statusInput.value = target.step || '배정대기';
           if (memoInput) memoInput.value = target.notes || '';
         }
       } else {
         if (titleEl) titleEl.textContent = '🤝 신규 서비스 고객 코치 배정 등록';
         form.reset();
         if (idInput) idInput.value = '';
-        if (scheduleInput) {
-          const tom = new Date(Date.now() + 86400000);
-          scheduleInput.value = `${tom.getFullYear()}.${String(tom.getMonth()+1).padStart(2,'0')}.${String(tom.getDate()).padStart(2,'0')} 오전 10:00`;
-        }
+        
+        const parsed = parseScheduleToDateTime('');
+        if (dateInput) dateInput.value = parsed.datePart;
+        if (timeSelect) timeSelect.value = '오전 10:00';
+        syncScheduleDateTime();
+
+        if (locationDetailInput) locationDetailInput.value = '';
         if (feeInput) feeInput.value = 150000;
-        if (statusSelect) statusSelect.value = '배정대기';
+        if (statusInput) statusInput.value = '배정대기';
       }
 
       modal.classList.add('open');
@@ -11412,16 +11713,26 @@ ${coachAppUrl}
       const nameInput = document.getElementById('inputDispClientName');
       const phoneInput = document.getElementById('inputDispClientPhone');
       const serviceSelect = document.getElementById('selectDispServiceType');
-      const scheduleInput = document.getElementById('inputDispSchedule');
       const locationInput = document.getElementById('inputDispLocation');
+      const locationDetailInput = document.getElementById('inputDispLocationDetail');
       const coachSelect = document.getElementById('selectDispCoach');
       const feeInput = document.getElementById('inputDispFee');
-      const statusSelect = document.getElementById('selectDispStatus');
+      const statusInput = document.getElementById('selectDispStatus');
       const memoInput = document.getElementById('inputDispMemo');
 
       const customerName = nameInput ? nameInput.value.trim() : '';
       if (!customerName) { alert('고객 성함을 입력해주세요.'); return; }
 
+      syncScheduleDateTime();
+      const schedule = document.getElementById('inputDispSchedule')?.value.trim() || '';
+      if (!schedule) { alert('방문 희망 일자를 선택해주세요.'); return; }
+
+      const baseLoc = locationInput ? locationInput.value.trim() : '';
+      const detailLoc = locationDetailInput ? locationDetailInput.value.trim() : '';
+      const fullAddress = baseLoc && detailLoc ? `${baseLoc} ${detailLoc}` : (baseLoc || detailLoc);
+      if (!fullAddress) { alert('방문 장소(주소)를 입력하거나 주소 찾기를 진행해주세요.'); return; }
+
+      const formattedPhone = phoneInput ? formatPhoneNumber(phoneInput.value.trim()) : '';
       const coachName = coachSelect ? coachSelect.value : '';
       const list = getDispatches();
       const existingId = idInput ? idInput.value : '';
@@ -11430,27 +11741,27 @@ ${coachAppUrl}
         const target = list.find(d => d.id === existingId);
         if (target) {
           target.customerName = customerName;
-          target.phone = phoneInput ? phoneInput.value.trim() : '';
+          target.phone = formattedPhone;
           target.serviceType = serviceSelect ? serviceSelect.value : '';
-          target.preferredDate = scheduleInput ? scheduleInput.value.trim() : '';
-          target.address = locationInput ? locationInput.value.trim() : '';
+          target.preferredDate = schedule;
+          target.address = fullAddress;
           target.coach = coachName;
           target.fee = feeInput ? Number(feeInput.value) || 150000 : 150000;
-          target.step = statusSelect ? statusSelect.value : (coachName ? '배정완료' : '배정대기');
+          target.step = statusInput && statusInput.value ? statusInput.value : (coachName ? '배정완료' : '배정대기');
           target.notes = memoInput ? memoInput.value.trim() : '';
         }
       } else {
         const newDisp = {
           id: 'disp_' + Date.now(),
           customerName: customerName,
-          phone: phoneInput ? phoneInput.value.trim() : '',
+          phone: formattedPhone,
           serviceType: serviceSelect ? serviceSelect.value : '💄 화려한 외출 (시니어 메이크업)',
-          preferredDate: scheduleInput ? scheduleInput.value.trim() : '',
-          address: locationInput ? locationInput.value.trim() : '',
+          preferredDate: schedule,
+          address: fullAddress,
           coach: coachName,
           coachPhone: '',
           fee: feeInput ? Number(feeInput.value) || 150000 : 150000,
-          step: statusSelect ? statusSelect.value : (coachName ? '배정완료' : '배정대기'),
+          step: statusInput && statusInput.value ? statusInput.value : (coachName ? '배정완료' : '배정대기'),
           notes: memoInput ? memoInput.value.trim() : '',
           arrivalStamp: '',
           completionDate: '',
@@ -11464,7 +11775,7 @@ ${coachAppUrl}
 
       saveDispatches(list);
       closeDispatchModal();
-      alert(`서비스 코치 배정 정보가 성공적으로 저장되었습니다.\n배정 테이블에서 [💬 카톡복사]를 눌러 코치님께 안내문을 바로 전송하실 수 있습니다.`);
+      alert(`서비스 코치 배정 정보가 성공적으로 저장되었습니다.\n배정 테이블에서 [💬 카톡전송/복사]를 눌러 코치님께 안내문을 바로 전송하실 수 있습니다.`);
     }
 
     function deleteDispatch(dispId) {
