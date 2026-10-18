@@ -1147,26 +1147,6 @@
           <input type="tel" id="loginPhone" class="form-input" placeholder="010-0000-0000" oninput="this.value = formatPhoneInput(this.value)" maxlength="13" required>
         </div>
 
-        <!-- 🔒 성함 + 전화번호 일치 안내 및 빠른 테스트 지원 -->
-        <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:12px; padding:12px 14px; margin-bottom:14px; font-size:0.8rem; color:#475569;">
-          <div style="font-weight:850; color:#0f172a; margin-bottom:4px; display:flex; align-items:center; gap:5px;">
-            <span style="color:#d97706;">🔒</span> 코치 인증 보안 시스템
-          </div>
-          <div style="line-height:1.45;">본사에 등록된 <strong>코치 성함</strong>과 <strong>전화번호</strong>가 정확히 일치해야 배정 카드가 열립니다.</div>
-          <div style="margin-top:8px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
-            <span style="font-size:0.72rem; color:#64748b; font-weight:700;">빠른 입력:</span>
-            <button type="button" onclick="quickFillCoach('김민희', '010-1111-2222')" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.75rem; font-weight:750; color:#1e293b; cursor:pointer;" title="김민희 코치로 빠른 로그인">
-              김민희 (010-1111-2222)
-            </button>
-            <button type="button" onclick="quickFillCoach('정우성', '010-5512-8871')" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.75rem; font-weight:750; color:#1e293b; cursor:pointer;" title="정우성 코치로 빠른 로그인">
-              정우성 (010-5512-8871)
-            </button>
-            <button type="button" onclick="quickFillCoach('이선영', '010-3333-4444')" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:6px; padding:4px 8px; font-size:0.75rem; font-weight:750; color:#1e293b; cursor:pointer;" title="이선영 코치로 빠른 로그인">
-              이선영 (010-3333-4444)
-            </button>
-          </div>
-        </div>
-
         <button type="submit" class="btn-login-submit">
           <span>🚀 오늘 배정된 임무 확인하기</span>
         </button>
