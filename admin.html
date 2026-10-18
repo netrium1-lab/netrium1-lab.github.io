@@ -3969,35 +3969,21 @@
           </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px;">
-          <div>
-            <label style="font-size: 0.84rem; font-weight: 800; color: var(--accent); display: block; margin-bottom: 5px;">⭐ 담당 배정 코치</label>
-            <select id="selectDispCoach" class="coach-select-sm" style="width: 100%; padding: 10px; font-size: 0.9rem;">
-              <option value="">⚠️ 미배정 (코치를 선택하세요)</option>
-              <!-- JS로 공인 코치 옵션 동적 렌더링 -->
-            </select>
-          </div>
-          <div>
-            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">코치 활동비 (수수료) *</label>
-            <input type="number" id="inputDispFee" class="setting-input" placeholder="150000" value="150000" step="10000" required>
-          </div>
+        <div>
+          <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">코치 활동비 (수수료) *</label>
+          <input type="number" id="inputDispFee" class="setting-input" placeholder="150000" value="150000" step="10000" required>
         </div>
 
-        <!-- 진행 상태는 리스트 테이블에서 직접 제어되므로 폼에서는 히든 처리 -->
+        <!-- 코치는 기본 미배정(배정대기)으로 저장된 후, 리스트 테이블에서 코치 배정 및 카톡 전송 진행 -->
+        <input type="hidden" id="selectDispCoach" value="">
         <input type="hidden" id="selectDispStatus" value="배정대기">
 
-        <!-- 코치 카톡 바로 전송 & 복사 배너 -->
-        <div style="background: #fdf8eb; border: 1.5px solid #fde68a; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;">
-          <div style="font-size: 0.82rem; color: #854d0e; font-weight: 750; display: flex; align-items: center; gap: 6px;">
-            <span>💬</span> 코치님께 배정 알림을 카카오톡으로 바로 전송할 수 있습니다.
-          </div>
-          <div style="display: flex; gap: 6px;">
-            <button type="button" class="btn-save-setting" onclick="sendCoachKakaoFromForm()" style="background: #fef01b; color: #181600; border: 1px solid #e5d800; padding: 8px 14px; font-weight: 850; font-size: 0.82rem;">
-              <span>💬</span> 카톡 바로 전송
-            </button>
-            <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgFromForm()" style="background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; padding: 8px 12px; font-weight: 800; font-size: 0.82rem;" title="클립보드 텍스트 복사">
-              <span>📋</span> 복사
-            </button>
+        <!-- 업무 프로세스 안내 배너 -->
+        <div style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.2rem;">💡</span>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.45;">
+            <strong style="color: var(--accent);">업무 진행 안내:</strong> 배정 정보를 저장하시면 리스트에 <strong>[⚠️ 미배정]</strong> 상태로 신규 등록됩니다.<br>
+            등록 후 아래 리스트 테이블의 <strong>[담당 배정 코치]</strong>에서 코치를 선택하시면 <strong>[🤝 배정완료]</strong>로 자동 전환되며, 바로 <strong>[💬 카톡 전송]</strong>을 눌러 알림을 보내실 수 있습니다.
           </div>
         </div>
 
@@ -10446,7 +10432,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         name: '김민희',
         cohort: '1기 수료 (수석)',
         specialty: '💄 웰니스 & 시니어 뷰티',
-        phone: '010-3841-9210',
+        phone: '010-1111-2222',
         region: '서울 강남 / 서초 / 송파',
         rating: '4.95',
         status: '활동중',
@@ -10468,7 +10454,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         name: '이선영',
         cohort: '1기 수료',
         specialty: '✍️ 디지털 자서전 구술 코칭',
-        phone: '010-8271-6453',
+        phone: '010-3333-4444',
         region: '서울 전지역 / 경기 북부',
         rating: '4.9',
         status: '활동중',
@@ -10770,7 +10756,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         preferredDate: "2026.09.30 오후 03:00",
         address: "서울 서초구 양재동 카페 채원",
         coach: "정우성 코치",
-        coachPhone: "010-7777-8888",
+        coachPhone: "010-5512-8871",
         step: "배정완료",
         fee: 200000,
         notes: "가까운 지인 10분 모시고 진행하는 따뜻한 생전 감사 파티 기획",
@@ -10887,15 +10873,28 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         }).join('');
 
         // 사진 존재 여부 및 썸네일
-        const hasPhotos = !!(d.beforePhoto || d.processPhoto || d.afterPhoto);
+        const bPhotos = Array.isArray(d.beforePhotos) ? d.beforePhotos : (d.beforePhoto ? [d.beforePhoto] : []);
+        const pPhotos = Array.isArray(d.processPhotos) ? d.processPhotos : (d.processPhoto ? [d.processPhoto] : []);
+        const aPhotos = Array.isArray(d.afterPhotos) ? d.afterPhotos : (d.afterPhoto ? [d.afterPhoto] : []);
+        const totalPhotoCount = bPhotos.length + pPhotos.length + aPhotos.length;
+        const thumbSrc = aPhotos[0] || pPhotos[0] || bPhotos[0] || '';
+
         let photoThumbHtml = '';
-        if (hasPhotos) {
-          const thumbSrc = d.afterPhoto || d.processPhoto || d.beforePhoto;
+        if (d.step === '서비스완료' || d.step === '정산완료') {
           photoThumbHtml = `
-            <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-              <img src="${thumbSrc}" style="width:36px; height:36px; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1; cursor:pointer;" onclick="openDispatchReportModal('${d.id}')" title="클릭하여 현장 사진 크게 검수">
-              <button class="btn-action-sm" onclick="openDispatchReportModal('${d.id}')" style="background:var(--accent); color:#fff; border:none; padding:4px 8px; font-weight:800; font-size:0.75rem;">
-                검수
+            <div style="display:flex; flex-direction:column; align-items:center; gap:5px;">
+              ${thumbSrc ? `<img src="${thumbSrc}" style="width:42px; height:42px; object-fit:cover; border-radius:8px; border:2px solid #059669; cursor:pointer;" onclick="openDispatchReportModal('${d.id}')" title="클릭하여 현장 사진 및 완료카드 열기">` : ''}
+              <button class="btn-action-sm" onclick="openDispatchReportModal('${d.id}')" style="background:linear-gradient(135deg, #059669 0%, #047857 100%); color:#ffffff; border:none; padding:6px 10px; font-weight:850; font-size:0.78rem; border-radius:6px; box-shadow:0 2px 8px rgba(5,150,105,0.3); white-space:nowrap; cursor:pointer;" title="코치가 등록한 3종 사진 및 소감 검수 후 송금 진행">
+                📸 완료카드 보기
+              </button>
+            </div>
+          `;
+        } else if (d.step === '진행중') {
+          photoThumbHtml = `
+            <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+              ${thumbSrc ? `<img src="${thumbSrc}" style="width:36px; height:36px; object-fit:cover; border-radius:6px; border:1px solid #0284c7; cursor:pointer;" onclick="openDispatchReportModal('${d.id}')" title="진행 현황 보기">` : ''}
+              <button class="btn-action-sm" onclick="openDispatchReportModal('${d.id}')" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; padding:4px 8px; font-size:0.75rem; font-weight:800;">
+                🏃 진행 현황
               </button>
             </div>
           `;
@@ -10913,7 +10912,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           stampHtml = `
             <div style="font-size:0.78rem; line-height:1.35; text-align:center;">
               ${d.arrivalStamp ? `<div style="color:#0284c7; font-weight:800;">📍 ${escapeHtml(d.arrivalStamp)}</div>` : ''}
-              ${d.completionDate ? `<div style="color:#059669; font-weight:800;">🏁 ${escapeHtml(d.completionDate)}</div>` : ''}
+              ${d.completionDate ? `<div style="color:#059669; font-weight:850; background:#ecfdf5; padding:2px 6px; border-radius:4px; margin-top:2px;">🏁 ${escapeHtml(d.completionDate)}</div>` : ''}
             </div>
           `;
         } else {
@@ -10938,21 +10937,21 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               <div style="color:var(--text-muted); font-size:0.8rem; margin-top:2px;">${escapeHtml(d.address || '-')}</div>
             </td>
             <td>
-              <select class="coach-select-sm" onchange="assignCoachToDispatchName('${d.id}', this.value)" style="width: 100%; margin-bottom:4px;">
+              <select class="coach-select-sm" onchange="assignCoachToDispatchName('${d.id}', this.value)" style="width: 100%; margin-bottom:4px; font-weight:800;">
                 <option value="">⚠️ 미배정 (코치 선택)</option>
                 ${coachOptions}
               </select>
               <div style="font-size:0.78rem; font-weight:850; color:#d97706; text-align:right;">
-                수수료: ${(d.fee || 150000).toLocaleString()}원
+                활동비: ${(d.fee || 150000).toLocaleString()}원
               </div>
             </td>
             <td style="text-align:center;">
               <select class="status-select-sm" onchange="updateDispatchStep('${d.id}', this.value)" style="background:#fff; font-weight:800;">
                 <option value="배정대기" ${d.step === '배정대기' ? 'selected' : ''}>⏳ 배정대기</option>
                 <option value="배정완료" ${d.step === '배정완료' ? 'selected' : ''}>🤝 배정완료</option>
-                <option value="진행중" ${d.step === '진행중' ? 'selected' : ''}>🏃 진행중</option>
+                <option value="진행중" ${d.step === '진행중' ? 'selected' : ''}>🏃 도착 진행중</option>
                 <option value="서비스완료" ${d.step === '서비스완료' ? 'selected' : ''}>✓ 서비스완료</option>
-                <option value="정산완료" ${d.step === '정산완료' ? 'selected' : ''}>💰 정산완료</option>
+                <option value="정산완료" ${d.step === '정산완료' ? 'selected' : ''}>💰 송금완료</option>
               </select>
             </td>
             <td>
@@ -10985,7 +10984,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }).join('');
     }
 
-    // 담당 코치 즉시 배정/변경 핸들러
+    // 담당 코치 즉시 배정/변경 핸들러 (코치 성함 + 연락처 연동)
     function assignCoachToDispatchName(dispId, coachFullName) {
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
@@ -10994,17 +10993,26 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (!coachFullName) {
         target.coach = '';
         target.coachId = '';
+        target.coachPhone = '';
         target.step = '배정대기';
         saveDispatches(dispatches);
         return;
       }
 
+      const coaches = getCoaches();
+      const cleanName = coachFullName.replace(/\s+|코치$/g, '');
+      const matched = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanName);
+
       target.coach = coachFullName;
+      if (matched) {
+        target.coachId = matched.id;
+        target.coachPhone = matched.phone;
+      }
       if (target.step === '배정대기') {
         target.step = '배정완료';
       }
       saveDispatches(dispatches);
-      alert(`[${target.customerName}] 고객 건에 [${coachFullName}]가 성공적으로 배정되었습니다.\n\n우측 [💬 카톡 전송]을 눌러 코치님께 카카오톡 배정 메시지를 바로 전송해 주세요.`);
+      alert(`[${target.customerName}] 고객 건에 [${coachFullName}]가 성공적으로 배정되었습니다.\n(코치 연락처: ${target.coachPhone || '등록됨'})\n\n우측 [💬 카톡 전송]을 눌러 코치님께 카카오톡 배정 메시지를 바로 전송해 주세요.`);
     }
 
     function updateDispatchStep(dispId, step) {
@@ -11038,11 +11046,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
       activeReportMissionId = dispId;
 
-      document.getElementById('reportModalTitle').textContent = `📸 [${target.customerName}] 현장 작업진행 카드`;
+      document.getElementById('reportModalTitle').textContent = `📸 [${target.customerName}] 현장 작업 완료 카드 (검수 및 송금 센터)`;
       const custInfoEl = document.getElementById('reportCustomerInfo');
       if (custInfoEl) custInfoEl.textContent = `${target.customerName} (${target.phone || '연락처 없음'})`;
 
-      document.getElementById('reportCoachName').textContent = target.coach || '미배정';
+      const coachPhoneStr = target.coachPhone ? ` (${target.coachPhone})` : '';
+      document.getElementById('reportCoachName').textContent = (target.coach || '미배정') + coachPhoneStr;
       document.getElementById('reportServiceType').textContent = target.serviceType || '일반 서비스';
       document.getElementById('reportArrivalStamp').textContent = target.arrivalStamp || '미도착 (현장 대기)';
       document.getElementById('reportCompletionDate').textContent = target.completionDate || '미완료';
@@ -11193,9 +11202,58 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       sendCoachKakaoDirect(activeReportMissionId);
     }
 
+    // 🔗 코치 앱(coach.html) 배정 데이터 탑재 URL 생성 유틸 (어느 기기/브라우저에서든 100% 동기화)
+    function buildCoachAppUrl(targetDispatch) {
+      let baseUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      if (!window.location.origin || window.location.origin === 'null' || window.location.protocol === 'file:') {
+        baseUrl = 'coach.html';
+      }
+
+      if (!targetDispatch) return baseUrl;
+
+      // 코치 전화번호가 누락되어 있다면 코치 명단에서 찾아 보강
+      let coachPhone = targetDispatch.coachPhone || '';
+      if (!coachPhone && targetDispatch.coach) {
+        const cleanCoachName = targetDispatch.coach.replace(/\s+|코치$/g, '');
+        const coaches = getCoaches();
+        const matched = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanCoachName);
+        if (matched) {
+          coachPhone = matched.phone;
+          targetDispatch.coachPhone = matched.phone;
+        }
+      }
+
+      const payload = {
+        id: targetDispatch.id || ('disp_' + Date.now()),
+        customerName: targetDispatch.customerName || '고객',
+        phone: targetDispatch.phone || '',
+        serviceType: targetDispatch.serviceType || '현장 케어 서비스',
+        preferredDate: targetDispatch.preferredDate || '',
+        address: targetDispatch.address || '',
+        coach: targetDispatch.coach || '',
+        coachPhone: coachPhone || '',
+        coachId: targetDispatch.coachId || '',
+        fee: Number(targetDispatch.fee) || 150000,
+        step: targetDispatch.step || '배정완료',
+        notes: targetDispatch.notes || '',
+        arrivalStamp: targetDispatch.arrivalStamp || '',
+        completionDate: targetDispatch.completionDate || ''
+      };
+
+      try {
+        const jsonStr = JSON.stringify(payload);
+        // UTF-8 호환 Base64
+        const b64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
+        return `${baseUrl}?m=${encodeURIComponent(b64)}`;
+      } catch (err) {
+        console.warn('URL 생성 실패, 기본 URL 사용:', err);
+        return baseUrl;
+      }
+    }
+
     // 카카오톡 코치 알림 메시지 복사 유틸
     function generateKakaoMsgText(d) {
-      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const coachAppUrl = buildCoachAppUrl(d);
       const cleanCoachName = (d.coach || '코치').replace(/ 코치$/, '');
 
       return `[여백과 결] 현장 코칭 배정 안내
@@ -11210,7 +11268,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 ■ 코치 활동비: ${(d.fee || 150000).toLocaleString()}원
 ■ 특이사항: ${d.notes || '특이사항 없음'}
 
-아래 코치 전용 현장 파트너 앱 링크를 열어 본인확인 후 도착 확인 및 임무를 수행해 주세요.
+아래 코치 전용 현장 파트너 링크를 열어 본인확인(성함+전화번호) 후 도착 확인 및 임무를 수행해 주세요.
 ▶ 코치 앱 바로가기:
 ${coachAppUrl}
 
@@ -11223,7 +11281,7 @@ ${coachAppUrl}
       const target = dispatches.find(d => d.id === dispId);
       if (!target) return;
 
-      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const coachAppUrl = buildCoachAppUrl(target);
       const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
 
@@ -11554,7 +11612,7 @@ ${coachAppUrl}
 
     function sendCoachKakaoFromForm() {
       const tempD = getDispatchFormData();
-      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const coachAppUrl = buildCoachAppUrl(tempD);
       const cleanCoachName = (tempD.coach || '코치').replace(/ 코치$/, '');
       const feeStr = tempD.fee.toLocaleString();
 
@@ -11681,7 +11739,7 @@ ${coachAppUrl}
           if (memoInput) memoInput.value = target.notes || '';
         }
       } else {
-        if (titleEl) titleEl.textContent = '🤝 신규 서비스 고객 코치 배정 등록';
+        if (titleEl) titleEl.textContent = '🤝 신규 서비스 신청 등록 (미배정 접수)';
         form.reset();
         if (idInput) idInput.value = '';
         
@@ -11693,6 +11751,7 @@ ${coachAppUrl}
         if (locationDetailInput) locationDetailInput.value = '';
         if (feeInput) feeInput.value = 150000;
         if (statusInput) statusInput.value = '배정대기';
+        if (coachSelect) coachSelect.value = '';
       }
 
       modal.classList.add('open');
@@ -11737,6 +11796,19 @@ ${coachAppUrl}
       const list = getDispatches();
       const existingId = idInput ? idInput.value : '';
 
+      // 코치 선택 시 코치 연락처 및 ID 자동 동기화
+      let coachPhone = '';
+      let coachId = '';
+      if (coachName) {
+        const coaches = getCoaches();
+        const cleanCName = coachName.replace(/\s+|코치$/g, '');
+        const matchedC = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanCName);
+        if (matchedC) {
+          coachId = matchedC.id;
+          coachPhone = matchedC.phone;
+        }
+      }
+
       if (existingId) {
         const target = list.find(d => d.id === existingId);
         if (target) {
@@ -11746,6 +11818,8 @@ ${coachAppUrl}
           target.preferredDate = schedule;
           target.address = fullAddress;
           target.coach = coachName;
+          target.coachPhone = coachPhone || target.coachPhone || '';
+          target.coachId = coachId || target.coachId || '';
           target.fee = feeInput ? Number(feeInput.value) || 150000 : 150000;
           target.step = statusInput && statusInput.value ? statusInput.value : (coachName ? '배정완료' : '배정대기');
           target.notes = memoInput ? memoInput.value.trim() : '';
@@ -11758,13 +11832,17 @@ ${coachAppUrl}
           serviceType: serviceSelect ? serviceSelect.value : '💄 화려한 외출 (시니어 메이크업)',
           preferredDate: schedule,
           address: fullAddress,
-          coach: coachName,
-          coachPhone: '',
+          coach: coachName || '',
+          coachPhone: coachPhone || '',
+          coachId: coachId || '',
           fee: feeInput ? Number(feeInput.value) || 150000 : 150000,
-          step: statusInput && statusInput.value ? statusInput.value : (coachName ? '배정완료' : '배정대기'),
+          step: coachName ? '배정완료' : '배정대기',
           notes: memoInput ? memoInput.value.trim() : '',
           arrivalStamp: '',
           completionDate: '',
+          beforePhotos: [],
+          processPhotos: [],
+          afterPhotos: [],
           beforePhoto: '',
           processPhoto: '',
           afterPhoto: '',
@@ -11775,7 +11853,7 @@ ${coachAppUrl}
 
       saveDispatches(list);
       closeDispatchModal();
-      alert(`서비스 코치 배정 정보가 성공적으로 저장되었습니다.\n배정 테이블에서 [💬 카톡전송/복사]를 눌러 코치님께 안내문을 바로 전송하실 수 있습니다.`);
+      alert(`✅ 신규 서비스 신청 정보가 성공적으로 저장되었습니다.\n\n리스트에 [⚠️ 미배정]으로 올라왔습니다. 리스트 테이블에서 적합한 전담 코치를 선택하여 [🤝 배정완료]로 변경하시고, [💬 카톡 전송]을 눌러 코치님께 알림을 전송해 주세요.`);
     }
 
     function deleteDispatch(dispId) {
@@ -12613,7 +12691,7 @@ ${coachAppUrl}
 
       const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
-      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const coachAppUrl = buildCoachAppUrl(target);
 
       copySettlementKakaoMsg(dispId, true);
 
@@ -12733,6 +12811,20 @@ ${coachAppUrl}
     window.addEventListener('DOMContentLoaded', () => {
       initAdminKakaoSDK();
       checkAuth();
+    });
+
+    // 🌟 코치 파트너 앱(coach.html)과의 실시간 양방향 동기화 수신
+    window.addEventListener('storage', (e) => {
+      if (e.key === DISPATCH_STORAGE_KEY) {
+        renderDispatchesTable(currentDispatchFilter || 'all');
+        updateAcademyStats();
+        if (typeof renderCoachControlCenter === 'function') {
+          renderCoachControlCenter();
+        }
+        if (activeReportMissionId) {
+          openDispatchReportModal(activeReportMissionId);
+        }
+      }
     });
   </script>
 </body>
