@@ -3939,9 +3939,14 @@
             </select>
           </div>
           <div style="display: flex; align-items: flex-end;">
-            <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgFromForm()" style="width:100%; background: #fef01b; color: #181600; border: 1px solid #e5d800; padding: 10px 14px; font-weight: 850; justify-content: center;">
-              <span>💬</span> 코치 카톡 알림문 복사
-            </button>
+            <div style="display: flex; gap: 6px; width: 100%;">
+              <button type="button" class="btn-save-setting" onclick="sendCoachKakaoFromForm()" style="flex: 1; background: #fef01b; color: #181600; border: 1px solid #e5d800; padding: 10px 10px; font-weight: 850; justify-content: center; font-size: 0.84rem;">
+                <span>💬</span> 카톡 바로 전송
+              </button>
+              <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgFromForm()" style="background: #ffffff; color: #334155; border: 1.5px solid #cbd5e1; padding: 10px 12px; font-weight: 800; justify-content: center; font-size: 0.84rem;" title="클립보드 텍스트 복사">
+                <span>📋</span> 복사
+              </button>
+            </div>
           </div>
         </div>
 
@@ -4069,11 +4074,11 @@
       <!-- 하단 액션 버튼 바 -->
       <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; border-top: 1px solid var(--border-color); padding-top: 16px;">
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-          <button type="button" class="btn-save-setting" onclick="copySettlementKakaoMsgCurrentMission()" style="background: #fef01b; color: #181600; border: 1px solid #e5d800; font-weight: 850; padding: 8px 14px;">
-            <span>💬</span> 입금완료 카톡 복사
+          <button type="button" class="btn-save-setting" onclick="sendSettlementKakaoCurrentMission()" style="background: #fef01b; color: #181600; border: 1px solid #e5d800; font-weight: 850; padding: 8px 14px;" title="카카오톡으로 코치님께 활동비 입금완료 안내 바로 전송">
+            <span>💬</span> 입금완료 카톡 전송
           </button>
-          <button type="button" class="btn-save-setting" onclick="copyCoachKakaoMsgCurrentMission()" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; font-weight: 800; padding: 8px 14px;">
-            <span>📲</span> 배정 카톡 복사
+          <button type="button" class="btn-save-setting" onclick="sendCoachKakaoCurrentMission()" style="background: #f1f5f9; color: #334155; border: 1.5px solid #cbd5e1; font-weight: 800; padding: 8px 14px;" title="카카오톡으로 코치님께 배정 알림 바로 전송">
+            <span>📲</span> 배정 카톡 전송
           </button>
           <button type="button" class="btn-save-setting" id="btnRevertSettlement" onclick="revertCoachSettlementFromModal()" style="display:none; background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3; font-weight: 800; padding: 8px 12px;">
             <span>↩️</span> 정산 되돌리기
@@ -10882,12 +10887,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             </td>
             <td style="text-align:center;">
               <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
-                <button class="btn-action-sm" onclick="copyCoachKakaoMsg('${d.id}')" style="background:#fef01b; color:#181600; border-color:#e5d800; font-size:0.75rem; padding:3px 6px;" title="코치에게 보낼 카톡 배정 안내문 복사">
-                  💬 카톡복사
+                <button class="btn-action-sm" onclick="sendCoachKakaoDirect('${d.id}')" style="background:#fef01b; color:#181600; border-color:#e5d800; font-size:0.76rem; font-weight:850; padding:4px 8px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.08); white-space:nowrap; display:inline-flex; align-items:center; gap:4px;" title="카카오톡으로 코치님께 배정 알림 바로 전송 (클립보드도 자동 복사)">
+                  <span>💬</span> 카톡 전송
                 </button>
-                <div style="display:flex; gap:4px;">
-                  <button class="btn-action-sm edit" onclick="openDispatchModal('${d.id}')" title="수정">수정</button>
-                  <button class="btn-action-sm del" onclick="deleteDispatch('${d.id}')" title="삭제">삭제</button>
+                <div style="display:flex; gap:3px;">
+                  <button class="btn-action-sm" onclick="copyCoachKakaoMsg('${d.id}')" style="font-size:0.72rem; padding:2px 5px; background:#fff; color:#475569;" title="카톡 안내문 전문만 클립보드에 복사">복사</button>
+                  <button class="btn-action-sm edit" onclick="openDispatchModal('${d.id}')" title="수정" style="font-size:0.72rem; padding:2px 5px;">수정</button>
+                  <button class="btn-action-sm del" onclick="deleteDispatch('${d.id}')" title="삭제" style="font-size:0.72rem; padding:2px 5px;">삭제</button>
                 </div>
               </div>
             </td>
@@ -10915,7 +10921,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         target.step = '배정완료';
       }
       saveDispatches(dispatches);
-      alert(`[${target.customerName}] 고객 건에 [${coachFullName}]가 성공적으로 배정되었습니다.\n\n우측 [💬 카톡복사]를 눌러 코치님께 카카오톡 배정 메시지를 전달해 주세요.`);
+      alert(`[${target.customerName}] 고객 건에 [${coachFullName}]가 성공적으로 배정되었습니다.\n\n우측 [💬 카톡 전송]을 눌러 코치님께 카카오톡 배정 메시지를 바로 전송해 주세요.`);
     }
 
     function updateDispatchStep(dispId, step) {
@@ -11089,9 +11095,19 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       copySettlementKakaoMsg(activeReportMissionId);
     }
 
+    function sendSettlementKakaoCurrentMission() {
+      if (!activeReportMissionId) return;
+      sendSettlementKakaoDirect(activeReportMissionId);
+    }
+
     function copyCoachKakaoMsgCurrentMission() {
       if (!activeReportMissionId) return;
       copyCoachKakaoMsg(activeReportMissionId);
+    }
+
+    function sendCoachKakaoCurrentMission() {
+      if (!activeReportMissionId) return;
+      sendCoachKakaoDirect(activeReportMissionId);
     }
 
     // 카카오톡 코치 알림 메시지 복사 유틸
@@ -11118,26 +11134,180 @@ ${coachAppUrl}
 ※ 현장 도착 시 앱의 [📍 현장 도착 확인] 버튼을 누르고, 작업 전/과정/완료 사진을 등록해 주시면 본사 검수 후 지정일에 활동비가 송금됩니다.`;
     }
 
-    function copyCoachKakaoMsg(dispId) {
+    // 🌟 카카오톡 코치 배정 알림 바로 전송 (카카오 공식 SDK 연동 + 클립보드 자동 복사 2중 처리)
+    function sendCoachKakaoDirect(dispId) {
+      const dispatches = getDispatches();
+      const target = dispatches.find(d => d.id === dispId);
+      if (!target) return;
+
+      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
+      const feeStr = (Number(target.fee) || 150000).toLocaleString();
+
+      // 1. 전문 텍스트 클립보드에 우선 자동 복사 (안전망)
+      copyCoachKakaoMsg(dispId, true);
+
+      // 2. 카카오톡 SDK 공식 공유 팝업 (친구/대화방 선택창 바로 열림)
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initAdminKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
+            let summaryText = `[여백과 결] 🏅 ${cleanCoachName} 코치님 현장 배정 안내\n\n`
+              + `■ 고객명: ${target.customerName}\n`
+              + `■ 서비스: ${target.serviceType}\n`
+              + `■ 방문일시: ${target.preferredDate}\n`
+              + `■ 방문주소: ${target.address}\n`
+              + `■ 코치 활동비: ${feeStr}원`
+              + (target.notes ? `\n■ 특이사항: ${target.notes}` : '');
+
+            if (summaryText.length > 200) {
+              summaryText = summaryText.slice(0, 195) + '...';
+            }
+
+            const textPayload = {
+              objectType: 'text',
+              text: summaryText,
+              link: {
+                mobileWebUrl: coachAppUrl,
+                webUrl: coachAppUrl
+              },
+              buttons: [
+                {
+                  title: '📱 코치 앱에서 확인 및 수행',
+                  link: {
+                    mobileWebUrl: coachAppUrl,
+                    webUrl: coachAppUrl
+                  }
+                }
+              ]
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(textPayload);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(textPayload);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Coach Direct Share Error]', e);
+      }
+
+      // 3. 웹 공유기 fallback
+      try {
+        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(coachAppUrl)}&text=${encodeURIComponent(`[여백과 결] ${cleanCoachName} 코치님께 ${target.serviceType} 현장 임무가 배정되었습니다.`)}`;
+        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (e) {}
+
+      // 4. 복사 알림 fallback
+      alert(`📋 [${cleanCoachName} 코치] 님께 전달할 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+    }
+
+    function copyCoachKakaoMsg(dispId, isSilent = false) {
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
       if (!target) return;
 
       const text = generateKakaoMsgText(target);
       navigator.clipboard.writeText(text).then(() => {
-        alert(`📋 [${target.coach || '코치'}] 님께 전달할 카카오톡 배정 안내 메시지가 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+        if (!isSilent) {
+          alert(`📋 [${target.coach || '코치'}] 님께 전달할 카카오톡 배정 안내 메시지가 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+        }
       }).catch(() => {
-        prompt('아래 카카오톡 배정 안내문을 복사하여 코치님께 전송하세요:', text);
+        if (!isSilent) {
+          prompt('아래 카카오톡 배정 안내문을 복사하여 코치님께 전송하세요:', text);
+        }
       });
     }
 
-    function copyCoachKakaoMsgCurrentMission() {
-      if (activeReportMissionId) {
-        copyCoachKakaoMsg(activeReportMissionId);
+    function sendCoachKakaoFromForm() {
+      const name = document.getElementById('inputDispClientName').value || '고객';
+      const phone = document.getElementById('inputDispClientPhone').value || '';
+      const svc = document.getElementById('selectDispServiceType').value || '';
+      const schedule = document.getElementById('inputDispSchedule').value || '';
+      const loc = document.getElementById('inputDispLocation').value || '';
+      const coachSelect = document.getElementById('selectDispCoach');
+      const coach = coachSelect ? coachSelect.value : '';
+      const fee = Number(document.getElementById('inputDispFee').value) || 150000;
+      const memo = document.getElementById('inputDispMemo').value || '';
+
+      const tempD = {
+        customerName: name,
+        phone: phone,
+        serviceType: svc,
+        preferredDate: schedule,
+        address: loc,
+        coach: coach,
+        fee: fee,
+        notes: memo
+      };
+
+      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      const cleanCoachName = (coach || '코치').replace(/ 코치$/, '');
+      const feeStr = fee.toLocaleString();
+
+      copyCoachKakaoMsgFromForm(true);
+
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initAdminKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
+            let summaryText = `[여백과 결] 🏅 ${cleanCoachName} 코치님 현장 배정 안내\n\n`
+              + `■ 고객명: ${tempD.customerName}\n`
+              + `■ 서비스: ${tempD.serviceType}\n`
+              + `■ 방문일시: ${tempD.preferredDate}\n`
+              + `■ 방문주소: ${tempD.address}\n`
+              + `■ 활동비: ${feeStr}원`
+              + (tempD.notes ? `\n■ 특이사항: ${tempD.notes}` : '');
+
+            if (summaryText.length > 200) {
+              summaryText = summaryText.slice(0, 195) + '...';
+            }
+
+            const textPayload = {
+              objectType: 'text',
+              text: summaryText,
+              link: {
+                mobileWebUrl: coachAppUrl,
+                webUrl: coachAppUrl
+              },
+              buttons: [
+                {
+                  title: '📱 코치 앱에서 확인 및 수행',
+                  link: {
+                    mobileWebUrl: coachAppUrl,
+                    webUrl: coachAppUrl
+                  }
+                }
+              ]
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(textPayload);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(textPayload);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Form Direct Share Error]', e);
       }
+
+      alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
     }
 
-    function copyCoachKakaoMsgFromForm() {
+    function copyCoachKakaoMsgFromForm(isSilent = false) {
       const name = document.getElementById('inputDispClientName').value || '고객';
       const phone = document.getElementById('inputDispClientPhone').value || '';
       const svc = document.getElementById('selectDispServiceType').value || '';
@@ -11161,9 +11331,13 @@ ${coachAppUrl}
 
       const text = generateKakaoMsgText(tempD);
       navigator.clipboard.writeText(text).then(() => {
-        alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
+        if (!isSilent) {
+          alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
+        }
       }).catch(() => {
-        prompt('복사하여 전송하세요:', text);
+        if (!isSilent) {
+          prompt('복사하여 전송하세요:', text);
+        }
       });
     }
 
@@ -12120,7 +12294,74 @@ ${coachAppUrl}
       }
     }
 
-    function copySettlementKakaoMsg(dispId) {
+    // 🌟 활동비 입금완료 카카오톡 바로 전송 (카카오 공식 SDK 연동 + 클립보드 자동 복사 2중 처리)
+    function sendSettlementKakaoDirect(dispId) {
+      const dispatches = getDispatches();
+      const target = dispatches.find(d => d.id === dispId);
+      if (!target) return;
+
+      const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
+      const feeStr = (Number(target.fee) || 150000).toLocaleString();
+      const coachAppUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+
+      copySettlementKakaoMsg(dispId, true);
+
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initAdminKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
+            const summaryText = `[여백과 결] 💰 ${cleanCoachName} 코치님 활동비 입금 완료\n\n`
+              + `■ 고객명: ${target.customerName}\n`
+              + `■ 서비스: ${target.serviceType}\n`
+              + `■ 정산 활동비: ${feeStr}원 (입금완료)\n\n`
+              + `현장 케어를 성심껏 완수해 주셔서 감사드립니다. 코치 앱에서 정산 내역을 확인하세요.`;
+
+            const textPayload = {
+              objectType: 'text',
+              text: summaryText.length > 200 ? summaryText.slice(0, 195) + '...' : summaryText,
+              link: {
+                mobileWebUrl: coachAppUrl,
+                webUrl: coachAppUrl
+              },
+              buttons: [
+                {
+                  title: '💰 정산 완료 내역 확인',
+                  link: {
+                    mobileWebUrl: coachAppUrl,
+                    webUrl: coachAppUrl
+                  }
+                }
+              ]
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(textPayload);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(textPayload);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Settlement Direct Share Error]', e);
+      }
+
+      // fallback 웹 공유기
+      try {
+        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(coachAppUrl)}&text=${encodeURIComponent(`[여백과 결 활동비 입금 완료] ${cleanCoachName} 코치님, ${target.customerName} 고객 건 활동비(${feeStr}원)가 송금되었습니다.`)}`;
+        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (e) {}
+
+      alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+    }
+
+    function copySettlementKakaoMsg(dispId, isSilent = false) {
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
       if (!target) return;
@@ -12144,9 +12385,13 @@ ${coachAppUrl}
 - 여백과 결 코칭센터 드림 -`;
 
       navigator.clipboard.writeText(text).then(() => {
-        alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+        if (!isSilent) {
+          alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+        }
       }).catch(() => {
-        prompt('아래 입금완료 안내문을 복사하여 코치님께 전송하세요:', text);
+        if (!isSilent) {
+          prompt('아래 입금완료 안내문을 복사하여 코치님께 전송하세요:', text);
+        }
       });
     }
 
