@@ -1957,6 +1957,11 @@
           <span class="nav-tab-icon">🏛️</span>
           <span>06. 보물서재 관리</span>
         </button>
+        <button class="nav-tab-btn" onclick="switchTab('tabBeautyCrm', this)" id="navBtnBeautyCrm" style="background: rgba(209, 81, 110, 0.1); border-left: 3px solid #d1516e; color: #b83354; font-weight: 850;">
+          <span class="nav-tab-icon">💄</span>
+          <span>뷰티 라이프케어 CRM</span>
+          <span id="beautyCrmBadge" style="background:#b83354; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">180분</span>
+        </button>
         <button class="nav-tab-btn" onclick="switchTab('tabConsult', this)">
           <span class="nav-tab-icon">📞</span>
           <span>상담 신청 명단</span>
@@ -2965,6 +2970,181 @@
           </div>
         </div>
       </section>
+
+      <!-- =========================================================================
+           [신설] 07. 시니어 뷰티 라이프케어 통합 CRM (senior_beauty_crm)
+           ========================================================================= -->
+      <section class="tab-panel" id="tabBeautyCrm">
+        <div class="panel-card">
+          <div class="panel-header">
+            <div class="panel-title-wrap">
+              <span class="panel-icon">💄</span>
+              <div>
+                <h2 class="panel-title">초고령화 대응 시니어 뷰티 라이프케어 CRM (senior_beauty_crm)</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                  ‘특별한 날, 화려한 외출’ 180분 SOP 예약 관리, 피부 진단 일지 등록, =EDATE 3·6개월 리텐션 자동 추적
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <a href="my-room.html?tab=beauty" target="_blank" class="btn-save-setting" style="background: #fee7ec; color: #b83354; border-color: #f8c8d2; text-decoration: none;">
+                <span>🏠</span> 고객 대시보드 보기
+              </a>
+              <button type="button" class="btn-save-setting" onclick="exportBeautyCrmCSV()">
+                <span>📥</span> CRM 엑셀 다운로드
+              </button>
+            </div>
+          </div>
+
+          <!-- 4대 핵심 KPI 통계 카드 -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin: 20px 0 26px;">
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #d1516e;">
+              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">총 등록 고객 수 (Master)</div>
+              <div style="font-size: 1.8rem; font-weight: 900; color: #b83354; margin-top: 4px;" id="kpiBeautyTotal">1건</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">신규 고객 획득 지표</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #2b7a4b;">
+              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">180분 코칭 완료 건수</div>
+              <div style="font-size: 1.8rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="kpiBeautyCompleted">1건</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP 완료율 100%</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #f59e0b;">
+              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">평균 서비스 만족도 (5점 만점)</div>
+              <div style="font-size: 1.8rem; font-weight: 900; color: #d97706; margin-top: 4px;">4.95점</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">NPS 순추천지수 98점</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #8b5cf6;">
+              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">3·6개월 사후 리마인더 대상</div>
+              <div style="font-size: 1.8rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="kpiBeautyReminders">1건</div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">무료 피부재진단 및 AGAIN180</div>
+            </div>
+          </div>
+
+          <!-- CRM 내부 서브탭 컨트롤 -->
+          <div style="display: flex; gap: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">
+            <button type="button" class="btn-save-setting" id="btnSubTabBookings" onclick="switchBeautySubTab('bookings')" style="background: #d1516e; color: #ffffff; border: none; font-weight: 850;">
+              📋 고객명단 및 예약관리
+            </button>
+            <button type="button" class="btn-save-setting" id="btnSubTabFollowup" onclick="switchBeautySubTab('followup')" style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);">
+              🌿 사후관리 &amp; 리마인더 (EDATE 3·6개월)
+            </button>
+          </div>
+
+          <!-- 서브패널 1: 마스터 예약 및 코치 배정 테이블 -->
+          <div id="beautySubPanelBookings">
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 105px;">예약 ID</th>
+                    <th style="width: 130px;">신청인 (관계)</th>
+                    <th style="width: 130px;">대상 어르신</th>
+                    <th style="width: 120px;">연락처</th>
+                    <th>희망 일시 &amp; 장소</th>
+                    <th style="width: 85px; text-align: center;">리즈 사진</th>
+                    <th style="width: 140px;">배정 코치</th>
+                    <th style="width: 105px; text-align: center;">처리 상태</th>
+                    <th style="width: 130px; text-align: center;">현장 일지 관리</th>
+                  </tr>
+                </thead>
+                <tbody id="beautyBookingTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 서브패널 2: 사후관리 및 리마인더 추적 (Follow-up Tracker) -->
+          <div id="beautySubPanelFollowup" style="display: none;">
+            <div style="background: #fff9fa; border: 1.5px solid #f8c8d2; border-radius: 14px; padding: 16px 20px; margin-bottom: 18px;">
+              <h4 style="font-size: 1.05rem; font-weight: 850; color: #b83354; margin: 0 0 6px;">
+                🔄 선순환 리텐션 루프(Retention Loop) 자동 관리
+              </h4>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                코칭 완료일로부터 <strong>=EDATE(완료일, 3)</strong> 자동 수식으로 3개월 후 무료 피부 재진단(20분) 알림톡을 발송하고, 
+                6개월 후 옷장 리프레시 코칭 및 <strong>AGAIN180 감사 쿠폰(20% 할인)</strong>을 제공하여 연 4회 계절별 정기 구독으로 전환합니다.
+              </p>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 105px;">예약 ID</th>
+                    <th style="width: 110px;">어르신 성함</th>
+                    <th style="width: 110px;">케어 완료일</th>
+                    <th style="width: 140px;">3개월 알림 예정일</th>
+                    <th style="width: 120px; text-align: center;">피부 재진단 상태</th>
+                    <th style="width: 140px;">6개월 알림 예정일</th>
+                    <th style="width: 120px; text-align: center;">AGAIN180 쿠폰</th>
+                    <th style="width: 110px; text-align: center;">알림톡 전송</th>
+                  </tr>
+                </thead>
+                <tbody id="beautyFollowupTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ================= 현장 코칭일지 & 피부진단 등록 모달 ================= -->
+      <div class="cms-modal-overlay" id="beautyCoachingLogModal" style="display: none; align-items: center; justify-content: center; z-index: 99999;">
+        <div style="background: var(--bg-card, #ffffff); max-width: 680px; width: 100%; border-radius: 22px; padding: 28px 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 2px solid #f8c8d2; max-height: 90vh; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; border-bottom: 1px solid var(--border-color); padding-bottom: 12px;">
+            <h3 style="font-size: 1.25rem; font-weight: 850; color: #b83354; margin: 0; display: flex; align-items: center; gap: 8px;">
+              <span>📝</span> 180분 현장 코칭일지 &amp; 피부진단 기록
+            </h3>
+            <button type="button" onclick="closeBeautyCoachingModal()" style="background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text-muted);">✕</button>
+          </div>
+
+          <form id="beautyCoachingLogForm" onsubmit="saveBeautyCoachingLog(event)">
+            <input type="hidden" id="logBookingId">
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div>
+                <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">사전 피부 수분 지수 (%)</label>
+                <input type="number" id="logMoistureBefore" class="setting-input" value="24" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">사후 피부 수분 지수 (%)</label>
+                <input type="number" id="logMoistureAfter" class="setting-input" value="68" required>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div>
+                <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">피부 탄력/윤광 변화</label>
+                <input type="text" id="logElasticity" class="setting-input" value="보통 이하 ➔ 매우 우수 (윤광 회복)" required>
+              </div>
+              <div>
+                <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">주거 낙상 안전 점검</label>
+                <select id="logSafety" class="setting-input">
+                  <option value="완료">✓ 5대 안전 동선 점검 완료</option>
+                  <option value="일부 완료">일부 완료</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 14px;">
+              <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">소장 의상 TPO 코디 및 스타일링 내역</label>
+              <input type="text" id="logWardrobe" class="setting-input" value="소장 실크 플라워 스카프 + 베이지 실루엣 투피스 매칭">
+            </div>
+
+            <div style="margin-bottom: 18px;">
+              <label style="display: block; font-size: 0.86rem; font-weight: 800; margin-bottom: 4px;">어머니의 엔딩 노트 기록 (고객 대시보드 연동)</label>
+              <textarea id="logEndingNote" class="setting-input" rows="3" style="height: 80px; resize: vertical;" placeholder="어머니께서 남기신 감동 소감을 입력하세요.">오늘 거울을 마주하며 지난 40년 세월 중 가장 환하게 웃어보았습니다. 젊은 시절 내가 얼마나 눈부셨는지 다시 깨닫게 해준 소중한 3시간이었습니다. 사랑하는 가족에게 고마움을 전합니다.</textarea>
+            </div>
+
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+              <button type="button" class="btn-save-setting" onclick="closeBeautyCoachingModal()" style="background: var(--bg-secondary); border: 1px solid var(--border-color);">취소</button>
+              <button type="submit" class="btn-save-setting" style="background: #d1516e; color: #ffffff; border: none; font-weight: 850;">💾 코칭일지 저장 및 대시보드 반영</button>
+            </div>
+          </form>
+        </div>
+      </div>
 
       <!-- ================= 탭 8: 📞 1:1 방문 맞춤 상담 명단 ================= -->
       <section class="tab-panel" id="tabConsult">
@@ -12421,7 +12601,7 @@ ${coachAppUrl}
               setTimeout(function() { window.print(); }, 500);
             };
           <\/script>
-        </body>
+</body>
         </html>
       `);
       printWin.document.close();
@@ -12827,5 +13007,6 @@ ${coachAppUrl}
       }
     });
   </script>
+  <script src="beauty-crm.js"></script>
 </body>
 </html>
