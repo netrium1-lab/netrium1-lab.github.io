@@ -1868,6 +1868,81 @@
       background: #f1f5f9;
       border-radius: 6px;
     }
+
+    /* ================= 4대 비즈니스 통합 관제 센터 스타일 ================= */
+    .biz-master-tabs {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border-color);
+      margin-bottom: 22px;
+    }
+    .biz-tab-btn {
+      padding: 12px 18px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border-color);
+      background: var(--bg-card);
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .biz-tab-btn:hover {
+      border-color: #d1516e;
+      color: #b83354;
+      transform: translateY(-2px);
+    }
+    .biz-tab-btn.active {
+      background: #fff0f3;
+      border-color: #f8c8d2;
+      color: #b83354;
+      box-shadow: 0 4px 14px rgba(209, 81, 110, 0.15);
+    }
+    [data-theme="dark"] .biz-tab-btn.active {
+      background: #331821;
+      border-color: #632233;
+      color: #ff859d;
+    }
+
+    /* 파이프라인 단계 필터 버튼 바 */
+    .pipeline-step-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 18px 0 20px;
+      padding-bottom: 4px;
+    }
+    .pipeline-step-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-secondary);
+      font-size: 0.86rem;
+      font-weight: 800;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+    .pipeline-step-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .pipeline-step-btn.active {
+      background: #b83354;
+      color: #ffffff;
+      border-color: #b83354;
+      box-shadow: 0 2px 8px rgba(184, 51, 84, 0.3);
+    }
   </style>
 </head>
 <body>
@@ -1936,35 +2011,23 @@
           <span class="nav-tab-icon">💬</span>
           <span>02. 비움한줄 관리</span>
         </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabTest', this)">
-          <span class="nav-tab-icon">🎯</span>
-          <span>03. 자가진단 관리</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabMemoir', this)">
-          <span class="nav-tab-icon">✍️</span>
-          <span>04. 디지털자서전</span>
+        <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster" style="background: rgba(209, 81, 110, 0.1); border-left: 3px solid #d1516e; color: #b83354; font-weight: 850;">
+          <span class="nav-tab-icon">🌟</span>
+          <span>03. 4대 비즈니스 관제센터</span>
+          <span id="businessMasterBadge" style="background:#b83354; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">원스톱</span>
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tabAcademy', this)">
           <span class="nav-tab-icon">🎓</span>
-          <span>05. 아카데미 & 코치배정</span>
+          <span>04. 아카데미 & 코치관리</span>
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="background: rgba(5, 150, 105, 0.08); border-left: 3px solid var(--accent);">
           <span class="nav-tab-icon">📸</span>
-          <span>05-2. 현장관제 &amp; 정산</span>
+          <span>04-2. 현장관제 &amp; 정산</span>
           <span id="sidebarPendingBadge" style="display:none; background:#ef4444; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">0</span>
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tabArchive', this)">
           <span class="nav-tab-icon">🏛️</span>
-          <span>06. 보물서재 관리</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabBeautyCrm', this)" id="navBtnBeautyCrm" style="background: rgba(209, 81, 110, 0.1); border-left: 3px solid #d1516e; color: #b83354; font-weight: 850;">
-          <span class="nav-tab-icon">💄</span>
-          <span>뷰티 라이프케어 CRM</span>
-          <span id="beautyCrmBadge" style="background:#b83354; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">180분</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabConsult', this)">
-          <span class="nav-tab-icon">📞</span>
-          <span>상담 신청 명단</span>
+          <span>05. 보물서재 관리</span>
         </button>
       </nav>
 
@@ -2321,15 +2384,191 @@
         </div>
       </section>
 
-      <!-- ================= 탭 4: 🎯 03. 맞춤 리셋 진단 & 칼럼 링크 관리 ================= -->
-      <section class="tab-panel" id="tabTest">
-        <!-- 1. 진단 테마별 '관련 여백 칼럼' 연결 링크 설정 카드 -->
-        <div class="panel-card">
+            <!-- ================= 탭 4: 🌟 03. 4대 비즈니스 통합 관제센터 & CRM ================= -->
+      <section class="tab-panel" id="tabBusinessMaster">
+
+        <!-- 1. 4대 비즈니스 카테고리 셀렉터 탭 바 -->
+        <div class="biz-master-tabs">
+          <button type="button" class="biz-tab-btn active" id="bizTabBtn_beauty" onclick="switchBusinessMasterTab('beauty')">
+            <span class="biz-tab-icon">💄</span>
+            <span>#01 뷰티 라이프케어</span>
+            <span class="badge" style="background:#b83354; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:999px;">180분</span>
+          </button>
+          <button type="button" class="biz-tab-btn" id="bizTabBtn_wardrobe" onclick="switchBusinessMasterTab('wardrobe')">
+            <span class="biz-tab-icon">👗</span>
+            <span>#02 옷장 & 공간 비움</span>
+          </button>
+          <button type="button" class="biz-tab-btn" id="bizTabBtn_legacy" onclick="switchBusinessMasterTab('legacy')">
+            <span class="biz-tab-icon">📦</span>
+            <span>#03 유품 & 짐 아카이빙</span>
+          </button>
+          <button type="button" class="biz-tab-btn" id="bizTabBtn_party" onclick="switchBusinessMasterTab('party')">
+            <span class="biz-tab-icon">💌</span>
+            <span>#04 생전 엔딩 파티</span>
+          </button>
+          <button type="button" class="biz-tab-btn" id="bizTabBtn_memoir" onclick="switchBusinessMasterTab('memoir')">
+            <span class="biz-tab-icon">✍️</span>
+            <span>#05 디지털 자서전</span>
+          </button>
+        </div>
+
+        <!-- 2. 상단 비즈니스 메타 헤더 & 4대 파이프라인 KPI 카드 -->
+        <div class="panel-card" style="margin-top: 14px; border-top: 4px solid #d1516e;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" id="currentBizIcon" style="font-size: 1.8rem;">🌟</span>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h2 class="panel-title" id="currentBizTitle" style="margin: 0;">💄 1호 시니어 뷰티 라이프케어</h2>
+                  <span class="badge" id="currentBizBadge" style="background: #fff0f3; color: #b83354; border: 1px solid #b83354; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">180분 SOP 시그니처</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;" id="currentBizDesc">
+                  ‘특별한 날, 화려한 외출’ 180분 표준 프로토콜(SOP) 맞춤 케어 및 사후 리텐션 관리
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <a href="my-room.html?tab=beauty" target="_blank" class="btn-save-setting" style="background: #fee7ec; color: #b83354; border-color: #f8c8d2; text-decoration: none; font-weight: 800;">
+                <span>🏠</span> 1:1 고객 대시보드 보기
+              </a>
+              <button type="button" class="btn-save-setting" onclick="exportBusinessCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
+                <span>📥</span> 비즈니스 데이터(CSV) 다운로드
+              </button>
+            </div>
+          </div>
+
+          <!-- 4대 핵심 원스톱 파이프라인 KPI 카드 -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 18px 0 22px;">
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #d1516e;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 고객 상담 접수 (Lead)</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #b83354; margin-top: 4px;" id="bizKpi_lead">1건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">신규 문의 및 예약</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #0284c7;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 공인 코치 배정 완료</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">1건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">전담 매칭 완료율 100%</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #2b7a4b;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ 180분/현장케어 완료</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">1건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP & 사진 검수</div>
+            </div>
+            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #8b5cf6;">
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">④ CRM 사후관리 & 리텐션</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">1건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 & AGAIN180</div>
+            </div>
+          </div>
+
+          <!-- 4단계 파이프라인 진행 상태 필터 바 -->
+          <div class="pipeline-step-bar">
+            <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">파이프라인 필터:</span>
+            <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">전체보기</button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step1" onclick="switchPipelineStep('step1')">① 상담신청 접수</button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">② 코치 배정</button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">③ 현장케어/일지</button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">④ CRM 사후 리텐션</button>
+          </div>
+
+          <!-- 3-1. [1호 뷰티 라이프케어 전용 파이프라인 래퍼] -->
+          <div id="beautyPipelineWrap">
+            <!-- 마스터 180분 예약 & 코치 배정 & 현장일지 테이블 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
+              <h3 style="font-size: 1.05rem; font-weight: 850; color: #b83354; margin: 0; display: flex; align-items: center; gap: 6px;">
+                <span>📋</span> 180분 마스터 케어 예약 &amp; 코치 배정 파이프라인
+              </h3>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 105px;">예약 ID</th>
+                    <th style="width: 130px;">신청인 (관계)</th>
+                    <th style="width: 130px;">대상 어르신</th>
+                    <th style="width: 120px;">연락처</th>
+                    <th>희망 일시 &amp; 장소</th>
+                    <th style="width: 85px; text-align: center;">리즈 사진</th>
+                    <th style="width: 140px;">배정 코치</th>
+                    <th style="width: 105px; text-align: center;">처리 상태</th>
+                    <th style="width: 130px; text-align: center;">현장 일지 관리</th>
+                  </tr>
+                </thead>
+                <tbody id="beautyBookingTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- 사후관리 및 3·6개월 리텐션 루프 테이블 -->
+            <div style="background: #fff9fa; border: 1.5px solid #f8c8d2; border-radius: 14px; padding: 16px 20px; margin: 24px 0 14px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+                <div>
+                  <h4 style="font-size: 1rem; font-weight: 850; color: #b83354; margin: 0 0 4px;">
+                    🔄 선순환 리텐션 루프(Retention Loop) 자동 관리
+                  </h4>
+                  <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">
+                    완료일 기준 <strong>=EDATE 3개월</strong> 무료 피부 재진단 알림톡 및 <strong>6개월</strong> AGAIN180 감사 할인 쿠폰 자동 추적
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 105px;">예약 ID</th>
+                    <th style="width: 110px;">어르신 성함</th>
+                    <th style="width: 110px;">케어 완료일</th>
+                    <th style="width: 140px;">3개월 알림 예정일</th>
+                    <th style="width: 120px; text-align: center;">피부 재진단 상태</th>
+                    <th style="width: 140px;">6개월 알림 예정일</th>
+                    <th style="width: 120px; text-align: center;">AGAIN180 쿠폰</th>
+                    <th style="width: 110px; text-align: center;">알림톡 전송</th>
+                  </tr>
+                </thead>
+                <tbody id="beautyFollowupTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- 3-2. [2호~5호 비즈니스 공용 파이프라인 래퍼] -->
+          <div id="generalBusinessWrap" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
+              <h3 style="font-size: 1.05rem; font-weight: 850; color: var(--accent); margin: 0; display: flex; align-items: center; gap: 6px;">
+                <span>📋</span> 분야별 고객 상담 및 전담 코치 배정 파이프라인
+              </h3>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 95px;">접수 ID</th>
+                    <th style="width: 120px;">고객 성함 (구분)</th>
+                    <th style="width: 120px;">연락처</th>
+                    <th>상담 요청 내용 &amp; 접수일시</th>
+                    <th style="width: 150px;">담당 배정 코치</th>
+                    <th style="width: 120px; text-align: center;">진행 상태</th>
+                    <th style="width: 90px; text-align: center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody id="generalBusinessTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. 진단 테마별 '관련 여백 칼럼' 연결 링크 설정 카드 (보존) -->
+        <div class="panel-card" id="bizDiagLinksCard" style="margin-top: 24px;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">🔗</span>
               <div>
-                <h2 class="panel-title">03-1. 맞춤 리셋 진단 결과별 [관련 여백 칼럼] 연결 링크 관리</h2>
+                <h2 class="panel-title">맞춤 리셋 진단 결과별 [관련 여백 칼럼] 연결 링크 관리</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
                   메인 화면 진단 결과창의 <strong>[📚 관련 여백 칼럼 읽기]</strong> 버튼을 고객이 클릭했을 때 이동할 칼럼 링크(URL 또는 앵커)를 테마별로 지정합니다.
                 </p>
@@ -2388,13 +2627,141 @@
           </div>
         </div>
 
-        <!-- 2. 맞춤 리셋 진단에서 접수된 1:1 방문 맞춤 상담 예약자 현황 테이블 -->
+        <!-- 5. 5호 디지털 자서전 전용 배너 및 완성 도서 PDF 관리 카드 (자서전 탭 활성 시 표시) -->
+        <div id="bizMemoirBannerCard" style="display: none; margin-top: 24px;">
+          <!-- 메인 사이트 자서전 특별 혜택 및 신청 배너 설정 관리 틀 -->
+          <div class="panel-card">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">✨</span>
+                <div>
+                  <h2 class="panel-title">메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 틀</h2>
+                  <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                    메인 화면의 디지털 자서전 하단 배너 문구와 <strong>[📖 자서전 예시 둘러보기] 이동 링크</strong>를 자유롭게 지정합니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-save-setting" onclick="resetMemoirBannerToDefault()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                  <span>🔄</span> 기본값 복원
+                </button>
+                <button class="btn-save-setting" onclick="saveMemoirBannerConfig()">
+                  <span>💾</span> 배너 설정 저장하기
+                </button>
+              </div>
+            </div>
+
+            <div class="setting-group-card">
+              <div class="setting-label-row">
+                <span>📢</span>
+                <span>배너 메인 타이틀 (혜택 안내)</span>
+              </div>
+              <input type="text" id="adminMemoirBannerTitle" class="setting-input" value="✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정" oninput="updateMemoirLivePreview()">
+            </div>
+
+            <div class="setting-group-card">
+              <div class="setting-label-row">
+                <span>📝</span>
+                <span>상세 설명 문구</span>
+              </div>
+              <textarea id="adminMemoirBannerDesc" class="setting-textarea" rows="2" oninput="updateMemoirLivePreview()">인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.</textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
+              <div class="setting-group-card">
+                <div class="setting-label-row">
+                  <span>🔘</span>
+                  <span>버튼 1: 무료 상담 신청 버튼명</span>
+                </div>
+                <input type="text" id="adminMemoirConsultBtnText" class="setting-input" value="✨ 자서전 제작 1:1 무료 상담 신청" oninput="updateMemoirLivePreview()">
+                <p class="setting-hint">※ 클릭 시 1:1 시니어 안심 상담 모달이 자동으로 연결됩니다.</p>
+              </div>
+
+              <div class="setting-group-card">
+                <div class="setting-label-row">
+                  <span>🔗</span>
+                  <span>버튼 2: 자서전 예시 둘러보기 이동 링크 (지정)</span>
+                </div>
+                <input type="text" id="adminMemoirSampleLink" class="setting-input" value="my-room.html?mode=sample" placeholder="예: my-room.html?mode=sample 또는 외부 주소" oninput="updateMemoirLivePreview()">
+                <p class="setting-hint" style="color: var(--accent); font-weight: 750;">
+                  💡 관리자님께서 지정한 링크로 고객이 이동합니다. (기본: my-room.html?mode=sample)
+                </p>
+              </div>
+            </div>
+
+            <div style="margin-top: 18px;">
+              <div style="font-size: 0.88rem; font-weight: 850; color: var(--text-main); margin-bottom: 6px;">
+                👁️ 메인 화면 실시간 미리보기 (Live Preview)
+              </div>
+              <div class="memoir-preview-box">
+                <h4 class="memoir-preview-title" id="previewMemoirTitle">✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정</h4>
+                <p class="memoir-preview-desc" id="previewMemoirDesc">
+                  인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.
+                </p>
+                <div class="memoir-preview-btns">
+                  <button type="button" class="memoir-preview-btn-primary" id="previewConsultBtn">
+                    ✨ 자서전 제작 1:1 무료 상담 신청
+                  </button>
+                  <button type="button" class="memoir-preview-btn-secondary" id="previewSampleBtn">
+                    📖 자서전 예시 둘러보기
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 출판 완료된 디지털 자서전 도서 & PDF 관리 -->
+          <div class="panel-card" style="margin-top: 24px;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon">📚</span>
+                <div>
+                  <h2 class="panel-title">출판 완료된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동)</h2>
+                  <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                    전문 구술 인터뷰와 교정을 거쳐 완간된 디지털 자서전 도서와 <strong>PDF 파일</strong>을 관리합니다. 등록된 도서는 <strong>[나의 서재(my-room.html)]</strong>에 자동 전시되어 어르신과 가족이 직접 다운로드할 수 있습니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px;">
+                <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
+                  <span>➕</span> 신규 완성 자서전 & PDF 등록
+                </button>
+                <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                  <span>📥</span> 도서 목록(CSV) 다운로드
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px; text-align: center;">표지</th>
+                    <th style="width: 180px;">자서전 도서명</th>
+                    <th style="width: 100px;">저자 (어르신)</th>
+                    <th style="width: 85px; text-align: center;">총 분량</th>
+                    <th style="width: 100px;">전담 코치</th>
+                    <th style="width: 100px;">완간 일자</th>
+                    <th style="width: 220px;">자서전 PDF 파일 & 다운로드</th>
+                    <th style="width: 100px; text-align: center;">서재 공개</th>
+                    <th style="width: 110px; text-align: center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody id="publishedMemoirsTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. 맞춤 리셋 진단 1:1 방문 상담 예약자 현황 (보존) -->
         <div class="panel-card" style="margin-top: 24px;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">📋</span>
               <div>
-                <h2 class="panel-title">03-2. 맞춤 리셋 진단 1:1 방문 상담 예약자 현황</h2>
+                <h2 class="panel-title">맞춤 리셋 진단 1:1 방문 상담 예약자 현황</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
                   [지금 나를 위한 맞춤 리셋 진단] 결과에서 <strong>[✨ 1:1 방문 맞춤 상담 예약하기]</strong>를 신청한 고객 명단입니다.
                 </p>
@@ -2424,175 +2791,7 @@
             </table>
           </div>
         </div>
-      </section>
 
-      <!-- ================= 탭 5: ✍️ 04. 디지털 자서전 배너 및 상담 신청 관리 ================= -->
-      <section class="tab-panel" id="tabMemoir">
-        <!-- 1. 메인 사이트 자서전 특별 혜택 및 신청 배너 (CTA 배너) 설정 관리 틀 -->
-        <div class="panel-card">
-          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">✨</span>
-              <div>
-                <h2 class="panel-title">04-1. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 틀</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  메인 화면의 디지털 자서전 하단 배너 문구와 <strong>[📖 자서전 예시 둘러보기] 이동 링크</strong>를 자유롭게 지정합니다.
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-save-setting" onclick="resetMemoirBannerToDefault()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                <span>🔄</span> 기본값 복원
-              </button>
-              <button class="btn-save-setting" onclick="saveMemoirBannerConfig()">
-                <span>💾</span> 배너 설정 저장하기
-              </button>
-            </div>
-          </div>
-
-          <div class="setting-group-card">
-            <div class="setting-label-row">
-              <span>📢</span>
-              <span>배너 메인 타이틀 (혜택 안내)</span>
-            </div>
-            <input type="text" id="adminMemoirBannerTitle" class="setting-input" value="✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정" oninput="updateMemoirLivePreview()">
-          </div>
-
-          <div class="setting-group-card">
-            <div class="setting-label-row">
-              <span>📝</span>
-              <span>상세 설명 문구</span>
-            </div>
-            <textarea id="adminMemoirBannerDesc" class="setting-textarea" rows="2" oninput="updateMemoirLivePreview()">인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.</textarea>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px;">
-            <!-- 버튼 1 설정 -->
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>🔘</span>
-                <span>버튼 1: 무료 상담 신청 버튼명</span>
-              </div>
-              <input type="text" id="adminMemoirConsultBtnText" class="setting-input" value="✨ 자서전 제작 1:1 무료 상담 신청" oninput="updateMemoirLivePreview()">
-              <p class="setting-hint">※ 클릭 시 1:1 시니어 안심 상담 모달이 자동으로 연결됩니다.</p>
-            </div>
-
-            <!-- 버튼 2 (예시 둘러보기) 링크 설정: 핵심 요구사항 -->
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>🔗</span>
-                <span>버튼 2: 자서전 예시 둘러보기 이동 링크 (지정)</span>
-              </div>
-              <input type="text" id="adminMemoirSampleLink" class="setting-input" value="my-room.html?mode=sample" placeholder="예: my-room.html?mode=sample 또는 외부 주소" oninput="updateMemoirLivePreview()">
-              <p class="setting-hint" style="color: var(--accent); font-weight: 750;">
-                💡 관리자님께서 지정한 링크로 고객이 이동합니다. (기본: my-room.html?mode=sample)
-              </p>
-            </div>
-          </div>
-
-          <div style="background: rgba(43, 90, 66, 0.08); border-left: 4px solid var(--accent); padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; color: var(--accent); font-weight: 750; margin: 12px 0;">
-            ✓ 사용자 요청 반영 완료: 메인 화면의 [카톡 1분 간편 문의] 노란색 버튼은 완전히 제거되었습니다.
-          </div>
-
-          <!-- 실시간 미리보기 카드 (사용자가 업로드한 스크린샷과 100% 동일) -->
-          <div style="margin-top: 18px;">
-            <div style="font-size: 0.88rem; font-weight: 850; color: var(--text-main); margin-bottom: 6px;">
-              👁️ 메인 화면 실시간 미리보기 (Live Preview)
-            </div>
-            <div class="memoir-preview-box">
-              <h4 class="memoir-preview-title" id="previewMemoirTitle">✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정</h4>
-              <p class="memoir-preview-desc" id="previewMemoirDesc">
-                인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.
-              </p>
-              <div class="memoir-preview-btns">
-                <button type="button" class="memoir-preview-btn-primary" id="previewConsultBtn">
-                  ✨ 자서전 제작 1:1 무료 상담 신청
-                </button>
-                <button type="button" class="memoir-preview-btn-secondary" id="previewSampleBtn">
-                  📖 자서전 예시 둘러보기
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. 디지털 자서전 제작 상담 신청자 명단 카드 -->
-        <div class="panel-card" style="margin-top: 24px;">
-          <div class="panel-header">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">✍️</span>
-              <h2 class="panel-title">04-2. 디지털 자서전 제작 상담 신청자 명단</h2>
-            </div>
-            <button class="btn-save-setting" onclick="exportMemoirCSV()">
-              <span>📥</span> 엑셀(CSV) 다운로드
-            </button>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
-            디지털 자서전 제작 및 30일 인생 서사 워크북 무료 배송을 신청한 고객 목록입니다.
-          </p>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 100px;">신청자 성함</th>
-                  <th style="width: 120px;">연락처</th>
-                  <th>배송 주소 / 상담 메모</th>
-                  <th style="width: 110px;">신청 일시</th>
-                  <th style="width: 100px; text-align: center;">처리 상태</th>
-                  <th style="width: 80px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="memoirTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 3. 출판 완료된 디지털 자서전 도서 & PDF 관리 (나의 서재 실시간 다운로드 연동) -->
-        <div class="panel-card" style="margin-top: 24px;">
-          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">📚</span>
-              <div>
-                <h2 class="panel-title">04-3. 출판 완료된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동)</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  전문 구술 인터뷰와 교정을 거쳐 완간된 디지털 자서전 도서와 <strong>PDF 파일</strong>을 관리합니다. 등록된 도서는 <strong>[나의 서재(my-room.html)]</strong>에 자동 전시되어 어르신과 가족이 직접 다운로드할 수 있습니다.
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
-                <span>➕</span> 신규 완성 자서전 & PDF 등록
-              </button>
-              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                <span>📥</span> 도서 목록(CSV) 다운로드
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 70px; text-align: center;">표지</th>
-                  <th style="width: 180px;">자서전 도서명</th>
-                  <th style="width: 100px;">저자 (어르신)</th>
-                  <th style="width: 85px; text-align: center;">총 분량</th>
-                  <th style="width: 100px;">전담 코치</th>
-                  <th style="width: 100px;">완간 일자</th>
-                  <th style="width: 220px;">자서전 PDF 파일 & 다운로드</th>
-                  <th style="width: 100px; text-align: center;">서재 공개</th>
-                  <th style="width: 110px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="publishedMemoirsTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
       </section>
 
       <!-- ================= 탭 6: 🎓 05. 코치 아카데미 & 코치 배정 관리 ================= -->
@@ -2971,124 +3170,7 @@
         </div>
       </section>
 
-      <!-- =========================================================================
-           [신설] 07. 시니어 뷰티 라이프케어 통합 CRM (senior_beauty_crm)
-           ========================================================================= -->
-      <section class="tab-panel" id="tabBeautyCrm">
-        <div class="panel-card">
-          <div class="panel-header">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">💄</span>
-              <div>
-                <h2 class="panel-title">초고령화 대응 시니어 뷰티 라이프케어 CRM (senior_beauty_crm)</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  ‘특별한 날, 화려한 외출’ 180분 SOP 예약 관리, 피부 진단 일지 등록, =EDATE 3·6개월 리텐션 자동 추적
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <a href="my-room.html?tab=beauty" target="_blank" class="btn-save-setting" style="background: #fee7ec; color: #b83354; border-color: #f8c8d2; text-decoration: none;">
-                <span>🏠</span> 고객 대시보드 보기
-              </a>
-              <button type="button" class="btn-save-setting" onclick="exportBeautyCrmCSV()">
-                <span>📥</span> CRM 엑셀 다운로드
-              </button>
-            </div>
-          </div>
-
-          <!-- 4대 핵심 KPI 통계 카드 -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin: 20px 0 26px;">
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #d1516e;">
-              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">총 등록 고객 수 (Master)</div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #b83354; margin-top: 4px;" id="kpiBeautyTotal">1건</div>
-              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">신규 고객 획득 지표</div>
-            </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #2b7a4b;">
-              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">180분 코칭 완료 건수</div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="kpiBeautyCompleted">1건</div>
-              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP 완료율 100%</div>
-            </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #f59e0b;">
-              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">평균 서비스 만족도 (5점 만점)</div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #d97706; margin-top: 4px;">4.95점</div>
-              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">NPS 순추천지수 98점</div>
-            </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 16px; padding: 18px; border-left: 4.5px solid #8b5cf6;">
-              <div style="font-size: 0.82rem; color: var(--text-muted); font-weight: 750;">3·6개월 사후 리마인더 대상</div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="kpiBeautyReminders">1건</div>
-              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 2px;">무료 피부재진단 및 AGAIN180</div>
-            </div>
-          </div>
-
-          <!-- CRM 내부 서브탭 컨트롤 -->
-          <div style="display: flex; gap: 8px; border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-bottom: 20px;">
-            <button type="button" class="btn-save-setting" id="btnSubTabBookings" onclick="switchBeautySubTab('bookings')" style="background: #d1516e; color: #ffffff; border: none; font-weight: 850;">
-              📋 고객명단 및 예약관리
-            </button>
-            <button type="button" class="btn-save-setting" id="btnSubTabFollowup" onclick="switchBeautySubTab('followup')" style="background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color);">
-              🌿 사후관리 &amp; 리마인더 (EDATE 3·6개월)
-            </button>
-          </div>
-
-          <!-- 서브패널 1: 마스터 예약 및 코치 배정 테이블 -->
-          <div id="beautySubPanelBookings">
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 105px;">예약 ID</th>
-                    <th style="width: 130px;">신청인 (관계)</th>
-                    <th style="width: 130px;">대상 어르신</th>
-                    <th style="width: 120px;">연락처</th>
-                    <th>희망 일시 &amp; 장소</th>
-                    <th style="width: 85px; text-align: center;">리즈 사진</th>
-                    <th style="width: 140px;">배정 코치</th>
-                    <th style="width: 105px; text-align: center;">처리 상태</th>
-                    <th style="width: 130px; text-align: center;">현장 일지 관리</th>
-                  </tr>
-                </thead>
-                <tbody id="beautyBookingTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- 서브패널 2: 사후관리 및 리마인더 추적 (Follow-up Tracker) -->
-          <div id="beautySubPanelFollowup" style="display: none;">
-            <div style="background: #fff9fa; border: 1.5px solid #f8c8d2; border-radius: 14px; padding: 16px 20px; margin-bottom: 18px;">
-              <h4 style="font-size: 1.05rem; font-weight: 850; color: #b83354; margin: 0 0 6px;">
-                🔄 선순환 리텐션 루프(Retention Loop) 자동 관리
-              </h4>
-              <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
-                코칭 완료일로부터 <strong>=EDATE(완료일, 3)</strong> 자동 수식으로 3개월 후 무료 피부 재진단(20분) 알림톡을 발송하고, 
-                6개월 후 옷장 리프레시 코칭 및 <strong>AGAIN180 감사 쿠폰(20% 할인)</strong>을 제공하여 연 4회 계절별 정기 구독으로 전환합니다.
-              </p>
-            </div>
-
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 105px;">예약 ID</th>
-                    <th style="width: 110px;">어르신 성함</th>
-                    <th style="width: 110px;">케어 완료일</th>
-                    <th style="width: 140px;">3개월 알림 예정일</th>
-                    <th style="width: 120px; text-align: center;">피부 재진단 상태</th>
-                    <th style="width: 140px;">6개월 알림 예정일</th>
-                    <th style="width: 120px; text-align: center;">AGAIN180 쿠폰</th>
-                    <th style="width: 110px; text-align: center;">알림톡 전송</th>
-                  </tr>
-                </thead>
-                <tbody id="beautyFollowupTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-        </div>
-      </section>
+      
 
       <!-- ================= 현장 코칭일지 & 피부진단 등록 모달 ================= -->
       <div class="cms-modal-overlay" id="beautyCoachingLogModal" style="display: none; align-items: center; justify-content: center; z-index: 99999;">
@@ -3146,42 +3228,7 @@
         </div>
       </div>
 
-      <!-- ================= 탭 8: 📞 1:1 방문 맞춤 상담 명단 ================= -->
-      <section class="tab-panel" id="tabConsult">
-        <div class="panel-card">
-          <div class="panel-header">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">📞</span>
-              <h2 class="panel-title">통합 1:1 방문 맞춤 상담 신청 내역</h2>
-            </div>
-            <button class="btn-save-setting" onclick="exportConsultCSV()">
-              <span>📥</span> 엑셀(CSV) 다운로드
-            </button>
-          </div>
-          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
-            메인 사이트 원터치 안심 상담 모달에서 접수된 고객 명단입니다.
-          </p>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 100px;">신청 분야</th>
-                  <th style="width: 100px;">고객 성함</th>
-                  <th style="width: 120px;">연락처</th>
-                  <th style="width: 110px;">희망 일시</th>
-                  <th>상담 요청 사항</th>
-                  <th style="width: 95px; text-align: center;">처리 상태</th>
-                  <th style="width: 80px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="consultTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      
     </main>
   </div>
 
@@ -4481,6 +4528,18 @@
 
     // 탭 전환
     function switchTab(tabId, btn) {
+      // 援???ID ?명솚 泥섎━ 諛?03. 4? 鍮꾩쫰?덉뒪 ?듯빀 愿?쒖꽱???곕룞
+      if (['tabBusinessMaster', 'tabBeautyCrm', 'tabTest', 'tabMemoir', 'tabConsult'].includes(tabId)) {
+        const mappedBiz = tabId === 'tabBeautyCrm' ? 'beauty' : (tabId === 'tabMemoir' ? 'memoir' : (tabId === 'tabTest' ? 'wardrobe' : (typeof currentBusinessTab !== 'undefined' ? currentBusinessTab : 'beauty')));
+        tabId = 'tabBusinessMaster';
+        btn = document.getElementById('navBtnBusinessMaster') || btn;
+        if (typeof switchBusinessMasterTab === 'function') {
+          switchBusinessMasterTab(mappedBiz);
+        } else if (typeof renderBusinessMasterDashboard === 'function') {
+          renderBusinessMasterDashboard();
+        }
+      }
+
       const panels = document.querySelectorAll('.tab-panel');
       panels.forEach(p => p.classList.remove('active'));
 
@@ -4491,12 +4550,15 @@
       btns.forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
 
-      // 05-2 현장관제 & 정산센터 진입 시 실시간 렌더링
-      if (tabId === 'tabCoachControl' && typeof renderCoachControlCenter === 'function') {
+      // 03 4? 鍮꾩쫰?덉뒪 愿?쒖꽱???뚮뜑留?      if (tabId === 'tabBusinessMaster' && typeof renderBusinessMasterDashboard === 'function') {
+        renderBusinessMasterDashboard();
+      }
+
+      // 05-2 ?꾩옣愿??& ?뺤궛?쇳꽣 吏꾩엯 ???ㅼ떆媛??뚮뜑留?      if (tabId === 'tabCoachControl' && typeof renderCoachControlCenter === 'function') {
         renderCoachControlCenter();
       }
 
-      // 모바일인 경우 사이드바 닫기
+      // 紐⑤컮?쇱씤 寃쎌슦 ?ъ씠?쒕컮 ?リ린
       const sidebar = document.getElementById('adminSidebar');
       if (sidebar && window.innerWidth <= 900) {
         sidebar.classList.remove('open');
@@ -12985,6 +13047,10 @@ ${coachAppUrl}
       renderCoachControlCenter();
       // 출판 완료 자서전 및 PDF 목록 로딩
       renderPublishedMemoirsTable();
+      // 🌟 03. 4대 비즈니스 통합 관제센터 & CRM 로딩
+      if (typeof renderBusinessMasterDashboard === 'function') {
+        renderBusinessMasterDashboard();
+      }
     }
 
     // 초기 실행
