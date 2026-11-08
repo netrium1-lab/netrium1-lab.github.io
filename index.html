@@ -1900,16 +1900,16 @@
       box-shadow: 0 6px 18px rgba(209, 81, 110, 0.45);
     }
 
-    /* -------------------- [신설] 180분 시니어 뷰티 라이프케어 전용 프로모션 모달 -------------------- */
+    /* -------------------- [신설] 180분 시니어 뷰티 라이프케어 전용 프로모션 모달 & 상담 팝업 -------------------- */
     .beauty-modal-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.72);
+      background: rgba(15, 23, 42, 0.76);
       backdrop-filter: blur(6px);
       z-index: 99999;
       overflow-y: auto;
-      padding: 30px 16px;
+      padding: 24px 16px;
       align-items: center;
       justify-content: center;
     }
@@ -1920,13 +1920,19 @@
       background: var(--bg-card, #ffffff);
       width: 100%;
       max-width: 960px;
-      border-radius: 26px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
       border: 1px solid rgba(255, 255, 255, 0.2);
       animation: beautyModalIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       margin: auto;
+    }
+    .beauty-counsel-container {
+      max-width: 600px;
     }
     @keyframes beautyModalIn {
       from { opacity: 0; transform: scale(0.95) translateY(20px); }
@@ -1936,9 +1942,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 26px;
+      padding: 16px 24px;
       background: #ffffff;
       border-bottom: 1px solid var(--border-color, #e5e7eb);
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 20;
     }
     [data-theme="dark"] .beauty-modal-header {
       background: #1f2937;
@@ -1960,13 +1970,14 @@
     }
     .beauty-modal-hero {
       position: relative;
-      min-height: 280px;
-      background: linear-gradient(135deg, rgba(209, 81, 110, 0.9) 0%, rgba(139, 30, 63, 0.95) 100%), url('images/care-beauty-hero.jpg') center/cover no-repeat;
+      min-height: 240px;
+      background: linear-gradient(135deg, rgba(209, 81, 110, 0.92) 0%, rgba(139, 30, 63, 0.96) 100%), url('images/care-beauty-hero.jpg') center/cover no-repeat;
       color: #ffffff;
-      padding: 40px 32px;
+      padding: 32px 28px;
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
+      flex-shrink: 0;
     }
     .beauty-hero-badge {
       display: inline-flex;
@@ -1979,34 +1990,35 @@
       font-size: 0.88rem;
       font-weight: 850;
       width: fit-content;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       border: 1px solid rgba(255, 255, 255, 0.35);
     }
     .beauty-hero-title {
-      font-size: 1.95rem;
+      font-size: 1.85rem;
       font-weight: 900;
       line-height: 1.35;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
       word-break: keep-all;
     }
     .beauty-hero-desc {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       opacity: 0.95;
-      line-height: 1.65;
+      line-height: 1.6;
       max-width: 680px;
       word-break: keep-all;
     }
     .beauty-modal-body {
-      padding: 32px 28px;
-      max-height: calc(85vh - 200px);
+      padding: 28px 28px 40px;
+      flex: 1;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     /* 이중 타깃 탭 */
     .beauty-target-tabs {
       display: flex;
       gap: 12px;
-      margin-bottom: 24px;
+      margin-bottom: 22px;
       border-bottom: 2px solid var(--border-color, #e5e7eb);
       padding-bottom: 8px;
     }
@@ -2016,7 +2028,7 @@
       border-radius: 12px;
       border: 1.5px solid transparent;
       background: var(--bg-secondary, #f8fafc);
-      font-size: 1.02rem;
+      font-size: 1rem;
       font-weight: 850;
       color: var(--text-secondary, #64748b);
       cursor: pointer;
@@ -2040,85 +2052,146 @@
     .beauty-target-box {
       background: var(--bg-secondary, #f8fafc);
       border-radius: 16px;
-      padding: 20px 22px;
-      margin-bottom: 28px;
+      padding: 18px 20px;
+      margin-bottom: 26px;
       border-left: 4.5px solid #d1516e;
     }
-    /* 180분 SOP 타임라인 카드 */
-    .sop-timeline-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
+
+    /* 📌 정돈된 180분 프로토콜 인포그래픽 & 타임라인 카드 스타일 */
+    .beauty-infographic-card {
+      background: var(--bg-card, #ffffff);
+      border: 2px solid #f8c8d2;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 24px rgba(209, 81, 110, 0.08);
+      position: relative;
     }
-    .sop-phase-card {
+    .beauty-infographic-header {
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #fff0f3 0%, #ffe3ea 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #f8c8d2;
+    }
+    [data-theme="dark"] .beauty-infographic-header {
+      background: linear-gradient(135deg, #2a161d 0%, #351a24 100%);
+      border-color: #632233;
+    }
+    .beauty-infographic-img-wrap {
+      cursor: zoom-in;
+      position: relative;
+      background: #111;
+      text-align: center;
+    }
+    .beauty-infographic-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+    .beauty-infographic-img-wrap:hover .beauty-infographic-img {
+      opacity: 0.95;
+    }
+    .beauty-infographic-zoom-badge {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      background: rgba(15, 23, 42, 0.82);
+      color: #ffffff;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 6px 12px;
+      border-radius: 999px;
+      backdrop-filter: blur(4px);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* 깔끔하고 구조화된 3단계 프로토콜 리스트 */
+    .clean-sop-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .clean-sop-card {
       background: var(--bg-card, #ffffff);
       border: 1.5px solid var(--border-color, #e2e8f0);
       border-radius: 18px;
-      padding: 22px 18px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      padding: 20px 22px;
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
       position: relative;
+      transition: all 0.2s ease;
     }
-    .sop-phase-card.featured {
+    .clean-sop-card.featured {
       border-color: #d1516e;
-      background: linear-gradient(180deg, #fff9fa 0%, var(--bg-card, #ffffff) 100%);
+      background: linear-gradient(180deg, #fffcfd 0%, var(--bg-card, #ffffff) 100%);
+      box-shadow: 0 6px 20px rgba(209, 81, 110, 0.08);
     }
-    [data-theme="dark"] .sop-phase-card.featured {
-      background: linear-gradient(180deg, #2b171e 0%, var(--bg-card) 100%);
+    [data-theme="dark"] .clean-sop-card.featured {
+      background: linear-gradient(180deg, #26161c 0%, var(--bg-card) 100%);
     }
-    .sop-phase-header {
+    .clean-sop-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .sop-phase-tag {
-      font-size: 0.8rem;
+    .clean-sop-badge {
+      font-size: 0.85rem;
       font-weight: 850;
       color: #b83354;
       background: #fee7ec;
-      padding: 4px 10px;
+      padding: 4px 12px;
       border-radius: 999px;
     }
-    .sop-time-badge {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: var(--text-muted, #94a3b8);
+    .clean-sop-badge.main {
+      background: #b83354;
+      color: #ffffff;
     }
-    .sop-phase-title {
-      font-size: 1.15rem;
+    .clean-sop-duration {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: var(--text-muted, #64748b);
+    }
+    .clean-sop-title {
+      font-size: 1.18rem;
       font-weight: 850;
       color: var(--text-primary, #1e293b);
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
-    .sop-step-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .clean-sop-items {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      font-size: 0.92rem;
-      color: var(--text-secondary, #475569);
     }
-    .sop-step-list li {
+    .clean-sop-item {
       display: flex;
       align-items: flex-start;
-      gap: 7px;
-      line-height: 1.5;
+      gap: 8px;
+      font-size: 0.94rem;
+      line-height: 1.55;
+      color: var(--text-secondary, #475569);
     }
-    .sop-step-list li span.dot {
-      color: #d1516e;
-      font-weight: 900;
-      flex-shrink: 0;
+    .clean-sop-item-tag {
+      font-weight: 800;
+      color: #b83354;
+      white-space: nowrap;
     }
+
     /* 3패널 이미지 배너 */
     .beauty-treatment-banner {
       width: 100%;
       border-radius: 16px;
       overflow: hidden;
-      margin-bottom: 28px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+      margin-bottom: 26px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
       border: 1px solid var(--border-color, #e2e8f0);
     }
     .beauty-treatment-banner img {
@@ -2126,12 +2199,13 @@
       height: auto;
       display: block;
     }
+
     /* 주거 안전 점검 & 리텐션 박스 */
     .beauty-feature-pillbox {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
-      margin-bottom: 30px;
+      margin-bottom: 28px;
     }
     .beauty-pillbox-item {
       background: var(--bg-secondary, #f8fafc);
@@ -2154,35 +2228,80 @@
       line-height: 1.5;
       margin: 0;
     }
-    /* 온라인 예약 신청 폼 */
-    .beauty-booking-card {
-      background: #ffffff;
+
+    /* 상세 안내 모달 하단 강력한 상담 CTA 박스 */
+    .beauty-consult-cta-box {
+      background: linear-gradient(135deg, #fff0f3 0%, #fee7ec 100%);
       border: 2px solid #f8c8d2;
       border-radius: 20px;
-      padding: 28px 24px;
-      box-shadow: 0 10px 30px rgba(209, 81, 110, 0.12);
+      padding: 24px 22px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(209, 81, 110, 0.12);
+      margin-top: 20px;
     }
-    [data-theme="dark"] .beauty-booking-card {
-      background: #1e293b;
+    [data-theme="dark"] .beauty-consult-cta-box {
+      background: linear-gradient(135deg, #2a161d 0%, #351a24 100%);
       border-color: #632233;
     }
-    .beauty-booking-title {
-      font-size: 1.35rem;
+    .beauty-consult-cta-btn {
+      width: 100%;
+      max-width: 440px;
+      height: 52px;
+      margin: 14px auto 0;
+      background: linear-gradient(135deg, #d1516e 0%, #b83354 100%);
+      color: #ffffff;
+      font-size: 1.08rem;
       font-weight: 900;
-      color: #1e293b;
-      margin-bottom: 6px;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
+      box-shadow: 0 6px 20px rgba(209, 81, 110, 0.38);
+      transition: all 0.2s ease;
     }
-    [data-theme="dark"] .beauty-booking-title {
-      color: #f8fafc;
+    .beauty-consult-cta-btn:hover {
+      background: linear-gradient(135deg, #e0607d 0%, #a62645 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(209, 81, 110, 0.48);
+    }
+
+    /* 모바일 하단 플로팅 바로 원클릭 상담 신청 연결 */
+    .beauty-mobile-cta-bar {
+      display: none;
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-color, #e5e7eb);
+      padding: 10px 16px;
+      z-index: 40;
+      box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.08);
+    }
+    [data-theme="dark"] .beauty-mobile-cta-bar {
+      background: rgba(31, 41, 55, 0.94);
+    }
+    .beauty-mobile-cta-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    /* 1:1 상담 안내 신청 전용 팝업 모달 내부 폼 */
+    .beauty-counsel-card {
+      background: var(--bg-card, #ffffff);
+      padding: 24px 22px;
     }
     .beauty-form-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
-      margin-top: 18px;
+      margin-top: 14px;
     }
     .beauty-form-group {
       display: flex;
@@ -2215,7 +2334,7 @@
     .photo-upload-container {
       border: 2px dashed #f8c8d2;
       border-radius: 12px;
-      padding: 18px;
+      padding: 16px;
       text-align: center;
       background: #fff9fa;
       cursor: pointer;
@@ -2224,10 +2343,6 @@
     [data-theme="dark"] .photo-upload-container {
       background: #2a1820;
       border-color: #632233;
-    }
-    .photo-upload-container:hover {
-      border-color: #d1516e;
-      background: #fff0f3;
     }
     .photo-preview-wrap {
       display: none;
@@ -2250,10 +2365,10 @@
     }
     .beauty-submit-btn {
       width: 100%;
-      height: 54px;
+      height: 52px;
       background: linear-gradient(135deg, #d1516e 0%, #b83354 100%);
       color: #ffffff;
-      font-size: 1.12rem;
+      font-size: 1.1rem;
       font-weight: 900;
       border: none;
       border-radius: 14px;
@@ -2271,15 +2386,126 @@
       transform: translateY(-2px);
       box-shadow: 0 8px 26px rgba(209, 81, 110, 0.48);
     }
+
+    /* 🔍 고화질 인포그래픽 전체화면 라이트박스 팝업 */
+    .infographic-lightbox-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 29, 0.92);
+      backdrop-filter: blur(8px);
+      z-index: 100005;
+      padding: 16px;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    .infographic-lightbox-backdrop.active {
+      display: flex;
+    }
+    .infographic-lightbox-box {
+      position: relative;
+      max-width: 900px;
+      width: 100%;
+      max-height: 94vh;
+      overflow-y: auto;
+      background: #000;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      text-align: center;
+    }
+    .infographic-lightbox-close {
+      position: sticky;
+      top: 10px;
+      right: 10px;
+      float: right;
+      background: rgba(0, 0, 0, 0.65);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 999px;
+      width: 36px;
+      height: 36px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      transition: background 0.2s;
+    }
+    .infographic-lightbox-close:hover {
+      background: #b83354;
+    }
+
+    /* 📱 모바일 극대화 반응형 스타일 */
     @media (max-width: 768px) {
-      .beauty-form-grid {
-        grid-template-columns: 1fr;
+      .beauty-modal-backdrop {
+        padding: 0;
+        align-items: flex-end;
+      }
+      .beauty-modal-container {
+        max-width: 100%;
+        height: 100dvh;
+        max-height: 100dvh;
+        border-radius: 0;
+        margin: 0;
+      }
+      .beauty-counsel-container {
+        height: 100dvh;
+        max-height: 100dvh;
+      }
+      .beauty-modal-header {
+        padding: 12px 16px;
+      }
+      .beauty-modal-hero {
+        min-height: auto;
+        padding: 18px 16px 20px;
+      }
+      .beauty-hero-badge {
+        font-size: 0.78rem;
+        padding: 4px 10px;
+        margin-bottom: 8px;
+      }
+      .beauty-hero-title {
+        font-size: 1.35rem;
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+      .beauty-hero-desc {
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+      .beauty-modal-body {
+        padding: 16px 14px 20px;
+        flex: 1;
+        max-height: none;
+      }
+      .beauty-target-tabs {
+        gap: 8px;
+        margin-bottom: 16px;
+      }
+      .beauty-tab-btn {
+        padding: 9px 10px;
+        font-size: 0.86rem;
+      }
+      .clean-sop-card {
+        padding: 16px 14px;
+      }
+      .clean-sop-title {
+        font-size: 1.05rem;
+      }
+      .clean-sop-item {
+        font-size: 0.88rem;
       }
       .beauty-feature-pillbox {
         grid-template-columns: 1fr;
       }
-      .beauty-hero-title {
-        font-size: 1.5rem;
+      .beauty-form-grid {
+        grid-template-columns: 1fr;
+      }
+      .beauty-mobile-cta-bar {
+        display: block;
       }
     }
 
@@ -5978,7 +6204,7 @@
               </div>
               <div>
                 <button type="button" class="diag-promo-btn" onclick="event.stopPropagation(); openBeautyCareModal();">
-                  <span>✨ 180분 스페셜 프로모션 & 예약하기</span>
+                  <span>✨ 180분 스페셜 프로모션 & 안내받기</span>
                   <span>➔</span>
                 </button>
               </div>
@@ -6097,12 +6323,12 @@
     </section>
 
     <!-- =========================================================================
-         [신설] 1호 비즈니스 전용: 180분 시니어 뷰티 라이프케어 프로모션 & 예약 모달
+         [신설] 1호 비즈니스 전용: 180분 시니어 뷰티 라이프케어 상세 안내 모달 (모바일 최적화)
          ========================================================================= -->
     <div class="beauty-modal-backdrop" id="beautyPromoModal" onclick="if(event.target === this) closeBeautyCareModal();" role="dialog" aria-modal="true" aria-labelledby="beautyHeroTitle">
       <div class="beauty-modal-container">
         
-        <!-- 모달 헤더 바 -->
+        <!-- 모달 헤더 바 (모바일 스티키 고정) -->
         <div class="beauty-modal-header">
           <div style="display: flex; align-items: center; gap: 10px;">
             <span style="font-size: 1.3rem;">💄</span>
@@ -6111,7 +6337,7 @@
           <button type="button" class="beauty-modal-close-btn" onclick="closeBeautyCareModal()" aria-label="프로모션 창 닫기">✕</button>
         </div>
 
-        <!-- 히어로 배너 (기획서 마케팅 헤드카피 완벽 반영) -->
+        <!-- 히어로 배너 (모바일 컴팩트 자동 최적화) -->
         <div class="beauty-modal-hero">
           <div class="beauty-hero-badge">
             <span>✨ 40대 전문 여성 라이프 코치 1:1 방문 컨설팅</span>
@@ -6124,7 +6350,7 @@
           </p>
         </div>
 
-        <!-- 모달 본문 콘텐츠 -->
+        <!-- 모달 본문 콘텐츠 (넓은 스크롤 영역) -->
         <div class="beauty-modal-body">
           
           <!-- 이중 타깃(Dual-Target) 맞춤 탭 -->
@@ -6139,10 +6365,10 @@
 
           <!-- 타깃별 감성 공감 박스 -->
           <div class="beauty-target-box" id="targetChildBox">
-            <h4 style="font-size: 1.15rem; font-weight: 850; color: #b83354; margin-bottom: 8px;">
+            <h4 style="font-size: 1.12rem; font-weight: 850; color: #b83354; margin-bottom: 8px;">
               “엄마의 화사한 웃음, 얼마 만에 보시나요?”
             </h4>
-            <p style="font-size: 0.96rem; color: var(--text-secondary); line-height: 1.65; margin: 0; word-break: keep-all;">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; margin: 0; word-break: keep-all;">
               바쁜 일상 때문에 부모님의 외로움과 삶의 질을 챙겨드리지 못했던 죄책감을 덜어드립니다. 
               단발성 용돈이나 단순 선물을 넘어, 엄마의 가장 빛났던 <strong>'리즈 시절' 추억과 우아한 자존감</strong>을 되찾아 드리는 3시간의 감동을 선물하세요. 
               방문 시 <strong>주거 공간 낙상 위험 요소 점검</strong>까지 꼼꼼히 진행하여 자녀의 마음을 안심시켜 드립니다.
@@ -6150,10 +6376,10 @@
           </div>
 
           <div class="beauty-target-box" id="targetSeniorBox" style="display: none; border-left-color: #2b7a4b;">
-            <h4 style="font-size: 1.15rem; font-weight: 850; color: #2b7a4b; margin-bottom: 8px;">
+            <h4 style="font-size: 1.12rem; font-weight: 850; color: #2b7a4b; margin-bottom: 8px;">
               “나이가 들어도 나만의 우아함과 멋을 잃지 않는 방법”
             </h4>
-            <p style="font-size: 0.96rem; color: var(--text-secondary); line-height: 1.65; margin: 0; word-break: keep-all;">
+            <p style="font-size: 0.95rem; color: var(--text-secondary); line-height: 1.65; margin: 0; word-break: keep-all;">
               외출 한 번 하기가 조심스럽고 거울 속 굳어진 표정이 낯설어질 때, 편안한 자택에서 오롯이 나만을 위한 하이엔드 라이프케어를 경험해 보세요. 
               정밀 피부 진단부터 딥 보습 에스테틱, 과거 전성기 사진을 바탕으로 한 맞춤 메이크업과 옷장 속 의상 큐레이션으로 당당한 자신감을 되찾아 드립니다.
             </p>
@@ -6164,58 +6390,108 @@
             <img src="images/care-beauty-treatment-3panel.jpg" alt="180분 딥보습 에스테틱, 타임슬립 메이크업, 워드로브 스타일링 3패널" loading="lazy">
           </div>
 
-          <!-- 180분 표준 서비스 프로토콜 (SOP) 3단계 타임라인 -->
-          <div style="margin-bottom: 16px;">
-            <h3 style="font-size: 1.25rem; font-weight: 850; color: var(--text-primary); margin-bottom: 6px;">
-              ⏱️ 180분 프리미엄 라이프케어 표준 프로토콜 (SOP)
-            </h3>
-            <p style="font-size: 0.92rem; color: var(--text-secondary); margin-bottom: 18px;">
-              투입되는 코치의 역량과 관계없이 최고 수준의 고객 경험을 보장하는 분 단위 시그니처 3단계 여정입니다.
+          <!-- 📌 [개선] 180분 표준 서비스 프로토콜 (SOP) 인포그래픽 & 체계적 3단계 카드 -->
+          <div style="margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 6px;">
+              <h3 style="font-size: 1.25rem; font-weight: 850; color: var(--text-primary); margin: 0;">
+                ⏱️ 180분 시니어 뷰티 코칭 &amp; 스타일링 체계적 프로세스
+              </h3>
+              <span style="font-size: 0.82rem; color: #b83354; font-weight: 800; background: #fee7ec; padding: 3px 10px; border-radius: 999px;">
+                분 단위 정밀 SOP
+              </span>
+            </div>
+            <p style="font-size: 0.92rem; color: var(--text-secondary); margin: 0 0 16px;">
+              전문 라이프 코치가 180분간 품격 있게 이끌어가는 단계별 표준 실행 프로토콜입니다.
             </p>
           </div>
 
-          <div class="sop-timeline-grid">
-            <!-- Phase 1 -->
-            <div class="sop-phase-card">
-              <div class="sop-phase-header">
-                <span class="sop-phase-tag">Phase 1 · 진단 & 라포</span>
-                <span class="sop-time-badge">00~30분 (30분)</span>
+          <!-- 1. 고화질 프로토콜 인포그래픽 카드 (터치 시 크게보기) -->
+          <div class="beauty-infographic-card">
+            <div class="beauty-infographic-header">
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 1.1rem;">📊</span>
+                <strong style="font-size: 0.94rem; color: #b83354;">180분 세부 실행 과정 인포그래픽 요약</strong>
               </div>
-              <h4 class="sop-phase-title">추억 소환 & 정밀 진단</h4>
-              <ul class="sop-step-list">
-                <li><span class="dot">•</span> <strong>환영 및 라포 형성:</strong> 웰컴 차담과 함께 <em>“어머니의 가장 빛났던 시절을 소환해 드릴게요”</em> 긴장 완화</li>
-                <li><span class="dot">•</span> <strong>리즈 시절 사진 소환:</strong> 20~40대 청춘 사진을 함께 보며 화장법과 추억 공유</li>
-                <li><span class="dot">•</span> <strong>피부 진단 컨설팅:</strong> 휴대용 진단기로 수분·탄력 정밀 측정 및 케어 플랜 동의</li>
-              </ul>
+              <button type="button" class="btn btn-secondary" onclick="openInfographicLightbox()" style="padding: 5px 12px; font-size: 0.82rem; border-radius: 999px; background: #ffffff; border: 1px solid #f8c8d2; color: #b83354; font-weight: 800;">
+                🔍 고화질 크게보기
+              </button>
+            </div>
+            <div class="beauty-infographic-img-wrap" onclick="openInfographicLightbox()" title="클릭하여 원본 고화질로 크게 보기">
+              <img src="images/care-beauty-protocol-infographic.jpg" alt="시니어 뷰티 코칭 & 스타일링 180분 세부 실행 내용 인포그래픽" class="beauty-infographic-img" loading="lazy">
+              <div class="beauty-infographic-zoom-badge">
+                <span>🔍 터치하여 전체화면 크게 보기</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 깔끔하게 정리된 3단계 프로토콜 타임라인 카드 (모바일 최적화) -->
+          <div class="clean-sop-container">
+            
+            <!-- Phase 1 -->
+            <div class="clean-sop-card">
+              <div class="clean-sop-header">
+                <span class="clean-sop-badge">Phase 1 · 진단 및 추억소환</span>
+                <span class="clean-sop-duration">⏱️ 00~30분 (30분 소요)</span>
+              </div>
+              <h4 class="clean-sop-title">추억 소환 &amp; 맞춤 스타일링 플랜</h4>
+              <div class="clean-sop-items">
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 환영 라포 형성 및 '리즈 시절' 추억 소환 (0~25분):</span>
+                  <span>따뜻한 차와 함께 과거 사진을 펼쳐 가장 아름다웠던 시절의 사진을 선택합니다.</span>
+                </div>
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 오늘의 맞춤 스타일링 플랜 브리핑 (25~30분):</span>
+                  <span>추억 속 모습을 재현하기 위하여 피부 진단 및 메이크업 등 오늘 진행될 전체 과정과 맞춤 플랜을 설명합니다.</span>
+                </div>
+              </div>
             </div>
 
-            <!-- Phase 2 -->
-            <div class="sop-phase-card featured">
-              <div class="sop-phase-header">
-                <span class="sop-phase-tag" style="background: #b83354; color: #ffffff;">Phase 2 · 메인 실행 (★)</span>
-                <span class="sop-time-badge">30~120분 (90분)</span>
+            <!-- Phase 2 (시그니처) -->
+            <div class="clean-sop-card featured">
+              <div class="clean-sop-header">
+                <span class="clean-sop-badge main">Phase 2 · 메인 실행 (시그니처 ★)</span>
+                <span class="clean-sop-duration" style="color: #b83354;">⏱️ 30~120분 (90분 소요)</span>
               </div>
-              <h4 class="sop-phase-title">에스테틱 & 스타일링</h4>
-              <ul class="sop-step-list">
-                <li><span class="dot">•</span> <strong>딥 보습 & 데콜테 테라피 (35분):</strong> 저자극 버블 클렌징 + 앰플 2단계 + 림프 순환 목/승모근 이완 + 손 마사지</li>
-                <li><span class="dot">•</span> <strong>타임슬립 메이크업 (30분):</strong> 투명 윤광 베이스, 처진 눈매 교정, 최애 립 컬러 재해석, 정수리 뿌리 볼륨 드라이</li>
-                <li><span class="dot">•</span> <strong>워드로브 스타일링 (25분):</strong> 옷장 속 아끼던 의상 2~3벌 선별, 스카프·브로치 매칭 TPO 토탈 코디</li>
-              </ul>
+              <h4 class="clean-sop-title" style="color: #b83354;">시그니처 에스테틱 &amp; 타임슬립 스타일링</h4>
+              <div class="clean-sop-items">
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 시그니처 딥 보습 에스테틱 &amp; 데콜테 테라피 (30~65분):</span>
+                  <span>저자극 클렌징 후 고영양 안티에이징 앰플과 페이스 &amp; 데콜테(목·승모근) 림프 순환 테크닉으로 피부 광채를 끌어올립니다.</span>
+                </div>
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 타임슬립 메이크업 &amp; 볼륨 헤어 아틀리에 (65~95분):</span>
+                  <span>기미·주름을 자연스럽게 커버하는 투명 윤광 메이크업과 정수리 뿌리 볼륨을 살려 우아하고 화사한 헤어를 연출합니다.</span>
+                </div>
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 워드로브 스타일링 &amp; 의상 코디네이션 (95~120분):</span>
+                  <span>옷장 속 보유 의상 2~3벌과 스카프, 브로치 등 소품을 활용해 감각적인 포인트 코디를 완성합니다.</span>
+                </div>
+              </div>
             </div>
 
             <!-- Phase 3 -->
-            <div class="sop-phase-card">
-              <div class="sop-phase-header">
-                <span class="sop-phase-tag">Phase 3 · 마무리 & 회고</span>
-                <span class="sop-time-badge">120~180분 (60분)</span>
+            <div class="clean-sop-card">
+              <div class="clean-sop-header">
+                <span class="clean-sop-badge">Phase 3 · 마무리 및 회고</span>
+                <span class="clean-sop-duration">⏱️ 120~180분 (60분 소요)</span>
               </div>
-              <h4 class="sop-phase-title">안전 점검 & 감동 아카이빙</h4>
-              <ul class="sop-step-list">
-                <li><span class="dot">•</span> <strong>주거 낙상 안전 점검 (45분):</strong> 미끄러운 매트, 슬리퍼, 바닥 동선 위험 요소 점검 & 옷장 미니멀 정돈</li>
-                <li><span class="dot">•</span> <strong>거울 미팅 & 포토 (10분):</strong> 전신 거울 앞에서 변화된 모습 감상, 다각도 스마트폰 비포·애프터 촬영</li>
-                <li><span class="dot">•</span> <strong>엔딩 노트 & 배웅 (5분):</strong> 느낀 감동과 자녀에게 전할 사랑의 한 줄 기록, 1분 홈케어 팁 교육</li>
-              </ul>
+              <h4 class="clean-sop-title">공간 안전 점검 &amp; 감동 아카이빙</h4>
+              <div class="clean-sop-items">
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 미니멀 옷장 정리 &amp; 안전 동선 체크 (120~150분):</span>
+                  <span>실용적인 미니멀 정리 노하우 안내와 거실 및 동선의 낙상 위험 요소를 점검합니다.</span>
+                </div>
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 거울 미팅 &amp; 포토 퍼포먼스 (150~165분):</span>
+                  <span>전신 거울로 변화된 모습을 확인하고 스마트폰으로 비포&amp;애프터 기념 사진을 촬영합니다.</span>
+                </div>
+                <div class="clean-sop-item">
+                  <span class="clean-sop-item-tag">• 엔딩 노트 기록 &amp; 작별 인사 (165~180분):</span>
+                  <span>감동의 소감과 1분 홈케어 팁을 '엔딩 노트'에 직접 기록하며 깔끔하게 마무리합니다.</span>
+                </div>
+              </div>
             </div>
+
           </div>
 
           <!-- 부가 가치: 주거 낙상 안전 & 사후 관리 리텐션 안내 -->
@@ -6230,76 +6506,137 @@
             </div>
           </div>
 
-          <!-- 온라인 간편 예약 및 사전 문진 신청 폼 -->
-          <div class="beauty-booking-card" id="beautyBookingSection">
-            <h3 class="beauty-booking-title">
-              <span>📅</span> 180분 프리미엄 라이프케어 예약 신청서
-            </h3>
-            <p style="font-size: 0.93rem; color: var(--text-secondary); margin: 0 0 16px;">
-              신청서를 접수하시면 담당 라이프 코치가 1:1로 매칭되며, 고객 대시보드(마이룸)와 관리자 시스템에 실시간 등록됩니다.
+          <!-- 💬 [분리 완료] 상세 안내 모달 하단: 1:1 상담 안내 신청 CTA 박스 -->
+          <div class="beauty-consult-cta-box">
+            <span style="background: #b83354; color: #fff; font-size: 0.82rem; font-weight: 850; padding: 4px 14px; border-radius: 999px;">
+              PREMIUM 1:1 CARE
+            </span>
+            <h4 style="font-size: 1.35rem; font-weight: 900; color: #b83354; margin: 12px 0 6px;">
+              엄마의 가장 눈부신 리즈 시절을 선물하세요
+            </h4>
+            <p style="font-size: 0.94rem; color: var(--text-secondary); margin: 0; line-height: 1.6; word-break: keep-all;">
+              전문 뷰티 라이프 코치가 댁으로 방문하여 소중한 추억과 우아한 일상을 완성해 드립니다.<br>
+              희망 일정 및 세부 비용, 맞춤 진행 플랜을 1:1로 친절하게 안내받으실 수 있습니다.
             </p>
+            <button type="button" class="beauty-consult-cta-btn" onclick="openBeautyCounselModal()">
+              <span>💬 1:1 맞춤 상담 안내 신청하기</span>
+              <span>➔</span>
+            </button>
+          </div>
 
-            <form id="beautyBookingForm" onsubmit="submitBeautyBooking(event)">
-              <div class="beauty-form-grid">
-                
-                <div class="beauty-form-group">
-                  <label for="bFormRole">신청자 구분 *</label>
-                  <select id="bFormRole" class="beauty-form-select" required onchange="handleBookingRoleChange(this.value)">
-                    <option value="자녀 대리 신청 (3040 세대)">자녀 대리 신청 (3040 세대)</option>
-                    <option value="시니어 본인 신청 (5060+ 세대)">시니어 본인 직접 신청 (5060+ 세대)</option>
-                    <option value="가족/친지 대리 신청">가족 / 친지 대리 신청</option>
-                  </select>
-                </div>
+        </div>
 
-                <div class="beauty-form-group">
-                  <label for="bFormApplicantName">신청자 성함 *</label>
-                  <input type="text" id="bFormApplicantName" class="beauty-form-input" placeholder="예: 김민수" required>
-                </div>
+        <!-- 📱 모바일 하단 고정 원클릭 상담 바 -->
+        <div class="beauty-mobile-cta-bar">
+          <div class="beauty-mobile-cta-inner">
+            <div>
+              <div style="font-size: 0.76rem; color: #b83354; font-weight: 800;">180분 프리미엄 라이프케어</div>
+              <div style="font-size: 0.9rem; font-weight: 900; color: var(--text-primary);">1:1 맞춤 일정 &amp; 상담</div>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="openBeautyCounselModal()" style="padding: 10px 18px; font-size: 0.92rem; font-weight: 850; border-radius: 12px; background: linear-gradient(135deg, #d1516e 0%, #b83354 100%); border: none; color: #fff; cursor: pointer;">
+              <span>💬 상담 안내받기</span>
+            </button>
+          </div>
+        </div>
 
-                <div class="beauty-form-group">
-                  <label for="bFormPhone">신청자 연락처 *</label>
-                  <input type="tel" id="bFormPhone" class="beauty-form-input" placeholder="010-0000-0000" required>
-                </div>
+      </div>
+    </div>
 
-                <div class="beauty-form-group">
-                  <label for="bFormSeniorName">서비스 대상 어르신 성함 / 연령 *</label>
-                  <input type="text" id="bFormSeniorName" class="beauty-form-input" placeholder="예: 이영숙 어머니 (72세)" required>
-                </div>
+    <!-- =========================================================================
+         [신설 별도 팝업] 180분 시니어 뷰티 라이프케어 1:1 상담 안내 신청 모달
+         ========================================================================= -->
+    <div class="beauty-modal-backdrop" id="beautyCounselModal" onclick="if(event.target === this) closeBeautyCounselModal();" role="dialog" aria-modal="true" aria-labelledby="beautyCounselTitle">
+      <div class="beauty-modal-container beauty-counsel-container">
+        
+        <!-- 모달 헤더 바 -->
+        <div class="beauty-modal-header">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="font-size: 1.3rem;">💬</span>
+            <span style="font-weight: 900; font-size: 1.05rem; color: #b83354;" id="beautyCounselTitle">1:1 맞춤 상담 안내 신청</span>
+          </div>
+          <button type="button" class="beauty-modal-close-btn" onclick="closeBeautyCounselModal()" aria-label="상담 신청 창 닫기">✕</button>
+        </div>
 
-                <div class="beauty-form-group">
-                  <label for="bFormPlace">진행 희망 장소 *</label>
-                  <select id="bFormPlace" class="beauty-form-select" required>
-                    <option value="자택 방문 1:1 케어">🏡 고객 자택 방문 1:1 케어 (권장)</option>
-                    <option value="지정 코칭 스튜디오 방문">🏢 지정 코칭 스튜디오 방문</option>
-                  </select>
-                </div>
+        <!-- 모달 본문 (깔끔하고 부담 없는 폼) -->
+        <div class="beauty-modal-body" style="padding: 22px 20px;">
+          
+          <div style="background: var(--bg-secondary, #f8fafc); border-radius: 14px; padding: 14px 16px; margin-bottom: 18px; border-left: 4px solid #b83354;">
+            <strong style="color: #b83354; font-size: 0.95rem; display: block; margin-bottom: 4px;">📞 친절 상담 안내 약속</strong>
+            <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; line-height: 1.5; word-break: keep-all;">
+              간단한 기본 정보를 남겨주시면 담당 라이프 코치가 1:1로 연락드려 어르신께 가장 알맞은 일정과 맞춤 코칭 과정을 친절히 안내해 드립니다.
+            </p>
+          </div>
 
-                <div class="beauty-form-group">
-                  <label for="bFormDate">희망 방문 일시 *</label>
-                  <input type="datetime-local" id="bFormDate" class="beauty-form-input" required>
-                </div>
+          <form id="beautyBookingForm" onsubmit="submitBeautyBooking(event)">
+            <div class="beauty-form-grid">
+              
+              <div class="beauty-form-group">
+                <label for="bFormRole">신청자 구분 *</label>
+                <select id="bFormRole" class="beauty-form-select" required onchange="handleBookingRoleChange(this.value)">
+                  <option value="자녀 대리 신청 (3040 세대)">자녀 대리 신청 (3040 세대)</option>
+                  <option value="시니어 본인 신청 (5060+ 세대)">시니어 본인 직접 신청 (5060+ 세대)</option>
+                  <option value="가족/친지 대리 신청">가족 / 친지 대리 신청</option>
+                </select>
+              </div>
 
-                <!-- 주소 입력 (자택 방문 시) -->
-                <div class="beauty-form-group full-width">
-                  <label for="bFormAddress">방문 주소 (자택 방문 케어 시) *</label>
-                  <input type="text" id="bFormAddress" class="beauty-form-input" placeholder="예: 서울시 서초구 반포대로 12길 (상세 동호수)" required>
-                </div>
+              <div class="beauty-form-group">
+                <label for="bFormApplicantName">신청자 성함 *</label>
+                <input type="text" id="bFormApplicantName" class="beauty-form-input" placeholder="예: 김민수" required>
+              </div>
 
+              <div class="beauty-form-group">
+                <label for="bFormPhone">신청자 연락처 *</label>
+                <input type="tel" id="bFormPhone" class="beauty-form-input" placeholder="010-0000-0000" required>
+              </div>
+
+              <div class="beauty-form-group">
+                <label for="bFormSeniorName">서비스 대상 어르신 성함 / 연령 *</label>
+                <input type="text" id="bFormSeniorName" class="beauty-form-input" placeholder="예: 이영숙 어머니 (72세)" required>
+              </div>
+
+              <div class="beauty-form-group">
+                <label for="bFormPlace">진행 희망 장소 *</label>
+                <select id="bFormPlace" class="beauty-form-select" required>
+                  <option value="자택 방문 1:1 케어">🏡 고객 자택 방문 1:1 케어 (권장)</option>
+                  <option value="지정 코칭 스튜디오 방문">🏢 지정 코칭 스튜디오 방문</option>
+                </select>
+              </div>
+
+              <div class="beauty-form-group">
+                <label for="bFormDate">희망 방문/상담 일시 *</label>
+                <input type="datetime-local" id="bFormDate" class="beauty-form-input" required>
+              </div>
+
+              <!-- 주소 입력 (자택 방문 시) -->
+              <div class="beauty-form-group full-width">
+                <label for="bFormAddress">방문 주소 (자택 방문 케어 희망 시) *</label>
+                <input type="text" id="bFormAddress" class="beauty-form-input" placeholder="예: 서울시 서초구 반포대로 12길 (상세 동호수)" required>
+              </div>
+
+              <!-- 선택 옵션 접이식 토글 -->
+              <div class="beauty-form-group full-width" style="margin-top: 4px;">
+                <button type="button" onclick="toggleCounselOptionalSection()" id="btnToggleOptional" style="background: none; border: 1px dashed #d1516e; border-radius: 10px; padding: 10px 14px; font-size: 0.88rem; font-weight: 800; color: #b83354; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                  <span>📸 청춘 사진 첨부 및 집중 케어 희망 부위 (선택 사항)</span>
+                  <span id="optionalArrow">▼</span>
+                </button>
+              </div>
+
+              <div id="counselOptionalSection" style="display: none; grid-column: 1 / -1;">
                 <!-- 리즈 시절 사진 파일 첨부 -->
-                <div class="beauty-form-group full-width">
-                  <label>📸 부모님 '리즈 시절' 청춘 사진 (20~40대) 사전 첨부 (선택)</label>
+                <div class="beauty-form-group full-width" style="margin-bottom: 12px;">
+                  <label>📸 부모님 '리즈 시절' 청춘 사진 사전 첨부 (선택)</label>
                   <div class="photo-upload-container" onclick="document.getElementById('bFormPhotoFile').click()">
                     <input type="file" id="bFormPhotoFile" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this)">
                     <div id="photoUploadPlaceholder">
-                      <span style="font-size: 1.8rem; display: block; margin-bottom: 4px;">🖼️</span>
-                      <strong style="color: #b83354; font-size: 0.95rem;">클릭하여 부모님의 가장 빛났던 시절 사진을 올려주세요</strong>
-                      <p style="font-size: 0.82rem; color: var(--text-muted); margin: 4px 0 0;">당일 타임슬립 메이크업과 헤어 연출의 소중한 길잡이가 됩니다. (현장 실물 지참 가능)</p>
+                      <span style="font-size: 1.5rem; display: block; margin-bottom: 2px;">🖼️</span>
+                      <strong style="color: #b83354; font-size: 0.9rem;">클릭하여 부모님의 가장 빛났던 시절 사진을 올려주세요</strong>
+                      <p style="font-size: 0.78rem; color: var(--text-muted); margin: 3px 0 0;">타임슬립 메이크업과 헤어 연출의 소중한 길잡이가 됩니다. (현장 실물 지참 가능)</p>
                     </div>
                     <div id="photoPreviewWrap" class="photo-preview-wrap">
                       <img id="photoPreviewImg" class="photo-preview-thumb" src="" alt="미리보기">
                       <div style="text-align: left;">
-                        <strong id="photoPreviewName" style="font-size: 0.88rem; color: var(--text-primary);">사진 등록 완료</strong>
-                        <p style="font-size: 0.8rem; color: #2b7a4b; margin: 2px 0 0;">✓ 현장 코칭 프로토콜에 사전 등록됩니다</p>
+                        <strong id="photoPreviewName" style="font-size: 0.86rem; color: var(--text-primary);">사진 등록 완료</strong>
+                        <p style="font-size: 0.78rem; color: #2b7a4b; margin: 2px 0 0;">✓ 현장 코칭 프로토콜에 사전 등록됩니다</p>
                       </div>
                     </div>
                   </div>
@@ -6308,42 +6645,52 @@
                 <!-- 사전 집중 케어 고민 -->
                 <div class="beauty-form-group full-width">
                   <label>🌿 특별히 신경 써서 케어받고 싶으신 부분 (중복 선택 가능)</label>
-                  <div style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px;">
-                    <label style="font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                  <div style="display: flex; gap: 8px 12px; flex-wrap: wrap; margin-top: 4px;">
+                    <label style="font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                       <input type="checkbox" name="bCareOption" value="목·승모근 림프 이완 테라피" checked> 목·승모근 림프 순환
                     </label>
-                    <label style="font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <label style="font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                       <input type="checkbox" name="bCareOption" value="기미·주름 커버 투명 윤광 메이크업" checked> 기미·주름 투명 메이크업
                     </label>
-                    <label style="font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <label style="font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                       <input type="checkbox" name="bCareOption" value="뿌리 볼륨 헤어 아틀리에" checked> 정수리 뿌리 볼륨 헤어
                     </label>
-                    <label style="font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <label style="font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                       <input type="checkbox" name="bCareOption" value="옷장 속 소장 의상 TPO 코디" checked> 소장 의상 맞춤 코디
                     </label>
-                    <label style="font-weight: 500; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                    <label style="font-weight: 500; font-size: 0.88rem; display: flex; align-items: center; gap: 5px; cursor: pointer;">
                       <input type="checkbox" name="bCareOption" value="주거 공간 낙상 안전 동선 점검" checked> 주거 낙상 안전 점검
                     </label>
                   </div>
                 </div>
-
-                <!-- 고객 요청사항 메모 -->
-                <div class="beauty-form-group full-width">
-                  <label for="bFormMemo">코치에게 전하고 싶은 말씀 (건강 상태 등)</label>
-                  <textarea id="bFormMemo" class="beauty-form-input" style="height: 72px; padding: 10px 14px; resize: vertical;" placeholder="예: 무릎이 조금 불편하셔서 침대나 소파에서 편안하게 받으시길 원합니다."></textarea>
-                </div>
-
               </div>
 
-              <button type="submit" class="beauty-submit-btn">
-                <span>✨ 180분 특별한 날, 화려한 외출 예약 신청하기</span>
-                <span>➔</span>
-              </button>
-            </form>
-          </div>
+              <!-- 고객 요청사항 메모 -->
+              <div class="beauty-form-group full-width">
+                <label for="bFormMemo">코치에게 전하고 싶은 말씀 (어르신 건강 상태 등)</label>
+                <textarea id="bFormMemo" class="beauty-form-input" style="height: 64px; padding: 10px 14px; resize: vertical;" placeholder="예: 무릎이 조금 불편하셔서 침대나 소파에서 편안하게 진행되기를 원합니다."></textarea>
+              </div>
+
+            </div>
+
+            <button type="submit" class="beauty-submit-btn">
+              <span>✨ 1:1 맞춤 상담 안내 신청 접수하기</span>
+              <span>➔</span>
+            </button>
+          </form>
 
         </div>
 
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         [신설 라이트박스] 180분 프로토콜 고화질 인포그래픽 전체화면 확대 뷰어
+         ========================================================================= -->
+    <div class="infographic-lightbox-backdrop" id="beautyInfographicModal" onclick="if(event.target === this) closeInfographicLightbox();" role="dialog" aria-modal="true">
+      <div class="infographic-lightbox-box">
+        <button type="button" class="infographic-lightbox-close" onclick="closeInfographicLightbox()" aria-label="닫기">✕</button>
+        <img src="images/care-beauty-protocol-infographic.jpg" alt="180분 시니어 뷰티 코칭 및 스타일링 세부 프로토콜 고화질 인포그래픽" style="width: 100%; height: auto; display: block;">
       </div>
     </div>
 
@@ -8098,14 +8445,33 @@
     }
 
     // =========================================================================
-    // [신설] 1호 비즈니스: 180분 프리미엄 시니어 뷰티 라이프케어 프로모션 & 예약 시스템
+    // [신설] 1호 비즈니스: 180분 프리미엄 시니어 뷰티 라이프케어 프로모션 & 1:1 상담 안내 시스템
     // =========================================================================
     let uploadedBeautyPhotoBase64 = '';
 
+    // 1. 상세 소개 모달 열기/닫기
     function openBeautyCareModal() {
       const modal = document.getElementById('beautyPromoModal');
       if (!modal) return;
       modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeBeautyCareModal() {
+      const modal = document.getElementById('beautyPromoModal');
+      if (!modal) return;
+      modal.classList.remove('active');
+      const counselModal = document.getElementById('beautyCounselModal');
+      if (!counselModal || !counselModal.classList.contains('active')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // 2. 1:1 맞춤 상담 안내 신청 별도 팝업 열기/닫기
+    function openBeautyCounselModal() {
+      const counselModal = document.getElementById('beautyCounselModal');
+      if (!counselModal) return;
+      counselModal.classList.add('active');
       document.body.style.overflow = 'hidden';
 
       // 희망 일시 기본값 설정 (내일 오전 10:00)
@@ -8121,11 +8487,41 @@
       }
     }
 
-    function closeBeautyCareModal() {
-      const modal = document.getElementById('beautyPromoModal');
+    function closeBeautyCounselModal() {
+      const counselModal = document.getElementById('beautyCounselModal');
+      if (!counselModal) return;
+      counselModal.classList.remove('active');
+      const promoModal = document.getElementById('beautyPromoModal');
+      if (!promoModal || !promoModal.classList.contains('active')) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // 3. 고화질 프로토콜 인포그래픽 라이트박스 전체화면 뷰어
+    function openInfographicLightbox() {
+      const modal = document.getElementById('beautyInfographicModal');
+      if (!modal) return;
+      modal.classList.add('active');
+    }
+
+    function closeInfographicLightbox() {
+      const modal = document.getElementById('beautyInfographicModal');
       if (!modal) return;
       modal.classList.remove('active');
-      document.body.style.overflow = '';
+    }
+
+    // 4. 상담 폼 선택사항(청춘사진, 케어옵션) 접기/펼치기 토글
+    function toggleCounselOptionalSection() {
+      const section = document.getElementById('counselOptionalSection');
+      const arrow = document.getElementById('optionalArrow');
+      if (!section) return;
+      if (section.style.display === 'none' || section.style.display === '') {
+        section.style.display = 'block';
+        if (arrow) arrow.textContent = '▲';
+      } else {
+        section.style.display = 'none';
+        if (arrow) arrow.textContent = '▼';
+      }
     }
 
     function switchBeautyTargetTab(target) {
@@ -8179,7 +8575,7 @@
       reader.readAsDataURL(file);
     }
 
-    // 180분 예약 신청서 제출
+    // 180분 상담 안내 신청서 제출
     function submitBeautyBooking(event) {
       event.preventDefault();
 
@@ -8201,7 +8597,7 @@
         return;
       }
 
-      // 고유 예약 ID 및 생성 일자
+      // 고유 접수 ID 및 생성 일자
       const bookingId = 'BK-' + Date.now().toString().slice(-6);
       const createdAt = new Date().toISOString();
 
@@ -8219,11 +8615,10 @@
         options: selectedOptions,
         memo: memo,
         photoBase64: uploadedBeautyPhotoBase64 || '',
-        status: '접수완료', // 접수완료 -> 코치배정 -> 케어완료
+        status: '상담접수', // 상담접수 -> 일정확정 -> 코치배정 -> 케어완료
         assignedCoach: '김서연 전문 라이프 코치 (40대 시니어 뷰티&라이프스타일 1급)',
         coachPhone: '010-9613-5913',
         createdAt: createdAt,
-        // 케어 완료 후 데이터 시뮬레이션용 기본값
         diagnostic: {
           moistureBefore: 24,
           moistureAfter: 68,
@@ -8251,24 +8646,25 @@
           role: role,
           name: applicantName,
           phone: phone,
-          category: '💄 시니어 뷰티 라이프케어 (180분)',
+          category: '💄 시니어 뷰티 라이프케어 (180분 상담안내)',
           message: `[${seniorName}] ${place} / 희망일: ${visitDate} / 주소: ${address} / 옵션: ${selectedOptions.join(', ')} / 메모: ${memo}`,
           date: new Date().toLocaleString('ko-KR'),
-          status: '접수완료'
+          status: '상담대기'
         });
         localStorage.setItem('seniorConsultList', JSON.stringify(consultList));
       } catch (err) {
-        console.error('예약 데이터 저장 오류:', err);
+        console.error('상담 신청 데이터 저장 오류:', err);
       }
 
       // 모달 닫기
+      closeBeautyCounselModal();
       closeBeautyCareModal();
 
       // 완료 팝업 & 고객 대시보드 / 관리자 CRM 연동 안내
       showBookingCompleteDialog(bookingItem);
     }
 
-    // 예약 완료 후 고객 대시보드 및 관리자 이동 안내 다이얼로그
+    // 상담 신청 완료 후 고객 대시보드 및 관리자 이동 안내 다이얼로그
     function showBookingCompleteDialog(item) {
       const overlay = document.createElement('div');
       overlay.style.cssText = `
@@ -8279,36 +8675,36 @@
       `;
 
       overlay.innerHTML = `
-        <div style="background: var(--bg-card, #ffffff); max-width: 540px; width: 100%; border-radius: 24px; padding: 32px 28px; box-shadow: 0 24px 60px rgba(0,0,0,0.3); border: 2px solid #f8c8d2; text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 12px;">🎉</div>
+        <div style="background: var(--bg-card, #ffffff); max-width: 520px; width: 100%; border-radius: 24px; padding: 32px 26px; box-shadow: 0 24px 60px rgba(0,0,0,0.3); border: 2px solid #f8c8d2; text-align: center;">
+          <div style="font-size: 3rem; margin-bottom: 10px;">💌</div>
           <span style="background: #fee7ec; color: #b83354; font-weight: 850; font-size: 0.84rem; padding: 4px 12px; border-radius: 999px;">
-            예약 번호: ${escapeHtml(item.id)}
+            접수 번호: ${escapeHtml(item.id)}
           </span>
-          <h3 style="font-size: 1.45rem; font-weight: 900; color: var(--text-primary, #1e293b); margin: 12px 0 8px;">
-            180분 프리미엄 라이프케어 예약이 접수되었습니다!
+          <h3 style="font-size: 1.4rem; font-weight: 900; color: var(--text-primary, #1e293b); margin: 12px 0 8px;">
+            180분 맞춤 상담 안내 신청이 접수되었습니다!
           </h3>
-          <p style="font-size: 0.95rem; color: var(--text-secondary, #64748b); line-height: 1.6; margin-bottom: 22px; word-break: keep-all;">
-            <strong>${escapeHtml(item.seniorName)}</strong> 어르신을 위한 180분 감동의 여정이 준비되었습니다.<br>
-            전담 라이프 코치가 배정되었으며, <strong>고객 대시보드(마이룸)</strong>와 <strong>관리자 CRM</strong>에 실시간 연동되었습니다.
+          <p style="font-size: 0.94rem; color: var(--text-secondary, #64748b); line-height: 1.6; margin-bottom: 20px; word-break: keep-all;">
+            <strong>${escapeHtml(item.seniorName)}</strong> 어르신을 위한 맞춤 코칭 일정을 확인한 뒤 전문 라이프 코치가 기재해주신 연락처로 정성껏 연락드리겠습니다.<br>
+            접수 내역은 <strong>고객 대시보드(마이룸)</strong>와 <strong>관리자 시스템</strong>에서 실시간 확인하실 수 있습니다.
           </p>
 
-          <div style="background: var(--bg-secondary, #f8fafc); border-radius: 14px; padding: 14px 18px; margin-bottom: 24px; text-align: left; font-size: 0.9rem; line-height: 1.6; border: 1px solid var(--border-color, #e2e8f0);">
-            <div><strong>• 신청인:</strong> ${escapeHtml(item.applicantName)} (${escapeHtml(item.role)})</div>
-            <div><strong>• 방문 일시:</strong> ${escapeHtml(item.visitDate.replace('T', ' '))}</div>
+          <div style="background: var(--bg-secondary, #f8fafc); border-radius: 14px; padding: 14px 18px; margin-bottom: 22px; text-align: left; font-size: 0.9rem; line-height: 1.6; border: 1px solid var(--border-color, #e2e8f0);">
+            <div><strong>• 신청자:</strong> ${escapeHtml(item.applicantName)} (${escapeHtml(item.role)})</div>
+            <div><strong>• 희망 일시:</strong> ${escapeHtml(item.visitDate.replace('T', ' '))}</div>
             <div><strong>• 진행 장소:</strong> ${escapeHtml(item.place)}</div>
             <div><strong>• 배정 코치:</strong> ${escapeHtml(item.assignedCoach)}</div>
           </div>
 
           <div style="display: flex; flex-direction: column; gap: 10px;">
-            <a href="my-room.html?tab=coach" class="btn btn-primary" style="padding: 13px 20px; font-size: 1.02rem; font-weight: 850; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #d1516e 0%, #b83354 100%);">
-              <span>🏠 고객 서비스 대시보드(마이룸) 확인하기</span>
+            <a href="my-room.html?tab=coach" class="btn btn-primary" style="padding: 13px 20px; font-size: 1rem; font-weight: 850; border-radius: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, #d1516e 0%, #b83354 100%);">
+              <span>🏠 고객 대시보드(마이룸)에서 확인하기</span>
               <span>➔</span>
             </a>
             <div style="display: flex; gap: 10px;">
-              <a href="admin.html?tab=tabBeautyCrm" class="btn btn-secondary" style="flex: 1; padding: 11px 16px; font-size: 0.92rem; font-weight: 800; border-radius: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
+              <a href="admin.html?tab=tabBeautyCrm" class="btn btn-secondary" style="flex: 1; padding: 11px 16px; font-size: 0.9rem; font-weight: 800; border-radius: 10px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px;">
                 <span>⚙️ 관리자 CRM 열기</span>
               </a>
-              <button type="button" onclick="this.closest('[style*=\\'position: fixed\\']').remove()" class="btn btn-secondary" style="padding: 11px 20px; font-size: 0.92rem; border-radius: 10px;">
+              <button type="button" onclick="this.closest('[style*=\\'position: fixed\\']').remove()" class="btn btn-secondary" style="padding: 11px 20px; font-size: 0.9rem; border-radius: 10px;">
                 닫기
               </button>
             </div>
