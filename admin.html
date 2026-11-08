@@ -5236,15 +5236,19 @@
             currentList.push(serverArt);
             addedCount++;
           } else {
+            // 관리자가 직접 변경한 노출 상태(isFeatured)는 서버 정적 파일로 덮어쓰지 않고 로컬/Firestore 상태 우선 유지!
+            const localIsFeatured = currentList[idx].isFeatured;
             currentList[idx] = Object.assign({}, currentList[idx], serverArt);
+            if (typeof localIsFeatured === 'boolean') {
+              currentList[idx].isFeatured = localIsFeatured;
+            }
           }
         });
 
         saveArticles(currentList);
-        alert(`🎉 서버 articles.json 동기화 완료!\n총 ${currentList.length}편의 칼럼이 최신화되었습니다.`);
+        console.log(`[서버 동기화] 총 ${currentList.length}편의 칼럼 최신화 완료 (신규 ${addedCount}편)`);
       } catch (e) {
-        console.warn('동기화 오류:', e);
-        alert('서버 데이터 동기화에 실패했습니다. (오프라인이거나 로컬 파일 모드)');
+        console.warn('동기화 안내:', e);
       }
     }
 
@@ -5580,19 +5584,31 @@
       document.body.removeChild(tempTextArea);
     }
 
-    // 메인 전면 노출 토글 (개별 글)
+    // 메인 전면 노출 토글 (개별 글 - 로컬 및 Firebase Firestore 실시간 동기화)
     function toggleArticlePin(id) {
       const articles = getArticles();
       const target = articles.find(a => a.id === id);
       if (target) {
         target.isFeatured = !target.isFeatured;
         saveArticles(articles);
-        const stateText = target.isFeatured ? '메인 전면 [⭐ 노출]' : '메인 전면 [☆ 비노출]';
+
+        // 🌟 구글 Firebase Firestore 클라우드 DB 즉시 실시간 동기화 (방문자 화면 즉시 반영!)
+        if (fbDb) {
+          fbDb.collection('articles').doc(target.id).set({
+            isFeatured: target.isFeatured
+          }, { merge: true }).then(() => {
+            console.log('[Firebase] 노출 상태 클라우드 동기화 성공:', target.id, target.isFeatured);
+          }).catch(err => {
+            console.warn('[Firebase] 노출 상태 동기화 오류:', err);
+          });
+        }
+
+        const stateText = target.isFeatured ? '메인 전면 [⭐ 노출 중]' : '메인 전면 [☆ 미노출]';
         console.log(`[여백과 결] '${target.title}' 상태 변경: ${stateText}`);
       }
     }
 
-    // 메인 전면 노출 일괄 설정 (전체 노출 / 전체 비노출)
+    // 메인 전면 노출 일괄 설정 (전체 노출 / 전체 비노출 - 로컬 및 Firebase 실시간 일괄 동기화)
     function setAllArticlesFeatured(featured) {
       const articles = getArticles();
       if (!articles || articles.length === 0) return;
@@ -5601,6 +5617,21 @@
         a.isFeatured = willBe;
       });
       saveArticles(articles);
+
+      // 🌟 구글 Firebase Firestore 클라우드 DB 일괄 동기화
+      if (fbDb) {
+        const batch = fbDb.batch();
+        articles.forEach(a => {
+          const docRef = fbDb.collection('articles').doc(a.id);
+          batch.set(docRef, { isFeatured: willBe }, { merge: true });
+        });
+        batch.commit().then(() => {
+          console.log('[Firebase] 전체 노출 상태 일괄 동기화 완료:', willBe);
+        }).catch(err => {
+          console.warn('[Firebase] 일괄 동기화 오류:', err);
+        });
+      }
+
       const stateText = willBe ? '모든 글이 [⭐ 메인 전면 노출]로 설정되었습니다.' : '모든 글이 [☆ 메인 비노출]로 설정되었습니다.';
       alert(stateText);
     }

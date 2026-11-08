@@ -10525,7 +10525,11 @@
           } else {
             const local = currentList[idx];
             if (local.title !== serverArt.title || local.image !== serverArt.image || local.content !== serverArt.content || local.category !== serverArt.category) {
+              const currentFeatured = local.isFeatured;
               currentList[idx] = Object.assign({}, local, serverArt);
+              if (typeof currentFeatured === 'boolean') {
+                currentList[idx].isFeatured = currentFeatured;
+              }
               hasChange = true;
             }
           }
@@ -10621,18 +10625,13 @@
       localStorage.setItem('yebaek_magazine_articles', JSON.stringify(list));
     }
 
-    // 메인 전면 서재 카드 렌더링 (isFeatured === true 만 노출, 대표사진 커버 연동)
+    // 메인 전면 서재 카드 렌더링 (isFeatured === true 만 노출, 미노출 설정 100% 엄격 반영)
     function renderFeaturedMagazine() {
       const grid = document.getElementById('magazineGrid');
       if (!grid) return;
 
       const articles = getStoredArticles();
-      let featured = articles.filter(a => a.isFeatured);
-
-      // 대표글이 없으면 최신 글 3편을 자동으로 대표글로 승격하여 대문 공백 방지
-      if (featured.length === 0) {
-        featured = articles.slice(0, 3);
-      }
+      let featured = articles.filter(a => a.isFeatured === true || a.isFeatured === 'true');
 
       if (featured.length === 0) {
         grid.innerHTML = `
@@ -10640,7 +10639,7 @@
             <div style="font-size: 2.2rem; margin-bottom: 12px;">📚</div>
             <h3 style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">현재 전면에 노출된 대표글이 없습니다</h3>
             <p style="color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 20px;">
-              [전체 글 목록 보기]에서 대표글을 지정(⭐)하거나, 관리자 홈에서 새 글을 작성하여 메인 대문에 띄워보세요.
+              관리자 콘솔에서 원하는 글의 <strong>[⭐ 전면 노출]</strong>을 켜시면 메인 화면에 즉시 노출됩니다.
             </p>
             <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
               <button class="btn btn-secondary" onclick="openBoardModal()" style="padding: 10px 20px;">📋 전체 글 목록에서 선택하기</button>
@@ -10648,6 +10647,8 @@
             </div>
           </div>
         `;
+        return;
+      }
         return;
       }
 
@@ -11246,6 +11247,14 @@
       if (target) {
         target.isFeatured = !target.isFeatured;
         saveArticles(articles);
+        
+        // 🌟 Firebase Firestore 즉시 동기화
+        if (fbDb) {
+          fbDb.collection('articles').doc(target.id).set({
+            isFeatured: target.isFeatured
+          }, { merge: true }).catch(e => console.warn(e));
+        }
+
         renderFeaturedMagazine();
         renderBoardList();
         if (isAdminLoggedIn()) {
@@ -11455,6 +11464,14 @@
       if (target) {
         target.isFeatured = !target.isFeatured;
         saveArticles(articles);
+
+        // 🌟 Firebase Firestore 즉시 동기화
+        if (fbDb) {
+          fbDb.collection('articles').doc(target.id).set({
+            isFeatured: target.isFeatured
+          }, { merge: true }).catch(e => console.warn(e));
+        }
+
         renderFeaturedMagazine();
         renderAdminDashboard();
         if (document.getElementById('boardListModal').classList.contains('open')) {
