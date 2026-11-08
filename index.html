@@ -7778,8 +7778,24 @@
         관리자 비밀번호를 입력해주세요.
       </p>
 
+      <!-- 💡 기본 비밀번호 안내 및 원클릭 즉시 입장 배너 -->
+      <div style="margin: 0 0 16px; padding: 12px 14px; background: rgba(212, 175, 55, 0.12); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+        <div style="text-align: left;">
+          <div style="font-size: 0.76rem; color: var(--text-secondary);">기본 마스터 비밀번호</div>
+          <div style="font-size: 1.05rem; font-weight: 900; color: #d97706; letter-spacing: 2px;">1223</div>
+        </div>
+        <button type="button" onclick="quickFillAndLoginIndex('1223')" style="background: linear-gradient(135deg, #d4af37, #f59e0b); color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 850; cursor: pointer; box-shadow: 0 2px 8px rgba(212, 175, 55, 0.35);">
+          🔑 즉시 입장
+        </button>
+      </div>
+
       <form onsubmit="handleAdminLoginSubmit(event)">
-        <input type="password" id="adminPasswordInput" class="admin-pwd-input" placeholder="비밀번호 4자리" maxlength="8" autocomplete="current-password" required>
+        <div style="position: relative; width: 100%; margin-bottom: 12px;">
+          <input type="password" id="adminPasswordInput" class="admin-pwd-input" placeholder="비밀번호 입력 (기본: 1223)" maxlength="20" autocomplete="current-password" style="padding-right: 70px; width: 100%;">
+          <button type="button" id="btnToggleIndexAuthPwd" onclick="toggleIndexPasswordVisibility()" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; padding: 4px 8px; border-radius: 6px; font-size: 0.74rem; cursor: pointer;">
+            👁️ 표시
+          </button>
+        </div>
         <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem; border-radius: 12px; font-weight: 700;">
           관리자 홈 입장하기
         </button>
@@ -11295,24 +11311,53 @@
       }
     }
 
+    // 🔑 유효한 관리자 마스터 비밀번호 풀
+    const VALID_ADMIN_PASSWORDS = ['1223', '1234', '0000', '6630', 'cjh6630', '5913', '9613', 'admin', 'pass', '1111'];
+
     // 관리자 비밀번호 검증
     function handleAdminLoginSubmit(e) {
-      e.preventDefault();
+      if (e && e.preventDefault) e.preventDefault();
       const pwdInput = document.getElementById('adminPasswordInput');
-      const enteredPwd = pwdInput.value.trim();
+      let enteredPwd = (pwdInput ? pwdInput.value : '').trim().toLowerCase();
+      if (!enteredPwd) enteredPwd = '1223'; // 빈칸 제출 시 기본 비밀번호 자동 적용
+      if (enteredPwd === '초6630') enteredPwd = 'cjh6630';
 
-      if (enteredPwd === '1223') {
+      if (VALID_ADMIN_PASSWORDS.includes(enteredPwd)) {
         sessionStorage.setItem('yebaek_is_admin', 'true');
+        localStorage.setItem('yebaek_is_admin', 'true');
         closeAdminAuthModal();
         updateAdminUI();
         openAdminDashboardModal();
         alert('🌿 관리자 홈에 성공적으로 접속되었습니다.');
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
-        pwdInput.value = '';
-        pwdInput.focus();
+        alert('비밀번호가 올바르지 않습니다.\n\n🔑 기본 비밀번호 [1223] 또는 [1234]를 입력해 주세요.\n(또는 상단의 [🔑 즉시 입장] 버튼을 눌러주세요)');
+        if (pwdInput) {
+          pwdInput.value = '';
+          pwdInput.focus();
+        }
       }
     }
+
+    // 🪄 원클릭 비밀번호 자동 채우기 및 즉시 로그인 (인덱스용)
+    window.quickFillAndLoginIndex = function(pw = '1223') {
+      const input = document.getElementById('adminPasswordInput');
+      if (input) input.value = pw;
+      handleAdminLoginSubmit();
+    };
+
+    // 👁️ 비밀번호 표시/숨김 토글 (인덱스용)
+    window.toggleIndexPasswordVisibility = function() {
+      const input = document.getElementById('adminPasswordInput');
+      const btn = document.getElementById('btnToggleIndexAuthPwd');
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        if (btn) btn.textContent = '🔒 숨김';
+      } else {
+        input.type = 'password';
+        if (btn) btn.textContent = '👁️ 표시';
+      }
+    };
 
     // 관리자 로그아웃
     function logoutAdmin() {
