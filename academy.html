@@ -2672,24 +2672,14 @@
         관리자 비밀번호를 입력해주세요.
       </p>
 
-      <!-- 💡 기본 비밀번호 안내 및 원클릭 즉시 입장 배너 -->
-      <div style="margin: 0 0 16px; padding: 12px 14px; background: rgba(212, 175, 55, 0.12); border: 1.5px solid rgba(212, 175, 55, 0.4); border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 8px;">
-        <div style="text-align: left;">
-          <div style="font-size: 0.76rem; color: var(--text-secondary);">기본 마스터 비밀번호</div>
-          <div style="font-size: 1.05rem; font-weight: 900; color: #d97706; letter-spacing: 2px;">1223</div>
-        </div>
-        <button type="button" onclick="quickFillAndLoginAcademy('1223')" style="background: linear-gradient(135deg, #d4af37, #f59e0b); color: #0f172a; border: none; padding: 8px 14px; border-radius: 8px; font-size: 0.82rem; font-weight: 850; cursor: pointer; box-shadow: 0 2px 8px rgba(212, 175, 55, 0.35);">
-          🔑 즉시 입장
-        </button>
-      </div>
-
       <form onsubmit="handleAcademyAdminLoginSubmit(event)">
         <input 
           type="password" 
           id="academyAdminPasswordInput" 
-          placeholder="비밀번호 입력 (기본: 1223)" 
-          maxlength="20" 
+          placeholder="관리자 비밀번호 4자리" 
+          maxlength="8" 
           autocomplete="current-password" 
+          required
           style="width: 100%; padding: 12px 14px; border: 2px solid var(--accent); border-radius: 10px; font-size: 1.1rem; text-align: center; margin-bottom: 14px; background: var(--bg-card); color: var(--text-primary); outline: none;"
         >
         <button type="submit" class="btn-submit-apply" style="width: 100%; padding: 13px; font-size: 0.98rem; border-radius: 10px; font-weight: 800; cursor: pointer;">
@@ -4321,37 +4311,24 @@
       if (e.target.id === 'academyAuthModal') closeAcademyAuthModal();
     }
 
-    // 🔑 유효한 관리자 마스터 비밀번호 풀
-    const VALID_ACADEMY_ADMIN_PASSWORDS = ['1223', '1234', '0000', '6630', 'cjh6630', '5913', '9613', 'admin', 'pass', '1111'];
-
     function handleAcademyAdminLoginSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       const pwdInput = document.getElementById('academyAdminPasswordInput');
-      let pwd = (pwdInput ? pwdInput.value : '').trim().toLowerCase();
-      if (!pwd) pwd = '1223'; // 빈칸 제출 시 기본 비밀번호 자동 적용
-      if (pwd === '초6630') pwd = 'cjh6630';
+      const pwd = pwdInput ? pwdInput.value.trim() : '';
 
-      if (VALID_ACADEMY_ADMIN_PASSWORDS.includes(pwd)) {
+      if (pwd === '1223') {
         sessionStorage.setItem('yebaek_academy_admin', 'true');
-        localStorage.setItem('yebaek_academy_admin', 'true');
         closeAcademyAuthModal(true);
         openAcademyAdminDashboard();
         updateAdminHeaderBtnState();
       } else {
-        alert('비밀번호가 올바르지 않습니다.\n\n🔑 기본 비밀번호 [1223] 또는 [1234]를 입력해 주세요.\n(또는 상단의 [🔑 즉시 입장] 버튼을 눌러주세요)');
+        alert('비밀번호가 일치하지 않습니다. 다시 확인해주세요.');
         if (pwdInput) {
           pwdInput.value = '';
           pwdInput.focus();
         }
       }
     }
-
-    // 🪄 원클릭 비밀번호 자동 채우기 및 즉시 로그인 (아카데미용)
-    window.quickFillAndLoginAcademy = function(pw = '1223') {
-      const input = document.getElementById('academyAdminPasswordInput');
-      if (input) input.value = pw;
-      handleAcademyAdminLoginSubmit();
-    };
 
     function logoutAcademyAdmin() {
       if (confirm('아카데미 관리자 모드에서 로그아웃 하시겠습니까?')) {
