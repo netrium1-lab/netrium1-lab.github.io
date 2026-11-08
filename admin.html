@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -4476,61 +4476,80 @@
     const dateEl = document.getElementById('currentDateDisplay');
     if (dateEl) dateEl.textContent = dateStr;
 
-    // 인증 확인
+            /* ================= Admin Auth & Security ================= */
     function checkAuth() {
-      const isAuth = sessionStorage.getItem('yebaek_is_admin') === 'true';
-      const overlay = document.getElementById('authOverlay');
-      const wrapper = document.getElementById('adminWrapper');
+      var isAuth = sessionStorage.getItem('yebaek_is_admin') === 'true' || localStorage.getItem('yebaek_is_admin') === 'true';
+      var overlay = document.getElementById('authOverlay');
+      var wrapper = document.getElementById('adminWrapper');
 
       if (isAuth) {
         if (overlay) overlay.style.display = 'none';
         if (wrapper) wrapper.style.display = 'flex';
-        loadAllData();
+        try {
+          loadAllData();
+        } catch (err) {
+          console.warn('[Admin loadAllData Error Caught]', err);
+        }
       } else {
         if (overlay) overlay.style.display = 'flex';
         if (wrapper) wrapper.style.display = 'none';
-        const input = document.getElementById('authInput');
-        if (input) setTimeout(() => input.focus(), 150);
+        var input = document.getElementById('authInput');
+        if (input) setTimeout(function() { input.focus(); }, 150);
       }
     }
 
-    // 비밀번호 제출 처리
+    /* Admin Password Submit (Default: 1223) */
     function handleAuthSubmit(e) {
-      e.preventDefault();
-      const input = document.getElementById('authInput');
-      const pwd = input ? input.value.trim() : '';
+      if (e && e.preventDefault) e.preventDefault();
+      var input = document.getElementById('authInput');
+      var rawVal = input ? input.value : '';
+      var pwd = rawVal.replace(/\s+/g, '').replace(/[\uFF10-\uFF19]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+      });
 
       if (pwd === '1223') {
         sessionStorage.setItem('yebaek_is_admin', 'true');
-        checkAuth();
+        localStorage.setItem('yebaek_is_admin', 'true');
+        
+        var overlay = document.getElementById('authOverlay');
+        var wrapper = document.getElementById('adminWrapper');
+        if (overlay) overlay.style.display = 'none';
+        if (wrapper) wrapper.style.display = 'flex';
+
+        try {
+          loadAllData();
+        } catch (err) {
+          console.warn('[Admin loadAllData Error Caught]', err);
+        }
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
+        alert('\uBE44\uBC00\uBC88\uD638\uAC00 \uC62C\uBC14\uB974\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4. \uB2E4\uC2DC \uC785\uB825\uD574\uC8FC\uC138\uC694. (1223)');
         if (input) {
           input.value = '';
           input.focus();
         }
       }
+      return false;
     }
 
-    // 관리자 로그아웃
+    /* Admin Logout */
     function adminLogout() {
-      if (confirm('관리자 모드에서 로그아웃하시겠습니까?')) {
+      if (confirm('\uAD00\uB9AC\uC790 \uBAA8\uB4DC\uC5D0\uC11C \uB85C\uADF8\uC544\uC6C3\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?')) {
         sessionStorage.removeItem('yebaek_is_admin');
+        localStorage.removeItem('yebaek_is_admin');
         window.location.href = 'index.html';
       }
     }
 
-    // 모바일 사이드바 토글
     function toggleSidebar() {
       const sidebar = document.getElementById('adminSidebar');
       if (sidebar) sidebar.classList.toggle('open');
     }
 
     // 탭 전환
+        /* ================= ???꾪솚 ================= */
     function switchTab(tabId, btn) {
-      // 援???ID ?명솚 泥섎━ 諛?03. 4? 鍮꾩쫰?덉뒪 ?듯빀 愿?쒖꽱???곕룞
-      if (['tabBusinessMaster', 'tabBeautyCrm', 'tabTest', 'tabMemoir', 'tabConsult'].includes(tabId)) {
-        const mappedBiz = tabId === 'tabBeautyCrm' ? 'beauty' : (tabId === 'tabMemoir' ? 'memoir' : (tabId === 'tabTest' ? 'wardrobe' : (typeof currentBusinessTab !== 'undefined' ? currentBusinessTab : 'beauty')));
+      if (['tabBusinessMaster', 'tabBeautyCrm', 'tabTest', 'tabMemoir', 'tabConsult'].indexOf(tabId) !== -1) {
+        var mappedBiz = tabId === 'tabBeautyCrm' ? 'beauty' : (tabId === 'tabMemoir' ? 'memoir' : (tabId === 'tabTest' ? 'wardrobe' : (typeof currentBusinessTab !== 'undefined' ? currentBusinessTab : 'beauty')));
         tabId = 'tabBusinessMaster';
         btn = document.getElementById('navBtnBusinessMaster') || btn;
         if (typeof switchBusinessMasterTab === 'function') {
@@ -4540,26 +4559,32 @@
         }
       }
 
-      const panels = document.querySelectorAll('.tab-panel');
-      panels.forEach(p => p.classList.remove('active'));
+      var panels = document.querySelectorAll('.tab-panel');
+      for (var i = 0; i < panels.length; i++) {
+        panels[i].classList.remove('active');
+      }
 
-      const target = document.getElementById(tabId);
+      var target = document.getElementById(tabId);
       if (target) target.classList.add('active');
 
-      const btns = document.querySelectorAll('.nav-tab-btn');
-      btns.forEach(b => b.classList.remove('active'));
+      var btns = document.querySelectorAll('.nav-tab-btn');
+      for (var j = 0; j < btns.length; j++) {
+        btns[j].classList.remove('active');
+      }
       if (btn) btn.classList.add('active');
 
-      // 03 4? 鍮꾩쫰?덉뒪 愿?쒖꽱???뚮뜑留?      if (tabId === 'tabBusinessMaster' && typeof renderBusinessMasterDashboard === 'function') {
+      /* 03 4? 鍮꾩쫰?덉뒪 愿?쒖꽱???뚮뜑留?*/
+      if (tabId === 'tabBusinessMaster' && typeof renderBusinessMasterDashboard === 'function') {
         renderBusinessMasterDashboard();
       }
 
-      // 05-2 ?꾩옣愿??& ?뺤궛?쇳꽣 吏꾩엯 ???ㅼ떆媛??뚮뜑留?      if (tabId === 'tabCoachControl' && typeof renderCoachControlCenter === 'function') {
+      /* 05-2 ?꾩옣愿??諛??뺤궛?쇳꽣 吏꾩엯 ???ㅼ떆媛??뚮뜑留?*/
+      if (tabId === 'tabCoachControl' && typeof renderCoachControlCenter === 'function') {
         renderCoachControlCenter();
       }
 
-      // 紐⑤컮?쇱씤 寃쎌슦 ?ъ씠?쒕컮 ?リ린
-      const sidebar = document.getElementById('adminSidebar');
+      /* 紐⑤컮?쇱씤 寃쎌슦 ?ъ씠?쒕컮 ?リ린 */
+      var sidebar = document.getElementById('adminSidebar');
       if (sidebar && window.innerWidth <= 900) {
         sidebar.classList.remove('open');
       }
