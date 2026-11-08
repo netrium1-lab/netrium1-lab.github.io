@@ -5754,7 +5754,7 @@
     }
 
     /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
-    .img-control-bar {
+    .img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"] {
       display: none !important;
     }
     .article-section-image-card, .article-body-img-block {
@@ -10625,14 +10625,24 @@
       localStorage.setItem('yebaek_magazine_articles', JSON.stringify(list));
     }
 
-    // 메인 전면 서재 카드 렌더링 (isFeatured === true 만 노출, 미노출 설정 100% 엄격 반영)
+    // 메인 전면 서재 카드 렌더링 (대표글 우선 노출 & 미노출 설정 100% 원천 차단 보장)
     function renderFeaturedMagazine() {
       const grid = document.getElementById('magazineGrid');
       if (!grid) return;
 
       const articles = getStoredArticles();
-      let featured = articles.filter(a => a.isFeatured === true || a.isFeatured === 'true');
+      // 1) 관리자가 [미노출(☆)]로 설정한 글은 메인 전면에서 100% 원천 배제!
+      const available = articles.filter(a => a.isFeatured !== false && a.isFeatured !== 'false');
 
+      // 2) [⭐ 전면 노출]로 지정된 대표글 우선 선별
+      let featured = available.filter(a => a.isFeatured === true || a.isFeatured === 'true');
+
+      // 3) 만약 명시적인 대표글이 아직 없을 때는, 미노출 처리되지 않은 유효 글 중 최신 4편을 기본 노출
+      if (featured.length === 0) {
+        featured = available.slice(0, 4);
+      }
+
+      // 4) 등록된 유효 글이 아예 없을 때만 안내 표시
       if (featured.length === 0) {
         grid.innerHTML = `
           <div style="grid-column: 1 / -1; background: var(--bg-card); border: 2px dashed var(--border-color); border-radius: 20px; padding: 48px 24px; text-align: center;">
@@ -10647,8 +10657,6 @@
             </div>
           </div>
         `;
-        return;
-      }
         return;
       }
 
@@ -10964,7 +10972,23 @@
         return false;
       }
 
-      // 흰색/밝은 글씨를 선명한 짙은 차콜(#1e293b)로 교체
+      // 🛡️ 1) 발행 본문 내 툴바 버튼 및 조작 요소 100% 완전 삭제!
+      div.querySelectorAll('.img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"]').forEach(b => b.remove());
+
+      // 🛡️ 2) 껍데기만 남은 빈 figure 및 빈 테두리 박스 완전 소멸
+      div.querySelectorAll('figure, .article-section-image-card, .article-body-img-block').forEach(fig => {
+        const img = fig.querySelector('img');
+        if (!img || !img.getAttribute('src') || img.getAttribute('src').trim() === '' || img.src.includes('pollinations.ai')) {
+          fig.remove();
+        }
+      });
+      div.querySelectorAll('div').forEach(d => {
+        if (!d.querySelector('img') && !d.innerText.trim() && (d.style.border || d.style.background || d.style.boxShadow || d.getAttribute('style')?.includes('border'))) {
+          d.remove();
+        }
+      });
+
+      // 🛡️ 3) 흰색/밝은 글씨를 선명한 짙은 차콜(#1e293b)로 교체
       div.querySelectorAll('*').forEach(el => {
         if (el.style && el.style.color && isBright(el.style.color)) {
           el.style.color = '#1e293b';

@@ -1945,12 +1945,15 @@
     }
 
     /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
-    .img-control-bar {
+    /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
+    .img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"] {
       display: none !important;
     }
     .article-section-image-card, .article-body-img-block {
       border: none !important;
       background: transparent !important;
+      box-shadow: none !important;
+    }
       box-shadow: none !important;
     }
   </style>
@@ -7117,11 +7120,20 @@
     }
 
     // 2) 고화질 실사 이미지 큐레이션 마스터 풀 (각 도메인 및 사물별 100% 매칭 데이터 10~15장 이상 완비)
+    // =========================================================================
+    // 🎨 [비주얼 디렉터 에이전트] 최고급 고화질 시맨틱 사진 마스터 라이브러리 (Pollinations 에러 배너 영구 박멸 & 글 단락 1:1 완벽 매칭)
+    // =========================================================================
     const VISUAL_MASTER_LIBRARY = {
+      // 🌿 1) 공간 비움 & 미니멀 정리 & 단샤리 (원목 식탁, 찻잔, 옷장, 서랍, 햇살 거실 등)
       organizing: [
         {
+          tag: 'woodencup',
+          caption: "공간이 비워지자 차오르는 마음의 평온: 텅 빈 원목 식탁 위에 놓인 따스한 찻잔 하나",
+          url: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
           tag: 'teatable',
-          caption: "공간이 비워지자 비로소 차오르는 마음의 평온: 찻잔 하나만 놓인 넓은 원목 테이블",
+          caption: "소유를 내려놓고 만나는 진정한 내면의 고요: 차 한 잔과 함께 누리는 인생 후반전의 품격",
           url: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=1200&q=80"
         },
         {
@@ -7131,70 +7143,51 @@
         },
         {
           tag: 'drawer',
-          caption: "버리는 것이 아닌 추억의 갈무리: 낡은 물건을 하나씩 단정하게 정돈하는 손길",
+          caption: "버리는 것이 아닌 추억의 갈무리: 서랍 속 낡은 물건들을 하나씩 단정하게 정돈하는 손길",
           url: "https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'closet',
-          caption: "내 삶의 통제권을 되찾는 비움: 단 10벌의 단정한 옷들로 채워진 가벼운 옷장",
+          caption: "내 삶의 통제권을 되찾는 비움: 꼭 필요한 단정한 옷들로 채워진 가벼운 옷장",
           url: "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?auto=format&fit=crop&w=1200&q=80"
         },
         {
-          tag: 'minimal',
-          caption: "햇살과 바람이 자유롭게 드나드는 여백: 비워진 공간에서 만나는 홀가분한 자유",
-          url: "https://images.unsplash.com/photo-1518455027359-f3f8164ba6bd?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
           tag: 'boxes',
-          caption: "가족에게 짐을 남기지 않는 품격: 정갈하게 분류된 유품 정리 보관함과 라벨링 노트",
+          caption: "가족에게 무거운 짐을 남기지 않는 품격: 정갈하게 분류된 유품 정리 보관함과 라벨링 박스",
           url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'sunlight',
-          caption: "창가로 스며드는 은은한 오후의 햇살: 소유를 내려놓고 만나는 진정한 내면의 고요",
+          caption: "창가로 스며드는 은은한 오후의 햇살: 비워진 공간 속에서 자유롭게 살랑이는 커튼 자락",
           url: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'woodencup',
-          caption: "텅 빈 원목 식탁 위의 온기: 따뜻한 차 한 잔과 함께 누리는 인생 후반전의 품격",
-          url: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'shelf',
           caption: "꼭 필요한 것만 남겨둔 단정한 서재: 비움 끝에 찾아오는 명징한 사색의 시간",
           url: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'room',
-          caption: "단샤리(斷捨離)가 완성한 평온: 비움으로 되찾은 공간의 숨결과 영혼의 자유",
-          url: "https://images.unsplash.com/photo-1449247709967-d4461a6a6103?auto=format&fit=crop&w=1200&q=80"
         }
       ],
+      // 🕊️ 2) 웰다잉 & 엔딩노트 & 사전의향서 & 생전 고별 (창가 만년필 노트, 따뜻한 가족 손잡음 등)
       welldying: [
         {
-          tag: 'gathering',
-          caption: "살아있을 때 온기를 나누는 작별: 따뜻한 공간에서 가족들과 마주 앉아 미소 짓는 고별의 순간",
-          url: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'handhold',
-          caption: "영정 사진 뒤의 침묵 대신 따뜻한 손길: 부모님의 주름진 손을 꼭 쥐며 전하는 고마움",
-          url: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'album',
-          caption: "반세기 청춘의 기억 전시전: 테이블 위에 정갈하게 펼쳐진 흑백사진과 손때 묻은 앨범",
-          url: "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
           tag: 'journal',
-          caption: "남겨질 가족을 위한 가장 다정한 배려: 창가 햇살 아래 단정하게 기록된 엔딩노트와 편지",
+          caption: "남겨질 가족을 위한 가장 다정한 배려: 창가 햇살 아래 정성껏 기록된 엔딩노트와 사전연명의료의향서",
           url: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=1200&q=80"
         },
         {
-          tag: 'sunset',
-          caption: "아름다운 마무리를 향한 여정: 고요한 자연 속으로 번져가는 황금빛 노을의 평화",
-          url: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80"
+          tag: 'handhold',
+          caption: "영정 사진 뒤의 침묵 대신 살아 숨 쉬는 온기: 부모님의 주름진 손을 꼭 쥐며 전하는 고마움과 사랑",
+          url: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          tag: 'gathering',
+          caption: "살아있을 때 온기를 나누는 작별: 따뜻한 공간에서 가족들과 마주 앉아 미소 짓는 생전 고별의 순간",
+          url: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=1200&q=80"
+        },
+        {
+          tag: 'album',
+          caption: "반세기 청춘의 기억 전시전: 테이블 위에 정갈하게 펼쳐진 흑백사진과 손때 묻은 가족 앨범",
+          url: "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'candle',
@@ -7203,29 +7196,25 @@
         },
         {
           tag: 'toast',
-          caption: "눈물 대신 미소로 건네는 축배: 한평생 잘 살아온 나를 응원해 준 벗들과의 건배",
+          caption: "눈물 대신 미소로 건네는 축배: 한평생 성실하게 살아온 나를 축복해 준 벗들과의 다정한 건배",
           url: "https://images.unsplash.com/photo-1519671482749-fd09be7ccebf?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'farewell',
-          caption: "존엄한 삶의 완성: 슬픔을 걷어내고 사랑만을 가슴에 새기는 품격 있는 작별",
-          url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80"
         }
       ],
+      // 🥗 3) 5060 저속노화 건강 식단 & 영양 관리
       health_diet: [
         {
           tag: 'salad',
-          caption: "혈당 스파이크를 잠재우는 기적의 밥상: 지중해식 오색 채소와 올리브유가 어우러진 저속노화 식단",
+          caption: "혈당 스파이크를 잠재우는 기적의 밥상: 지중해식 오색 채소와 엑스트라 버진 올리브유 저속노화 식단",
           url: "https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'greens',
-          caption: "식사 순서의 혁명: 탄수화물 흡수를 지연시키는 신선한 샐러드와 식이섬유의 첫 젓가락",
+          caption: "식사 순서의 혁명: 탄수화물 흡수를 지연시키는 신선한 채소와 식이섬유의 첫 젓가락",
           url: "https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'protein',
-          caption: "도정되지 않은 통곡물의 생명력: 귀리, 현미, 렌틸콩과 양질의 단백질 밥상",
+          caption: "도정되지 않은 통곡물의 생명력: 귀리, 현미, 렌틸콩과 양질의 단백질 건강 밥상",
           url: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80"
         },
         {
@@ -7234,67 +7223,49 @@
           url: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=1200&q=80"
         },
         {
-          tag: 'vitality',
-          caption: "뇌와 혈관을 10년 젊게 깨우는 활력: 맑은 정신과 가벼운 몸으로 맞이하는 아침",
-          url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
           tag: 'healthybowl',
-          caption: "자연의 색이 깃든 치유의 식탁: 항산화 파이토케미컬이 풍부한 컬러 푸드",
+          caption: "자연의 색이 깃든 치유의 식탁: 항산화 파이토케미컬이 풍부한 오색 컬러 푸드",
           url: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'oliveoil',
-          caption: "엑스트라 버진 올리브유와 허브의 조화: 심혈관 건강을 지켜주는 지중해의 선물",
-          url: "https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?auto=format&fit=crop&w=1200&q=80"
         }
       ],
+      // 🧘 4) 시니어 활력 & 관절 스트레칭 & 보행 운동
       health_exercise: [
         {
           tag: 'stretch',
-          caption: "굳어가는 척추와 고관절을 부드럽게 깨우는 시간: 아침 햇살 속 15분 스트레칭",
+          caption: "굳어가는 척추와 관절을 부드럽게 깨우는 시간: 아침 햇살 속 무리 없는 15분 스트레칭",
           url: "https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'forestwalk',
-          caption: "자연 속에서 되찾는 관절의 탄력: 푸른 숲길을 활기차게 거니는 시니어의 당당한 보행",
+          caption: "자연 속에서 되찾는 관절의 탄력: 피톤치드 가득한 숲길을 활기차게 거니는 시니어의 당당한 보행",
           url: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'homefitness',
-          caption: "무릎 통증을 줄여주는 하체 근력 루틴: 무리 없는 바른 자세의 홈트레이닝",
+          caption: "무릎 통증을 줄여주는 하체 근력 루틴: 벽을 짚고 진행하는 안전한 홈 트레이닝",
           url: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?auto=format&fit=crop&w=1200&q=80"
         },
         {
-          tag: 'breathing',
-          caption: "호흡과 함께 깊어지는 평온: 운동 후 맑아진 호흡으로 온몸의 순환을 느끼는 순간",
-          url: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'vitalenergy',
-          caption: "내일을 준비하는 가벼운 발걸음: 활력 넘치는 표정으로 맞이하는 건강한 하루",
-          url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
           tag: 'morningwalk',
-          caption: "새벽 공기를 가르며 내딛는 활기찬 걸음: 평생 보행의 자유를 지키는 걷기 습관",
+          caption: "새벽 공기를 가르며 내딛는 활기찬 걸음: 평생 보행의 자유를 지키는 올바른 걷기 습관",
           url: "https://images.unsplash.com/photo-1476480862126-209bfaa8edc8?auto=format&fit=crop&w=1200&q=80"
         }
       ],
+      // 📖 5) 구술 자서전 & 가족사 평전 & 가문의 유산
       family_memoir: [
         {
           tag: 'book',
-          caption: "70년 헌신의 서사를 금박 양장본으로: 부모님께 바치는 세상에서 단 하나뿐인 자서전",
+          caption: "70년 헌신의 서사를 금박 양장본으로: 부모님께 바치는 세상에서 단 하나뿐인 인생 자서전",
           url: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'listen',
-          caption: "살아온 날들의 구술 인터뷰: 어머니의 떨리는 목소리를 녹음하며 눈물짓는 자녀",
+          caption: "살아온 날들의 따뜻한 구술 인터뷰: 부모님의 음성을 기록하며 눈물짓는 자녀",
           url: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80"
         },
         {
           tag: 'oldphoto',
-          caption: "테이블 위에 펼쳐진 반세기 기억: 1960년대 청춘의 흑백사진과 손때 묻은 월급봉투",
+          caption: "테이블 위에 펼쳐진 반세기 기억: 빛바랜 청춘의 흑백사진과 손때 묻은 가족 기록",
           url: "https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=1200&q=80"
         },
         {
@@ -7306,13 +7277,9 @@
           tag: 'shelf',
           caption: "영원히 기억될 사랑의 기록: 가문의 유산이 되어 서재 책장에 단정하게 꽂힌 가족사",
           url: "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'portrait',
-          caption: "세월의 아름다움이 머문 온화한 미소: 카메라 앞에서 평생의 자부심을 드러낸 부모님",
-          url: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1200&q=80"
         }
       ],
+      // 🌿 6) 일반 시니어 지혜 & 성찰 & 일상의 품격
       general: [
         {
           tag: 'teatime',
@@ -7330,61 +7297,110 @@
           url: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1200&q=80"
         },
         {
-          tag: 'wise',
-          caption: "지혜로운 어른의 온화한 미소: 젊은 세대에게 건네는 따뜻한 격려와 용기",
-          url: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=1200&q=80"
-        },
-        {
-          tag: 'lake',
-          caption: "아름다운 마무리를 향한 여정: 잔잔한 호수 위로 물드는 황금빛 노을의 평화",
-          url: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=1200&q=80"
+          tag: 'sunroom',
+          caption: "단정한 공간이 주는 평온: 창가로 들어오는 따스한 볕과 홀가분한 사색",
+          url: "https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80"
         }
       ]
     };
 
-    // 3) 단락별(Section) 문맥 시맨틱 분석 및 1:1 사진 매칭 엔진
+    // 3) 단락별(Section) 문맥 시맨틱 분석 및 1:1 사진 정밀 매칭 엔진 (점수제 가중치 알고리즘)
     function selectImageForSpecificSection(sectionText = '', domain = 'general', usedUrls = new Set()) {
       const lower = sectionText.toLowerCase();
       const domainPool = VISUAL_MASTER_LIBRARY[domain] || VISUAL_MASTER_LIBRARY.general;
 
-      // 단락 텍스트 내 사물/분위기 키워드 우선순위 매칭 (단락에 등장한 실제 사물 최우선!)
-      let matchedItem = null;
+      // 키워드별 매칭 점수 채점표
+      const candidates = [];
 
-      if (/식탁|원목\s*식탁|찻잔|따스한\s*찻잔|차\s*한\s*잔|테이블|커피|녹차|차를/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'teatable' || p.tag === 'woodencup') || domainPool.find(p => p.tag === 'teatable' || p.tag === 'teatime');
-      } else if (/옷장|옷|의류|양복|코트|기부|아름다운가게|옷캔/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'closet') || domainPool.find(p => p.tag === 'closet');
-      } else if (/서랍|물건|잡동사니|수납|정돈|도구|박스|상자|먼지/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'drawer' || p.tag === 'boxes') || domainPool.find(p => p.tag === 'drawer');
-      } else if (/거실|공간|여백|햇살|바람|커튼|창가|청소|미니멀|방|단샤리/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'living' || p.tag === 'minimal' || p.tag === 'sunlight') || domainPool.find(p => p.tag === 'living');
-      } else if (/사진|앨범|일기장|기억|추억|흑백|성적표|월급봉투/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.family_memoir.find(p => p.tag === 'oldphoto') || domainPool.find(p => p.tag === 'album');
-      } else if (/손|손길|주름진\s*손|포옹|눈물|화해|어머니|아버지|부모|자녀|가족|대화|사랑/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'handhold') || domainPool.find(p => p.tag === 'listen' || p.tag === 'familyjoy');
-      } else if (/엔딩노트|사전연명의료의향서|유언|공증|법적/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'journal');
-      } else if (/생전장례|고별|작별|지젠소|파티|연회|축배/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'gathering' || p.tag === 'toast');
-      } else if (/샐러드|채소|나물|올리브유|혈당|식사|밥상|단백질|통곡물/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.health_diet.find(p => p.tag === 'salad' || p.tag === 'greens' || p.tag === 'protein');
-      } else if (/스트레칭|관절|무릎|척추|요가|운동|가동성|둔근/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.health_exercise.find(p => p.tag === 'stretch' || p.tag === 'homefitness');
-      } else if (/숲길|산책|걷기|보행|길|자연/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.health_exercise.find(p => p.tag === 'forestwalk' || p.tag === 'morningwalk') || domainPool.find(p => p.tag === 'couplewalk');
-      } else if (/자서전|책|책장|기록|양장본|출판|서재/.test(lower)) {
-        matchedItem = VISUAL_MASTER_LIBRARY.family_memoir.find(p => p.tag === 'book' || p.tag === 'shelf') || domainPool.find(p => p.tag === 'book');
-      } else if (/노을|호수|황금빛|하늘|바람|평온|안식/.test(lower)) {
-        matchedItem = domainPool.find(p => p.tag === 'sunset' || p.tag === 'lake') || VISUAL_MASTER_LIBRARY.general.find(p => p.tag === 'lake');
+      // A. 원목 식탁 / 찻잔 / 차 한 잔 (식탁, 찻잔, 차, 커피, 린넨, 여백)
+      const teaMatch = (lower.match(/식탁|원목\s*식탁|찻잔|따스한\s*찻잔|차\s*한\s*잔|테이블|녹차|홍차|커피|티타임|다도|온기/g) || []).length;
+      if (teaMatch > 0) {
+        const item = domainPool.find(p => p.tag === 'woodencup' || p.tag === 'teatable') || VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'woodencup');
+        if (item) candidates.push({ item, score: teaMatch * 3 });
       }
 
-      // 1순위: 단락 문맥과 직접 매칭된 항목이 아직 안 쓰였으면 우선 반환
-      if (matchedItem && !usedUrls.has(matchedItem.url)) {
-        usedUrls.add(matchedItem.url);
-        return matchedItem;
+      // B. 엔딩노트 / 사전연명의료의향서 / 유언 / 서류 (창가 만년필 노트)
+      const journalMatch = (lower.match(/엔딩노트|사전연명의료의향서|연명의료|의향서|유언|공증|서약|법적\s*효력|임종기|호스피스/g) || []).length;
+      if (journalMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'journal');
+        if (item) candidates.push({ item, score: journalMatch * 3.5 });
       }
 
-      // 2순위: 도메인 풀에서 아직 안 쓴 항목 순차 선택
+      // C. 옷장 / 의류 / 양복 / 기부 (단정한 옷장)
+      const closetMatch = (lower.match(/옷장|옷|의류|양복|코트|패션|기부|아름다운가게|옷캔|버릴\s*옷/g) || []).length;
+      if (closetMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'closet') || domainPool.find(p => p.tag === 'closet');
+        if (item) candidates.push({ item, score: closetMatch * 3 });
+      }
+
+      // D. 서랍 / 물건 / 잡동사니 / 수납 / 박스 (서랍 정돈)
+      const drawerMatch = (lower.match(/서랍|잡동사니|수납|정돈|물건들|박스|상자|먼지|분류|버리기|보관함/g) || []).length;
+      if (drawerMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'drawer' || p.tag === 'boxes') || domainPool.find(p => p.tag === 'drawer');
+        if (item) candidates.push({ item, score: drawerMatch * 3 });
+      }
+
+      // E. 주름진 손 / 포옹 / 부모 / 자녀 / 감사 / 사랑 (맞잡은 손길)
+      const handMatch = (lower.match(/손길|주름진\s*손|손을\s*잡|손을\s*꼭|포옹|눈물|화해|어머니|아버지|부모님|자녀|사랑|고마움|따뜻한\s*손/g) || []).length;
+      if (handMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'handhold') || domainPool.find(p => p.tag === 'listen');
+        if (item) candidates.push({ item, score: handMatch * 2.8 });
+      }
+
+      // F. 거실 / 햇살 / 바람 / 커튼 / 여백 / 미니멀 (햇살 거실)
+      const livingMatch = (lower.match(/거실|햇살|창가|바람|커튼|여백|미니멀|공간|단샤리|비워진|홀가분/g) || []).length;
+      if (livingMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.organizing.find(p => p.tag === 'living' || p.tag === 'sunlight') || domainPool.find(p => p.tag === 'living');
+        if (item) candidates.push({ item, score: livingMatch * 2.5 });
+      }
+
+      // G. 지젠소 / 생전 장례 / 고별 / 파티 (온기 모임)
+      const gatheringMatch = (lower.match(/생전\s*장례|지젠소|고별|작별|소풍\s*잔치|마지막\s*파티|연회|축배|건배/g) || []).length;
+      if (gatheringMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.welldying.find(p => p.tag === 'gathering' || p.tag === 'toast');
+        if (item) candidates.push({ item, score: gatheringMatch * 3 });
+      }
+
+      // H. 건강 식단 / 샐러드 / 올리브유 / 혈당 (저속노화 밥상)
+      const foodMatch = (lower.match(/샐러드|채소|올리브유|혈당|식사|밥상|단백질|통곡물|식이섬유|지중해식/g) || []).length;
+      if (foodMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.health_diet.find(p => p.tag === 'salad' || p.tag === 'greens' || p.tag === 'protein');
+        if (item) candidates.push({ item, score: foodMatch * 3 });
+      }
+
+      // I. 스트레칭 / 관절 / 척추 / 무릎 / 운동 (시니어 운동)
+      const exerciseMatch = (lower.match(/스트레칭|관절|무릎|척추|유연성|통증|홈트|가동성|체조/g) || []).length;
+      if (exerciseMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.health_exercise.find(p => p.tag === 'stretch' || p.tag === 'homefitness');
+        if (item) candidates.push({ item, score: exerciseMatch * 3 });
+      }
+
+      // J. 숲길 / 산책 / 걷기 / 보행 (숲길 산책)
+      const walkMatch = (lower.match(/숲길|산책|걷기|보행|발걸음|피톤치드|공원/g) || []).length;
+      if (walkMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.health_exercise.find(p => p.tag === 'forestwalk' || p.tag === 'morningwalk') || domainPool.find(p => p.tag === 'couplewalk');
+        if (item) candidates.push({ item, score: walkMatch * 3 });
+      }
+
+      // K. 자서전 / 흑백 앨범 / 출판 / 기록 (양장본 도서)
+      const bookMatch = (lower.match(/자서전|양장본|평전|출판|구술|책장|서재|앨범|흑백사진/g) || []).length;
+      if (bookMatch > 0) {
+        const item = VISUAL_MASTER_LIBRARY.family_memoir.find(p => p.tag === 'book' || p.tag === 'oldphoto') || domainPool.find(p => p.tag === 'book');
+        if (item) candidates.push({ item, score: bookMatch * 3 });
+      }
+
+      // 점수 내림차순 정렬
+      candidates.sort((a, b) => b.score - a.score);
+
+      // 1순위: 가장 점수가 높고 아직 본문에 쓰이지 않은 이미지
+      for (const cand of candidates) {
+        if (cand.item && cand.item.url && !usedUrls.has(cand.item.url)) {
+          usedUrls.add(cand.item.url);
+          return cand.item;
+        }
+      }
+
+      // 2순위: 현재 도메인 풀에서 아직 쓰이지 않은 이미지 순차 배정
       for (const item of domainPool) {
         if (!usedUrls.has(item.url)) {
           usedUrls.add(item.url);
@@ -7392,16 +7408,16 @@
         }
       }
 
-      // 3순위: 도메인 풀이 모두 소진되었으나 matchedItem이 있으면 반환
-      if (matchedItem) {
-        return matchedItem;
+      // 3순위: 최고 점수 후보 반환
+      if (candidates.length > 0 && candidates[0].item) {
+        return candidates[0].item;
       }
 
-      // 4순위: 기본 첫 번째 항목 반환
+      // 4순위: 도메인 첫 번째 아이템 기본값
       return domainPool[0] || VISUAL_MASTER_LIBRARY.general[0];
     }
 
-    // 4) 🖼️ 본문 단락 순서에 맞게 1:1 이미지를 스마트 툴바와 함께 인라인 임베딩
+    // 4) 🖼️ 본문 단락 순서에 맞게 1:1 이미지를 인라인 임베딩 (순수 에세이 카드 & 불필요한 인라인 버튼 완전 배제)
     function embedSectionImagesIntoContent(contentHtml = '', photoCards = [], topic = '', category = '') {
       if (!contentHtml) return contentHtml;
 
@@ -7453,7 +7469,7 @@
       }
     }
 
-    // 5) 🛡️ 방탄 순수 이미지 카드 HTML 생성 (불필요한 버튼 툴바 완전 제거 & 순수 에세이 카드 표준)
+    // 5) 🛡️ 방탄 순수 이미지 카드 HTML 생성 (불필요한 버튼 툴바 100% 완전 제거 & 순수 에세이 카드 표준)
     function generateImageCardHtml(imgUrl, caption, altText, domain = 'general') {
       const escapedUrl = escapeHtml(imgUrl);
       const escapedCaption = escapeHtml(caption);
@@ -7469,7 +7485,7 @@
       `;
     }
 
-    // 6) 🗑️ 사진 완전히 삭제 호환 함수
+    // 6) 🗑️ 사진 완전히 삭제 호환 함수 (빈 테두리 박스 100% 소멸 보장)
     window.removeThisSectionImage = function(btn) {
       if (!btn) return;
       const figure = btn.closest('figure.article-section-image-card') || btn.closest('figure');
@@ -7506,7 +7522,7 @@
       const editor = document.getElementById('editorContent');
       if (!editor) return;
 
-      // 1) figure 및 .article-section-image-card 검사 (이미지 없으면 박스 통째로 삭제!)
+      // 1) figure 및 .article-section-image-card 검사 (이미지 없거나 빈 src면 박스 통째로 완전 소멸!)
       editor.querySelectorAll('figure, .article-section-image-card, .article-body-img-block').forEach(fig => {
         const img = fig.querySelector('img');
         if (!img || !img.getAttribute('src') || img.getAttribute('src').trim() === '' || img.src.includes('pollinations.ai')) {
@@ -7515,11 +7531,11 @@
       });
 
       // 2) img-control-bar 찌꺼기 버튼 툴바 완전 박멸!
-      editor.querySelectorAll('.img-control-bar').forEach(bar => bar.remove());
+      editor.querySelectorAll('.img-control-bar, .photo-action-bar').forEach(bar => bar.remove());
 
-      // 3) 과거 혹시 남은 빈 테두리 박스 div 자동 소멸
+      // 3) 과거 혹시 남은 빈 테두리 박스 div (border/background 있고 이미지/텍스트 없는 빈 바) 자동 소멸
       editor.querySelectorAll('div').forEach(d => {
-        if (d.style && (d.style.border || d.style.background) && !d.querySelector('img') && !d.innerText.trim()) {
+        if (!d.querySelector('img') && !d.innerText.trim() && (d.style.border || d.style.background || d.style.boxShadow || d.getAttribute('style')?.includes('border'))) {
           d.remove();
         }
       });
@@ -9759,11 +9775,11 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             fig.remove();
           }
         });
-        // 2) 발행 본문에서 모든 조작 툴바(.img-control-bar) 100% 완전 삭제!
-        cleanDiv.querySelectorAll('.img-control-bar').forEach(bar => bar.remove());
-        // 3) 혹시 남은 빈 테두리 박스 div 제거
+        // 2) 발행 본문에서 모든 조작 툴바 및 버튼 100% 완전 삭제!
+        cleanDiv.querySelectorAll('.img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"]').forEach(bar => bar.remove());
+        // 3) 혹시 남은 빈 테두리 박스 div (border/background 있고 이미지/텍스트 없는 빈 바) 완전 소멸
         cleanDiv.querySelectorAll('div').forEach(d => {
-          if (d.style && (d.style.border || d.style.background) && !d.querySelector('img') && !d.innerText.trim()) {
+          if (!d.querySelector('img') && !d.innerText.trim() && (d.style.border || d.style.background || d.style.boxShadow || d.getAttribute('style')?.includes('border'))) {
             d.remove();
           }
         });
@@ -10246,8 +10262,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         }
       });
 
-      // 툴바 찌꺼기 제거
-      tempDiv.querySelectorAll('.img-control-bar').forEach(b => b.remove());
+      // 툴바 및 버튼 찌꺼기 100% 완전 제거
+      tempDiv.querySelectorAll('.img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"]').forEach(b => b.remove());
 
       // 📸 [사진 자동 배치] 만약 본문에 이미지가 1장도 없고 좌측 보관함(editorPhotos)에 사진들이 담겨 있다면,
       // 소제목(h2, h3, h4) 앞이나 문단 사이사이에 감동 사진들을 스마트하게 자동 배치합니다!
@@ -10632,7 +10648,23 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         return false;
       }
 
-      // 흰색/밝은 글씨를 선명한 짙은 차콜(#1e293b)로 교체
+      // 🛡️ 1) 발행 본문 내 툴바 버튼 및 조작 요소 100% 완전 삭제!
+      div.querySelectorAll('.img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"]').forEach(b => b.remove());
+
+      // 🛡️ 2) 껍데기만 남은 빈 figure 및 빈 테두리 박스 완전 소멸
+      div.querySelectorAll('figure, .article-section-image-card, .article-body-img-block').forEach(fig => {
+        const img = fig.querySelector('img');
+        if (!img || !img.getAttribute('src') || img.getAttribute('src').trim() === '' || img.src.includes('pollinations.ai')) {
+          fig.remove();
+        }
+      });
+      div.querySelectorAll('div').forEach(d => {
+        if (!d.querySelector('img') && !d.innerText.trim() && (d.style.border || d.style.background || d.style.boxShadow || d.getAttribute('style')?.includes('border'))) {
+          d.remove();
+        }
+      });
+
+      // 🛡️ 3) 흰색/밝은 글씨를 선명한 짙은 차콜(#1e293b)로 교체
       div.querySelectorAll('*').forEach(el => {
         if (el.style && el.style.color && isBright(el.style.color)) {
           el.style.color = '#1e293b';
