@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -1999,35 +1999,44 @@
           </button>
         </div>
 
-        <button class="nav-tab-btn active" onclick="switchTab('tabSettings', this)">
-          <span class="nav-tab-icon">⚙️</span>
-          <span>환경설정 & 채널연동</span>
+        <!-- 🔥 1단계: 코치 배정 & 카톡 파견 센터 -->
+        <button class="nav-tab-btn active" onclick="switchTab('tabAcademy', this)" id="navBtnAcademy" style="background: rgba(217, 119, 6, 0.08); border-left: 3px solid #d97706; font-weight: 850;">
+          <span class="nav-tab-icon">🤝</span>
+          <span>01. 코치 배정 &amp; 파견센터</span>
+          <span style="background:#d97706; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">카톡전송</span>
         </button>
+
+        <!-- 🔥 2단계: 현장관제 & 활동비 송금 정산 센터 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; font-weight: 850;">
+          <span class="nav-tab-icon">📸</span>
+          <span>02. 현장관제 &amp; 활동비 정산</span>
+          <span id="sidebarPendingBadge" style="display:none; background:#ef4444; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">0</span>
+        </button>
+
+        <!-- 🌟 3단계: 4대 비즈니스 통합 관제센터 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster" style="background: rgba(209, 81, 110, 0.08); border-left: 3px solid #d1516e; color: #b83354; font-weight: 850;">
+          <span class="nav-tab-icon">🌟</span>
+          <span>03. 4대 비즈니스 관제센터</span>
+          <span id="businessMasterBadge" style="background:#b83354; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">1호~4호</span>
+        </button>
+
+        <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
+
         <button class="nav-tab-btn" onclick="switchTab('tabMagazine', this)">
           <span class="nav-tab-icon">📝</span>
-          <span>01. 여백서재 관리</span>
+          <span>04. 여백서재 관리</span>
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tabLounge', this)">
           <span class="nav-tab-icon">💬</span>
-          <span>02. 비움한줄 관리</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster" style="background: rgba(209, 81, 110, 0.1); border-left: 3px solid #d1516e; color: #b83354; font-weight: 850;">
-          <span class="nav-tab-icon">🌟</span>
-          <span>03. 4대 비즈니스 관제센터</span>
-          <span id="businessMasterBadge" style="background:#b83354; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">원스톱</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabAcademy', this)">
-          <span class="nav-tab-icon">🎓</span>
-          <span>04. 아카데미 & 코치관리</span>
-        </button>
-        <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="background: rgba(5, 150, 105, 0.08); border-left: 3px solid var(--accent);">
-          <span class="nav-tab-icon">📸</span>
-          <span>04-2. 현장관제 &amp; 정산</span>
-          <span id="sidebarPendingBadge" style="display:none; background:#ef4444; color:#fff; font-size:0.72rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">0</span>
+          <span>05. 비움한줄 관리</span>
         </button>
         <button class="nav-tab-btn" onclick="switchTab('tabArchive', this)">
           <span class="nav-tab-icon">🏛️</span>
-          <span>05. 보물서재 관리</span>
+          <span>06. 보물서재 관리</span>
+        </button>
+        <button class="nav-tab-btn" onclick="switchTab('tabSettings', this)">
+          <span class="nav-tab-icon">⚙️</span>
+          <span>07. 환경설정 &amp; 채널연동</span>
         </button>
       </nav>
 
@@ -2060,8 +2069,33 @@
         </div>
       </div>
 
-      <!-- ================= 탭 1: ⚙️ 사이트 정보 및 배너 ================= -->
-      <section class="tab-panel active" id="tabSettings">
+      <!-- 🌟 핵심 라이프케어 원스톱 3단계 파이프라인 퀵 관제 바 -->
+      <div style="margin: 0 0 22px; padding: 14px 18px; border-radius: 14px; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 0.88rem; font-weight: 900; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px;">
+            <span style="font-size: 1.15rem;">⚡</span> <strong style="color: #b83354;">원스톱 워크플로우:</strong>
+          </span>
+          <button type="button" onclick="switchTab('tabAcademy')" class="btn-save-setting" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 1px 3px rgba(217,119,6,0.12); cursor: pointer;">
+            <span>🤝 1단계: 코치 배정 &amp; 카톡 발송</span>
+          </button>
+          <span style="color: #cbd5e1; font-weight: 900;">➔</span>
+          <a href="coach.html" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #2d5a45 100%); color: #ffffff; text-decoration: none; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 2px 6px rgba(30,61,47,0.25); display: inline-flex; align-items: center; gap: 5px;">
+            <span>📱 2단계: 코치 현장앱 열기 ➔</span>
+          </a>
+          <span style="color: #cbd5e1; font-weight: 900;">➔</span>
+          <button type="button" onclick="switchTab('tabCoachControl')" class="btn-save-setting" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 1px 3px rgba(5,150,105,0.12); cursor: pointer;">
+            <span>📸 3단계: 현장관제 &amp; 송금 정산 승인</span>
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="switchTab('tabBusinessMaster')" class="btn-save-setting" style="background: #fff0f3; color: #b83354; border: 1.5px solid #f8c8d2; font-size: 0.82rem; font-weight: 850; padding: 6px 12px; cursor: pointer;">
+            <span>🌟 03. 4대 비즈니스 상담 관제</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ================= 탭 7: ⚙️ 사이트 정보 및 배너 ================= -->
+      <section class="tab-panel" id="tabSettings">
         <div class="panel-card">
           <div class="panel-header">
             <div class="panel-title-wrap">
@@ -2428,6 +2462,12 @@
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabAcademy'); openDispatchModal();" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-weight: 850;" title="신규 코치 배정 모달을 열고 카톡 일정을 발송합니다">
+                <span>🤝</span> 코치 배정&amp;카톡센터 이동
+              </button>
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabCoachControl')" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-weight: 850;" title="현장 코치들의 사진 3종 검수 및 활동비 송금 확인 센터로 이동">
+                <span>📸</span> 현장관제&amp;송금센터 이동
+              </button>
               <a href="my-room.html?tab=beauty" target="_blank" class="btn-save-setting" style="background: #fee7ec; color: #b83354; border-color: #f8c8d2; text-decoration: none; font-weight: 800;">
                 <span>🏠</span> 1:1 고객 대시보드 보기
               </a>
@@ -2794,8 +2834,8 @@
 
       </section>
 
-      <!-- ================= 탭 6: 🎓 05. 코치 아카데미 & 코치 배정 관리 ================= -->
-      <section class="tab-panel" id="tabAcademy">
+      <!-- ================= 탭 1: 🎓 01. 코치 아카데미 & 코치 배정 관리 ================= -->
+      <section class="tab-panel active" id="tabAcademy">
 
         <!-- 상단 실시간 코칭스태프 & 배정 현황 카드 -->
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-bottom: 24px;">
@@ -2835,9 +2875,9 @@
             <div class="panel-title-wrap">
               <span class="panel-icon">🤝</span>
               <div>
-                <h2 class="panel-title">05-1. 각종 서비스별 전담 코치 배정 및 파견 관리 툴 (Dispatch Center)</h2>
+                <h2 class="panel-title">01. 각종 서비스별 전담 코치 배정 및 파견 관리 툴 (Dispatch Center)</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  고객의 서비스 신청(뷰티, 옷장비움, 유품정리, 자서전, 서재, 엔딩파티)에 <strong>교육을 이수한 공인 코치를 직접 배정</strong>하고 방문·코칭 일정을 관리합니다.
+                  고객의 서비스 신청(뷰티, 옷장비움, 유품정리, 자서전, 서재, 엔딩파티)에 <strong>교육을 이수한 공인 코치를 직접 배정</strong>하고 방문·코칭 일정을 관리하며 <strong>카카오톡 알림을 즉시 발송</strong>합니다.
                 </p>
               </div>
             </div>
@@ -2968,7 +3008,7 @@
         </div>
       </section>
 
-      <!-- ================= 탭: 📸 05-2. 코치 현장관제 & 정산센터 ================= -->
+      <!-- ================= 탭 2: 📸 02. 코치 현장관제 & 활동비 정산센터 ================= -->
       <section class="tab-panel" id="tabCoachControl">
         
         <!-- 상단 헤더 & 원클릭 바로가기 -->
@@ -2977,9 +3017,9 @@
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background:#eef7f2; color:#059669; font-size:1.6rem; padding:8px; border-radius:12px;">📸</span>
               <div>
-                <h2 class="panel-title" style="font-size:1.35rem; font-weight:900;">05-2. 코치 현장수행 관제 &amp; 활동비 정산 센터</h2>
+                <h2 class="panel-title" style="font-size:1.35rem; font-weight:900;">02. 코치 현장수행 관제 &amp; 활동비 송금·정산 센터</h2>
                 <p style="color: var(--text-muted); font-size: 0.88rem; margin: 4px 0 0;">
-                  현장 코치들이 등록한 <strong>도착 스탬프, 현장 사진 3종(Before/Process/After), 완료 보고</strong>를 실시간 검수하고, 활동비 송금 확인 후 <strong>원클릭 입금완료 승인</strong>을 처리합니다.
+                  현장 코치들이 등록한 <strong>도착 스탬프, 현장 사진 3종(Before/Process/After), 완료 보고</strong>를 실시간 검수하고, 활동비 송금 확인 후 <strong>원클릭 입금완료 승인 및 카톡 안내</strong>를 처리합니다.
                 </p>
               </div>
             </div>
@@ -4559,6 +4599,12 @@
         }
       }
 
+      if (!btn) {
+        if (tabId === 'tabAcademy') btn = document.getElementById('navBtnAcademy');
+        else if (tabId === 'tabCoachControl') btn = document.getElementById('navBtnCoachControl');
+        else if (tabId === 'tabBusinessMaster') btn = document.getElementById('navBtnBusinessMaster');
+      }
+
       var panels = document.querySelectorAll('.tab-panel');
       for (var i = 0; i < panels.length; i++) {
         panels[i].classList.remove('active');
@@ -4572,6 +4618,13 @@
         btns[j].classList.remove('active');
       }
       if (btn) btn.classList.add('active');
+
+      /* 01. 코치 배정 & 파견센터 진입 시 실시간 새로고침 */
+      if (tabId === 'tabAcademy') {
+        if (typeof renderDispatchesTable === 'function') renderDispatchesTable();
+        if (typeof renderCoachesTable === 'function') renderCoachesTable();
+        if (typeof updateAcademyStats === 'function') updateAcademyStats();
+      }
 
       /* 03 4? 鍮꾩쫰?덉뒪 愿?쒖꽱???뚮뜑留?*/
       if (tabId === 'tabBusinessMaster' && typeof renderBusinessMasterDashboard === 'function') {
@@ -12031,6 +12084,60 @@ ${coachAppUrl}
 
     function closeDispatchModalOnOverlay(e) {
       if (e.target.id === 'dispatchFormModal') closeDispatchModal();
+    }
+
+    // 🌟 특정 고객(4대 비즈니스 상담/뷰티 예약 등) 정보를 채워 코치 배정 모달 바로 열기
+    function openDispatchModalForClient(clientData) {
+      if (typeof switchTab === 'function') {
+        switchTab('tabAcademy');
+      }
+      openDispatchModal();
+      if (!clientData) return;
+
+      const titleEl = document.getElementById('dispatchModalTitle');
+      const nameInput = document.getElementById('inputDispClientName');
+      const phoneInput = document.getElementById('inputDispClientPhone');
+      const serviceSelect = document.getElementById('selectDispServiceType');
+      const locationInput = document.getElementById('inputDispLocation');
+      const feeInput = document.getElementById('inputDispFee');
+      const memoInput = document.getElementById('inputDispMemo');
+      const coachSelect = document.getElementById('selectDispCoach');
+      const statusInput = document.getElementById('selectDispStatus');
+      const dateInput = document.getElementById('inputDispDate');
+      const timeSelect = document.getElementById('inputDispTime');
+
+      if (titleEl && clientData.name) {
+        titleEl.textContent = `🤝 [${clientData.name}] 고객 전담 코치 배정 & 카톡 발송`;
+      }
+      if (nameInput && clientData.name) nameInput.value = clientData.name;
+      if (phoneInput && clientData.phone) phoneInput.value = formatPhoneNumber(clientData.phone);
+      if (serviceSelect && clientData.service) {
+        for (let i = 0; i < serviceSelect.options.length; i++) {
+          const opt = serviceSelect.options[i];
+          if (opt.value.includes(clientData.service) || clientData.service.includes(opt.value.replace(/^[^\s]+ /, ''))) {
+            serviceSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
+      if (clientData.date) {
+        const parsed = parseScheduleToDateTime(clientData.date);
+        if (dateInput && parsed.datePart) dateInput.value = parsed.datePart;
+        if (timeSelect && parsed.timePart) timeSelect.value = parsed.timePart;
+        syncScheduleDateTime();
+      }
+      if (locationInput && clientData.address) locationInput.value = clientData.address;
+      if (feeInput && clientData.fee) feeInput.value = clientData.fee;
+      if (memoInput && clientData.notes) memoInput.value = clientData.notes;
+      if (statusInput) statusInput.value = '배정완료';
+      if (coachSelect && clientData.coach) {
+        for (let i = 0; i < coachSelect.options.length; i++) {
+          if (coachSelect.options[i].value.includes(clientData.coach)) {
+            coachSelect.selectedIndex = i;
+            break;
+          }
+        }
+      }
     }
 
     function handleDispatchFormSubmit(e) {

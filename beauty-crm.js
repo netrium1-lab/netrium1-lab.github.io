@@ -315,10 +315,18 @@ function renderBeautyPipeline(list) {
                 <option value="케어완료" ${item.status === '케어완료' ? 'selected' : ''}>③ 케어완료</option>
               </select>
             </td>
-            <td style="text-align:center;">
-              <button type="button" class="btn-save-setting" onclick="openBeautyCoachingModal('${item.id}')" style="padding:5px 10px; font-size:0.82rem; background:#fee7ec; color:#b83354; border-color:#f8c8d2;">
-                📝 180분 일지
-              </button>
+            <td style="text-align:center; white-space:nowrap;">
+              <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
+                <button type="button" class="btn-save-setting" onclick="openDispatchFromBeauty('${item.id}')" style="padding:4px 8px; font-size:0.78rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; font-weight:850; display:inline-flex; align-items:center; gap:3px;" title="공식 파견센터에 등록하고 코치에게 카톡 일정을 바로 전송합니다">
+                  <span>🤝</span> 코치 배정&amp;카톡
+                </button>
+                <button type="button" class="btn-save-setting" onclick="goToCoachControlForClient('${escapeHtml(item.seniorName)}')" style="padding:4px 8px; font-size:0.78rem; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-weight:850; display:inline-flex; align-items:center; gap:3px;" title="현장관제&정산센터로 이동하여 사진 3종 검수 및 송금을 진행합니다">
+                  <span>📸</span> 현장관제&amp;송금
+                </button>
+                <button type="button" class="btn-save-setting" onclick="openBeautyCoachingModal('${item.id}')" style="padding:4px 8px; font-size:0.78rem; background:#fee7ec; color:#b83354; border:1px solid #f8c8d2; font-weight:800;">
+                  📝 180분 일지
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -429,10 +437,15 @@ function renderGeneralBusinessPipeline(biz, consults) {
                 <option value="완료" ${item.status === '완료' ? 'selected' : ''}>④ 완료</option>
               </select>
             </td>
-            <td style="text-align:center;">
-              <button type="button" class="btn-save-setting" onclick="alert('[${item.name} 고객님]의 현장 컨설팅 관리 카드가 열립니다.')" style="padding:5px 10px; font-size:0.82rem;">
-                📋 관리
-              </button>
+            <td style="text-align:center; white-space:nowrap;">
+              <div style="display:inline-flex; gap:4px; flex-wrap:wrap; justify-content:center;">
+                <button type="button" class="btn-save-setting" onclick="openDispatchFromGeneral('${item.id}')" style="padding:4px 8px; font-size:0.78rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; font-weight:850; display:inline-flex; align-items:center; gap:3px;" title="공식 파견센터에 등록하고 코치에게 카톡 일정을 바로 전송합니다">
+                  <span>🤝</span> 코치 배정&amp;카톡
+                </button>
+                <button type="button" class="btn-save-setting" onclick="goToCoachControlForClient('${escapeHtml(item.name)}')" style="padding:4px 8px; font-size:0.78rem; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-weight:850; display:inline-flex; align-items:center; gap:3px;" title="현장관제&정산센터로 이동하여 사진 3종 검수 및 송금을 진행합니다">
+                  <span>📸</span> 현장관제&amp;송금
+                </button>
+              </div>
             </td>
           </tr>
         `;
@@ -560,6 +573,62 @@ function downloadCSVFile(csv, filename) {
   link.href = URL.createObjectURL(blob);
   link.download = filename;
   link.click();
+}
+
+// 12. 🌟 공식 코치 배정 & 현장관제 연동 함수들
+function openDispatchFromBeauty(id) {
+  const list = getStoredBeautyBookings();
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+  if (typeof openDispatchModalForClient === 'function') {
+    openDispatchModalForClient({
+      name: item.seniorName || item.applicantName,
+      phone: item.phone,
+      service: '💄 화려한 외출 (시니어 메이크업)',
+      date: item.visitDate || '',
+      address: (item.place || '') + (item.address ? ' ' + item.address : ''),
+      coach: item.assignedCoach || '',
+      fee: 150000,
+      notes: `[뷰티 180분 예약 연동] 신청인: ${item.applicantName}(${item.role}), 어르신: ${item.seniorName}, 예약ID: ${item.id}`
+    });
+  } else if (typeof switchTab === 'function') {
+    switchTab('tabAcademy');
+    if (typeof openDispatchModal === 'function') openDispatchModal();
+  }
+}
+
+function openDispatchFromGeneral(id) {
+  const list = getStoredGeneralConsults();
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+  if (typeof openDispatchModalForClient === 'function') {
+    openDispatchModalForClient({
+      name: item.name,
+      phone: item.phone,
+      service: item.category || '👗 2호 일상과 비움의 미학 (옷장&서재 정리)',
+      date: item.date || '',
+      address: '고객 자택 (상담 후 확정)',
+      coach: item.assignedCoach || '',
+      fee: 150000,
+      notes: `[4대 비즈니스 상담 연동] 접수ID: ${item.id} / 내용: ${item.message || ''}`
+    });
+  } else if (typeof switchTab === 'function') {
+    switchTab('tabAcademy');
+    if (typeof openDispatchModal === 'function') openDispatchModal();
+  }
+}
+
+function goToCoachControlForClient(name) {
+  if (typeof switchTab === 'function') {
+    switchTab('tabCoachControl');
+  }
+  const searchInput = document.getElementById('inputControlSearch');
+  if (searchInput) {
+    searchInput.value = name || '';
+    if (typeof handleControlSearch === 'function') {
+      handleControlSearch(name || '');
+    }
+  }
 }
 
 // 11. 초기 로드
