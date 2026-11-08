@@ -2229,6 +2229,111 @@
       margin: 0;
     }
 
+    /* 모달 헤더 공유 버튼 */
+    .beauty-header-share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #fee7ec;
+      color: #b83354;
+      border: 1px solid #f8c8d2;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .beauty-header-share-btn:hover {
+      background: #b83354;
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+    [data-theme="dark"] .beauty-header-share-btn {
+      background: #351a24;
+      border-color: #632233;
+      color: #ff859d;
+    }
+
+    /* 본문 내 SNS 공유 전용 카드 */
+    .beauty-sns-share-card {
+      background: var(--bg-secondary, #f8fafc);
+      border: 1.5px solid var(--border-color, #e2e8f0);
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin-top: 22px;
+      margin-bottom: 24px;
+    }
+    .beauty-sns-share-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .beauty-sns-share-btns {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 580px) {
+      .beauty-sns-share-btns {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    .sns-share-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .sns-share-item.kakao {
+      background: #FEE500;
+      color: #191600;
+    }
+    .sns-share-item.kakao:hover {
+      background: #ebd200;
+      transform: translateY(-2px);
+    }
+    .sns-share-item.naver {
+      background: #03C75A;
+      color: #ffffff;
+    }
+    .sns-share-item.naver:hover {
+      background: #02b350;
+      transform: translateY(-2px);
+    }
+    .sns-share-item.webshare {
+      background: var(--bg-card, #ffffff);
+      color: var(--text-primary);
+      border-color: var(--border-color, #cbd5e1);
+    }
+    .sns-share-item.webshare:hover {
+      background: var(--bg-hover, #f1f5f9);
+      transform: translateY(-2px);
+    }
+    .sns-share-item.linkcopy {
+      background: #fee7ec;
+      color: #b83354;
+      border-color: #f8c8d2;
+    }
+    [data-theme="dark"] .sns-share-item.linkcopy {
+      background: #331821;
+      color: #ff859d;
+      border-color: #632233;
+    }
+    .sns-share-item.linkcopy:hover {
+      background: #d1516e;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
     /* 상세 안내 모달 하단 강력한 상담 CTA 박스 */
     .beauty-consult-cta-box {
       background: linear-gradient(135deg, #fff0f3 0%, #fee7ec 100%);
@@ -6334,7 +6439,12 @@
             <span style="font-size: 1.3rem;">💄</span>
             <span style="font-weight: 900; font-size: 1.05rem; color: #b83354;">여백과결 1호 프리미엄 라이프케어</span>
           </div>
-          <button type="button" class="beauty-modal-close-btn" onclick="closeBeautyCareModal()" aria-label="프로모션 창 닫기">✕</button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <button type="button" class="beauty-header-share-btn" onclick="shareBeautyNative()" title="SNS로 공유하기">
+              <span>📤 공유하기</span>
+            </button>
+            <button type="button" class="beauty-modal-close-btn" onclick="closeBeautyCareModal()" aria-label="프로모션 창 닫기">✕</button>
+          </div>
         </div>
 
         <!-- 히어로 배너 (모바일 컴팩트 자동 최적화) -->
@@ -6506,6 +6616,33 @@
             </div>
           </div>
 
+          <!-- 🎁 SNS 공유하기 전용 섹션 -->
+          <div class="beauty-sns-share-card">
+            <div class="beauty-sns-share-head">
+              <span style="font-size: 1.4rem;">🎁</span>
+              <div>
+                <h5 style="margin: 0; font-size: 0.98rem; font-weight: 850; color: var(--text-primary);">부모님 효도 선물, 가족·지인에게 SNS 공유하기</h5>
+                <p style="margin: 2px 0 0; font-size: 0.82rem; color: var(--text-secondary);">소중한 부모님과 가족에게 카카오톡이나 메시지로 180분 감동의 여정을 전해보세요.</p>
+              </div>
+            </div>
+            <div class="beauty-sns-share-btns">
+              <button type="button" class="sns-share-item kakao" onclick="shareBeautyOnKakao()" title="카카오톡으로 공유">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="#3C1E1E"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.87 5.33 4.71 6.73-.21.78-.77 2.83-.88 3.26-.14.54.2.53.42.39.29-.19 3.42-2.34 3.99-2.73.57.08 1.16.12 1.76.12 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/></svg>
+                <span>카카오톡</span>
+              </button>
+              <button type="button" class="sns-share-item naver" onclick="shareBeautyOnNaver()" title="네이버로 공유">
+                <span style="font-weight: 900; font-size: 0.92rem; color: #fff;">N</span>
+                <span>네이버</span>
+              </button>
+              <button type="button" class="sns-share-item webshare" onclick="shareBeautyNative()" title="스마트폰 기본 공유창">
+                <span>📱 SNS 공유</span>
+              </button>
+              <button type="button" class="sns-share-item linkcopy" onclick="copyBeautyShareLink()" title="링크 주소 복사">
+                <span>🔗 링크 복사</span>
+              </button>
+            </div>
+          </div>
+
           <!-- 💬 [분리 완료] 상세 안내 모달 하단: 1:1 상담 안내 신청 CTA 박스 -->
           <div class="beauty-consult-cta-box">
             <span style="background: #b83354; color: #fff; font-size: 0.82rem; font-weight: 850; padding: 4px 14px; border-radius: 999px;">
@@ -6526,16 +6663,21 @@
 
         </div>
 
-        <!-- 📱 모바일 하단 고정 원클릭 상담 바 -->
+        <!-- 📱 모바일 하단 고정 원클릭 상담 & 공유 바 -->
         <div class="beauty-mobile-cta-bar">
           <div class="beauty-mobile-cta-inner">
             <div>
               <div style="font-size: 0.76rem; color: #b83354; font-weight: 800;">180분 프리미엄 라이프케어</div>
               <div style="font-size: 0.9rem; font-weight: 900; color: var(--text-primary);">1:1 맞춤 일정 &amp; 상담</div>
             </div>
-            <button type="button" class="btn btn-primary" onclick="openBeautyCounselModal()" style="padding: 10px 18px; font-size: 0.92rem; font-weight: 850; border-radius: 12px; background: linear-gradient(135deg, #d1516e 0%, #b83354 100%); border: none; color: #fff; cursor: pointer;">
-              <span>💬 상담 안내받기</span>
-            </button>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <button type="button" onclick="shareBeautyNative()" style="padding: 10px 14px; font-size: 0.88rem; font-weight: 850; border-radius: 12px; background: #fee7ec; color: #b83354; border: 1px solid #f8c8d2; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <span>📤 공유</span>
+              </button>
+              <button type="button" class="btn btn-primary" onclick="openBeautyCounselModal()" style="padding: 10px 18px; font-size: 0.92rem; font-weight: 850; border-radius: 12px; background: linear-gradient(135deg, #d1516e 0%, #b83354 100%); border: none; color: #fff; cursor: pointer;">
+                <span>💬 상담 안내받기</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -8712,6 +8854,186 @@
         </div>
       `;
       document.body.appendChild(overlay);
+    }
+
+    // =========================================================================
+    // 180분 시니어 뷰티 라이프케어 SNS 공유하기 시스템 (카카오톡, 네이버, WebShare, 링크복사)
+    // =========================================================================
+    const BEAUTY_SHARE_INFO = {
+      title: '“엄마의 찬란했던 리즈 시절을 되찾아 드립니다” - 여백과결 180분 시니어 뷰티 라이프케어',
+      desc: '전문 뷰티 라이프 코치가 댁으로 방문하여 피부 진단·딥보습 에스테틱·타임슬립 메이크업·옷장 코디·주거 낙상 안전 점검까지 180분간 품격 있게 완성합니다.',
+      imageUrl: 'https://netrium1-lab.github.io/images/care-beauty-hero.jpg',
+      getShareUrl: function() {
+        const origin = window.location.origin || 'https://netrium1-lab.github.io';
+        let path = window.location.pathname;
+        if (!path || path === '') path = '/';
+        return `${origin}${path}?modal=beauty`;
+      }
+    };
+
+    // 1. 카카오톡 공유 (Kakao SDK 공식 피드 공유 & 웹 공유기 fallback)
+    function shareBeautyOnKakao() {
+      const shareUrl = BEAUTY_SHARE_INFO.getShareUrl();
+      const shareTitle = BEAUTY_SHARE_INFO.title;
+      const shareDesc = BEAUTY_SHARE_INFO.desc;
+      const shareImage = BEAUTY_SHARE_INFO.imageUrl;
+
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
+            const shareConfig = {
+              objectType: 'feed',
+              content: {
+                title: shareTitle,
+                description: shareDesc,
+                imageUrl: shareImage,
+                imageWidth: 1200,
+                imageHeight: 630,
+                link: {
+                  mobileWebUrl: shareUrl,
+                  webUrl: shareUrl,
+                },
+              },
+              buttons: [
+                {
+                  title: '💄 프로그램 안내 보기',
+                  link: {
+                    mobileWebUrl: shareUrl,
+                    webUrl: shareUrl,
+                  },
+                },
+              ],
+            };
+
+            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+              Kakao.Share.sendDefault(shareConfig);
+              return;
+            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+              Kakao.Link.sendDefault(shareConfig);
+              return;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[Kakao Share Error]', e);
+      }
+
+      // fallback 1: 카카오 웹 공유기 팝업
+      try {
+        const kakaoWebSharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+        const popup = window.open(kakaoWebSharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
+        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
+          return;
+        }
+      } catch (err) {}
+
+      // fallback 2: 클립보드 복사
+      copyBeautyShareLink();
+    }
+
+    // 2. 네이버 공유 (블로그/밴드)
+    function shareBeautyOnNaver() {
+      const shareUrl = BEAUTY_SHARE_INFO.getShareUrl();
+      const shareTitle = BEAUTY_SHARE_INFO.title;
+      const naverUrl = `https://share.naver.com/web/shareView?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(shareTitle)}`;
+      window.open(naverUrl, 'naver_share', 'width=520,height=600,resizable=yes,scrollbars=yes');
+    }
+
+    // 3. 모바일 기기 기본 공유창 (Web Share API)
+    async function shareBeautyNative() {
+      const shareUrl = BEAUTY_SHARE_INFO.getShareUrl();
+      const shareData = {
+        title: BEAUTY_SHARE_INFO.title,
+        text: BEAUTY_SHARE_INFO.desc,
+        url: shareUrl
+      };
+
+      if (navigator.share && /Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        try {
+          await navigator.share(shareData);
+          return;
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            copyBeautyShareLink();
+          }
+        }
+      } else {
+        // PC 브라우저에서는 편리하게 카카오톡 공유 우선 실행
+        shareBeautyOnKakao();
+      }
+    }
+
+    // 4. 링크 복사 (클립보드)
+    function copyBeautyShareLink() {
+      const shareUrl = BEAUTY_SHARE_INFO.getShareUrl();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          showBeautyToast('🔗 180분 시니어 뷰티 라이프케어 링크가 복사되었습니다! 카카오톡이나 메시지로 전달해 보세요.');
+        }).catch(() => {
+          fallbackCopyText(shareUrl);
+        });
+      } else {
+        fallbackCopyText(shareUrl);
+      }
+    }
+
+    function fallbackCopyText(text) {
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+        showBeautyToast('🔗 링크가 복사되었습니다!');
+      } catch (e) {
+        prompt('아래 링크를 복사하여 공유하세요:', text);
+      }
+      document.body.removeChild(textarea);
+    }
+
+    // 감성 토스트 알림창
+    function showBeautyToast(msg) {
+      let toast = document.getElementById('beautyShareToast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'beautyShareToast';
+        toast.style.cssText = `
+          position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px);
+          background: rgba(15, 23, 42, 0.92); color: #ffffff; padding: 12px 24px;
+          border-radius: 999px; font-size: 0.92rem; font-weight: 800; z-index: 100010;
+          box-shadow: 0 10px 28px rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2);
+          opacity: 0; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+          text-align: center; max-width: 90vw; word-break: keep-all;
+        `;
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translateX(-50%) translateY(0)';
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-50%) translateY(20px)';
+      }, 3200);
+    }
+
+    // URL 파라미터(?modal=beauty 또는 #beauty)로 접속 시 팝업 모달 자동 오픈
+    function checkBeautyDeepLink() {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('modal') === 'beauty' || window.location.hash === '#beauty') {
+          setTimeout(() => {
+            openBeautyCareModal();
+            if (params.get('action') === 'counsel') {
+              setTimeout(() => { openBeautyCounselModal(); }, 350);
+            }
+          }, 450);
+        }
+      } catch (e) {}
     }
 
     // ================= 시니어 맞춤형 원터치 안심 상담 모달 제어 =================
@@ -14006,6 +14328,7 @@
       applySiteSettingsToMain();
       applyMemoirBannerConfig();
       checkDeepLinkArticle();
+      checkBeautyDeepLink();
     });
 
     // 외부 클릭 시 서식 팝업 닫기
@@ -14035,6 +14358,7 @@
     applySiteSettingsToMain();
     applyMemoirBannerConfig();
     checkDeepLinkArticle();
+    checkBeautyDeepLink();
   </script>
 </body>
 </html>
