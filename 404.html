@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>여백과 결, 리셋 아카이브 | 칼럼 연결 중...</title>
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="여백과 결, 리셋 아카이브">
+  <meta property="og:title" content="여백과 결, 리셋 아카이브 | 인생 후반전 라이프 리셋 칼럼">
+  <meta property="og:description" content="지나온 세월의 결을 다듬고, 남은 인생의 여백을 내 손으로 그리다. 여백의 서재 최신 칼럼으로 이동합니다.">
+  <meta property="og:image" content="https://netrium1-lab.github.io/images/og-share-cover.jpg">
+  <style>
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: #08090c;
+      color: #f3f5f8;
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 85vh;
+      text-align: center;
+    }
+    .card {
+      max-width: 480px;
+      width: 100%;
+      background: #111622;
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 32px 24px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+    .title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      color: #ffffff;
+    }
+    .desc {
+      font-size: 0.94rem;
+      color: #94a3b8;
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #2b5a42;
+      color: #ffffff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+  </style>
+  <script>
+    (function() {
+      var path = window.location.pathname || '';
+      var search = window.location.search || '';
+      // /articles/mag_xxxx.html 또는 잘못 결합된 /articles/mag_xxxx.html&art_data=... 경로 감지
+      var match = path.match(/\/articles\/([a-zA-Z0-9_-]+)\.html(.*)$/i);
+      if (match && match[1]) {
+        var artId = match[1];
+        var extraQuery = '';
+        if (match[2] && match[2].indexOf('art_data=') !== -1) {
+          extraQuery = '&' + match[2].replace(/^[?&]+/, '');
+        }
+        if (search) {
+          extraQuery += '&' + search.replace(/^\?+/, '');
+        }
+        window.location.replace('/index.html?article=' + encodeURIComponent(artId) + extraQuery);
+        return;
+      }
+      // 그 외 경로는 메인으로 연결
+      window.location.replace('/index.html' + search);
+    })();
+  </script>
+</head>
+<body>
+  <div class="card">
+    <div class="title">🌿 여백의 서재 칼럼으로 이동 중입니다...</div>
+    <div class="desc">잠시만 기다려 주시면 해당 칼럼 본문 뷰어로 즉시 연결됩니다.</div>
+    <a id="fallbackLink" class="btn" href="/index.html">여백과 결 홈으로 바로가기</a>
+  </div>
+</body>
+</html>
