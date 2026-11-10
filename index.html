@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -2851,6 +2851,261 @@
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+    }
+
+    /* ==========================================================
+       [신설] 디지털 자서전 5대 테마 로드맵 & 3대 맞춤 출판 패키지 스타일
+       ========================================================== */
+    .memoir-roadmap-container {
+      margin-top: 56px;
+      margin-bottom: 56px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 20px;
+      padding: 36px 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+    }
+    .memoir-roadmap-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    .memoir-roadmap-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 14px;
+      background: rgba(194, 155, 56, 0.12);
+      color: #936f1c;
+      border-radius: 999px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .memoir-roadmap-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .memoir-roadmap-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    .memoir-chapters-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 1100px) {
+      .memoir-chapters-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 640px) {
+      .memoir-chapters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .memoir-chapter-card {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 20px 16px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+    }
+    .memoir-chapter-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(30, 61, 47, 0.08);
+      border-color: #c29b38;
+    }
+    .memoir-chapter-num {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 900;
+      color: #c29b38;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .memoir-chapter-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+    .memoir-questions-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .memoir-questions-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+    }
+    .memoir-questions-list li span.q-bullet {
+      color: #c29b38;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    /* 3대 출판 패키지 */
+    .memoir-packages-container {
+      margin-top: 48px;
+      margin-bottom: 48px;
+    }
+    .memoir-packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      align-items: stretch;
+    }
+    @media (max-width: 900px) {
+      .memoir-packages-grid {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+        margin: 0 auto;
+      }
+    }
+    .memoir-pkg-card {
+      background: var(--bg-card);
+      border: 1.8px solid var(--border-color);
+      border-radius: 20px;
+      padding: 32px 26px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.25s ease;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+    }
+    .memoir-pkg-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 14px 35px rgba(30, 61, 47, 0.1);
+    }
+    .memoir-pkg-card.highlight {
+      border-color: #c29b38;
+      background: linear-gradient(180deg, rgba(194, 155, 56, 0.04) 0%, var(--bg-card) 100%);
+      box-shadow: 0 10px 32px rgba(194, 155, 56, 0.15);
+    }
+    .memoir-pkg-badge-best {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #d4af37, #aa7c11);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 4px 16px;
+      border-radius: 999px;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 10px rgba(170, 124, 17, 0.35);
+    }
+    .memoir-pkg-header {
+      text-align: center;
+      padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border-color);
+      margin-bottom: 20px;
+    }
+    .memoir-pkg-tier {
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #c29b38;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .memoir-pkg-name {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.45rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+    }
+    .memoir-pkg-desc {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+    .memoir-pkg-specs {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 28px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex-grow: 1;
+    }
+    .memoir-pkg-specs li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.45;
+    }
+    .memoir-pkg-specs li span.icon {
+      font-size: 1.05rem;
+      line-height: 1.2;
+      flex-shrink: 0;
+    }
+    .memoir-pkg-specs li strong {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+    .memoir-pkg-btn {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      font-size: 0.98rem;
+      font-weight: 850;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      border: none;
+    }
+    .memoir-pkg-btn.primary {
+      background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(30, 61, 47, 0.25);
+    }
+    .memoir-pkg-btn.primary:hover {
+      background: linear-gradient(135deg, #274f3d 0%, #1c3b2d 100%);
+      transform: translateY(-2px);
+    }
+    .memoir-pkg-btn.gold {
+      background: linear-gradient(135deg, #c29b38 0%, #9a7820 100%);
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(194, 155, 56, 0.35);
+    }
+    .memoir-pkg-btn.gold:hover {
+      background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
+      transform: translateY(-2px);
+    }
+    .memoir-pkg-btn.outline {
+      background: transparent;
+      border: 1.6px solid var(--border-color);
+      color: var(--text-primary);
+    }
+    .memoir-pkg-btn.outline:hover {
+      border-color: #1e3d2f;
+      background: rgba(30, 61, 47, 0.05);
     }
 
     /* -------------------- 공통 섹션 스타일 -------------------- */
@@ -6952,7 +7207,155 @@
           </div>
         </div>
 
-        <!-- 하단 특별 혜택 및 신청 배너 (관리자홈 실시간 동기화 지원) -->
+        <!-- [신설] 5대 테마 & 20대 핵심 구술 질문 로드맵 -->
+        <div class="memoir-roadmap-container">
+          <div class="memoir-roadmap-header">
+            <div class="memoir-roadmap-tag">
+              <span>🧭</span> THE 5 CHAPTER ROADMAP
+            </div>
+            <h3 class="memoir-roadmap-title">삶의 궤적을 엮는 5대 테마 &amp; 20대 구술 로드맵</h3>
+            <p class="memoir-roadmap-desc">
+              어디서부터 이야기를 시작해야 할지 막막하셔도 걱정 없습니다.<br>
+              전문 구술 코치가 준비된 20개 인생 핵심 질문으로 어르신의 소중한 기억을 자연스럽게 이끌어냅니다.
+            </p>
+          </div>
+
+          <div class="memoir-chapters-grid">
+            <!-- Chapter 1 -->
+            <div class="memoir-chapter-card">
+              <span class="memoir-chapter-num">CHAPTER 01</span>
+              <h4 class="memoir-chapter-title">🌱 유년과 고향의 기억</h4>
+              <ul class="memoir-questions-list">
+                <li><span class="q-bullet">Q1.</span> 고향 마을의 사계절 풍경과 첫 기억</li>
+                <li><span class="q-bullet">Q2.</span> 어머니의 밥상과 아버지의 훈계</li>
+                <li><span class="q-bullet">Q3.</span> 골목길 단짝들과 학창 시절 비화</li>
+                <li><span class="q-bullet">Q4.</span> 가슴에 품었던 어린 날의 꿈과 동경</li>
+              </ul>
+            </div>
+
+            <!-- Chapter 2 -->
+            <div class="memoir-chapter-card">
+              <span class="memoir-chapter-num">CHAPTER 02</span>
+              <h4 class="memoir-chapter-title">🔥 청춘의 열정과 도전</h4>
+              <ul class="memoir-questions-list">
+                <li><span class="q-bullet">Q5.</span> 맨손으로 상경해 맞은 첫 일터의 새벽</li>
+                <li><span class="q-bullet">Q6.</span> 격랑의 시대 속 밤낮없이 흘린 땀방울</li>
+                <li><span class="q-bullet">Q7.</span> 잊을 수 없는 동료들과 청춘의 낭만</li>
+                <li><span class="q-bullet">Q8.</span> 내 인생의 방향을 바꾼 결정적 순간</li>
+              </ul>
+            </div>
+
+            <!-- Chapter 3 -->
+            <div class="memoir-chapter-card">
+              <span class="memoir-chapter-num">CHAPTER 03</span>
+              <h4 class="memoir-chapter-title">🏡 사랑과 가족의 결</h4>
+              <ul class="memoir-questions-list">
+                <li><span class="q-bullet">Q9.</span> 평생의 반려자를 처음 마주한 날</li>
+                <li><span class="q-bullet">Q10.</span> 첫 아이가 태어났을 때의 벅찬 감동</li>
+                <li><span class="q-bullet">Q11.</span> 팍팍한 살림 속에서도 지켜낸 가족애</li>
+                <li><span class="q-bullet">Q12.</span> 우리 가족만의 보금자리를 일군 날</li>
+              </ul>
+            </div>
+
+            <!-- Chapter 4 -->
+            <div class="memoir-chapter-card">
+              <span class="memoir-chapter-num">CHAPTER 04</span>
+              <h4 class="memoir-chapter-title">🌊 시련을 넘은 삶의 지혜</h4>
+              <ul class="memoir-questions-list">
+                <li><span class="q-bullet">Q13.</span> 생애 가장 캄캄했던 시련과 고비</li>
+                <li><span class="q-bullet">Q14.</span> 주저앉고 싶을 때 나를 세운 신념</li>
+                <li><span class="q-bullet">Q15.</span> 위기를 버티게 해 준 고마운 은인들</li>
+                <li><span class="q-bullet">Q16.</span> 세월이 지나서야 깨달은 용서와 감사</li>
+              </ul>
+            </div>
+
+            <!-- Chapter 5 -->
+            <div class="memoir-chapter-card">
+              <span class="memoir-chapter-num">CHAPTER 05</span>
+              <h4 class="memoir-chapter-title">🌳 후손에게 전하는 유산</h4>
+              <ul class="memoir-questions-list">
+                <li><span class="q-bullet">Q17.</span> 자녀와 손주들에게 꼭 남기고픈 당부</li>
+                <li><span class="q-bullet">Q18.</span> 인생의 여정에서 건져 올린 삶의 철학</li>
+                <li><span class="q-bullet">Q19.</span> 남은 생애 동안 이루고픈 소망</li>
+                <li><span class="q-bullet">Q20.</span> 영원히 기억될 나의 이름 석 자</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- [신설] 맞춤 출판 3대 패키지 -->
+        <div class="memoir-packages-container">
+          <div class="section-header" style="margin-bottom: 36px;">
+            <p class="section-tag">CUSTOM PUBLISHING PACKAGES</p>
+            <h3 class="section-title" style="font-size: 1.65rem;">여백과 결 명품 자서전 3대 맞춤 패키지</h3>
+            <p class="section-desc">가족의 상황과 기록 목적에 맞춰 최적의 구성으로 품격 있게 출판합니다.</p>
+          </div>
+
+          <div class="memoir-packages-grid">
+            <!-- 패키지 1: 감사 헌정본 -->
+            <div class="memoir-pkg-card">
+              <div class="memoir-pkg-header">
+                <div class="memoir-pkg-tier">COMPACT TRIBUTE</div>
+                <h4 class="memoir-pkg-name">감사 헌정본</h4>
+                <p class="memoir-pkg-desc">부모님의 칠순·팔순을 기념하는 실속형 양장 회고록</p>
+              </div>
+              <ul class="memoir-pkg-specs">
+                <li><span class="icon">🎙️</span><span><strong>구술 채록 2회</strong> (전문 코치 자택 방문, 총 3시간)</span></li>
+                <li><span class="icon">📖</span><span><strong>고급 양장본 3권</strong> (80페이지 내외 하드커버)</span></li>
+                <li><span class="icon">🎞️</span><span><strong>옛 사진 15장</strong> 고화질 스캔 &amp; 정밀 색상 복원</span></li>
+                <li><span class="icon">✍️</span><span>여백 감성 문체 윤문 및 가족 검수 1회</span></li>
+                <li><span class="icon">📱</span><span>가족 공유용 <strong>모바일 전용 웹북 URL</strong> 제공</span></li>
+              </ul>
+              <button type="button" onclick="openMemoirPackageModal('basic')" class="memoir-pkg-btn outline">
+                <span>감사 헌정본 상담 신청</span>
+                <span>→</span>
+              </button>
+            </div>
+
+            <!-- 패키지 2: 인생 마스터피스 (베스트) -->
+            <div class="memoir-pkg-card highlight">
+              <div class="memoir-pkg-badge-best">BEST · 가장 인기 있는 시그니처</div>
+              <div class="memoir-pkg-header">
+                <div class="memoir-pkg-tier">LIFE MASTERPIECE</div>
+                <h4 class="memoir-pkg-name">인생 마스터피스</h4>
+                <p class="memoir-pkg-desc">삶의 전 생애를 한 편의 명작 소설처럼 엮어내는 대표작</p>
+              </div>
+              <ul class="memoir-pkg-specs">
+                <li><span class="icon">🎙️</span><span><strong>심층 구술 4회</strong> (생애 5대 테마 집중 채록, 총 6시간)</span></li>
+                <li><span class="icon">📖</span><span><strong>최고급 양장본 5권</strong> (신국판 160페이지 올컬러)</span></li>
+                <li><span class="icon">🎞️</span><span><strong>옛 사진 30장</strong> AI 정밀 복원 &amp; 화보급 배치</span></li>
+                <li><span class="icon">🔊</span><span>책 속에 인쇄되는 <strong>육성 오디오북 QR 코드</strong> 수록</span></li>
+                <li><span class="icon">✍️</span><span>전문 작가진 5단계 심층 윤문 &amp; 자녀 헌정 서문</span></li>
+                <li><span class="icon">📱</span><span>영구 보존 디지털 아카이브 &amp; 플립북 뷰어</span></li>
+              </ul>
+              <button type="button" onclick="openMemoirPackageModal('masterpiece')" class="memoir-pkg-btn gold">
+                <span>✨ 인생 마스터피스 상담 신청</span>
+                <span>→</span>
+              </button>
+            </div>
+
+            <!-- 패키지 3: 명문 가문 평전 -->
+            <div class="memoir-pkg-card">
+              <div class="memoir-pkg-header">
+                <div class="memoir-pkg-tier">HERITAGE PRESTIGE</div>
+                <h4 class="memoir-pkg-name">명문 가문 평전</h4>
+                <p class="memoir-pkg-desc">대를 이어 전할 가문의 역사와 가훈, 헤리티지 평전</p>
+              </div>
+              <ul class="memoir-pkg-specs">
+                <li><span class="icon">🎙️</span><span><strong>VIP 심층 구술 8회</strong> (가계도 &amp; 명문 가문사 집중 편찬)</span></li>
+                <li><span class="icon">📖</span><span><strong>수제 가죽 양장본 10권</strong> (240페이지 하이엔드 조판)</span></li>
+                <li><span class="icon">🎞️</span><span>옛 사진 및 훈장/유품 <strong>60장 무제한 디지털 복원</strong></span></li>
+                <li><span class="icon">🎬</span><span><strong>구술 다큐멘터리 영상 클립</strong> &amp; 전문 성우 오디오북</span></li>
+                <li><span class="icon">🏛️</span><span>가문 헌정 출판기념회 기획 및 오프라인 배포 지원</span></li>
+                <li><span class="icon">🌐</span><span>가문 전용 영구 프리미엄 온라인 전시관 구축</span></li>
+              </ul>
+              <button type="button" onclick="openMemoirPackageModal('heritage')" class="memoir-pkg-btn primary">
+                <span>명문 가문 평전 상담 신청</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+        </div>
         <div class="memoir-cta-banner" id="memoirCtaBanner">
           <div class="memoir-cta-info">
             <h4 id="memoirBannerTitle">✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정</h4>
@@ -7890,6 +8293,125 @@
       <button type="button" onclick="closeMemoirBookSampleModal()" style="margin-top: 16px; width: 100%; padding: 12px; background: var(--bg-secondary); border: 1.5px solid var(--border-color); border-radius: 12px; color: var(--text-primary); font-size: 0.92rem; font-weight: 750; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
         <span>✕ 창 닫고 이전 화면으로</span>
       </button>
+    </div>
+  </div>
+
+  <!-- ================= [신설] 모달 8) 디지털 자서전 3대 맞춤 패키지 1:1 방문 상담 신청 모달 ================= -->
+  <div class="cms-modal-overlay" id="memoirPackageModal" onclick="closeMemoirPackageOnOverlay(event)" style="display: none;">
+    <div class="senior-modal-card" style="max-width: 600px; text-align: left; padding: 32px 28px; position: relative;">
+      <button class="drawer-close" onclick="closeMemoirPackageModal()" aria-label="닫기" style="position: absolute; top: 18px; right: 18px; border: 1px solid var(--border-color); background: var(--bg-secondary); border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 10;">✕</button>
+
+      <div style="margin-bottom: 20px;">
+        <span class="senior-badge-wrap" style="padding: 4px 12px; font-size: 0.82rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; font-weight: 850;">
+          📖 여백과 결 명품 자서전 · 1:1 방문 상담 신청
+        </span>
+        <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.45rem; font-weight: 850; color: var(--text-primary); margin: 8px 0 6px 0;">
+          어르신의 소중한 생애를 한 권의 명작으로 엮어드립니다
+        </h3>
+        <p style="font-size: 0.90rem; color: var(--text-secondary); line-height: 1.55; margin: 0;">
+          신청서를 남겨주시면 전문 구술 총괄 실장이 24시간 이내 연락드려 사전 인터뷰 일정과 세부 진행 절차를 친절히 안내해 드립니다.
+        </p>
+      </div>
+
+      <form id="memoirPackageForm" onsubmit="handleMemoirPackageSubmit(event)">
+        <!-- 희망 패키지 선택 -->
+        <div class="form-group" style="margin-bottom: 16px;">
+          <label style="display: block; font-size: 0.88rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+            희망 패키지 선택 <span style="color: #e11d48;">*</span>
+          </label>
+          <select id="memoirPackageSelect" required style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.95rem; font-weight: 700;">
+            <option value="basic">감사 헌정본 (Compact Tribute) - 80P 양장본 3권 / 구술 2회</option>
+            <option value="masterpiece" selected>⭐ 인생 마스터피스 (Life Masterpiece) - 160P 양장본 5권 / 오디오북 QR / 구술 4회</option>
+            <option value="heritage">명문 가문 평전 (Heritage Prestige) - 240P 가죽 양장본 10권 / 가계도 / 다큐영상</option>
+          </select>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+          <!-- 신청인 이름 -->
+          <div>
+            <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+              신청인(의뢰인) 성함 <span style="color: #e11d48;">*</span>
+            </label>
+            <input type="text" id="memoirApplicantName" required placeholder="예: 홍길동" style="width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.92rem;">
+          </div>
+          <!-- 신청인 연락처 -->
+          <div>
+            <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+              신청인 연락처 <span style="color: #e11d48;">*</span>
+            </label>
+            <input type="tel" id="memoirApplicantPhone" required placeholder="예: 010-1234-5678" style="width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.92rem;">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px;">
+          <!-- 어르신과의 관계 -->
+          <div>
+            <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+              어르신과의 관계
+            </label>
+            <select id="memoirRelation" style="width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.90rem;">
+              <option value="자녀">자녀 (아들/딸)</option>
+              <option value="본인">본인 직접 신청</option>
+              <option value="배우자">배우자</option>
+              <option value="손자녀">손자/손녀</option>
+              <option value="기타">기타 친인척</option>
+            </select>
+          </div>
+          <!-- 어르신 성함 -->
+          <div>
+            <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+              주인공 어르신 성함 <span style="color: #e11d48;">*</span>
+            </label>
+            <input type="text" id="memoirSeniorName" required placeholder="예: 김순옥 어르신" style="width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.90rem;">
+          </div>
+          <!-- 어르신 연령대 -->
+          <div>
+            <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+              어르신 연령대
+            </label>
+            <select id="memoirSeniorAge" style="width: 100%; padding: 11px 12px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.90rem;">
+              <option value="60대">60대 (환갑/은퇴기)</option>
+              <option value="70대" selected>70대 (칠순 기념)</option>
+              <option value="80대">80대 (팔순/산수 기념)</option>
+              <option value="90대 이상">90대 이상 (구순)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+          <!-- 방문 희망 지역 -->
+          <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+            방문 희망 지역 (시/군/구)
+          </label>
+          <input type="text" id="memoirRegion" placeholder="예: 서울시 강남구, 경기 성남시 분당구, 부산 해운대구 등" style="width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.92rem;">
+        </div>
+
+        <!-- 남기실 말씀 / 특별히 담고 싶은 내용 -->
+        <div style="margin-bottom: 20px;">
+          <label style="display: block; font-size: 0.86rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
+            특별히 담고 싶은 사연이나 요청사항 (선택)
+          </label>
+          <textarea id="memoirNotes" rows="3" placeholder="예: 부모님 팔순 기념 선물입니다. 옛날 사업하시던 시절 이야기와 시골 고향 사진이 많아 꼭 책에 예쁘게 넣고 싶습니다." style="width: 100%; padding: 11px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-size: 0.90rem; resize: vertical; line-height: 1.5;"></textarea>
+        </div>
+
+        <!-- 혜택 알림 박스 -->
+        <div style="background: rgba(194, 155, 56, 0.08); border: 1.2px solid rgba(194, 155, 56, 0.35); border-radius: 12px; padding: 14px 16px; margin-bottom: 22px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">🎁</span>
+          <div style="font-size: 0.86rem; color: var(--text-secondary); line-height: 1.45;">
+            <strong style="color: #936f1c;">특별 프로모션:</strong> 지금 신청 시 <strong>'30일 인생 서사 워크북(정가 35,000원)'</strong>을 1:1 방문 상담 시 무료 증정해 드립니다.
+          </div>
+        </div>
+
+        <!-- 제출 버튼군 -->
+        <div style="display: flex; gap: 10px;">
+          <button type="submit" id="memoirSubmitBtn" class="btn btn-primary" style="flex: 2; padding: 14px; font-size: 1.02rem; font-weight: 850; border-radius: 12px; background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); display: inline-flex; align-items: center; justify-content: center; gap: 8px;">
+            <span>✨ 1:1 방문 상담 무료 신청하기</span>
+          </button>
+          <button type="button" onclick="closeMemoirPackageModal()" class="btn btn-secondary" style="flex: 1; padding: 14px; font-size: 0.94rem; border-radius: 12px;">
+            닫기
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -9102,7 +9624,158 @@
 
     // 디지털 자서전 1:1 맞춤 상담 신청 인터랙션
     function openMemoirConsultModal() {
-      openSeniorConsultModal('✍️ 내 인생의 디지털 자서전', '자서전 30일 워크북 및 제작 상담 희망');
+      openMemoirPackageModal('masterpiece');
+    }
+
+    // [신설] 3대 맞춤 출판 패키지 모달 열기/닫기
+    function openMemoirPackageModal(pkgType) {
+      var modal = document.getElementById('memoirPackageModal');
+      var select = document.getElementById('memoirPackageSelect');
+      if (select && pkgType) {
+        select.value = pkgType;
+      }
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    function closeMemoirPackageModal() {
+      var modal = document.getElementById('memoirPackageModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function closeMemoirPackageOnOverlay(e) {
+      if (e.target && e.target.id === 'memoirPackageModal') {
+        closeMemoirPackageModal();
+      }
+    }
+
+    // [신설] 자서전 맞춤 패키지 신청 처리 (Firestore memoir_projects + senior_consults 동시 기록)
+    async function handleMemoirPackageSubmit(e) {
+      e.preventDefault();
+      var submitBtn = document.getElementById('memoirSubmitBtn');
+      var pkgSelect = document.getElementById('memoirPackageSelect');
+      var applicantName = (document.getElementById('memoirApplicantName')?.value || '').trim();
+      var applicantPhone = (document.getElementById('memoirApplicantPhone')?.value || '').trim();
+      var relation = document.getElementById('memoirRelation')?.value || '자녀';
+      var seniorName = (document.getElementById('memoirSeniorName')?.value || '').trim();
+      var seniorAge = document.getElementById('memoirSeniorAge')?.value || '70대';
+      var region = (document.getElementById('memoirRegion')?.value || '').trim();
+      var notes = (document.getElementById('memoirNotes')?.value || '').trim();
+
+      if (!applicantName || !applicantPhone || !seniorName) {
+        alert('신청인 성함, 연락처, 주인공 어르신 성함을 모두 입력해 주세요.');
+        return;
+      }
+
+      var pkgType = pkgSelect ? pkgSelect.value : 'masterpiece';
+      var pkgNameMap = {
+        'basic': '감사 헌정본 (Compact Tribute)',
+        'masterpiece': '인생 마스터피스 (Life Masterpiece)',
+        'heritage': '명문 가문 평전 (Heritage Prestige)'
+      };
+      var pkgLabel = pkgNameMap[pkgType] || '인생 마스터피스';
+
+      var projectId = 'mem_' + Date.now();
+      var now = new Date();
+      var dateStr = now.getFullYear() + '.' + String(now.getMonth()+1).padStart(2,'0') + '.' + String(now.getDate()).padStart(2,'0');
+
+      var projectData = {
+        id: projectId,
+        applicantName: applicantName,
+        applicantPhone: applicantPhone,
+        relation: relation,
+        clientName: seniorName,
+        clientAge: seniorAge,
+        region: region || '미지정',
+        packageType: pkgType,
+        packageLabel: pkgLabel,
+        notes: notes || '',
+        status: 'interview_pending',
+        statusLabel: '인터뷰 대기',
+        coachName: '배정 중',
+        coachPhone: '',
+        recordingsCount: 0,
+        photosCount: 0,
+        chapters: [
+          { id: 1, title: '제1장. 유년과 고향의 기억', status: 'pending', audioUrl: '', transcript: '', content: '' },
+          { id: 2, title: '제2장. 청춘의 열정과 도전', status: 'pending', audioUrl: '', transcript: '', content: '' },
+          { id: 3, title: '제3장. 사랑과 가족의 결', status: 'pending', audioUrl: '', transcript: '', content: '' },
+          { id: 4, title: '제4장. 시련을 넘은 삶의 지혜', status: 'pending', audioUrl: '', transcript: '', content: '' },
+          { id: 5, title: '제5장. 후손에게 전하는 유산', status: 'pending', audioUrl: '', transcript: '', content: '' }
+        ],
+        createdAt: dateStr,
+        updatedAt: dateStr
+      };
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>⏳ 신청 접수 중...</span>';
+      }
+
+      try {
+        // 1. LocalStorage 저장
+        var localProjects = [];
+        try {
+          var raw = localStorage.getItem('yebaek_memoir_projects');
+          if (raw) localProjects = JSON.parse(raw);
+        } catch(err) {}
+        localProjects.unshift(projectData);
+        localStorage.setItem('yebaek_memoir_projects', JSON.stringify(localProjects));
+
+        // 2. Firestore memoir_projects 저장
+        if (typeof db !== 'undefined' && db) {
+          try {
+            await db.collection('memoir_projects').doc(projectId).set(projectData);
+          } catch(fsErr) {
+            console.warn('[Memoir] Firestore memoir_projects 저장 건너뜀/실패:', fsErr);
+          }
+
+          // 3. senior_consults 컬렉션에도 알림용으로 동시 저장
+          try {
+            var consultPayload = {
+              consultType: '✍️ 내 인생의 디지털 자서전',
+              category: 'memoir',
+              name: applicantName,
+              phone: applicantPhone,
+              elderName: seniorName,
+              elderAge: seniorAge,
+              relation: relation,
+              region: region,
+              memo: '[' + pkgLabel + '] ' + notes,
+              status: 'pending'
+            };
+            if (typeof firebase !== 'undefined' && firebase.firestore && firebase.firestore.FieldValue) {
+              consultPayload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            } else {
+              consultPayload.createdAt = new Date().toISOString();
+            }
+            await db.collection('senior_consults').add(consultPayload);
+          } catch(scErr) {
+            console.warn('[Memoir] Firestore senior_consults 동시 저장 건너뜀:', scErr);
+          }
+        }
+
+        closeMemoirPackageModal();
+        var formEl = document.getElementById('memoirPackageForm');
+        if (formEl) formEl.reset();
+
+        alert('✨ ' + seniorName + ' 주인공님의 [' + pkgLabel + '] 자서전 제작 상담 신청이 정상 접수되었습니다!\n\n담당 구술 코치가 남겨주신 연락처(' + applicantPhone + ')로 24시간 이내 연락드려 사전 인터뷰 일정과 무료 증정 워크북 배송을 안내해 드리겠습니다.');
+      } catch(err) {
+        console.error('[Memoir] 신청 오류:', err);
+        alert('신청 접수 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = '<span>✨ 1:1 방문 상담 무료 신청하기</span>';
+        }
+      }
     }
 
     // 📖 자서전 예시 둘러보기 클릭 시 관리자홈 지정 링크 이동
