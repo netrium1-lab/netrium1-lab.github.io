@@ -2035,10 +2035,10 @@
         </button>
 
         <!-- 📖 4단계: [신설] 자서전 출판 관제 대시보드 -->
-        <button class="nav-tab-btn" onclick="switchTab('tabMemoirDashboard', this)" id="navBtnMemoirDashboard" style="background: rgba(194, 155, 56, 0.08); border-left: 3px solid #c29b38; color: #936f1c; font-weight: 850;">
+        <button class="nav-tab-btn" onclick="switchTab('tabMemoirDashboard', this)" id="navBtnMemoirDashboard" style="background: rgba(194, 155, 56, 0.14); border-left: 4px solid #c29b38; color: #936f1c; font-weight: 900; box-shadow: 0 2px 8px rgba(194, 155, 56, 0.15);">
           <span class="nav-tab-icon">📖</span>
           <span>04. 자서전 출판 관제</span>
-          <span id="memoirDashboardBadge" style="background:#c29b38; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">AI윤문</span>
+          <span id="memoirDashboardBadge" style="background: linear-gradient(135deg, #c29b38, #9a7820); color:#fff; font-size:0.72rem; font-weight:900; padding:2px 8px; border-radius:999px; margin-left:auto; box-shadow: 0 1px 3px rgba(0,0,0,0.2);">AI윤문&amp;조판</span>
         </button>
 
         <div style="height: 1px; background: var(--border-color); margin: 8px 12px;"></div>
@@ -2090,27 +2090,34 @@
         </div>
       </div>
 
-      <!-- 🌟 핵심 라이프케어 원스톱 3단계 파이프라인 퀵 관제 바 -->
+      <!-- 🌟 핵심 라이프케어 원스톱 4단계 파이프라인 퀵 관제 바 -->
       <div style="margin: 0 0 22px; padding: 14px 18px; border-radius: 14px; background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1.5px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.03);">
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
           <span style="font-size: 0.88rem; font-weight: 900; color: var(--text-main); display: inline-flex; align-items: center; gap: 6px;">
             <span style="font-size: 1.15rem;">⚡</span> <strong style="color: #b83354;">원스톱 워크플로우:</strong>
           </span>
-          <button type="button" onclick="switchTab('tabAcademy')" class="btn-save-setting" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 1px 3px rgba(217,119,6,0.12); cursor: pointer;">
-            <span>🤝 1단계: 코치 배정 &amp; 카톡 발송</span>
+          <button type="button" onclick="switchTab('tabAcademy')" class="btn-save-setting" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-size: 0.82rem; font-weight: 850; padding: 7px 12px; box-shadow: 0 1px 3px rgba(217,119,6,0.12); cursor: pointer;">
+            <span>🤝 1단계: 코치 배정&amp;카톡</span>
           </button>
           <span style="color: #cbd5e1; font-weight: 900;">➔</span>
-          <a href="coach.html" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #2d5a45 100%); color: #ffffff; text-decoration: none; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 2px 6px rgba(30,61,47,0.25); display: inline-flex; align-items: center; gap: 5px;">
-            <span>📱 2단계: 코치 현장앱 열기 ➔</span>
+          <a href="coach.html" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #2d5a45 100%); color: #ffffff; text-decoration: none; font-size: 0.82rem; font-weight: 850; padding: 7px 12px; box-shadow: 0 2px 6px rgba(30,61,47,0.25); display: inline-flex; align-items: center; gap: 4px;">
+            <span>📱 2단계: 코치 현장앱 ➔</span>
           </a>
           <span style="color: #cbd5e1; font-weight: 900;">➔</span>
-          <button type="button" onclick="switchTab('tabCoachControl')" class="btn-save-setting" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-size: 0.84rem; font-weight: 850; padding: 7px 14px; box-shadow: 0 1px 3px rgba(5,150,105,0.12); cursor: pointer;">
-            <span>📸 3단계: 현장관제 &amp; 송금 정산 승인</span>
+          <button type="button" onclick="switchTab('tabCoachControl')" class="btn-save-setting" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-size: 0.82rem; font-weight: 850; padding: 7px 12px; box-shadow: 0 1px 3px rgba(5,150,105,0.12); cursor: pointer;">
+            <span>📸 3단계: 현장관제&amp;송금정산</span>
+          </button>
+          <span style="color: #c29b38; font-weight: 900;">➔</span>
+          <button type="button" onclick="switchTab('tabMemoirDashboard')" class="btn-save-setting" style="background: rgba(194, 155, 56, 0.15); color: #936f1c; border: 1.8px solid #c29b38; font-size: 0.84rem; font-weight: 900; padding: 7px 14px; box-shadow: 0 2px 6px rgba(194,155,56,0.2); cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+            <span>📖 4단계: 자서전 출판 관제 대시보드</span>
           </button>
         </div>
-        <div style="display: flex; gap: 8px;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
           <button type="button" onclick="switchTab('tabBusinessMaster')" class="btn-save-setting" style="background: #fff0f3; color: #b83354; border: 1.5px solid #f8c8d2; font-size: 0.82rem; font-weight: 850; padding: 6px 12px; cursor: pointer;">
-            <span>🌟 03. 4대 비즈니스 상담 관제</span>
+            <span>🌟 03. 4대 비즈니스</span>
+          </button>
+          <button type="button" onclick="switchTab('tabMemoirDashboard')" class="btn-save-setting" style="background: #c29b38; color: #ffffff; border: 1.5px solid #aa7c11; font-size: 0.82rem; font-weight: 850; padding: 6px 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(194,155,56,0.3);">
+            <span>📖 04. 자서전 출판 관제</span>
           </button>
         </div>
       </div>
@@ -2461,9 +2468,10 @@
             <span class="biz-tab-icon">💌</span>
             <span>#04 생전 엔딩 파티</span>
           </button>
-          <button type="button" class="biz-tab-btn" id="bizTabBtn_memoir" onclick="switchBusinessMasterTab('memoir')">
-            <span class="biz-tab-icon">✍️</span>
-            <span>#05 디지털 자서전</span>
+          <button type="button" class="biz-tab-btn" id="bizTabBtn_memoir" onclick="switchTab('tabMemoirDashboard')" style="background: rgba(194, 155, 56, 0.12); color: #936f1c; border: 1.5px solid #c29b38; font-weight: 850;">
+            <span class="biz-tab-icon">📖</span>
+            <span>#05 디지털 자서전 출판 대시보드 ➔</span>
+            <span class="badge" style="background:#c29b38; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:999px;">전용관제</span>
           </button>
         </div>
 
@@ -15137,6 +15145,49 @@ ${coachAppUrl}
       // 🌟 03. 4대 비즈니스 통합 관제센터 & CRM 로딩
       if (typeof renderBusinessMasterDashboard === 'function') {
         renderBusinessMasterDashboard();
+      }
+      // 📖 04. [신설] 자서전 출판 관제 대시보드 로딩
+      if (typeof renderMemoirDashboard === 'function') {
+        renderMemoirDashboard();
+      }
+
+      // URL 파라미터(?tab=memoir) 또는 해시(#memoir) 감지 시 해당 탭 자동 활성화
+      try {
+        var urlParams = new URLSearchParams(window.location.search);
+        var reqTab = urlParams.get('tab') || window.location.hash.replace('#', '');
+        if (reqTab === 'memoir' || reqTab === 'tabMemoirDashboard' || reqTab === 'memoirDashboard') {
+          switchTab('tabMemoirDashboard');
+        } else if (reqTab && document.getElementById(reqTab)) {
+          switchTab(reqTab);
+        }
+      } catch(e) {}
+    }
+
+    // 🌟 03. 4대 비즈니스 카테고리 전환 함수
+    function switchBusinessMasterTab(bizCategory) {
+      if (bizCategory === 'memoir') {
+        switchTab('tabMemoirDashboard');
+        return;
+      }
+      currentBusinessTab = bizCategory;
+      var tabs = ['beauty', 'wardrobe', 'legacy', 'party', 'memoir'];
+      tabs.forEach(function(t) {
+        var btn = document.getElementById('bizTabBtn_' + t);
+        if (btn) btn.classList.toggle('active', t === bizCategory);
+      });
+
+      var beautyWrap = document.getElementById('beautyPipelineWrap');
+      var generalWrap = document.getElementById('generalBusinessWrap');
+      var memoirCard = document.getElementById('bizMemoirBannerCard');
+
+      if (bizCategory === 'beauty') {
+        if (beautyWrap) beautyWrap.style.display = 'block';
+        if (generalWrap) generalWrap.style.display = 'none';
+        if (memoirCard) memoirCard.style.display = 'none';
+      } else {
+        if (beautyWrap) beautyWrap.style.display = 'none';
+        if (generalWrap) generalWrap.style.display = 'block';
+        if (memoirCard) memoirCard.style.display = (bizCategory === 'memoir') ? 'block' : 'none';
       }
     }
 
