@@ -1,0 +1,369 @@
+<!-- ================= [신설] 모달: 🎙️ 비포/애프터 자서전 스플릿 뷰 스마트 에디터 ================= -->
+  <div class="cms-modal-overlay" id="memoirSplitEditorModal" style="display: none; z-index: 10070;">
+    <div style="background: var(--bg-card, #ffffff); max-width: 1360px; width: 96%; height: 94vh; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #c29b38; display: flex; flex-direction: column; overflow: hidden;">
+      
+      <!-- 상단 헤더 & 프로젝트 메타바 -->
+      <div style="padding: 14px 22px; background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 2px solid #c29b38;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <span style="font-size: 1.6rem;">📖</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="splitElderBadge" style="background: #c29b38; color: #fff; font-size: 0.76rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">김순옥 어르신 (78세)</span>
+              <span id="splitPackageBadge" style="background: rgba(255,255,255,0.15); color: #f1f5f9; font-size: 0.74rem; font-weight: 750; padding: 2px 8px; border-radius: 6px;">인생 마스터피스</span>
+              <span id="splitCoachBadge" style="background: rgba(255,255,255,0.12); color: #fef08a; font-size: 0.74rem; padding: 2px 8px; border-radius: 6px;">담당: 김은영 수석코치</span>
+            </div>
+            <h3 id="splitModalTitle" style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.18rem; font-weight: 850; color: #fff; margin: 4px 0 0 0;">
+              자서전 스플릿 뷰 에디터 (Split-View Editor)
+            </h3>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <!-- 진행 단계 변경 드롭다운 -->
+          <div style="display: flex; align-items: center; gap: 6px;">
+            <span style="font-size: 0.8rem; color: #e2e8f0; font-weight: 700;">진행 단계:</span>
+            <select id="splitProjectStatusSelect" onchange="handleSplitStatusChange(this.value)" style="padding: 6px 10px; border-radius: 8px; font-size: 0.82rem; font-weight: 750; background: #fff; color: #1e293b; border: none; cursor: pointer;">
+              <option value="interview_pending">🎙️ 인터뷰 대기</option>
+              <option value="interview_done">🎙️ 인터뷰 완료 (녹음 업로드)</option>
+              <option value="ai_drafted">🤖 AI 5단계 윤문 완료</option>
+              <option value="coach_reviewed">✍️ 코치 검수 &amp; 교정 중</option>
+              <option value="family_approved">👨‍👩‍👧 가족 최종 승인 완료</option>
+              <option value="printing">🖨️ 양장본 인쇄·제본 중</option>
+              <option value="completed">✅ 출판 및 배송 완료</option>
+            </select>
+          </div>
+          <button type="button" onclick="closeMemoirSplitEditor()" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center;">✕</button>
+        </div>
+      </div>
+
+      <!-- 5대 챕터 선택 탭 바 -->
+      <div style="padding: 8px 16px; background: var(--bg-secondary); border-bottom: 1.2px solid var(--border-color); display: flex; gap: 8px; overflow-x: auto;" id="splitChapterTabBar">
+        <button type="button" class="btn-mag-filter active" onclick="switchSplitChapter(1, this)">제1장. 유년과 고향의 기억</button>
+        <button type="button" class="btn-mag-filter" onclick="switchSplitChapter(2, this)">제2장. 청춘의 열정과 도전</button>
+        <button type="button" class="btn-mag-filter" onclick="switchSplitChapter(3, this)">제3장. 사랑과 가족의 결</button>
+        <button type="button" class="btn-mag-filter" onclick="switchSplitChapter(4, this)">제4장. 시련을 넘은 삶의 지혜</button>
+        <button type="button" class="btn-mag-filter" onclick="switchSplitChapter(5, this)">제5장. 후손에게 전하는 유산</button>
+      </div>
+
+      <!-- 듀얼 스플릿 바디 (좌: Before 구술녹음/녹취록, 우: After AI윤문/에디터) -->
+      <div style="display: flex; flex: 1; overflow: hidden;">
+        
+        <!-- 좌측: 구술 음성 & 원문 녹취록 (Before) -->
+        <div style="flex: 1; border-right: 1.5px solid var(--border-color); display: flex; flex-direction: column; background: var(--bg-primary); padding: 18px 20px; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-weight: 850; font-size: 0.96rem; color: #2563eb; display: flex; align-items: center; gap: 6px;">
+              <span>🎙️</span> 현장 구술 음성 &amp; 원문 녹취록 (Before)
+            </div>
+            <span id="splitAudioDurationBadge" style="font-size: 0.78rem; background: rgba(37,99,235,0.1); color: #2563eb; padding: 2px 8px; border-radius: 6px; font-weight: 750;">
+              녹음 파일: rec_chapter1.mp3 (24분 15초)
+            </span>
+          </div>
+
+          <!-- 실제 오디오 플레이어 & 파일 선택 툴바 -->
+          <div style="background: var(--bg-card); border: 1.2px solid var(--border-color); border-radius: 12px; padding: 12px 16px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 0.82rem; font-weight: 800; color: var(--text-primary);">오디오 플레이어</span>
+              <div>
+                <input type="file" id="splitAudioFileInput" accept="audio/*" onchange="handleAudioFileUpload(event)" style="display: none;">
+                <button type="button" onclick="document.getElementById('splitAudioFileInput').click()" class="btn-save-setting" style="font-size: 0.78rem; padding: 4px 10px; background: #eff6ff; border: 1px solid #bfdbfe; color: #1d4ed8; border-radius: 6px; cursor: pointer; font-weight: 750;">
+                  📁 현장 녹음 파일 불러오기 (.mp3/.m4a)
+                </button>
+              </div>
+            </div>
+
+            <!-- 실제 HTML5 오디오 태그 -->
+            <audio id="splitRealAudioElement" controls style="width: 100%; height: 36px; margin-bottom: 8px; display: none;"></audio>
+
+            <!-- 가상 시뮬레이터 플레이어 (기본 노출) -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
+              <button type="button" id="splitAudioPlayBtn" onclick="toggleSplitAudioSim()" style="background: #2563eb; color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.95rem;">
+                ▶
+              </button>
+              <div style="flex: 1;">
+                <input type="range" id="splitAudioSlider" min="0" max="100" value="35" style="width: 100%; cursor: pointer;">
+              </div>
+              <span id="splitAudioTime" style="font-size: 0.82rem; font-family: monospace; font-weight: 750; color: var(--text-secondary);">
+                08:32 / 24:15
+              </span>
+            </div>
+            <div style="display: flex; justify-content: space-between; font-size: 0.76rem; color: var(--text-muted);">
+              <span>현장 무손실 채록 포맷 지원</span>
+              <span>Whisper STT 한국어 음성인식 정확도 98.4%</span>
+            </div>
+          </div>
+
+          <!-- 🤖 핵심: 원클릭 AI 음성 녹취 & 5단계 감성 윤문 생성 버튼 바 -->
+          <div style="margin-bottom: 12px;">
+            <button type="button" id="btnAiOneClickPipeline" onclick="runOneClickAiMemoirPipeline()" style="width: 100%; padding: 12px 16px; border-radius: 10px; background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; border: none; font-size: 0.92rem; font-weight: 850; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(37,99,235,0.25);">
+              <span>🤖 원클릭 AI 음성 녹취 &amp; 5단계 감성 윤문 생성</span>
+            </button>
+          </div>
+
+          <!-- 구술 녹취 텍스트 -->
+          <div style="flex: 1; display: flex; flex-direction: column;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-secondary);">
+                구술 채록 원문 텍스트 (타임스탬프 지원)
+              </label>
+              <button type="button" onclick="loadSplitTranscriptToEditor()" style="font-size: 0.78rem; color: #2563eb; background: none; border: none; cursor: pointer; font-weight: 750;">
+                ↪️ 우측 에디터로 텍스트 복사
+              </button>
+            </div>
+            <textarea id="splitTranscriptText" style="flex: 1; width: 100%; min-height: 200px; padding: 14px; border-radius: 12px; border: 1.2px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 0.90rem; line-height: 1.7; resize: none; font-family: inherit;"></textarea>
+          </div>
+
+          <!-- 현장 복원 사진 갤러리 프리뷰 -->
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border-color);">
+            <div style="font-size: 0.82rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 8px; display: flex; align-items: center; gap: 6px;">
+              <span>🎞️</span> 이 챕터에 배치된 복원 사진 (2장)
+            </div>
+            <div style="display: flex; gap: 10px;" id="splitPhotosPreview">
+              <div style="width: 100px; height: 75px; border-radius: 8px; background: #e2e8f0; border: 1px solid var(--border-color); overflow: hidden; position: relative;">
+                <img src="images/showcase-senior-memoir.jpg" alt="복원 사진 1" style="width: 100%; height: 100%; object-fit: cover;">
+                <span style="position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px;">1962년 고향집</span>
+              </div>
+              <div style="width: 100px; height: 75px; border-radius: 8px; background: #e2e8f0; border: 1px solid var(--border-color); overflow: hidden; position: relative;">
+                <img src="images/care-beauty-hero.jpg" alt="복원 사진 2" style="width: 100%; height: 100%; object-fit: cover;">
+                <span style="position: absolute; bottom: 2px; left: 2px; background: rgba(0,0,0,0.6); color: #fff; font-size: 0.65rem; padding: 1px 4px; border-radius: 4px;">어머니와 함께</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 우측: '여백과 결' AI 감성 윤문 에디터 (After) -->
+        <div style="flex: 1.15; display: flex; flex-direction: column; background: var(--bg-card); padding: 18px 22px; overflow-y: auto;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <div style="font-weight: 850; font-size: 0.96rem; color: #c29b38; display: flex; align-items: center; gap: 6px;">
+              <span>✍️</span> '여백과 결' AI 감성 윤문 원고 (After)
+            </div>
+            <span id="splitCharCountBadge" style="font-size: 0.78rem; background: rgba(194,155,56,0.12); color: #936f1c; padding: 2px 8px; border-radius: 6px; font-weight: 750;">
+              2,450자 · 신국판 약 4.2페이지
+            </span>
+          </div>
+
+          <!-- 소제목 인풋 -->
+          <div style="margin-bottom: 10px;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 4px;">
+              챕터 소제목 (양장본 도서 목차 반영)
+            </label>
+            <input type="text" id="splitChapterSubtitle" placeholder="예: 1.1. 감나무 가지 끝에 걸린 고향의 노을" style="width: 100%; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--border-color); font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.05rem; font-weight: 800; background: var(--bg-primary); color: var(--text-primary);">
+          </div>
+
+          <!-- AI 스마트 윤문 도구 버튼군 -->
+          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; background: rgba(194,155,56,0.06); padding: 8px 10px; border-radius: 10px; border: 1px dashed rgba(194,155,56,0.3);">
+            <span style="font-size: 0.78rem; font-weight: 850; color: #936f1c; display: flex; align-items: center; gap: 4px; margin-right: 4px;">
+              <span>🪄 AI 윤문 도구:</span>
+            </span>
+            <button type="button" onclick="runAiPolishTool('poetic')" class="btn-save-setting" style="font-size: 0.78rem; padding: 5px 10px; border-radius: 6px; background: #fff; border: 1px solid #c29b38; color: #936f1c; cursor: pointer; font-weight: 750;">
+              ✨ 여백 감성 문체
+            </button>
+            <button type="button" onclick="runAiPolishTool('dialect')" class="btn-save-setting" style="font-size: 0.78rem; padding: 5px 10px; border-radius: 6px; background: #fff; border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; font-weight: 750;">
+              🌸 사투리 정갈하게 순화
+            </button>
+            <button type="button" onclick="runAiPolishTool('breathe')" class="btn-save-setting" style="font-size: 0.78rem; padding: 5px 10px; border-radius: 6px; background: #fff; border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; font-weight: 750;">
+              ✂️ 문장 호흡 다듬기
+            </button>
+            <button type="button" onclick="runAiPolishTool('title')" class="btn-save-setting" style="font-size: 0.78rem; padding: 5px 10px; border-radius: 6px; background: #fff; border: 1px solid var(--border-color); color: var(--text-primary); cursor: pointer; font-weight: 750;">
+              📌 소제목 자동 추천
+            </button>
+          </div>
+
+          <!-- 본문 에디터 -->
+          <div style="flex: 1; display: flex; flex-direction: column; margin-bottom: 10px;">
+            <textarea id="splitChapterContent" oninput="updateSplitCharCount()" placeholder="이곳에 AI 윤문 원고가 표시되며, 코치가 현장 뉘앙스에 맞춰 실시간으로 가필·퇴고할 수 있습니다..." style="flex: 1; width: 100%; min-height: 240px; padding: 16px 18px; border-radius: 12px; border: 1.5px solid var(--border-color); background: var(--bg-primary); color: var(--text-primary); font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 0.98rem; line-height: 1.85; resize: none;"></textarea>
+          </div>
+
+          <!-- 👨‍👩‍👧 가족 피드백 및 코치 메모 영역 -->
+          <div style="background: #fffbeb; border: 1.2px solid #fef3c7; border-radius: 10px; padding: 10px 14px;">
+            <div style="font-size: 0.82rem; font-weight: 850; color: #b45309; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+              <span>👨‍👩‍👧</span> 가족 감상 의견 &amp; 코치 교정 메모 (가족 검수용)
+            </div>
+            <input type="text" id="splitFamilyFeedbackMemo" placeholder="예: 자녀 의견: 어머니 1장 고향집 감나무 묘사 좋음, 3장의 첫아이 태어난 병원 이름 추가 요청 등" style="width: 100%; padding: 8px 10px; border-radius: 6px; border: 1px solid #fde68a; font-size: 0.84rem; background: #ffffff;">
+          </div>
+        </div>
+      </div>
+
+      <!-- 하단 액션 툴바 -->
+      <div style="padding: 12px 22px; background: var(--bg-secondary); border-top: 1.5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <button type="button" onclick="copyFlipbookLink()" class="btn-save-setting" style="background: #fff; border: 1.2px solid var(--border-color); color: var(--text-primary); font-size: 0.84rem; padding: 8px 14px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>📖</span> 가족 전용 감상 &amp; 피드백 링크 복사
+          </button>
+          <button type="button" onclick="openMemoirPrintPreview()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #ffffff; border: none; font-size: 0.86rem; font-weight: 850; padding: 8px 16px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(170,124,17,0.3);">
+            <span>🖨️</span> 양장본 인쇄 규격(신국판 152×225) 실제 출판 PDF 생성
+          </button>
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="saveMemoirSplitChapter()" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 8px 20px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
+            <span>💾</span> 챕터 원고 저장
+          </button>
+          <button type="button" onclick="closeMemoirSplitEditor()" class="btn-save-setting" style="background: var(--bg-card); border: 1px solid var(--border-color); font-size: 0.84rem; padding: 8px 14px; border-radius: 8px; cursor: pointer;">
+            닫기
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= [신설] 모달: ➕ 새 자서전 프로젝트 등록 모달 ================= -->
+  <div class="cms-modal-overlay" id="memoirProjectCreateModal" style="display: none; z-index: 10075;">
+    <div style="background: var(--bg-card, #ffffff); max-width: 680px; width: 95%; border-radius: 18px; padding: 28px 26px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 2px solid #c29b38; max-height: 92vh; overflow-y: auto;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.5rem;">📖</span>
+          <div>
+            <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.25rem; font-weight: 850; margin: 0; color: var(--text-primary);">
+              새 자서전 출판 프로젝트 등록
+            </h3>
+            <p style="font-size: 0.80rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              어르신 기본 정보와 현장 구술 음성 녹음 파일을 등록하여 출판 파이프라인을 가동합니다.
+            </p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMemoirProjectCreateModal()" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+
+      <form id="memoirProjectCreateForm" onsubmit="handleCreateMemoirProject(event)">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              주인공 어르신 성함 <span style="color: #e11d48;">*</span>
+            </label>
+            <input type="text" id="newMemoirElderName" required placeholder="예: 김순옥 어르신" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              어르신 연령대
+            </label>
+            <select id="newMemoirElderAge" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+              <option value="60대">60대 (은퇴기/환갑)</option>
+              <option value="70대" selected>70대 (칠순 기념)</option>
+              <option value="80대">80대 (팔순/산수 기념)</option>
+              <option value="90대 이상">90대 이상 (구순)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              신청인(자녀/보호자) 성함
+            </label>
+            <input type="text" id="newMemoirApplicantName" placeholder="예: 홍길동 (장남)" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              신청인 연락처
+            </label>
+            <input type="tel" id="newMemoirApplicantPhone" placeholder="예: 010-1234-5678" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              출판 패키지 선택 <span style="color: #e11d48;">*</span>
+            </label>
+            <select id="newMemoirPackageType" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary); font-weight: 700;">
+              <option value="basic">감사 헌정본 (80P 양장본 3권 / 구술 2회)</option>
+              <option value="masterpiece" selected>⭐ 인생 마스터피스 (160P 양장본 5권 / 오디오북 QR)</option>
+              <option value="heritage">명문 가문 평전 (240P 가죽양장본 10권 / 가계도 / 다큐)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+              담당 구술 코치 지정
+            </label>
+            <select id="newMemoirCoachSelect" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+              <option value="김은영 수석코치">김은영 수석코치 (전문 생애사 작가)</option>
+              <option value="박미정 코치">박미정 코치 (시니어 심리상담 1급)</option>
+              <option value="최진우 코치">최진우 코치 (가문 역사 아키비스트)</option>
+              <option value="배정 대기">배정 대기 (총괄 실장 검토 후 배정)</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+            거주 지역 (현장 방문 지역)
+          </label>
+          <input type="text" id="newMemoirRegion" placeholder="예: 서울시 서초구 방배동" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
+        </div>
+
+        <!-- 🎙️ 현장 녹음 파일 & 사진 등록 필드 (신규) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px dashed var(--border-color);">
+          <div>
+            <label style="display: block; font-size: 0.82rem; font-weight: 800; color: #2563eb; margin-bottom: 4px;">
+              🎙️ 현장 구술 녹음 파일 (.mp3 / .m4a)
+            </label>
+            <input type="file" id="newMemoirAudioFile" accept="audio/*" style="width: 100%; font-size: 0.80rem;">
+          </div>
+          <div>
+            <label style="display: block; font-size: 0.82rem; font-weight: 800; color: #059669; margin-bottom: 4px;">
+              🎞️ 복원할 옛 사진 / 앨범 파일
+            </label>
+            <input type="file" id="newMemoirPhotoFiles" accept="image/*" multiple style="width: 100%; font-size: 0.80rem;">
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label style="display: block; font-size: 0.84rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">
+            인터뷰 방향 및 코치 전달 메모
+          </label>
+          <textarea id="newMemoirNotes" rows="2" placeholder="예: 칠순 선물로 자녀들이 의뢰함. 1970년대 건설 현장에서 일하시던 열정적인 시절과 옛 사진들을 비중 있게 다뤄달라는 요청." style="width: 100%; padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.88rem; background: var(--bg-primary); color: var(--text-primary); resize: vertical; line-height: 1.5;"></textarea>
+        </div>
+
+        <!-- AI 자동 가동 옵션 체크박스 -->
+        <div style="margin-bottom: 18px; background: rgba(194,155,56,0.08); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(194,155,56,0.3);">
+          <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 0.86rem; font-weight: 800; color: #936f1c;">
+            <input type="checkbox" id="newMemoirAutoDraftCheck" checked style="width: 17px; height: 17px; cursor: pointer;">
+            <span>🤖 등록 즉시 5대 챕터 AI 감성 윤문 파이프라인 자동 가동 (추천)</span>
+          </label>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px;">
+          <button type="button" onclick="closeMemoirProjectCreateModal()" class="btn-save-setting" style="background: var(--bg-secondary); border: 1px solid var(--border-color);">취소</button>
+          <button type="submit" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-weight: 850; padding: 10px 20px;">
+            💾 프로젝트 등록 &amp; 에디터 열기
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= [신설] 모달: 🖨️ 양장본 인쇄 규격(신국판 152×225) 실제 출판 도서 조판 및 PDF 생성 뷰어 ================= -->
+  <div class="cms-modal-overlay" id="memoirPrintPreviewModal" style="display: none; z-index: 10080;">
+    <div style="background: #2d3748; max-width: 900px; width: 95%; height: 94vh; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.4); border: 2px solid #c29b38; display: flex; flex-direction: column; overflow: hidden;">
+      
+      <!-- 상단 컨트롤 헤더 -->
+      <div style="padding: 14px 22px; background: #1a202c; color: #fff; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; border-bottom: 1.5px solid #4a5568;">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.5rem;">🖨️</span>
+          <div>
+            <h3 style="font-family: 'MaruBuri', serif; font-size: 1.15rem; font-weight: 850; margin: 0; color: #fff;">
+              양장본 인쇄 규격 조판 미리보기 (신국판 152 × 225 mm)
+            </h3>
+            <p style="font-size: 0.78rem; color: #a0aec0; margin: 2px 0 0 0;">
+              국립중앙도서관 표준 조판 규격 · 표지/속표지/목차/5대 챕터 본문 올컬러 출판
+            </p>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="btnDownloadMemoirPdf" onclick="downloadMemoirPdf()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(170,124,17,0.3);">
+            <span>📥</span> 인쇄소 발주용 고화질 PDF 다운로드
+          </button>
+          <button type="button" onclick="closeMemoirPrintPreview()" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); border-radius: 50%; width: 34px; height: 34px; font-size: 1rem; cursor: pointer;">✕</button>
+        </div>
+      </div>
+
+      <!-- 책자 조판 스크롤 뷰 (이곳이 html2pdf로 실제 PDF가 됩니다) -->
+      <div style="flex: 1; padding: 30px 20px; overflow-y: auto; background: #4a5568;">
+        <div id="memoirBookPrintContainer" style="margin: 0 auto; max-width: 152mm;">
+          <!-- JS 동적 렌더링 -->
+        </div>
+      </div>
+
+    </div>
+  </div>
