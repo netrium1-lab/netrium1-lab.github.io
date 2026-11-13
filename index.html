@@ -6099,7 +6099,7 @@
             <span>📱</span>
             <span>코치앱</span>
           </a>
-          <a href="admin.html" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
+          <a href="admin.html" onclick="goToAdminHome(event)" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
             <span>⚙️</span>
             <span>관리자홈</span>
           </a>
@@ -6124,7 +6124,7 @@
       <a href="academy.html" class="mobile-cat-item" data-target="programs" title="코치 아카데미"><span>🎓</span> <span>아카데미</span></a>
       <a href="my-room.html?mode=sample" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 800;" title="김순옥 어르신 완성 서재 체험"><span>👵</span> <span>샘플서재</span></a>
       <a href="javascript:void(0)" onclick="openLoginModal(event)" class="mobile-cat-item" data-target="archive"><span>🏛️</span> <span>나의서재</span></a>
-      <a href="admin.html" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈"><span>⚙️</span> <span>관리자</span></a>
+      <a href="admin.html" onclick="goToAdminHome(event)" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈"><span>⚙️</span> <span>관리자</span></a>
     </nav>
   </header>
 
@@ -6203,7 +6203,7 @@
           </div>
           <span class="drawer-badge" style="background: #059669; color: #fff;">COACH</span>
         </a>
-        <a href="admin.html" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35); margin-top: 6px;">
+        <a href="admin.html" onclick="closeMobileDrawer(); goToAdminHome(event);" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35); margin-top: 6px;">
           <div class="drawer-item-left">
             <span class="drawer-icon">⚙️</span>
             <span style="color: var(--accent-gold); font-weight: 850;">통합 관리자 홈</span>
@@ -7573,7 +7573,7 @@
       </div>
       <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <p>© 2026 메타큐 라이프 · 여백과 결, 리셋 아카이브 (MetaQ Life). 모든 권리 보유.</p>
-        <a href="admin.html" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: var(--transition);" title="전체 사이트 운영 관리자 홈">
+        <a href="admin.html" onclick="goToAdminHome(event)" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: var(--transition);" title="전체 사이트 운영 관리자 홈">
           <span>⚙️ 통합 관리자 홈</span>
         </a>
       </div>
@@ -8174,10 +8174,10 @@
       <button class="modal-close-btn" onclick="closeAdminAuthModal()" aria-label="닫기">✕</button>
       <div style="font-size: 2.2rem; margin-bottom: 8px;">🔐</div>
       <h3 style="font-family: 'Noto Serif KR', serif; font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin-bottom: 6px;">
-        서재 관리자 홈 인증
+        통합 관리자 홈 인증
       </h3>
       <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.5;">
-        칼럼 작성·수정·삭제 및 메인 전면 노출을 관리하는 전용 관리자 홈입니다.<br>
+        사이트 전체 운영, 자서전 출판 관제 및 칼럼·상담 관리를 위한 관리자 전용 공간입니다.<br>
         관리자 비밀번호를 입력해주세요.
       </p>
 
@@ -12061,15 +12061,30 @@
     // 7. 관리자 인증 시스템 & 관리자 홈 (Admin Console) 제어
     // =========================================================================
     
-    // 관리자 로그인 여부 확인 (세션 스토리지 기반)
+    // 잔여 위험한 영구 localStorage 관리자 인증값 즉시 파기 (일반인 자동 로그인 원천 방지)
+    try { localStorage.removeItem('yebaek_is_admin'); } catch (e) {}
+
+    // 관리자 로그인 여부 확인 (오직 현재 세션 sessionStorage 기준)
     function isAdminLoggedIn() {
       return sessionStorage.getItem('yebaek_is_admin') === 'true';
+    }
+
+    // 🌟 관리자 홈 이동 제어 (일반인 무단 클릭 시 비밀번호 1223 모달 호출, 관리자 인증 시 즉시 이동)
+    function goToAdminHome(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      try { localStorage.removeItem('yebaek_is_admin'); } catch (err) {}
+
+      if (isAdminLoggedIn()) {
+        window.location.href = 'admin.html';
+        return;
+      }
+      openAdminAuthModal();
     }
 
     // 관리자 인증 모달 열기
     function openAdminAuthModal() {
       if (isAdminLoggedIn()) {
-        openAdminDashboardModal();
+        window.location.href = 'admin.html';
         return;
       }
       const pwdInput = document.getElementById('adminPasswordInput');
@@ -12102,16 +12117,18 @@
     function handleAdminLoginSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       const pwdInput = document.getElementById('adminPasswordInput');
-      const enteredPwd = pwdInput ? pwdInput.value.trim() : '';
+      const rawVal = pwdInput ? pwdInput.value : '';
+      const enteredPwd = rawVal.replace(/\s+/g, '').replace(/[\uFF10-\uFF19]/g, function(s) {
+        return String.fromCharCode(s.charCodeAt(0) - 0xFEE0);
+      });
 
       if (enteredPwd === '1223') {
         sessionStorage.setItem('yebaek_is_admin', 'true');
+        try { localStorage.removeItem('yebaek_is_admin'); } catch (err) {}
         closeAdminAuthModal();
-        updateAdminUI();
-        openAdminDashboardModal();
-        alert('🌿 관리자 홈에 성공적으로 접속되었습니다.');
+        window.location.href = 'admin.html';
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
+        alert('관리자 전용 비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
         if (pwdInput) {
           pwdInput.value = '';
           pwdInput.focus();
@@ -12122,6 +12139,7 @@
     // 관리자 로그아웃
     function logoutAdmin() {
       sessionStorage.removeItem('yebaek_is_admin');
+      try { localStorage.removeItem('yebaek_is_admin'); } catch (e) {}
       closeAdminDashboardModal();
       updateAdminUI();
       alert('관리자 모드에서 로그아웃되었습니다.');

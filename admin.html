@@ -64,10 +64,10 @@
     #authOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.75);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 9999;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 99999;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1978,23 +1978,22 @@
     </div>
   </div>
 
-  <!-- ================= 2. 모바일 상단 바 ================= -->
-  <div class="mobile-admin-bar">
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <span style="color: var(--accent-gold); font-weight: 900; font-size: 1.15rem;">| 여백과 결 관리</span>
-    </div>
-    <div style="display: flex; align-items: center; gap: 6px;">
-      <button type="button" class="btn-action-sm" onclick="switchTab('tabSettings')" style="background: var(--accent); color: #fff; padding: 6px 12px; font-weight: 800; font-size: 0.8rem; border-radius: 6px;">
-        ⚙️ 환경설정
-      </button>
-      <button type="button" class="mobile-sidebar-toggle" onclick="toggleSidebar()">
-        ☰ 메뉴
-      </button>
-    </div>
-  </div>
-
-  <!-- ================= 3. 전체 관리자 대시보드 레이아웃 ================= -->
+  <!-- ================= 2. 전체 관리자 대시보드 레이아웃 ================= -->
   <div class="admin-wrapper" id="adminWrapper" style="display: none;">
+    <!-- 모바일 상단 바 (인증 통과 시에만 노출) -->
+    <div class="mobile-admin-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="color: var(--accent-gold); font-weight: 900; font-size: 1.15rem;">| 여백과 결 관리</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 6px;">
+        <button type="button" class="btn-action-sm" onclick="switchTab('tabSettings')" style="background: var(--accent); color: #fff; padding: 6px 12px; font-weight: 800; font-size: 0.8rem; border-radius: 6px;">
+          ⚙️ 환경설정
+        </button>
+        <button type="button" class="mobile-sidebar-toggle" onclick="toggleSidebar()">
+          ☰ 메뉴
+        </button>
+      </div>
+    </div>
     <!-- 좌측 사이드바 (FIT-FLUENCE 관리 스타일 재현) -->
     <aside class="admin-sidebar" id="adminSidebar">
       <div class="sidebar-header">
@@ -5051,8 +5050,13 @@
     if (dateEl) dateEl.textContent = dateStr;
 
             /* ================= Admin Auth & Security ================= */
+    // 기존에 남아있던 위험한 영구 localStorage 플래그 즉시 파기 (일반인 자동 로그인 원천 차단)
+    try { localStorage.removeItem('yebaek_is_admin'); } catch (e) {}
+
     function checkAuth() {
-      var isAuth = sessionStorage.getItem('yebaek_is_admin') === 'true' || localStorage.getItem('yebaek_is_admin') === 'true';
+      // ⚠️ 보안 강화: 오직 현재 탭 세션(sessionStorage)에서 비밀번호 1223을 인증한 관리자만 접속 허용
+      try { localStorage.removeItem('yebaek_is_admin'); } catch (e) {}
+      var isAuth = sessionStorage.getItem('yebaek_is_admin') === 'true';
       var overlay = document.getElementById('authOverlay');
       var wrapper = document.getElementById('adminWrapper');
 
@@ -5084,7 +5088,7 @@
       // 1223 단일 고정 비밀번호 검증
       if (pwd === '1223') {
         sessionStorage.setItem('yebaek_is_admin', 'true');
-        localStorage.setItem('yebaek_is_admin', 'true');
+        try { localStorage.removeItem('yebaek_is_admin'); } catch (err) {}
         
         var overlay = document.getElementById('authOverlay');
         var wrapper = document.getElementById('adminWrapper');
@@ -5097,7 +5101,7 @@
           console.warn('[Admin loadAllData Error Caught]', err);
         }
       } else {
-        alert('비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
+        alert('관리자 전용 비밀번호가 올바르지 않습니다. 다시 입력해주세요.');
         if (input) {
           input.value = '';
           input.focus();
@@ -5108,9 +5112,9 @@
 
     /* Admin Logout */
     function adminLogout() {
-      if (confirm('\uAD00\uB9AC\uC790 \uBAA8\uB4DC\uC5D0\uC11C \uB85C\uADF8\uC544\uC6C3\uD558\uC2DC\uACA0\uC2B5\uB2C8\uAE4C?')) {
+      if (confirm('관리자 모드에서 로그아웃하시겠습니까?')) {
         sessionStorage.removeItem('yebaek_is_admin');
-        localStorage.removeItem('yebaek_is_admin');
+        try { localStorage.removeItem('yebaek_is_admin'); } catch (e) {}
         window.location.href = 'index.html';
       }
     }
