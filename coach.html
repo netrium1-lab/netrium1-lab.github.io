@@ -1165,7 +1165,12 @@
             <span class="coach-badge">COACH</span>
             <span class="coach-name-text" id="displayCoachName">김민희 코치</span>
           </div>
-          <button type="button" class="btn-logout-sm" onclick="logoutCoach()">로그아웃</button>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <a href="coach-memoir.html" target="_blank" style="display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px; background: rgba(194, 155, 56, 0.15); color: #c29b38; border: 1.2px solid rgba(194, 155, 56, 0.4); border-radius: 999px; font-size: 0.78rem; font-weight: 850; text-decoration: none;" title="디지털 자서전 전용 현장 글쓰기 대시보드 앱으로 이동">
+              <span>✍️</span> 자서전 스튜디오
+            </a>
+            <button type="button" class="btn-logout-sm" onclick="logoutCoach()">로그아웃</button>
+          </div>
         </div>
       </header>
 
@@ -1911,6 +1916,14 @@
                 </button>
               </div>
             `}
+
+            ${(m.serviceType && m.serviceType.includes('자서전')) ? `
+              <div style="margin-top: 10px;">
+                <a href="coach-memoir.html" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #c29b38 0%, #a27b20 100%); color: #fff; text-decoration: none; padding: 11px 16px; border-radius: 10px; font-weight: 850; font-size: 0.88rem; box-shadow: 0 4px 12px rgba(194,155,56,0.25);">
+                  <span>✍️</span> 디지털 자서전 전문 글쓰기 앱 열기 ➔
+                </a>
+              </div>
+            ` : ''}
           </div>
         `;
       }).join('');

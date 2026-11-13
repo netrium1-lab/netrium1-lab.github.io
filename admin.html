@@ -2878,7 +2878,10 @@
                 현장 코치의 20문항 구술 음성 업로드부터 Whisper 음성인식, '여백과 결' AI 감성 윤문, 스플릿 뷰 에디터 검수, 가족용 플립북 및 신국판 양장본 인쇄 조판까지 원스톱으로 관리합니다.
               </p>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+              <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
+                <span>📱</span> 코치 글쓰기 앱 열기 ➔
+              </a>
               <button type="button" onclick="openMemoirProjectCreateModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 18px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
                 <span>➕</span> 새 자서전 프로젝트 등록
               </button>
@@ -15583,6 +15586,9 @@ ${coachAppUrl}
 
       html += '<td style="padding: 12px 10px; text-align: center;">';
       html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">';
+      html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 코치에게 글쓰기 대시보드 카톡 링크 및 안내 발송">';
+      html += '<span>💬</span> 코치 카톡';
+      html += '</button>';
       html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
       html += '<span>✍️</span> 검수 에디터';
       html += '</button>';
@@ -16218,6 +16224,75 @@ ${coachAppUrl}
     renderMemoirDashboard();
   }
 
+  function sendCoachMemoirKakao(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) {
+      alert('해당 자서전 프로젝트 정보를 찾을 수 없습니다.');
+      return;
+    }
+
+    var baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'coach-memoir.html');
+    var shareUrl = baseUrl + '?project=' + encodeURIComponent(p.id) + 
+                   '&coach=' + encodeURIComponent(p.coachName || '') + 
+                   '&phone=' + encodeURIComponent(p.coachPhone || '');
+
+    var msg = '✨ [여백과 결 | 디지털 자서전 현장 집필 임무 전달]\n\n' +
+              '안녕하세요, ' + (p.coachName || '담당') + ' 전문 코치님.\n' +
+              '새로운 생애 자서전 집필 프로젝트가 배정되었습니다.\n\n' +
+              '👵 주인공: ' + (p.clientName || '어르신') + ' (' + (p.clientAge || '-') + ')\n' +
+              '📍 방문지: ' + (p.region || '배정 주소지') + '\n' +
+              '📦 플랜: ' + (p.packageLabel || '인생 마스터피스 양장본') + '\n\n' +
+              '아래 현장 코치 전용 글쓰기 대시보드 링크로 접속하시면\n' +
+              '1. 원터치 현장 음성 녹취 및 실시간 한글 STT 받아쓰기\n' +
+              '2. AI 5대 생애 챕터 목차 및 1인칭 수필 초안 자동 집필\n' +
+              '3. 챕터별 현장 윤문 교정 및 흑백/가족사진 캡션 배치\n' +
+              '4. 신국판 양장본 규격 PDF 원클릭 다운로드\n' +
+              '를 수행하실 수 있습니다.\n\n' +
+              '🔗 코치 전용 글쓰기 앱 접속:\n' + shareUrl + '\n\n' +
+              '* 본인 인증(성함/연락처) 후 즉시 작업하실 수 있으며, 작업 내용은 본사 관리자 화면에 실시간 자동 동기화됩니다.';
+
+    // 카카오톡 SDK 공유 가능 여부 확인
+    if (typeof Kakao !== 'undefined' && Kakao.isInitialized && Kakao.isInitialized()) {
+      try {
+        Kakao.Share.sendDefault({
+          objectType: 'feed',
+          content: {
+            title: '📖 [여백과 결] ' + (p.clientName || '') + ' 어르신 자서전 현장 집필 임무',
+            description: (p.coachName || '코치') + '님, 현장 방문 녹취 및 AI 목차/초안 자동 집필을 진행해 주세요.',
+            imageUrl: 'https://netrium1-lab.github.io/images/og-share-cover.jpg',
+            link: {
+              mobileWebUrl: shareUrl,
+              webUrl: shareUrl
+            }
+          },
+          buttons: [
+            {
+              title: '✍️ 코치 글쓰기 대시보드 열기',
+              link: {
+                mobileWebUrl: shareUrl,
+                webUrl: shareUrl
+              }
+            }
+          ]
+        });
+      } catch(e) {
+        console.warn('카카오톡 SDK 공유 오류:', e);
+      }
+    }
+
+    // 클립보드 복사 처리
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(function() {
+        alert('💬 [' + (p.coachName || '코치') + ' 코치님]께 전송할 카카오톡 발송 안내문과 전용 글쓰기 앱 링크가 클립보드에 복사되었습니다!\n\n카카오톡 대화방에 [붙여넣기]하여 전송해 주세요.\n\n-------------------------\n' + shareUrl);
+      }).catch(function() {
+        prompt('아래 링크와 메시지를 복사하여 코치님 카톡으로 전송하세요:', shareUrl);
+      });
+    } else {
+      prompt('아래 링크를 복사하여 코치님 카톡으로 전송하세요:', shareUrl);
+    }
+  }
+
   function initAdminMemoirListener() {
     if (typeof db === 'undefined' || !db) return;
     try {
@@ -16248,6 +16323,7 @@ ${coachAppUrl}
   window.getMemoirProjects = getMemoirProjects;
   window.saveMemoirProjects = saveMemoirProjects;
   window.renderMemoirDashboard = renderMemoirDashboard;
+  window.sendCoachMemoirKakao = sendCoachMemoirKakao;
   window.filterMemoirProjects = filterMemoirProjects;
   window.handleMemoirSearch = handleMemoirSearch;
   window.openMemoirSplitEditor = openMemoirSplitEditor;

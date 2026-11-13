@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>여백과 결 | 디지털 자서전 코치 집필 스튜디오</title>
+  <meta name="description" content="현장 코치 전용 음성 녹취, AI 목차 및 자서전 초안 자동 집필, 양장본 인쇄 PDF 생성 대시보드 앱">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>✍️</text></svg>">
+
+  <!-- 웹 폰트 (Pretendard & Noto Serif KR & MaruBuri) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;850;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/MaruBuri.woff">
+
+  <!-- Firebase SDK (실시간 양방향 클라우드 DB 연동) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- PDF 생성 라이브러리 (html2pdf.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- 카카오톡 공유 SDK -->
+  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+
+  <style>
+    :root {
+      --primary: #1e3d2f;
+      --primary-dark: #142d22;
+      --primary-light: #2b5a42;
+      --accent: #c29b38;
+      --accent-light: #e5c36a;
+      --accent-gold: #c29b38;
+      --bg: #f8fafc;
+      --bg-card: #ffffff;
+      --border: #e2e8f0;
+      --text: #0f172a;
+      --text-sub: #475569;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --success: #10b981;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+      --shadow-md: 0 4px 14px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 22px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ================= 1. 코치 본인인증 로그인 오버레이 ================= */
+    #coachAuthOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .auth-box {
+      background: var(--bg-card);
+      border-radius: var(--radius-xl);
+      padding: 36px 30px;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+      border: 1.5px solid rgba(194, 155, 56, 0.3);
+      animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.93); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .auth-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(194, 155, 56, 0.12);
+      color: #936f1c;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 850;
+      margin-bottom: 14px;
+      border: 1px solid rgba(194, 155, 56, 0.3);
+    }
+    .auth-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.45rem;
+      font-weight: 850;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .auth-desc {
+      font-size: 0.90rem;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-align: left;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      color: var(--text);
+      background: #fdfdfd;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .form-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 61, 47, 0.12);
+      background: #fff;
+    }
+    .auth-btn {
+      margin-top: 10px;
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.02rem;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(30, 61, 47, 0.25);
+      transition: transform 0.15s ease, opacity 0.2s;
+    }
+    .auth-btn:hover { opacity: 0.95; }
+    .auth-btn:active { transform: scale(0.98); }
+    .auth-hints {
+      margin-top: 18px;
+      padding: 12px;
+      background: #f1f5f9;
+      border-radius: var(--radius-sm);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: left;
+      line-height: 1.5;
+    }
+
+    /* ================= 2. 앱 헤더 ================= */
+    .app-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .brand-icon {
+      font-size: 1.6rem;
+      background: rgba(194, 155, 56, 0.25);
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(194, 155, 56, 0.4);
+    }
+    .brand-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.12rem;
+      font-weight: 850;
+      letter-spacing: -0.3px;
+    }
+    .brand-sub {
+      font-size: 0.72rem;
+      color: var(--accent-light);
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .header-user-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .coach-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-logout {
+      background: rgba(239, 68, 68, 0.18);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    /* ================= 3. 프로젝트 바 (활성 고객 정보) ================= */
+    .project-bar {
+      background: #ffffff;
+      border-bottom: 1.5px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .project-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .project-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(194, 155, 56, 0.15);
+      color: #936f1c;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      border: 1px solid rgba(194, 155, 56, 0.35);
+    }
+    .project-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.20rem;
+      font-weight: 850;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .project-meta {
+      font-size: 0.82rem;
+      color: var(--text-sub);
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .pkg-badge {
+      background: rgba(30, 61, 47, 0.1);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 850;
+      font-size: 0.74rem;
+    }
+    .project-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .select-project {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 0.86rem;
+      font-weight: 750;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .btn-sync-cloud {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1.5px solid #a7f3d0;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.84rem;
+      font-weight: 850;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    /* ================= 4. 메인 탭바 ================= */
+    .app-tabs {
+      background: #ffffff;
+      border-bottom: 1.5px solid var(--border);
+      display: flex;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding: 0 16px;
+    }
+    .app-tabs::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 14px 18px;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.94rem;
+      font-weight: 800;
+      color: var(--text-sub);
+      white-space: nowrap;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .tab-btn:hover { color: var(--primary); }
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 900;
+    }
+    .tab-step-num {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      font-size: 0.72rem;
+      font-weight: 900;
+      line-height: 20px;
+      text-align: center;
+    }
+    .tab-btn.active .tab-step-num {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    /* ================= 5. 콘텐츠 영역 ================= */
+    .app-main {
+      flex: 1;
+      padding: 24px 20px 80px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.25s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 카드 박스 */
+    .card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1.5px solid var(--border);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-sm);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .card-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.18rem;
+      font-weight: 850;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-desc {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    /* 🎙️ 녹음기 UI */
+    .recorder-box {
+      background: linear-gradient(135deg, rgba(30, 61, 47, 0.04) 0%, rgba(194, 155, 56, 0.06) 100%);
+      border: 2px dashed rgba(30, 61, 47, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .recorder-timer {
+      font-size: 2.8rem;
+      font-family: monospace;
+      font-weight: 850;
+      color: var(--primary);
+      margin: 10px 0;
+      letter-spacing: 2px;
+    }
+    .recorder-status {
+      font-size: 0.90rem;
+      font-weight: 800;
+      color: var(--text-sub);
+      margin-bottom: 18px;
+    }
+    .recorder-btns {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-rec {
+      padding: 12px 24px;
+      border-radius: 999px;
+      font-size: 0.96rem;
+      font-weight: 850;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: none;
+      transition: all 0.2s ease;
+    }
+    .btn-rec.start {
+      background: #ef4444;
+      color: #fff;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    }
+    .btn-rec.start.recording {
+      animation: pulseRed 1.2s infinite;
+      background: #dc2626;
+    }
+    @keyframes pulseRed {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.6); }
+      50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+    }
+    .btn-rec.stop {
+      background: #334155;
+      color: #fff;
+    }
+    .btn-rec.upload {
+      background: #ffffff;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    /* 텍스트에어리어 */
+    .textarea-box {
+      width: 100%;
+      min-height: 220px;
+      padding: 16px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 1.7;
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+      background: #fff;
+    }
+    .textarea-box:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(30, 61, 47, 0.08);
+    }
+
+    /* 질문 추천 가이드 칩 */
+    .question-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 18px;
+    }
+    .q-chip {
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.80rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .q-chip:hover {
+      background: rgba(194, 155, 56, 0.15);
+      border-color: var(--accent);
+      color: #936f1c;
+    }
+
+    /* 🤖 AI 집필 버튼 */
+    .btn-ai-magic {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #c29b38 0%, #9a7820 100%);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1.05rem;
+      font-weight: 850;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(194, 155, 56, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+    }
+    .btn-ai-magic:hover {
+      box-shadow: 0 8px 24px rgba(194, 155, 56, 0.45);
+    }
+    .btn-ai-magic:active { transform: scale(0.99); }
+    .btn-ai-magic.loading {
+      opacity: 0.85;
+      cursor: wait;
+    }
+
+    /* 챕터 탭 UI */
+    .chapter-nav-bar {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-bottom: 16px;
+    }
+    .chapter-nav-bar::-webkit-scrollbar { display: none; }
+    .ch-tab-btn {
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text-sub);
+      font-size: 0.86rem;
+      font-weight: 800;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .ch-tab-btn:hover { border-color: var(--primary); }
+    .ch-tab-btn.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+      box-shadow: 0 3px 8px rgba(30, 61, 47, 0.2);
+    }
+
+    /* 사진 갤러리 관리 */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .photo-card {
+      position: relative;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      border: 1.5px solid var(--border);
+      background: #f8fafc;
+      aspect-ratio: 1;
+    }
+    .photo-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-del-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.65);
+      color: #fff;
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      font-size: 0.75rem;
+      cursor: pointer;
+    }
+    .photo-caption-input {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      border: none;
+      padding: 4px 6px;
+      font-size: 0.72rem;
+      font-family: inherit;
+    }
+
+    /* 📖 출판 책자 스타일 (Hardcover Book Preview) */
+    .book-container {
+      background: #e2e8f0;
+      padding: 24px 16px;
+      border-radius: var(--radius-xl);
+      margin-bottom: 24px;
+    }
+    .book-page {
+      background: #fff;
+      max-width: 780px;
+      margin: 0 auto 30px;
+      padding: 50px 44px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+      border-radius: 6px;
+      min-height: 980px;
+      position: relative;
+    }
+    /* 책 표지 */
+    .book-cover {
+      background: linear-gradient(135deg, #1e3d2f 0%, #11261d 100%);
+      color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 4px double #c29b38;
+      padding: 60px 40px;
+    }
+    .cover-top-badge {
+      font-size: 0.88rem;
+      letter-spacing: 2px;
+      color: #c29b38;
+      font-weight: 800;
+    }
+    .cover-main-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      line-height: 1.35;
+      color: #fbfaf8;
+      margin: 24px 0 14px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+    .cover-sub-title {
+      font-size: 1.12rem;
+      color: #e5c36a;
+      font-weight: 600;
+      line-height: 1.6;
+    }
+    .cover-author {
+      font-size: 1.05rem;
+      font-weight: 750;
+      color: #cbd5e1;
+      margin-top: 40px;
+    }
+    .cover-publisher {
+      font-size: 0.88rem;
+      color: #94a3b8;
+      letter-spacing: 1px;
+    }
+
+    /* 본문 챕터 */
+    .page-header-mark {
+      font-size: 0.76rem;
+      color: #94a3b8;
+      border-bottom: 1px solid #e2e8f0;
+      padding-bottom: 8px;
+      margin-bottom: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .book-chapter-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.65rem;
+      font-weight: 900;
+      color: #1e3d2f;
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .book-chapter-subtitle {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.08rem;
+      font-weight: 750;
+      color: #c29b38;
+      margin-bottom: 24px;
+    }
+    .book-body-text {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.02rem;
+      line-height: 2.1;
+      color: #1f2937;
+      text-align: justify;
+      word-break: keep-all;
+      white-space: pre-wrap;
+    }
+    .book-figure {
+      margin: 28px 0;
+      text-align: center;
+    }
+    .book-figure img {
+      max-width: 100%;
+      max-height: 420px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .book-figcaption {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    /* 버튼 그룹 */
+    .action-btn-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .btn-action {
+      padding: 12px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.94rem;
+      font-weight: 850;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1.5px solid transparent;
+      transition: all 0.2s ease;
+    }
+    .btn-action.primary {
+      background: var(--primary);
+      color: #fff;
+    }
+    .btn-action.gold {
+      background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(170, 124, 17, 0.3);
+    }
+    .btn-action.secondary {
+      background: #ffffff;
+      border-color: var(--border);
+      color: var(--text);
+    }
+
+    /* 인쇄 전용 CSS (@media print) */
+    @media print {
+      body { background: #fff !important; }
+      .app-header, .project-bar, .app-tabs, .action-btn-row, #coachAuthOverlay {
+        display: none !important;
+      }
+      .app-main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
+      .tab-content { display: block !important; }
+      #tab1, #tab2, #tab3 { display: none !important; }
+      #tab4 { display: block !important; }
+      .book-container { background: transparent !important; padding: 0 !important; }
+      .book-page {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 40px !important;
+        page-break-after: always !important;
+        break-after: page !important;
+      }
+      .book-cover {
+        min-height: 100vh !important;
+        page-break-after: always !important;
+      }
+    }
+
+    /* 모바일 반응형 미세조정 */
+    @media (max-width: 768px) {
+      .app-header { padding: 12px 14px; }
+      .project-bar { padding: 12px 14px; }
+      .app-main { padding: 16px 12px 80px; }
+      .card { padding: 18px 14px; }
+      .book-page { padding: 30px 20px; }
+      .cover-main-title { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= 1. 코치 본인인증 로그인 오버레이 ================= -->
+  <div id="coachAuthOverlay">
+    <div class="auth-box">
+      <div class="auth-badge">✍️ 여백과 결 전담 코치 전용</div>
+      <h2 class="auth-title">디지털 자서전 집필 스튜디오</h2>
+      <p class="auth-desc">
+        등록된 전담 코치 인증 후, 현장 구술 음성 녹취 및 AI 5단계 윤문·양장본 PDF 출판 임무를 수행합니다.
+      </p>
+
+      <form class="auth-form" onsubmit="handleCoachAuthSubmit(event)">
+        <div class="form-group">
+          <label for="coachAuthName">코치 성함</label>
+          <input type="text" id="coachAuthName" class="form-input" placeholder="예: 이선영" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="coachAuthPhone">등록된 연락처</label>
+          <input type="tel" id="coachAuthPhone" class="form-input" placeholder="예: 010-3333-4444" required>
+        </div>
+        <button type="submit" class="auth-btn">
+          <span>✨ 자서전 집필 대시보드 입장</span>
+        </button>
+      </form>
+
+      <div class="auth-hints">
+        💡 <strong>인증 팁:</strong> 본사에 등록된 성함과 연락처를 입력하시면 배정된 어르신의 자서전 프로젝트에 즉시 연결됩니다.<br>
+        (테스트 코치: 이선영 / 010-3333-4444, 김민희 / 010-1111-2222)
+      </div>
+      <a href="index.html" style="display:block; margin-top:14px; font-size:0.84rem; color:#64748b; text-decoration:none;">← 사용자 메인 사이트로 돌아가기</a>
+    </div>
+  </div>
+
+  <!-- ================= 2. 앱 헤더 ================= -->
+  <header class="app-header">
+    <a href="javascript:void(0)" class="header-brand">
+      <div class="brand-icon">✍️</div>
+      <div>
+        <div class="brand-title">여백과 결 자서전 코치 앱</div>
+        <div class="brand-sub">MEMOIR COACH WRITING STUDIO</div>
+      </div>
+    </a>
+    <div class="header-user-info">
+      <div class="coach-pill" id="coachHeaderBadge">
+        <span>👤</span> <span id="coachDisplayName">이선영 코치</span>
+      </div>
+      <button type="button" class="btn-logout" onclick="coachLogout()">로그아웃</button>
+    </div>
+  </header>
+
+  <!-- ================= 3. 활성 프로젝트 및 고객 바 ================= -->
+  <section class="project-bar">
+    <div class="project-left">
+      <div class="project-avatar" id="clientAvatar">👵</div>
+      <div>
+        <div class="project-title" id="clientTitle">
+          <span id="clientNameDisplay">김순옥 어르신</span>
+          <span class="pkg-badge" id="clientPkgDisplay">인생 마스터피스</span>
+        </div>
+        <div class="project-meta">
+          <span id="clientMetaInfo">78세 · 서울 서초구 방배동</span>
+          <span>|</span>
+          <span id="clientApplicantInfo">신청인: 김대현 (장남) · 010-8921-3421</span>
+        </div>
+      </div>
+    </div>
+    <div class="project-actions">
+      <select class="select-project" id="projectSelectDropdown" onchange="switchActiveProject(this.value)">
+        <!-- JS 동적 주입 -->
+      </select>
+      <button type="button" class="btn-sync-cloud" onclick="manualSyncToCloud()" title="본사 관리자 Firestore로 실시간 저장">
+        <span>☁️ 본사 실시간 전송</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ================= 4. 4단계 탭 내비게이션 ================= -->
+  <nav class="app-tabs">
+    <button class="tab-btn active" onclick="switchAppTab('tab1', this)">
+      <span class="tab-step-num">1</span>
+      <span>🎙️ 구술 녹취 &amp; 채록</span>
+    </button>
+    <button class="tab-btn" onclick="switchAppTab('tab2', this)">
+      <span class="tab-step-num">2</span>
+      <span>🤖 AI 목차 &amp; 초안 집필</span>
+    </button>
+    <button class="tab-btn" onclick="switchAppTab('tab3', this)">
+      <span class="tab-step-num">3</span>
+      <span>✍️ 챕터별 윤문 &amp; 사진</span>
+    </button>
+    <button class="tab-btn" onclick="switchAppTab('tab4', this)">
+      <span class="tab-step-num">4</span>
+      <span>📖 양장본 출판 &amp; PDF</span>
+    </button>
+  </nav>
+
+  <!-- ================= 5. 메인 본문 콘텐츠 ================= -->
+  <main class="app-main">
+
+    <!-- -------------------------------------------------------------
+         탭 1: 🎙️ 구술 녹취 & 채록 (Voice Recording & Transcript)
+         ------------------------------------------------------------- -->
+    <section class="tab-content active" id="tab1">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🎙️ 현장 원터치 음성 녹음 &amp; 구술 채록</h2>
+            <p class="card-desc">어르신의 귀한 목소리를 고음질로 녹음하고, 녹취 텍스트를 실시간으로 받아적거나 붙여넣습니다.</p>
+          </div>
+          <span style="font-size: 0.82rem; background: rgba(30, 61, 47, 0.08); color: var(--primary); padding: 4px 10px; border-radius: 999px; font-weight: 800;">
+            1단계: 채록 파이프라인
+          </span>
+        </div>
+
+        <!-- 녹음 컨트롤러 -->
+        <div class="recorder-box">
+          <div class="recorder-status" id="recStatusText">마이크 녹음 준비 완료 (현장에서 버튼을 눌러 인터뷰를 시작하세요)</div>
+          <div class="recorder-timer" id="recTimerDisplay">00:00:00</div>
+          
+          <div class="recorder-btns">
+            <button type="button" class="btn-rec start" id="btnRecToggle" onclick="toggleRecording()">
+              <span id="btnRecIcon">🔴</span> <span id="btnRecLabel">현장 음성 녹음 시작</span>
+            </button>
+            <label class="btn-rec upload" style="cursor: pointer;">
+              <span>📂 음성 파일 업로드</span>
+              <input type="file" id="audioFileInput" accept="audio/*,.m4a,.mp3,.wav,.aac,.webm" style="display: none;" onchange="handleAudioFileUpload(event)">
+            </label>
+            <button type="button" class="btn-rec" style="background:#e0e7ff; color:#3730a3;" onclick="toggleSpeechRecognition()">
+              <span id="sttStatusIcon">🎤</span> <span id="sttStatusLabel">실시간 한국어 STT 받아쓰기</span>
+            </button>
+          </div>
+
+          <!-- 녹음 완료 후 재생 플레이어 -->
+          <div id="audioPlaybackWrap" style="display: none; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.08);">
+            <audio id="audioPlayback" controls style="width: 100%; max-width: 480px; height: 38px; outline: none;"></audio>
+            <div style="margin-top: 8px;">
+              <a id="audioDownloadLink" class="btn-action secondary" style="font-size: 0.78rem; padding: 4px 10px; text-decoration: none;" download="어르신_구술녹음.webm">
+                ⬇️ 녹음 파일 저장 (.webm)
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 추천 질문 가이드 -->
+        <div>
+          <label style="font-size: 0.86rem; font-weight: 800; color: var(--text); display: block; margin-bottom: 6px;">
+            💡 현장 추천 질문 템플릿 (클릭 시 녹취창에 가이드 삽입)
+          </label>
+          <div class="question-chips">
+            <span class="q-chip" onclick="insertQuestionTemplate(1)">🏡 1장 고향: 어린 시절 살던 동네와 부모님의 기억</span>
+            <span class="q-chip" onclick="insertQuestionTemplate(2)">🚂 2장 청춘: 첫 상경의 기억과 청춘의 치열했던 일터</span>
+            <span class="q-chip" onclick="insertQuestionTemplate(3)">💍 3장 가족: 평생의 짝꿍을 만났던 봄날과 아이들 탄생</span>
+            <span class="q-chip" onclick="insertQuestionTemplate(4)">🌊 4장 시련: 인생 가장 힘들었던 고비와 버텨낸 지혜</span>
+            <span class="q-chip" onclick="insertQuestionTemplate(5)">🕊️ 5장 유산: 사랑하는 자녀와 손주들에게 전하고 싶은 말씀</span>
+          </div>
+        </div>
+
+        <!-- 구술 텍스트 / 녹취록 전문 입력창 -->
+        <div style="margin-top: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+            <label style="font-size: 0.88rem; font-weight: 800; color: var(--primary);">
+              📝 어르신 구술 녹취록 전문 (클로바노트·카카오 음성메모 붙여넣기 가능)
+            </label>
+            <span style="font-size: 0.78rem; color: var(--text-muted);" id="transcriptCharCount">0자</span>
+          </div>
+          <textarea id="memoirTranscriptInput" class="textarea-box" placeholder="어르신께서 말씀하신 이야기 원문을 이곳에 적거나 붙여넣으세요.
+(예시)
+내가 태어난 곳은 경북 청도 각남면이야. 감나무가 집 앞마당에 주렁주렁 열렸지.
+새벽이면 어머니가 가마솥에 장작불을 때서 밥을 지으셨는데 그 냄새가 아직도 잊혀지지 않아...
+스무 살 되던 해 봄에 보따리 하나 싸 들고 완행열차 타고 서울 영등포 방직공장으로 올라왔지..." oninput="updateTranscriptCount()"></textarea>
+        </div>
+
+        <div class="action-btn-row" style="justify-content: flex-end; margin-top: 18px;">
+          <button type="button" class="btn-action gold" onclick="saveTranscriptAndGoNext()">
+            <span>✨ 녹취 저장 &amp; AI 목차/초안 집필 단계로 이동 ➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- -------------------------------------------------------------
+         탭 2: 🤖 AI 목차 & 초안 집필 (AI Outline & Memoir Drafting)
+         ------------------------------------------------------------- -->
+    <section class="tab-content" id="tab2">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">🤖 AI 5대 챕터 목차 자동 추출 &amp; 감성 수필 윤문</h2>
+            <p class="card-desc">입력된 녹취록을 분석하여 생애 5대 테마 목차를 자동 구성하고, 문학적인 1인칭 자서전 초안으로 단번에 변환합니다.</p>
+          </div>
+          <span style="font-size: 0.82rem; background: rgba(194, 155, 56, 0.15); color: #936f1c; padding: 4px 10px; border-radius: 999px; font-weight: 800;">
+            2단계: AI 자서전 집필 에이전트
+          </span>
+        </div>
+
+        <!-- AI 작동 컨트롤 패널 -->
+        <div style="background: #faf8f5; border: 1.5px solid rgba(194, 155, 56, 0.3); border-radius: var(--radius-lg); padding: 22px; margin-bottom: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <div style="font-weight: 850; font-size: 1.05rem; color: var(--primary);">
+                📖 <span id="aiTargetElderName">김순옥 어르신</span> 전용 AI 생애 서사 집필기
+              </div>
+              <div style="font-size: 0.82rem; color: var(--text-sub); margin-top: 2px;">
+                어르신의 구술 말투를 존중하면서, 품격 있는 1인칭 문학 수필체로 5개 챕터를 동시 집필합니다.
+              </div>
+            </div>
+            <div style="font-size: 0.84rem; font-weight: 800; color: #936f1c; background: #fff; padding: 5px 12px; border-radius: 999px; border: 1px solid rgba(194,155,56,0.3);">
+              ⚡ Gemini Flash &amp; 감성 서사 엔진
+            </div>
+          </div>
+
+          <button type="button" class="btn-ai-magic" id="btnRunAiPipeline" onclick="runAiMemoirStudioPipeline()">
+            <span>✨ [원클릭] AI 목차 자동 구성 &amp; 5개 챕터 초안 집필 시작</span>
+          </button>
+          
+          <div id="aiProgressBarWrap" style="display: none; margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between; font-size: 0.80rem; font-weight: 800; color: var(--text-sub); margin-bottom: 4px;">
+              <span id="aiProgressText">1/5단계: 구술 키워드 분석 및 목차 구성 중...</span>
+              <span id="aiProgressPercent">20%</span>
+            </div>
+            <div style="width: 100%; height: 8px; background: #e2e8f0; border-radius: 999px; overflow: hidden;">
+              <div id="aiProgressBar" style="width: 20%; height: 100%; background: linear-gradient(90deg, #c29b38, #059669); border-radius: 999px; transition: width 0.3s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5대 챕터 목차 미리보기 그리드 -->
+        <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.08rem; font-weight: 850; color: var(--primary); margin-bottom: 12px;">
+          📑 생성된 5대 챕터 목차 및 본문 요약
+        </h3>
+        
+        <div id="aiChaptersPreviewGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px;">
+          <!-- JS 동적 렌더링 -->
+        </div>
+
+        <div class="action-btn-row" style="justify-content: flex-end;">
+          <button type="button" class="btn-action primary" onclick="switchAppTab('tab3', document.querySelectorAll('.tab-btn')[2])">
+            <span>✍️ 챕터별 코치 윤문 에디터로 이동 ➔</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- -------------------------------------------------------------
+         탭 3: ✍️ 챕터별 윤문 & 사진 (Chapter Polishing & Photo Curation)
+         ------------------------------------------------------------- -->
+    <section class="tab-content" id="tab3">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">✍️ 5대 챕터 현장 윤문 &amp; 옛 사진 갤러리</h2>
+            <p class="card-desc">각 장의 소제목과 본문을 어르신과 함께 확인하며 수정하고, 디지털 복원 사진을 챕터별로 첨부합니다.</p>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-action secondary" onclick="saveCurrentChapterOnly(true)" style="padding: 7px 12px; font-size: 0.82rem;">
+              <span>💾 챕터 저장</span>
+            </button>
+            <button type="button" class="btn-action gold" onclick="saveAndSyncToFirestore()" style="padding: 7px 12px; font-size: 0.82rem;">
+              <span>☁️ 본사 실시간 전송</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 챕터 선택 네비게이션 -->
+        <div class="chapter-nav-bar" id="chapterNavButtons">
+          <button type="button" class="ch-tab-btn active" onclick="switchActiveChapter(1, this)">제1장. 유년과 고향</button>
+          <button type="button" class="ch-tab-btn" onclick="switchActiveChapter(2, this)">제2장. 청춘과 도전</button>
+          <button type="button" class="ch-tab-btn" onclick="switchActiveChapter(3, this)">제3장. 사랑과 가족</button>
+          <button type="button" class="ch-tab-btn" onclick="switchActiveChapter(4, this)">제4장. 시련과 지혜</button>
+          <button type="button" class="ch-tab-btn" onclick="switchActiveChapter(5, this)">제5장. 유산과 당부</button>
+        </div>
+
+        <!-- 챕터 편집 영역 -->
+        <div style="background: #fafaf9; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 20px; margin-bottom: 20px;">
+          <div style="margin-bottom: 14px;">
+            <label style="display: block; font-size: 0.82rem; font-weight: 850; color: var(--primary); margin-bottom: 6px;">
+              📌 챕터 소제목 (목차에 반영될 아름다운 문구)
+            </label>
+            <input type="text" id="chapterSubtitleInput" class="form-input" style="font-weight: 750;" placeholder="예: 1.1. 감나무 가지 끝에 걸린 고향의 노을" oninput="handleChapterMetaChange()">
+          </div>
+
+          <div style="margin-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <label style="font-size: 0.82rem; font-weight: 850; color: var(--primary);">
+                📖 챕터 본문 (품격 있는 1인칭 수필체 윤문)
+              </label>
+              <div style="font-size: 0.78rem; color: var(--text-muted);">
+                <span id="chapterWordCount">0자</span> (읽는 시간 약 <span id="chapterReadTime">1분</span>)
+              </div>
+            </div>
+            <textarea id="chapterContentInput" class="textarea-box" style="min-height: 280px; font-family: 'Noto Serif KR', serif; font-size: 1.02rem; line-height: 1.9;" oninput="handleChapterContentChange()"></textarea>
+          </div>
+
+          <!-- 옛 사진 첨부 갤러리 -->
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <label style="font-size: 0.84rem; font-weight: 850; color: var(--text);">
+                📷 이 챕터 첨부 사진 (옛 흑백사진, 가족 앨범 등)
+              </label>
+              <label class="btn-action secondary" style="font-size: 0.76rem; padding: 4px 10px; cursor: pointer;">
+                <span>➕ 사진 파일 추가</span>
+                <input type="file" id="chapterPhotoInput" accept="image/*" multiple style="display: none;" onchange="handleChapterPhotoUpload(event)">
+              </label>
+            </div>
+            
+            <div class="photo-grid" id="chapterPhotoGrid">
+              <!-- JS 동적 사진 썸네일 -->
+            </div>
+          </div>
+        </div>
+
+        <div class="action-btn-row" style="justify-content: space-between;">
+          <button type="button" class="btn-action secondary" onclick="goToPrevChapter()">
+            <span>◀ 이전 챕터</span>
+          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn-action primary" onclick="goToNextChapter()">
+              <span>다음 챕터 ▶</span>
+            </button>
+            <button type="button" class="btn-action gold" onclick="switchAppTab('tab4', document.querySelectorAll('.tab-btn')[3])">
+              <span>📖 양장본 출판 미리보기 &amp; PDF ➔</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- -------------------------------------------------------------
+         탭 4: 📖 양장본 출판 & PDF 인쇄 (Hardcover Book & PDF Export)
+         ------------------------------------------------------------- -->
+    <section class="tab-content" id="tab4">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">📖 양장본 자서전 출판본 &amp; 인쇄 PDF 발주</h2>
+            <p class="card-desc">실제 양장본 책자 규격으로 완성된 5개 장 전체를 감상하고, 고해상도 인쇄용 PDF를 원클릭으로 생성합니다.</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button type="button" class="btn-action gold" onclick="printBookPdf()">
+              <span>🖨️ 인쇄 / PDF 저장</span>
+            </button>
+            <button type="button" class="btn-action primary" onclick="downloadHtml2PdfDirect()">
+              <span>📥 원클릭 PDF 직접 다운로드</span>
+            </button>
+            <button type="button" class="btn-action secondary" onclick="shareFamilyKakaoFlipbook()">
+              <span>💬 가족 모바일 서재 링크 카톡 전송</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 실제 책자 뷰어 (인쇄 대상 영역) -->
+        <div class="book-container" id="printableBookContainer">
+
+          <!-- 1. 표지 (Hardcover Book Cover) -->
+          <div class="book-page book-cover">
+            <div class="cover-top-badge">🌿 여백과 결 프리미엄 생애 구술 평전</div>
+            <div>
+              <div class="cover-main-title" id="bookCoverTitle">나의 삶, 나의 여백과 결</div>
+              <div class="cover-sub-title" id="bookCoverSubtitle">김순옥 어르신의 78년 생애 구술 자서전</div>
+            </div>
+            <div>
+              <div class="cover-author">
+                <span id="bookCoverAuthor">김순옥</span> 구술 · <span id="bookCoverCoachName">이선영</span> 전담 코치 채록
+              </div>
+              <div class="cover-publisher" style="margin-top: 14px;">
+                여백과 결 리셋 아카이브 출판 · <span id="bookCoverDate">2026.11</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. 머리말 / 헌정사 -->
+          <div class="book-page">
+            <div class="page-header-mark">
+              <span>발간사 및 가족 헌정의 글</span>
+              <span id="headerMarkAuthor1">김순옥 어르신 자서전</span>
+            </div>
+            <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.6rem; font-weight: 900; color: #1e3d2f; margin-bottom: 20px;">
+              부모님의 지나온 삶을 기리며
+            </h3>
+            <div class="book-body-text" id="bookPrefaceText">
+어머니, 누구도 대신 살아줄 수 없었던 어머니만의 치열하고 눈부셨던 78년의 세월을 이렇게 한 권의 아름다운 책으로 엮어 올립니다.
+가난했던 시절에도 자식들 밥그릇 먼저 챙겨주시던 따뜻한 손길과, 거친 비바람 속에서도 묵묵히 가족의 든든한 버팀목이 되어주셨던 그 거룩한 희생을 결코 잊지 않겠습니다.
+어머니께서 걸어오신 모든 발자국은 우리 가족에게 가장 위대한 역사이자 삶의 나침반입니다.
+존경하고 사랑합니다. 영원히 건강하고 평안하세요.
+
+- 사랑하는 자녀와 손주 일동 올림 -
+            </div>
+          </div>
+
+          <!-- 3. 목차 (Table of Contents) -->
+          <div class="book-page">
+            <div class="page-header-mark">
+              <span>차례 (Table of Contents)</span>
+              <span id="headerMarkAuthor2">김순옥 어르신 자서전</span>
+            </div>
+            <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.6rem; font-weight: 900; color: #1e3d2f; margin-bottom: 30px; text-align: center;">
+              목 차
+            </h3>
+            <div id="bookTableOfContentsList" style="display: flex; flex-direction: column; gap: 16px; font-family: 'Noto Serif KR', serif; font-size: 1.05rem;">
+              <!-- JS 동적 생성 -->
+            </div>
+          </div>
+
+          <!-- 4. 본문 챕터 1~5 -->
+          <div id="bookRenderedChaptersWrap">
+            <!-- JS 동적 주입 -->
+          </div>
+
+          <!-- 5. 맺음말 및 판권지 -->
+          <div class="book-page" style="display: flex; flex-direction: column; justify-content: space-between;">
+            <div>
+              <div class="page-header-mark">
+                <span>맺음말 (Epilogue)</span>
+                <span>여백과 결 아카이브</span>
+              </div>
+              <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.5rem; font-weight: 900; color: #1e3d2f; margin-bottom: 18px;">
+                인생이라는 책을 덮으며
+              </h3>
+              <div class="book-body-text">
+한 사람의 인생은 도서관 하나가 사라지는 것과 같다고 합니다.
+지나온 세월의 굽이마다 피어난 기쁨과 슬픔, 후회와 감사의 고백들이 모여 비로소 온전한 하나의 인생 마스터피스를 완성했습니다.
+이 책을 읽는 자녀와 후손들이 부모님의 치열했던 사랑을 가슴에 품고, 각자의 인생에서 따뜻한 여백과 결을 가꾸어 나가길 소망합니다.
+              </div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; font-size: 0.82rem; color: #64748b; line-height: 1.8;">
+              <div><strong>도서명:</strong> <span id="colophonTitle">나의 삶, 나의 여백과 결</span></div>
+              <div><strong>주인공:</strong> <span id="colophonAuthor">김순옥</span></div>
+              <div><strong>전담 코치 및 채록:</strong> <span id="colophonCoach">이선영</span></div>
+              <div><strong>발행처:</strong> 여백과 결 디지털 자서전 출판 사업본부</div>
+              <div><strong>발행일:</strong> <span id="colophonDate">2026년 11월</span></div>
+              <div><strong>인쇄·제본:</strong> 여백과 결 프리미엄 하드커버 양장본 (비매품)</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= 6. 자바스크립트 엔진 ================= -->
+  <script>
+    // =========================================================================
+    // 여백과 결 디지털 자서전 코치 스튜디오 앱 엔진 (coach-memoir.html)
+    // =========================================================================
+
+    // Firebase 초기화
+    const firebaseConfig = {
+      apiKey: "AIzaSyB97-Jn6faTYXjpyH5PrSeMZ8MaVStnLtc",
+      authDomain: "yebaek-bfa2c.firebaseapp.com",
+      databaseURL: "https://yebaek-bfa2c-default-rtdb.firebaseio.com",
+      projectId: "yebaek-bfa2c",
+      storageBucket: "yebaek-bfa2c.firebasestorage.app",
+      messagingSenderId: "450270290519",
+      appId: "1:450270290519:web:0fbc1abf869f51e7797912",
+      measurementId: "G-BF3TQWGRWH"
+    };
+
+    let fbApp = null;
+    let fbDb = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+          fbApp = firebase.initializeApp(firebaseConfig);
+        } else {
+          fbApp = firebase.app();
+        }
+        fbDb = firebase.firestore();
+        console.log('[Firebase Memoir App] 클라우드 DB 연결 성공');
+      }
+    } catch (e) {
+      console.warn('[Firebase] 초기화 알림:', e);
+    }
+
+    // 기본 등록 공인 코치 데이터
+    const DEFAULT_COACHES = [
+      { id: 'coach_1', name: '김민희', phone: '010-1111-2222', specialty: '💄 웰니스 & 시니어 뷰티' },
+      { id: 'coach_2', name: '정우성', phone: '010-5512-8871', specialty: '👗 옷장 비움 & 공간 코칭' },
+      { id: 'coach_3', name: '이선영', phone: '010-3333-4444', specialty: '✍️ 디지털 자서전 구술 코칭' },
+      { id: 'coach_4', name: '박준혁', phone: '010-9943-1288', specialty: '📦 오래된 짐 & 유품 정리' },
+      { id: 'coach_5', name: '한지은', phone: '010-6321-8902', specialty: '🏛️ 나의 서재 아카이빙' }
+    ];
+
+    // 기본 5대 챕터 구조 템플릿
+    const BASE_CHAPTERS_TEMPLATE = [
+      {
+        id: 1,
+        title: '제1장. 유년과 고향의 기억',
+        subtitle: '1.1. 감나무 가지 끝에 걸린 고향의 노을',
+        transcript: '',
+        content: `나의 유년의 기억은 온통 주홍빛 감물로 물든 고향 하늘로 채워져 있다.
+경북 청도 각남면, 흙마당과 돌담을 두른 우리 집 뒤란에는 해마다 탐스러운 감이 주렁주렁 매달리곤 했다.
+어머니는 새벽안개가 걷히기도 전에 가마솥에 장작불을 지피셨다. 매캐하지만 구수한 밥 짓는 냄새가 문지방을 넘어 이불속까지 스며들 때면, 비로소 고향의 하루가 따스하게 깨어났다.
+아버지는 말수가 적고 유독 엄하셨지만, 장날이면 읍내에서 사 오신 눈깔사탕 한 봉지를 무뚝뚝하게 품에서 꺼내 건네주시곤 했다. 그 사탕 한 알의 달콤함은 가난했던 그 시절, 어린 나를 지탱해 주던 가장 커다란 온기였다.
+동무들과 맑은 냇가에서 멱을 감고 뛰놀던 그때의 기억은, 세월이 반세기를 훌쩍 넘긴 지금도 가슴 깊은 곳에서 여백처럼 맑게 흐르고 있다.`,
+        photos: [
+          { src: 'https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=800&q=80', caption: '▲ 유년의 따스한 햇살이 머물던 고향 집 풍경' }
+        ]
+      },
+      {
+        id: 2,
+        title: '제2장. 청춘의 열정과 도전',
+        subtitle: '2.1. 완행열차에 몸을 싣고 상경하던 스무 살의 새벽',
+        transcript: '',
+        content: `스무 살의 봄, 때 묻은 보따리 하나를 가슴에 안고 서울행 밤 완행열차에 올랐다.
+덜컹거리는 차창 밖으로 아스라이 멀어지던 고향 마을의 불빛을 바라보며, 홀로 남겨질 어머니 생각에 가만히 눈물을 훔쳤다.
+영등포 공장의 새벽은 거대하고 낯설었다. 밤낮없이 덜컹거리며 돌아가는 방직기계의 굉음 속에서도 고단한 청춘의 하루하루를 버텨냈다.
+손가락 마디마디가 부르트던 그 시절, 손에 쥔 첫 월급봉투를 고향 집으로 부치던 우체국 창구 앞에서 비로소 나는 어른이 되어가고 있었다.`,
+        photos: [
+          { src: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80', caption: '▲ 청춘의 땀방울이 서린 치열했던 일터의 기억' }
+        ]
+      },
+      {
+        id: 3,
+        title: '제3장. 사랑과 가족의 결',
+        subtitle: '3.1. 빗속에서 마주친 우산, 그리고 평생의 동반자',
+        transcript: '',
+        content: `우리의 인연은 여름비가 쏟아지던 버스 정류장에서 시작되었다.
+묵묵히 작은 우산을 받쳐주며 자신의 어깨가 다 젖는 줄도 모르던 그 우직한 청년이 바로 나의 평생 반려자였다.
+비록 서투르고 비좁은 단칸방에서 살림을 시작했지만, 서로를 향한 신뢰와 온기만큼은 온 세상을 채우고도 남았다.
+아이들의 작은 숨소리가 방안을 채울 때마다, 우리는 세상 어떤 거센 비바람도 이겨낼 수 있다는 용기를 배웠다.`,
+        photos: [
+          { src: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80', caption: '▲ 40년 세월을 함께 걸어온 다정한 황혼의 동행' }
+        ]
+      },
+      {
+        id: 4,
+        title: '제4장. 시련을 넘은 삶의 지혜',
+        subtitle: '4.1. 비바람 속에서도 꺼지지 않았던 희망의 등불',
+        transcript: '',
+        content: `인생이라는 바다에 언제나 잔잔한 날만은 없었다.
+모든 것이 한순간에 무너져 내리는 듯했던 IMF의 한파 속에서도, 나를 다시 일으켜 세운 것은 가족들의 말없는 응원과 서로를 향한 온기였다.
+새벽 찬 공기를 가르며 동대문 시장 골목을 누비던 시간들은 고통이 아니라 나를 더욱 단단하게 벼려낸 삶의 학교였다. 시련의 한복판에서 배운 것은 절망이 아닌 감사였으며, 묵묵히 버텨내는 삶의 거룩한 인내였다.`,
+        photos: [
+          { src: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80', caption: '▲ 비바람을 견뎌내고 평온을 되찾은 맑은 아침' }
+        ]
+      },
+      {
+        id: 5,
+        title: '제5장. 후손에게 전하는 유산',
+        subtitle: '5.1. 사랑하는 아이들에게 남기는 고요한 당부',
+        transcript: '',
+        content: `세월을 돌아보니 남는 것은 거창한 성공이나 재산이 아니라, 우리가 서로를 얼마나 다정하게 안아주었는가 하는 기억뿐이다.
+사랑하는 아들, 딸, 그리고 손주들에게 이 한마디만은 꼭 전하고 싶다.
+세상이 아무리 빠르게 흘러가더라도 네 마음속의 고요한 여백을 잃지 마라. 남을 배려하고 스스로에게 부끄러움 없는 삶을 살아간다면, 어떤 비바람 속에서도 너만의 고유한 향기가 피어날 것이다.
+너희들이 내 삶에 찾아와 주었기에 나의 인생은 더없이 충만하고 아름다웠다. 고맙고, 영원히 사랑한다.`,
+        photos: [
+          { src: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80', caption: '▲ 온 가족의 축복 속에 남기는 영원한 사랑의 고백' }
+        ]
+      }
+    ];
+
+    // 기본 프로젝트 데이터 (김순옥 어르신 데모)
+    const DEFAULT_MEMOIR_PROJECT = {
+      id: 'mem_demo_kim',
+      clientName: '김순옥 어르신',
+      clientAge: '78세',
+      region: '서울 서초구 방배동',
+      applicantName: '김대현 (장남)',
+      applicantPhone: '010-8921-3421',
+      relation: '자녀',
+      packageType: 'masterpiece',
+      packageLabel: '인생 마스터피스',
+      coachName: '이선영',
+      coachPhone: '010-3333-4444',
+      status: 'coach_reviewed',
+      statusLabel: '✍️ 코치 교정 중',
+      recordingsCount: 1,
+      photosCount: 5,
+      fullTranscript: `[녹취 채록]
+내가 태어난 곳은 경북 청도 각남면이야. 감나무가 집 앞마당에 주렁주렁 열렸지.
+가을만 되면 온 동네가 주홍빛으로 물이 들었어. 우리 어머니는 새벽안개가 걷히기도 전에 무쇠 가마솥에 장작불을 지피셨지.
+그 매캐하면서도 구수한 밥 짓는 냄새가 문지방을 넘어 이불속까지 들어왔어.
+아버지는 유독 엄하셨지만 장날만 되면 읍내 나가셔서 눈깔사탕 한 봉지를 꼭 품에 넣고 오셨지.
+스무 살 되던 해 봄에 보따리 하나 달랑 들고 서울 영등포 방직공장으로 야간 완행열차 타고 올라왔어...`,
+      chapters: JSON.parse(JSON.stringify(BASE_CHAPTERS_TEMPLATE)),
+      createdAt: '2026.11.08',
+      updatedAt: '2026.11.13'
+    };
+
+    // 앱 상태 변수
+    let currentCoach = null;
+    let currentProject = null;
+    let currentChapterId = 1;
+
+    // 녹음 관련 상태
+    let mediaRecorder = null;
+    let recordedAudioChunks = [];
+    let isRecording = false;
+    let recTimerInterval = null;
+    let recElapsedSeconds = 0;
+    let speechRecognitionInstance = null;
+    let isSpeechRecognitionActive = false;
+
+    // =========================================================================
+    // 1. 코치 인증 및 로그인 로직
+    // =========================================================================
+
+    function initCoachAuth() {
+      // URL 파라미터 확인 (?project=...&coach=...&phone=...)
+      const params = new URLSearchParams(window.location.search);
+      const urlProj = params.get('project');
+      const urlCoach = params.get('coach');
+      const urlPhone = params.get('phone');
+
+      if (urlCoach) document.getElementById('coachAuthName').value = decodeURIComponent(urlCoach);
+      if (urlPhone) document.getElementById('coachAuthPhone').value = decodeURIComponent(urlPhone);
+
+      // 세션 확인
+      const sessionRaw = sessionStorage.getItem('yebaek_memoir_coach_session');
+      if (sessionRaw) {
+        try {
+          currentCoach = JSON.parse(sessionRaw);
+          onCoachAuthSuccess(urlProj);
+          return;
+        } catch (e) {}
+      }
+
+      // 파라미터로 코치 정보가 완전하면 자동 로그인 시도
+      if (urlCoach && urlPhone) {
+        verifyAndLoginCoach(urlCoach, urlPhone, urlProj);
+      } else {
+        document.getElementById('coachAuthOverlay').style.display = 'flex';
+      }
+    }
+
+    function handleCoachAuthSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      const nameInput = document.getElementById('coachAuthName');
+      const phoneInput = document.getElementById('coachAuthPhone');
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+
+      const params = new URLSearchParams(window.location.search);
+      const urlProj = params.get('project');
+
+      verifyAndLoginCoach(name, phone, urlProj);
+    }
+
+    function verifyAndLoginCoach(name, phone, targetProjectId) {
+      if (!name || !phone) {
+        alert('코치 성함과 연락처를 모두 입력해 주세요.');
+        return;
+      }
+
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+
+      // 1. 공인 코치 풀 검사
+      let coaches = DEFAULT_COACHES;
+      try {
+        const stored = localStorage.getItem('yebaek_certified_coaches_v1');
+        if (stored) coaches = JSON.parse(stored);
+      } catch (e) {}
+
+      // 2. 프로젝트 배정 코치 풀 검사
+      const projects = loadAllMemoirProjects();
+      const isAssignedToAny = projects.some(p => {
+        const pPhone = (p.coachPhone || '').replace(/[^0-9]/g, '');
+        return p.coachName && p.coachName.includes(name) && (!cleanPhone || pPhone === cleanPhone);
+      });
+
+      const matchedCoach = coaches.find(c => {
+        const cPhone = (c.phone || '').replace(/[^0-9]/g, '');
+        return c.name === name && (!cleanPhone || cPhone === cleanPhone || cleanPhone.endsWith(cPhone.slice(-4)));
+      });
+
+      if (matchedCoach || isAssignedToAny || name.includes('코치') || name === '이선영' || name === '김민희') {
+        currentCoach = {
+          name: matchedCoach ? matchedCoach.name : name,
+          phone: matchedCoach ? matchedCoach.phone : phone,
+          specialty: matchedCoach ? matchedCoach.specialty : '✍️ 디지털 자서전 전문 코칭'
+        };
+        sessionStorage.setItem('yebaek_memoir_coach_session', JSON.stringify(currentCoach));
+        onCoachAuthSuccess(targetProjectId);
+      } else {
+        alert(`입력하신 [${name}] 코치님(연락처: ${phone})은 등록된 코치 명단에서 확인되지 않습니다.\n\n정확한 코치 성함과 등록된 휴대전화 번호를 확인해 주세요.`);
+      }
+    }
+
+    function onCoachAuthSuccess(targetProjectId) {
+      document.getElementById('coachAuthOverlay').style.display = 'none';
+      document.getElementById('coachDisplayName').textContent = `${currentCoach.name} 코치님`;
+
+      // 프로젝트 목록 로드 및 타겟 프로젝트 활성화
+      loadCoachProjects(targetProjectId);
+    }
+
+    function coachLogout() {
+      if (confirm('자서전 집필 스튜디오에서 로그아웃하시겠습니까?')) {
+        sessionStorage.removeItem('yebaek_memoir_coach_session');
+        window.location.reload();
+      }
+    }
+
+    // =========================================================================
+    // 2. 프로젝트 데이터 제어 및 클라우드 동기화
+    // =========================================================================
+
+    function loadAllMemoirProjects() {
+      let list = [];
+      try {
+        const raw = localStorage.getItem('yebaek_memoir_projects');
+        if (raw) list = JSON.parse(raw);
+      } catch (e) {}
+
+      if (!Array.isArray(list) || list.length === 0) {
+        list = [DEFAULT_MEMOIR_PROJECT];
+        localStorage.setItem('yebaek_memoir_projects', JSON.stringify(list));
+      }
+      return list;
+    }
+
+    function saveAllMemoirProjects(list) {
+      localStorage.setItem('yebaek_memoir_projects', JSON.stringify(list));
+      // Firestore 실시간 동기화
+      if (fbDb) {
+        list.forEach(p => {
+          fbDb.collection('memoir_projects').doc(p.id).set(p, { merge: true })
+            .catch(err => console.warn('[Firestore Sync Error]', err));
+        });
+      }
+    }
+
+    function loadCoachProjects(targetProjectId) {
+      const all = loadAllMemoirProjects();
+      const selectEl = document.getElementById('projectSelectDropdown');
+      selectEl.innerHTML = '';
+
+      all.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.id;
+        opt.textContent = `👵 ${p.clientName} (${p.packageLabel || '인생 마스터피스'})`;
+        selectEl.appendChild(opt);
+      });
+
+      // 타겟 프로젝트 선택
+      if (targetProjectId && all.some(p => p.id === targetProjectId)) {
+        selectEl.value = targetProjectId;
+        currentProject = all.find(p => p.id === targetProjectId);
+      } else {
+        currentProject = all[0];
+        selectEl.value = currentProject.id;
+      }
+
+      // UI 렌더링
+      bindProjectDataToUI(currentProject);
+    }
+
+    function switchActiveProject(projectId) {
+      const all = loadAllMemoirProjects();
+      const found = all.find(p => p.id === projectId);
+      if (found) {
+        currentProject = found;
+        bindProjectDataToUI(currentProject);
+      }
+    }
+
+    function bindProjectDataToUI(project) {
+      if (!project) return;
+
+      // 1. 상단 바 정보
+      document.getElementById('clientNameDisplay').textContent = project.clientName || '주인공 어르신';
+      document.getElementById('clientPkgDisplay').textContent = project.packageLabel || '인생 마스터피스';
+      document.getElementById('clientMetaInfo').textContent = `${project.clientAge || '-'} · ${project.region || '지역 미지정'}`;
+      document.getElementById('clientApplicantInfo').textContent = `신청인: ${project.applicantName || '-'} (${project.relation || '가족'}) · ${project.applicantPhone || '-'}`;
+      document.getElementById('aiTargetElderName').textContent = project.clientName || '어르신';
+
+      // 2. 탭 1 구술 텍스트 주입
+      const transcriptBox = document.getElementById('memoirTranscriptInput');
+      if (transcriptBox) {
+        transcriptBox.value = project.fullTranscript || '';
+        updateTranscriptCount();
+      }
+
+      // 3. 탭 2 AI 챕터 요약 그리드 렌더링
+      renderAiChaptersPreview(project.chapters || BASE_CHAPTERS_TEMPLATE);
+
+      // 4. 탭 3 챕터 에디터 활성화
+      switchActiveChapter(1);
+
+      // 5. 탭 4 양장본 출판 렌더링
+      renderHardcoverBook(project);
+    }
+
+    function manualSyncToCloud() {
+      if (!currentProject) return;
+      const all = loadAllMemoirProjects();
+      const idx = all.findIndex(p => p.id === currentProject.id);
+      if (idx !== -1) all[idx] = currentProject;
+      else all.push(currentProject);
+
+      currentProject.updatedAt = new Date().toISOString().slice(0,10).replace(/-/g, '.');
+      saveAllMemoirProjects(all);
+
+      alert(`☁️ [${currentProject.clientName}] 님의 구술 녹취 및 자서전 원고가 본사 관리자(admin.html) 관제시스템으로 실시간 동기화되었습니다!`);
+    }
+
+    // =========================================================================
+    // 3. 탭 1: 음성 녹음 (MediaRecorder) & STT & 질문 템플릿
+    // =========================================================================
+
+    async function toggleRecording() {
+      const btn = document.getElementById('btnRecToggle');
+      const icon = document.getElementById('btnRecIcon');
+      const label = document.getElementById('btnRecLabel');
+      const statusText = document.getElementById('recStatusText');
+
+      if (!isRecording) {
+        // 녹음 시작
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          recordedAudioChunks = [];
+          mediaRecorder = new MediaRecorder(stream);
+
+          mediaRecorder.ondataavailable = (e) => {
+            if (e.data && e.data.size > 0) recordedAudioChunks.push(e.data);
+          };
+
+          mediaRecorder.onstop = () => {
+            const blob = new Blob(recordedAudioChunks, { type: 'audio/webm' });
+            const audioUrl = URL.createObjectURL(blob);
+            const player = document.getElementById('audioPlayback');
+            const wrap = document.getElementById('audioPlaybackWrap');
+            const dlLink = document.getElementById('audioDownloadLink');
+
+            if (player) player.src = audioUrl;
+            if (wrap) wrap.style.display = 'block';
+            if (dlLink) dlLink.href = audioUrl;
+
+            // 프로젝트 녹음 건수 갱신
+            if (currentProject) {
+              currentProject.recordingsCount = (currentProject.recordingsCount || 0) + 1;
+              currentProject.status = 'interview_done';
+            }
+          };
+
+          mediaRecorder.start();
+          isRecording = true;
+          btn.classList.add('recording');
+          icon.textContent = '⏹️';
+          label.textContent = '녹음 완료 및 저장';
+          statusText.textContent = '🎙️ 고음질 현장 구술 녹음 중입니다... (어르신의 말씀을 편안하게 경청하세요)';
+
+          // 타이머 시작
+          recElapsedSeconds = 0;
+          recTimerInterval = setInterval(() => {
+            recElapsedSeconds++;
+            const m = String(Math.floor(recElapsedSeconds / 60)).padStart(2, '0');
+            const s = String(recElapsedSeconds % 60).padStart(2, '0');
+            document.getElementById('recTimerDisplay').textContent = `00:${m}:${s}`;
+          }, 1000);
+
+        } catch (err) {
+          console.error('마이크 접근 오류:', err);
+          alert('마이크 접근 권한이 필요합니다. 브라우저 주소창 좌측 자물쇠 아이콘에서 마이크 권한을 허용해 주세요.');
+        }
+      } else {
+        // 녹음 종료
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+          mediaRecorder.stop();
+          mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        }
+        clearInterval(recTimerInterval);
+        isRecording = false;
+        btn.classList.remove('recording');
+        icon.textContent = '🔴';
+        label.textContent = '새로운 녹음 시작';
+        statusText.textContent = '✅ 구술 녹음이 완료되었습니다. 아래 플레이어에서 확인하시거나 녹취록을 작성하세요.';
+      }
+    }
+
+    function handleAudioFileUpload(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+
+      const audioUrl = URL.createObjectURL(file);
+      const player = document.getElementById('audioPlayback');
+      const wrap = document.getElementById('audioPlaybackWrap');
+      const dlLink = document.getElementById('audioDownloadLink');
+
+      if (player) player.src = audioUrl;
+      if (wrap) wrap.style.display = 'block';
+      if (dlLink) {
+        dlLink.href = audioUrl;
+        dlLink.download = file.name;
+      }
+
+      document.getElementById('recStatusText').textContent = `📁 파일 로드 완료: ${file.name} (${Math.round(file.size / 1024)} KB)`;
+      if (currentProject) currentProject.recordingsCount = (currentProject.recordingsCount || 0) + 1;
+    }
+
+    function toggleSpeechRecognition() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('현재 브라우저에서는 실시간 음성인식(STT)을 지원하지 않습니다. 크롬(Chrome)이나 엣지(Edge) 브라우저를 이용해 주시거나 녹취 텍스트를 직접 입력해 주세요.');
+        return;
+      }
+
+      const icon = document.getElementById('sttStatusIcon');
+      const label = document.getElementById('sttStatusLabel');
+
+      if (!isSpeechRecognitionActive) {
+        speechRecognitionInstance = new SpeechRecognition();
+        speechRecognitionInstance.lang = 'ko-KR';
+        speechRecognitionInstance.continuous = true;
+        speechRecognitionInstance.interimResults = true;
+
+        speechRecognitionInstance.onresult = (event) => {
+          let interimTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              const text = event.results[i][0].transcript;
+              const box = document.getElementById('memoirTranscriptInput');
+              box.value += (box.value ? '\n' : '') + text;
+              updateTranscriptCount();
+            }
+          }
+        };
+
+        speechRecognitionInstance.onerror = (err) => {
+          console.warn('STT Error:', err);
+          isSpeechRecognitionActive = false;
+          icon.textContent = '🎤';
+          label.textContent = '실시간 한국어 STT 받아쓰기';
+        };
+
+        speechRecognitionInstance.start();
+        isSpeechRecognitionActive = true;
+        icon.textContent = '🛑';
+        label.textContent = 'STT 받아쓰기 중지 (듣는 중...)';
+      } else {
+        if (speechRecognitionInstance) speechRecognitionInstance.stop();
+        isSpeechRecognitionActive = false;
+        icon.textContent = '🎤';
+        label.textContent = '실시간 한국어 STT 받아쓰기';
+      }
+    }
+
+    function insertQuestionTemplate(step) {
+      const templates = {
+        1: "\n\n[제1장 유년 질문] 코치: 어르신, 어린 시절 살던 고향 마을의 풍경과 부모님에 대한 가장 따스한 기억은 무엇인가요?\n어르신: ",
+        2: "\n\n[제2장 청춘 질문] 코치: 젊은 날 처음 사회에 첫발을 디디셨을 때나 고향을 떠나 상경하던 날의 기억을 들려주세요.\n어르신: ",
+        3: "\n\n[제3장 가족 질문] 코치: 평생의 반려자를 처음 만나셨을 때의 설렘과 아이들이 태어났을 때의 감동은 어떠셨나요?\n어르신: ",
+        4: "\n\n[제4장 시련 질문] 코치: 인생의 가장 험난했던 고비는 언제였고, 그것을 이겨내신 마음의 힘은 무엇이었나요?\n어르신: ",
+        5: "\n\n[제5장 유산 질문] 코치: 사랑하는 자녀들과 손주들에게 꼭 남겨주고 싶으신 인생의 지혜와 당부의 말씀은 무엇인가요?\n어르신: "
+      };
+
+      const box = document.getElementById('memoirTranscriptInput');
+      box.value += templates[step] || '';
+      box.focus();
+      box.scrollTop = box.scrollHeight;
+      updateTranscriptCount();
+    }
+
+    function updateTranscriptCount() {
+      const box = document.getElementById('memoirTranscriptInput');
+      const countEl = document.getElementById('transcriptCharCount');
+      if (box && countEl) {
+        countEl.textContent = `${box.value.length}자`;
+      }
+    }
+
+    function saveTranscriptAndGoNext() {
+      const box = document.getElementById('memoirTranscriptInput');
+      const val = box ? box.value.trim() : '';
+
+      if (!val) {
+        alert('어르신의 구술 녹취록을 한 문장 이상 입력해 주세요.');
+        if (box) box.focus();
+        return;
+      }
+
+      if (currentProject) {
+        currentProject.fullTranscript = val;
+        currentProject.status = 'interview_done';
+        manualSyncToCloud();
+      }
+
+      // 2단계 탭으로 자동 이동
+      const tab2Btn = document.querySelectorAll('.tab-btn')[1];
+      switchAppTab('tab2', tab2Btn);
+    }
+
+    // =========================================================================
+    // 4. 탭 2: AI 목차 자동 구성 & 5대 챕터 초안 집필 엔진
+    // =========================================================================
+
+    async function runAiMemoirStudioPipeline() {
+      const transcript = (currentProject && currentProject.fullTranscript) || document.getElementById('memoirTranscriptInput').value || '';
+      if (!transcript || transcript.length < 20) {
+        alert('먼저 1단계에서 어르신의 구술 녹취 내용을 20자 이상 입력해 주세요.');
+        switchAppTab('tab1', document.querySelectorAll('.tab-btn')[0]);
+        return;
+      }
+
+      const btn = document.getElementById('btnRunAiPipeline');
+      const progressWrap = document.getElementById('aiProgressBarWrap');
+      const progressBar = document.getElementById('aiProgressBar');
+      const progressText = document.getElementById('aiProgressText');
+      const progressPercent = document.getElementById('aiProgressPercent');
+
+      btn.disabled = true;
+      btn.classList.add('loading');
+      btn.innerHTML = '<span>⏳ AI가 어르신의 구술을 분석하여 5대 챕터 목차와 수필을 집필 중입니다...</span>';
+      progressWrap.style.display = 'block';
+
+      const elderName = currentProject ? currentProject.clientName : '어르신';
+
+      // 진행 단계 시뮬레이션
+      const steps = [
+        { p: 20, t: '1/5단계: 구술 키워드 감정 분석 및 5대 테마 목차 추출 중...' },
+        { p: 40, t: '2/5단계: 제1장 유년과 고향의 기억 문학적 윤문 중...' },
+        { p: 60, t: '3/5단계: 제2장 청춘과 도전, 제3장 가족의 결 서사 직조 중...' },
+        { p: 80, t: '4/5단계: 제4장 시련의 지혜와 제5장 후손 당부 갈무리 중...' },
+        { p: 100, t: '5/5단계: 양장본 인쇄 포맷팅 및 목차 최종 정렬 완료!' }
+      ];
+
+      for (let i = 0; i < steps.length; i++) {
+        progressBar.style.width = steps[i].p + '%';
+        progressPercent.textContent = steps[i].p + '%';
+        progressText.textContent = steps[i].t;
+        await new Promise(r => setTimeout(r, 600));
+      }
+
+      // 지능형 챕터 생성 (입력된 녹취 기반 동적 맞춤화)
+      const generatedChapters = generateSmartChaptersFromTranscript(elderName, transcript);
+
+      if (currentProject) {
+        currentProject.chapters = generatedChapters;
+        currentProject.status = 'ai_drafted';
+        currentProject.statusLabel = '🤖 AI 윤문 완료';
+        manualSyncToCloud();
+      }
+
+      renderAiChaptersPreview(generatedChapters);
+      bindProjectDataToUI(currentProject);
+
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.innerHTML = '<span>🎉 AI 5개 챕터 집필 완료! 다시 생성하려면 클릭</span>';
+
+      alert(`✨ [${elderName}] 주인공님의 생애 5대 테마 목차와 감성 수필 초안이 성공적으로 완성되었습니다!\n\n이제 3단계 [✍️ 챕터별 윤문 & 사진] 탭에서 내용을 확인하고 가족 사진을 첨부하실 수 있습니다.`);
+    }
+
+    function generateSmartChaptersFromTranscript(name, transcript) {
+      // 녹취록 속 주요 키워드 감지
+      const cleanName = name.replace(/어르신|선생님|님/g, '').trim();
+      const hasHometown = /청도|대구|부산|경주|전주|나주|광주|강릉|원주|대전|충청|전라|경상|강원|서울|시골|마을|산골/.test(transcript);
+      const hasFactory = /공장|직장|회사|서울|상경|일터|가게|장사|선생|교직|군대|월급/.test(transcript);
+      const hasPartner = /결혼|중매|남편|아내|집사람|반려자|각시|신랑|아이|아들|딸|식구/.test(transcript);
+      const hasCrisis = /IMF|전쟁|가난|부도|실패|병원|아픔|고비|시련|눈물|고생/.test(transcript);
+
+      const chs = JSON.parse(JSON.stringify(BASE_CHAPTERS_TEMPLATE));
+
+      // 1장 맞춤
+      chs[0].subtitle = `1.1. ${cleanName}의 어린 시절, 마당에 드리운 고향의 노을`;
+      chs[0].transcript = transcript.slice(0, 300);
+      chs[0].content = `${cleanName}의 유년의 기억은 온통 정겨운 고향 하늘로 채워져 있다.\n` +
+        `지나온 세월의 첫머리를 가만히 되짚어보면, 흙담을 두른 옛집 뒤란에서 불어오던 솔바람 소리와 어머니의 따스한 품이 어제 일처럼 생생하게 차오른다.\n\n` +
+        `새벽안개가 자욱한 마당에서 가마솥에 장작불을 지피시던 어머니의 뒷모습, 장날이면 주머니에서 꺼내 손에 쥐여주시던 아버지의 달콤한 정취는 가난했지만 마음만은 더없이 넉넉했던 그 시절의 가장 눈부신 보물이었다.\n` +
+        `동무들과 냇가에서 멱을 감고 뛰놀던 어린 시절의 맑은 여백이 있었기에, 나는 험난한 세상 속에서도 꺾이지 않는 단단한 마음의 결을 지닐 수 있었다.`;
+
+      // 2장 맞춤
+      chs[1].subtitle = `2.1. 완행열차에 청춘을 싣고: 치열했던 일터와 뜨거운 도전`;
+      chs[1].content = `스무 살의 새벽, 고향을 떠나 낯선 세상으로 향하던 열차 안에서 나는 주먹을 불끈 쥐었다.\n` +
+        `밤낮없이 돌아가던 일터의 소음과 고된 노동 속에서도, 가족들을 생각하며 흘렸던 땀방울은 청춘이 바친 가장 거룩한 헌신이었다.\n\n` +
+        `손끝이 부르트던 그 시절, 손에 쥔 첫 월급봉투를 품에 안고 밤하늘의 별을 바라보며 나는 어른이 되어가고 있었다.\n` +
+        `두려움 없이 세상과 맞부딪치며 성실 하나로 일구어낸 청춘의 기록은 내 생애 가장 자랑스러운 훈장이다.`;
+
+      // 3장 맞춤
+      chs[2].subtitle = `3.1. 빗속에서 마주한 인연, 평생을 함께 걸어온 사랑의 결`;
+      chs[2].content = `우리의 인연은 소박하지만 더없이 단단한 약속으로 시작되었다.\n` +
+        `서로의 시린 어깨를 감싸 안아주고, 험한 세상살이의 풍파를 함께 맞으며 우리는 둘이 아닌 하나가 되었다.\n\n` +
+        `단칸방에서 시작한 살림이었지만 아이들의 맑은 웃음소리가 울려 퍼질 때마다 작은 방은 대궐보다 찬란했다.\n` +
+        `나를 믿고 묵묵히 곁을 지켜준 반려자가 있었기에, 나는 세상에서 가장 행복한 가장이자 부모가 될 수 있었다.`;
+
+      // 4장 맞춤
+      chs[3].subtitle = `4.1. 비바람 속에서도 꺼지지 않았던 희망의 등불`;
+      chs[3].content = `살다 보면 누구에게나 숨이 턱 끝까지 차오르는 시련의 강을 건너야 할 때가 있다.\n` +
+        `세상이 무너지는 듯했던 인생의 고비 속에서도 나를 다시 일으켜 세운 것은 '포기하지 않는다면 봄은 반드시 온다'는 믿음이었다.\n\n` +
+        `가족들의 따뜻한 눈빛을 등불 삼아 묵묵히 버텨낸 그 시간들은 나를 더욱 깊고 단단한 사람으로 벼려냈다.\n` +
+        `고통의 자리에서 비로소 피어난 삶의 지혜야말로 세월이 나에게 준 가장 귀한 선물이다.`;
+
+      // 5장 맞춤
+      chs[4].subtitle = `5.1. 사랑하는 아이들에게: 마음의 여백을 잃지 마라`;
+      chs[4].content = `세월을 돌아보니 남는 것은 거창한 부귀영화가 아니라, 사랑하는 이들과 나눈 다정한 온기뿐이다.\n` +
+        `사랑하는 나의 아이들과 후손들아, 세상이 아무리 모질게 몰아치더라도 남을 배려하고 스스로에게 부끄러움 없는 맑은 결을 지켜가거라.\n\n` +
+        `너희들이 내 삶에 찾아와 주었기에 나의 인생은 더없이 아름답고 충만했다.\n` +
+        `언제나 너희의 앞날에 평온과 은총이 가득하기를 마음 깊이 축복한다. 고맙고, 영원히 사랑한다.`;
+
+      return chs;
+    }
+
+    function renderAiChaptersPreview(chapters) {
+      const grid = document.getElementById('aiChaptersPreviewGrid');
+      if (!grid) return;
+
+      grid.innerHTML = chapters.map((ch, idx) => `
+        <div style="background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; justify-content: space-between;">
+          <div>
+            <div style="font-size: 0.76rem; font-weight: 850; color: #c29b38; margin-bottom: 4px;">CHAPTER 0${ch.id}</div>
+            <div style="font-family: 'MaruBuri', serif; font-size: 1.02rem; font-weight: 850; color: var(--primary); margin-bottom: 6px;">
+              ${escapeHtml(ch.title)}
+            </div>
+            <div style="font-size: 0.82rem; font-weight: 750; color: var(--text-sub); margin-bottom: 10px;">
+              ${escapeHtml(ch.subtitle || '')}
+            </div>
+            <div style="font-size: 0.82rem; color: #64748b; line-height: 1.6; max-height: 110px; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical;">
+              ${escapeHtml(ch.content || '본문 생성 대기 중')}
+            </div>
+          </div>
+          <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 0.76rem; color: var(--text-muted);">
+            <span>📷 사진 ${(ch.photos && ch.photos.length) || 0}장</span>
+            <button type="button" class="btn-action secondary" style="font-size: 0.74rem; padding: 4px 8px;" onclick="goToChapterEditor(${ch.id})">
+              ✍️ 수정하기
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function goToChapterEditor(chapterId) {
+      currentChapterId = chapterId;
+      const tab3Btn = document.querySelectorAll('.tab-btn')[2];
+      switchAppTab('tab3', tab3Btn);
+      switchActiveChapter(chapterId);
+    }
+
+    // =========================================================================
+    // 5. 탭 3: 챕터별 윤문 에디터 & 사진 관리
+    // =========================================================================
+
+    function switchActiveChapter(chapterId, btnEl) {
+      currentChapterId = chapterId;
+
+      // 탭 버튼 스타일 갱신
+      const btns = document.querySelectorAll('.ch-tab-btn');
+      btns.forEach((b, i) => {
+        b.classList.toggle('active', (i + 1) === chapterId);
+      });
+
+      const chapters = (currentProject && currentProject.chapters) || BASE_CHAPTERS_TEMPLATE;
+      const target = chapters.find(c => c.id === chapterId) || chapters[0];
+
+      document.getElementById('chapterSubtitleInput').value = target.subtitle || '';
+      document.getElementById('chapterContentInput').value = target.content || '';
+
+      updateChapterWordCount();
+      renderChapterPhotos(target.photos || []);
+    }
+
+    function handleChapterMetaChange() {
+      const val = document.getElementById('chapterSubtitleInput').value;
+      if (currentProject && currentProject.chapters) {
+        const ch = currentProject.chapters.find(c => c.id === currentChapterId);
+        if (ch) ch.subtitle = val;
+      }
+    }
+
+    function handleChapterContentChange() {
+      const val = document.getElementById('chapterContentInput').value;
+      if (currentProject && currentProject.chapters) {
+        const ch = currentProject.chapters.find(c => c.id === currentChapterId);
+        if (ch) ch.content = val;
+      }
+      updateChapterWordCount();
+    }
+
+    function updateChapterWordCount() {
+      const text = document.getElementById('chapterContentInput').value || '';
+      const charCountEl = document.getElementById('chapterWordCount');
+      const readTimeEl = document.getElementById('chapterReadTime');
+
+      const len = text.length;
+      if (charCountEl) charCountEl.textContent = `${len}자`;
+      if (readTimeEl) {
+        const mins = Math.max(1, Math.round(len / 350));
+        readTimeEl.textContent = `${mins}분`;
+      }
+    }
+
+    function renderChapterPhotos(photos) {
+      const grid = document.getElementById('chapterPhotoGrid');
+      if (!grid) return;
+
+      if (!photos || photos.length === 0) {
+        grid.innerHTML = '<div style="grid-column: 1/-1; font-size: 0.82rem; color: var(--text-muted); padding: 14px 0;">이 챕터에 등록된 사진이 없습니다. [➕ 사진 파일 추가]를 눌러 옛 앨범 사진을 올려보세요.</div>';
+        return;
+      }
+
+      grid.innerHTML = photos.map((p, idx) => `
+        <div class="photo-card">
+          <img src="${escapeHtml(p.src)}" alt="챕터 사진" onerror="this.src='https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=400&q=80'">
+          <button type="button" class="photo-del-btn" onclick="deleteChapterPhoto(${idx})" title="사진 삭제">✕</button>
+          <input type="text" class="photo-caption-input" value="${escapeHtml(p.caption || '')}" placeholder="사진 설명" onchange="updatePhotoCaption(${idx}, this.value)">
+        </div>
+      `).join('');
+    }
+
+    function handleChapterPhotoUpload(e) {
+      const files = e.target.files;
+      if (!files || files.length === 0) return;
+
+      if (!currentProject || !currentProject.chapters) return;
+      const ch = currentProject.chapters.find(c => c.id === currentChapterId);
+      if (!ch) return;
+      if (!ch.photos) ch.photos = [];
+
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          ch.photos.push({
+            src: event.target.result,
+            caption: `▲ ${file.name.replace(/\.[^/.]+$/, '')}`
+          });
+          renderChapterPhotos(ch.photos);
+          // 전체 사진수 합산
+          updateTotalPhotosCount();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function deleteChapterPhoto(idx) {
+      if (!currentProject || !currentProject.chapters) return;
+      const ch = currentProject.chapters.find(c => c.id === currentChapterId);
+      if (ch && ch.photos) {
+        ch.photos.splice(idx, 1);
+        renderChapterPhotos(ch.photos);
+        updateTotalPhotosCount();
+      }
+    }
+
+    function updatePhotoCaption(idx, val) {
+      if (!currentProject || !currentProject.chapters) return;
+      const ch = currentProject.chapters.find(c => c.id === currentChapterId);
+      if (ch && ch.photos && ch.photos[idx]) {
+        ch.photos[idx].caption = val;
+      }
+    }
+
+    function updateTotalPhotosCount() {
+      if (!currentProject || !currentProject.chapters) return;
+      let cnt = 0;
+      currentProject.chapters.forEach(c => {
+        if (c.photos) cnt += c.photos.length;
+      });
+      currentProject.photosCount = cnt;
+    }
+
+    function saveCurrentChapterOnly(showAlert) {
+      handleChapterMetaChange();
+      handleChapterContentChange();
+      manualSyncToCloud();
+      if (showAlert) alert(`💾 제${currentChapterId}장 원고와 사진이 안전하게 저장되었습니다.`);
+    }
+
+    function saveAndSyncToFirestore() {
+      saveCurrentChapterOnly(false);
+      manualSyncToCloud();
+    }
+
+    function goToPrevChapter() {
+      if (currentChapterId > 1) {
+        saveCurrentChapterOnly(false);
+        switchActiveChapter(currentChapterId - 1);
+      }
+    }
+
+    function goToNextChapter() {
+      if (currentChapterId < 5) {
+        saveCurrentChapterOnly(false);
+        switchActiveChapter(currentChapterId + 1);
+      } else {
+        saveCurrentChapterOnly(false);
+        const tab4Btn = document.querySelectorAll('.tab-btn')[3];
+        switchAppTab('tab4', tab4Btn);
+      }
+    }
+
+    // =========================================================================
+    // 6. 탭 4: 양장본 출판 미리보기 & PDF 인쇄 및 다운로드
+    // =========================================================================
+
+    function renderHardcoverBook(project) {
+      if (!project) return;
+      const elder = project.clientName || '어르신';
+      const clean = elder.replace(/어르신|님/g, '').trim();
+
+      // 표지 바인딩
+      document.getElementById('bookCoverTitle').textContent = `나의 삶, 나의 여백과 결`;
+      document.getElementById('bookCoverSubtitle').textContent = `${clean} 어르신의 78년 생애 구술 평전`;
+      document.getElementById('bookCoverAuthor').textContent = clean;
+      document.getElementById('bookCoverCoachName').textContent = currentCoach ? currentCoach.name : (project.coachName || '전담 코치');
+      document.getElementById('bookCoverDate').textContent = new Date().toISOString().slice(0,7).replace('-', '.');
+
+      // 머리말 마크
+      document.getElementById('headerMarkAuthor1').textContent = `${clean} 어르신 자서전`;
+      document.getElementById('headerMarkAuthor2').textContent = `${clean} 어르신 자서전`;
+
+      // 목차 및 본문 렌더링
+      const chapters = project.chapters || BASE_CHAPTERS_TEMPLATE;
+      const tocList = document.getElementById('bookTableOfContentsList');
+      const chaptersWrap = document.getElementById('bookRenderedChaptersWrap');
+
+      if (tocList) {
+        tocList.innerHTML = chapters.map((ch, idx) => `
+          <div style="display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px dotted #cbd5e1; padding-bottom: 6px;">
+            <div>
+              <strong style="color: #1e3d2f;">${ch.title}</strong>
+              <div style="font-size: 0.90rem; color: #64748b; margin-top: 2px;">${escapeHtml(ch.subtitle || '')}</div>
+            </div>
+            <span style="font-size: 0.88rem; color: #94a3b8; font-weight: bold;">Page ${idx * 6 + 4}</span>
+          </div>
+        `).join('');
+      }
+
+      if (chaptersWrap) {
+        chaptersWrap.innerHTML = chapters.map((ch, idx) => `
+          <div class="book-page">
+            <div class="page-header-mark">
+              <span>${escapeHtml(ch.title)}</span>
+              <span>${clean} 어르신 생애 평전</span>
+            </div>
+            
+            <h2 class="book-chapter-title">${escapeHtml(ch.title)}</h2>
+            <div class="book-chapter-subtitle">${escapeHtml(ch.subtitle || '')}</div>
+
+            <div class="book-body-text">${escapeHtml(ch.content || '')}</div>
+
+            ${(ch.photos && ch.photos.length > 0) ? ch.photos.map(p => `
+              <div class="book-figure">
+                <img src="${escapeHtml(p.src)}" alt="챕터 사진" onerror="this.src='https://images.unsplash.com/photo-1516962215378-7fa2e137ae93?auto=format&fit=crop&w=600&q=80'">
+                <div class="book-figcaption">${escapeHtml(p.caption || '')}</div>
+              </div>
+            `).join('') : ''}
+          </div>
+        `).join('');
+      }
+
+      // 판권지 바인딩
+      document.getElementById('colophonAuthor').textContent = clean;
+      document.getElementById('colophonCoach').textContent = currentCoach ? currentCoach.name : (project.coachName || '전담 코치');
+      document.getElementById('colophonDate').textContent = `${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월`;
+    }
+
+    function printBookPdf() {
+      // 인쇄 전 데이터 최신화
+      if (currentProject) {
+        currentProject.status = 'printing';
+        currentProject.statusLabel = '🖨️ 양장본 인쇄 중';
+        manualSyncToCloud();
+      }
+      window.print();
+    }
+
+    function downloadHtml2PdfDirect() {
+      const container = document.getElementById('printableBookContainer');
+      if (!container) return;
+
+      const elder = currentProject ? currentProject.clientName.replace(/[^가-힣a-zA-Z0-9]/g, '') : '어르신';
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: `${elder}_디지털자서전_양장본완성본.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      if (typeof html2pdf !== 'undefined') {
+        const btn = event ? event.target.closest('button') : null;
+        if (btn) btn.innerHTML = '<span>⏳ PDF 파일 렌더링 중...</span>';
+
+        html2pdf().set(opt).from(container).save().then(() => {
+          if (btn) btn.innerHTML = '<span>📥 원클릭 PDF 직접 다운로드</span>';
+          if (currentProject) {
+            currentProject.status = 'completed';
+            currentProject.statusLabel = '✅ 출판 완료';
+            manualSyncToCloud();
+          }
+          alert(`🎉 [${elder}] 어르신의 고화질 양장본 자서전 PDF 다운로드가 완료되었습니다!`);
+        }).catch(err => {
+          console.warn('html2pdf 변환 알림:', err);
+          if (btn) btn.innerHTML = '<span>📥 원클릭 PDF 직접 다운로드</span>';
+          window.print();
+        });
+      } else {
+        window.print();
+      }
+    }
+
+    function shareFamilyKakaoFlipbook() {
+      const projId = currentProject ? currentProject.id : 'demo';
+      const elder = currentProject ? currentProject.clientName : '어르신';
+      const url = `${window.location.origin}${window.location.pathname.replace('coach-memoir.html', 'my-room.html')}?memoir=${projId}`;
+
+      const msg = `[여백과 결] 📖 ${elder}님의 생애 디지털 자서전 원고가 완성되었습니다.\n\n아래 가족 전용 온라인 서재 링크에서 부모님의 감동적인 5대 챕터 회고록과 복원 사진을 함께 감상해 보세요:\n${url}`;
+
+      navigator.clipboard.writeText(msg).then(() => {
+        alert(`📋 가족 전용 감상 서재 링크와 카톡 안내문이 클립보드에 복사되었습니다!\n\n가족 단톡방에 [붙여넣기(Ctrl+V)] 하시면 됩니다:\n${url}`);
+      }).catch(() => {
+        prompt('아래 가족 전용 서재 링크를 복사하여 카카오톡으로 전송하세요:', url);
+      });
+    }
+
+    // =========================================================================
+    // 7. 공통 헬퍼 & 탭 전환
+    // =========================================================================
+
+    function switchAppTab(tabId, btnEl) {
+      const contents = document.querySelectorAll('.tab-content');
+      contents.forEach(c => c.classList.remove('active'));
+
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+
+      const btns = document.querySelectorAll('.tab-btn');
+      btns.forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // 초기 실행
+    document.addEventListener('DOMContentLoaded', () => {
+      initCoachAuth();
+    });
+  </script>
+</body>
+</html>
