@@ -1738,9 +1738,24 @@
 
         speechRecognitionInstance.onerror = (err) => {
           console.warn('STT Error:', err);
+          // no-speech 등 경미한 에러는 자동 재시작으로 복구
+          if (err.error === 'no-speech' && isSpeechRecognitionActive) {
+            return;
+          }
           isSpeechRecognitionActive = false;
           icon.textContent = '🎤';
           label.textContent = '실시간 한국어 STT 받아쓰기';
+        };
+
+        speechRecognitionInstance.onend = () => {
+          // 브라우저의 침묵 타임아웃에 의한 자동 종료 시, 코치가 명시적으로 중지하지 않았다면 즉시 재시작하여 무제한 녹취 보장
+          if (isSpeechRecognitionActive) {
+            try {
+              speechRecognitionInstance.start();
+            } catch(e) {
+              // 이미 시작되었거나 전환 중일 경우 무시
+            }
+          }
         };
 
         speechRecognitionInstance.start();
