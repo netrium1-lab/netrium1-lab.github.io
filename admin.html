@@ -2712,50 +2712,98 @@
 
             <!-- ================= 탭 4: 🌟 03. 4대 비즈니스 통합 관제센터 & CRM ================= -->
       <section class="tab-panel" id="tabBusinessMaster">
-        <!-- 4대 비즈니스 헤더 배너 -->
-        <div class="panel-card" style="margin-bottom: 14px; background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%); border-left: 4px solid #d1516e; padding: 18px 22px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 1.8rem;">🌟</span>
+        <!-- 🌟 03. 4대 오프라인 라이프케어 비즈니스 관제 허브 -->
+        <div class="panel-card" style="margin-bottom: 20px; border-top: 4px solid #b83354;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" style="font-size: 1.8rem;">🌟</span>
               <div>
-                <h2 style="font-size: 1.25rem; font-weight: 850; color: #b83354; margin: 0;">03. 4대 오프라인 라이프케어 비즈니스 관제</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 2px 0 0;">
-                  #01 뷰티케어(180분), #02 옷장비움, #03 유품정리, #04 생전 엔딩파티 현장 방문 서비스 전용 관제
+                <h2 class="panel-title" style="margin: 0; font-size: 1.25rem; color: #b83354;">03. 4대 오프라인 라이프케어 비즈니스 관제</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                  #01 뷰티케어(180분), #02 공간비움, #03 유품정리, #04 생전 엔딩파티 현장 방문 서비스 전용 관제 허브입니다.
                 </p>
               </div>
             </div>
-            <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: rgba(194, 155, 56, 0.12); color: #936f1c; border: 1.5px solid #c29b38; font-weight: 850; padding: 8px 14px; cursor: pointer;">
-              <span>📖 04. 자서전 출판 관제 바로가기 ➔</span>
-            </button>
+            <!-- 유연한 빠른 선택 드롭다운 (프로그램 추가·수정 시 무한 확장 지원) -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <label for="bizProgramSelector" style="font-size: 0.85rem; font-weight: 850; color: var(--text-main);">비즈니스 선택:</label>
+              <select id="bizProgramSelector" onchange="switchBusinessMasterTab(this.value)" class="setting-input" style="padding: 7px 14px; font-weight: 850; width: auto; font-size: 0.88rem; border: 1.5px solid #b83354; border-radius: 10px; cursor: pointer;">
+                <option value="beauty">💄 #01 뷰티 라이프케어 (180분 SOP)</option>
+                <option value="wardrobe">👗 #02 옷장 &amp; 공간 비움</option>
+                <option value="legacy">📦 #03 유품 &amp; 짐 아카이빙</option>
+                <option value="party">💌 #04 생전 엔딩 파티</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- 4대 비즈니스 대시보드 카드 그리드 (반응형 4열, 비즈니스 추가 시 자동 줄바꿈) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-top: 16px;">
+            <!-- 카드 1: 뷰티 라이프케어 -->
+            <div class="biz-hub-card active" id="bizCard_beauty" onclick="switchBusinessMasterTab('beauty')" style="cursor: pointer; padding: 18px; border-radius: 14px; border: 2.2px solid #b83354; background: #fff0f3; transition: all 0.2s ease;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.6rem;">💄</span>
+                <span class="badge" style="background: #b83354; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">180분 SOP</span>
+              </div>
+              <div style="font-size: 1.05rem; font-weight: 850; color: #b83354; margin-top: 10px;">#01 뷰티 라이프케어</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">수분·탄력 회복 &amp; 특별한 날 외출 케어</div>
+              <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed rgba(184,51,84,0.3); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.76rem; color: var(--text-muted);">관제 상태</span>
+                <span class="biz-card-status-text" style="font-size: 0.84rem; font-weight: 850; color: #b83354;">현재 관제 중 ✓</span>
+              </div>
+            </div>
+
+            <!-- 카드 2: 옷장 & 공간 비움 -->
+            <div class="biz-hub-card" id="bizCard_wardrobe" onclick="switchBusinessMasterTab('wardrobe')" style="cursor: pointer; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-color); background: var(--bg-card); transition: all 0.2s ease;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.6rem;">👗</span>
+                <span class="badge" style="background: #2b7a4b; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">공간 리셋</span>
+              </div>
+              <div style="font-size: 1.05rem; font-weight: 850; color: var(--text-main); margin-top: 10px;">#02 옷장 &amp; 공간 비움</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">일상복과 외출복 구분 &amp; 동선 수납 컨설팅</div>
+              <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.76rem; color: var(--text-muted);">관제 상태</span>
+                <span class="biz-card-status-text" style="font-size: 0.84rem; font-weight: 850; color: #2b7a4b;">전환하기 ➔</span>
+              </div>
+            </div>
+
+            <!-- 카드 3: 유품 & 짐 아카이빙 -->
+            <div class="biz-hub-card" id="bizCard_legacy" onclick="switchBusinessMasterTab('legacy')" style="cursor: pointer; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-color); background: var(--bg-card); transition: all 0.2s ease;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.6rem;">📦</span>
+                <span class="badge" style="background: #9a6528; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">유품 아카이빙</span>
+              </div>
+              <div style="font-size: 1.05rem; font-weight: 850; color: var(--text-main); margin-top: 10px;">#03 유품 &amp; 짐 아카이빙</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">기억의 계승 &amp; 오래된 짐 비움·유품 정돈</div>
+              <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.76rem; color: var(--text-muted);">관제 상태</span>
+                <span class="biz-card-status-text" style="font-size: 0.84rem; font-weight: 850; color: #9a6528;">전환하기 ➔</span>
+              </div>
+            </div>
+
+            <!-- 카드 4: 생전 엔딩 파티 -->
+            <div class="biz-hub-card" id="bizCard_party" onclick="switchBusinessMasterTab('party')" style="cursor: pointer; padding: 18px; border-radius: 14px; border: 1.5px solid var(--border-color); background: var(--bg-card); transition: all 0.2s ease;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 1.6rem;">💌</span>
+                <span class="badge" style="background: #7a3594; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">생전 장례</span>
+              </div>
+              <div style="font-size: 1.05rem; font-weight: 850; color: var(--text-main); margin-top: 10px;">#04 생전 엔딩 파티</div>
+              <div style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">고마운 분들을 초대하는 아름다운 인생 감사 축제</div>
+              <div style="margin-top: 14px; padding-top: 10px; border-top: 1px dashed var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.76rem; color: var(--text-muted);">관제 상태</span>
+                <span class="biz-card-status-text" style="font-size: 0.84rem; font-weight: 850; color: #7a3594;">전환하기 ➔</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 하위 호환성을 위한 히든 버튼 앵커 -->
+          <div style="display: none;">
+            <button id="bizTabBtn_beauty"></button>
+            <button id="bizTabBtn_wardrobe"></button>
+            <button id="bizTabBtn_legacy"></button>
+            <button id="bizTabBtn_party"></button>
+            <button id="bizTabBtn_memoir"></button>
           </div>
         </div>
-
-        <!-- 1. 4대 비즈니스 카테고리 셀렉터 탭 바 -->
-        <div class="biz-master-tabs">
-          <button type="button" class="biz-tab-btn active" id="bizTabBtn_beauty" onclick="switchBusinessMasterTab('beauty')">
-            <span class="biz-tab-icon">💄</span>
-            <span>#01 뷰티 라이프케어</span>
-            <span class="badge" style="background:#b83354; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:999px;">180분</span>
-          </button>
-          <button type="button" class="biz-tab-btn" id="bizTabBtn_wardrobe" onclick="switchBusinessMasterTab('wardrobe')">
-            <span class="biz-tab-icon">👗</span>
-            <span>#02 옷장 & 공간 비움</span>
-          </button>
-          <button type="button" class="biz-tab-btn" id="bizTabBtn_legacy" onclick="switchBusinessMasterTab('legacy')">
-            <span class="biz-tab-icon">📦</span>
-            <span>#03 유품 & 짐 아카이빙</span>
-          </button>
-          <button type="button" class="biz-tab-btn" id="bizTabBtn_party" onclick="switchBusinessMasterTab('party')">
-            <span class="biz-tab-icon">💌</span>
-            <span>#04 생전 엔딩 파티</span>
-          </button>
-          <button type="button" class="biz-tab-btn" id="bizTabBtn_memoir" onclick="switchTab('tabMemoirDashboard')" style="background: rgba(194, 155, 56, 0.12); color: #936f1c; border: 1.5px solid #c29b38; font-weight: 850;">
-            <span class="biz-tab-icon">📖</span>
-            <span>#05 디지털 자서전 출판 대시보드 ➔</span>
-            <span class="badge" style="background:#c29b38; color:#fff; font-size:0.7rem; padding:2px 6px; border-radius:999px;">전용관제</span>
-          </button>
-        </div>
-
         <!-- 2. 상단 비즈니스 메타 헤더 & 4대 파이프라인 KPI 카드 -->
         <div class="panel-card" style="margin-top: 14px; border-top: 4px solid #d1516e;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
@@ -2978,23 +3026,6 @@
         </div>
 
         <!-- 5. 5호 디지털 자서전 전용 배너 및 완성 도서 PDF 관리 카드 (자서전 탭 활성 시 표시) -->
-        <!-- 📖 디지털 자서전 출판 관제 분리 안내 카드 -->
-        <div class="panel-card" style="margin-top: 24px; background: #fdfbf7; border: 1.5px solid #e7d8b5;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 1.8rem;">📖</span>
-              <div>
-                <div style="font-weight: 850; font-size: 0.98rem; color: #936f1c;">디지털 자서전 출판 &amp; AI 윤문 스튜디오 독립 관제</div>
-                <div style="color: #785714; font-size: 0.86rem; margin-top: 2px;">
-                  생애 구술 채록 인터뷰 녹취, AI 5단계 감성 윤문, 양장본 조판 및 완간 도서 PDF 관리는 <strong>[04. 자서전 출판 관제]</strong> 전용 스튜디오에서 독립적으로 관리됩니다.
-                </div>
-              </div>
-            </div>
-            <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: #c29b38; color: #ffffff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(194,155,56,0.3); padding: 8px 16px; cursor: pointer;">
-              <span>자서전 출판 전용 스튜디오 열기 ➔</span>
-            </button>
-          </div>
-        </div>
         <!-- 맞춤 진단 고객 접수 안내 배너 -->
         <div class="panel-card" style="margin-top: 24px; background: #f0fdf4; border: 1.5px solid #bbf7d0;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
@@ -15713,30 +15744,66 @@ ${coachAppUrl}
     }
 
     // 🌟 03. 4대 비즈니스 카테고리 전환 함수
-    function switchBusinessMasterTab(bizCategory) {
+        function switchBusinessMasterTab(bizCategory) {
       if (bizCategory === 'memoir') {
         switchTab('tabMemoirDashboard');
         return;
       }
-      currentBusinessTab = bizCategory;
-      var tabs = ['beauty', 'wardrobe', 'legacy', 'party', 'memoir'];
-      tabs.forEach(function(t) {
-        var btn = document.getElementById('bizTabBtn_' + t);
-        if (btn) btn.classList.toggle('active', t === bizCategory);
+      currentBusinessTab = bizCategory || 'beauty';
+
+      // 1. 드롭다운 동기화
+      var sel = document.getElementById('bizProgramSelector');
+      if (sel) sel.value = currentBusinessTab;
+
+      // 2. 비즈니스 대시보드 허브 카드 활성화 상태 업데이트
+      var cards = ['beauty', 'wardrobe', 'legacy', 'party'];
+      cards.forEach(function(c) {
+        var card = document.getElementById('bizCard_' + c);
+        if (card) {
+          if (c === currentBusinessTab) {
+            card.classList.add('active');
+            var theme = (c === 'beauty' ? '#b83354' : (c === 'wardrobe' ? '#2b7a4b' : (c === 'legacy' ? '#9a6528' : '#7a3594')));
+            var bg = (c === 'beauty' ? '#fff0f3' : (c === 'wardrobe' ? '#edf7f1' : (c === 'legacy' ? '#fdf6ed' : '#f9f0fd')));
+            card.style.border = '2.2px solid ' + theme;
+            card.style.background = bg;
+            var titleEl = card.querySelector('div[style*="font-size: 1.05rem"]');
+            if (titleEl) titleEl.style.color = theme;
+            var badgeText = card.querySelector('.biz-card-status-text');
+            if (badgeText) {
+              badgeText.innerText = '현재 관제 중 ✓';
+              badgeText.style.color = theme;
+            }
+          } else {
+            card.classList.remove('active');
+            card.style.border = '1.5px solid var(--border-color)';
+            card.style.background = 'var(--bg-card)';
+            var titleEl = card.querySelector('div[style*="font-size: 1.05rem"]');
+            if (titleEl) titleEl.style.color = 'var(--text-main)';
+            var badgeText = card.querySelector('.biz-card-status-text');
+            if (badgeText) {
+              badgeText.innerText = '전환하기 ➔';
+              badgeText.style.color = 'var(--text-muted)';
+            }
+          }
+        }
+        var btn = document.getElementById('bizTabBtn_' + c);
+        if (btn) btn.classList.toggle('active', c === currentBusinessTab);
       });
 
+      // 3. 뷰티 전용 파이프라인 vs 일반 비즈니스 공용 파이프라인 전환
       var beautyWrap = document.getElementById('beautyPipelineWrap');
       var generalWrap = document.getElementById('generalBusinessWrap');
-      var memoirCard = document.getElementById('bizMemoirBannerCard');
-
-      if (bizCategory === 'beauty') {
+      if (currentBusinessTab === 'beauty') {
         if (beautyWrap) beautyWrap.style.display = 'block';
         if (generalWrap) generalWrap.style.display = 'none';
-        if (memoirCard) memoirCard.style.display = 'none';
       } else {
         if (beautyWrap) beautyWrap.style.display = 'none';
         if (generalWrap) generalWrap.style.display = 'block';
-        if (memoirCard) memoirCard.style.display = (bizCategory === 'memoir') ? 'block' : 'none';
+      }
+
+      // 4. 대시보드 렌더링 호출
+      if (typeof renderBusinessMasterDashboard === 'function') {
+        renderBusinessMasterDashboard();
       }
     }
 
