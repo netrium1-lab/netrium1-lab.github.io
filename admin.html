@@ -16775,86 +16775,92 @@ ${coachAppUrl}
   function getMemoirProjects() {
     try {
       var raw = localStorage.getItem('yebaek_memoir_projects');
+      var parsed = [];
       if (raw) {
-        var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
-          var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
-          var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
-          var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
-          var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
-          var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
+        try { parsed = JSON.parse(raw); } catch(err) { parsed = []; }
+      }
+      if (!Array.isArray(parsed) || parsed.length === 0) {
+        parsed = JSON.parse(JSON.stringify(DEFAULT_MEMOIR_PROJECTS));
+        localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
+        return parsed;
+      }
 
-          var changed = false;
+      // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
+      var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
+      var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
+      var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
+      var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
+      var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
 
-          // 데모 프로젝트 필드(consultLog 등) 최신 속성 동기화
-          parsed.forEach(function(item) {
-            var demoMatch = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.id === item.id; });
-            if (demoMatch) {
-              if (demoMatch.consultLog && !item.consultLog) {
-                item.consultLog = demoMatch.consultLog;
-                changed = true;
-              }
-              if (demoMatch.preferredDate && !item.preferredDate) {
-                item.preferredDate = demoMatch.preferredDate;
-                changed = true;
-              }
-            }
-          });
+      var changed = false;
 
-          // 1단계 누락 시 보강
-          if (!hasStage1) {
-            DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
-              if (dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned') {
-                if (!parsed.some(function(p) { return p.id === dp.id; })) {
-                  parsed.unshift(JSON.parse(JSON.stringify(dp)));
-                  changed = true;
-                }
-              }
-            });
+      // 데모 프로젝트 필드(consultLog 등) 최신 속성 동기화
+      parsed.forEach(function(item) {
+        var demoMatch = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.id === item.id; });
+        if (demoMatch) {
+          if (demoMatch.consultLog && !item.consultLog) {
+            item.consultLog = demoMatch.consultLog;
+            changed = true;
           }
-          // 2단계 누락 시 보강
-          if (!hasStage2) {
-            var dp2 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'interview_pending'; });
-            if (dp2 && !parsed.some(function(p) { return p.id === dp2.id; })) {
-              parsed.push(JSON.parse(JSON.stringify(dp2)));
+          if (demoMatch.preferredDate && !item.preferredDate) {
+            item.preferredDate = demoMatch.preferredDate;
+            changed = true;
+          }
+        }
+      });
+
+      // 1단계 누락 시 보강
+      if (!hasStage1) {
+        DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
+          if (dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned') {
+            if (!parsed.some(function(p) { return p.id === dp.id; })) {
+              parsed.unshift(JSON.parse(JSON.stringify(dp)));
               changed = true;
             }
           }
-          // 3단계 누락 시 보강
-          if (!hasStage3) {
-            var dp3 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'coach_reviewed'; });
-            if (dp3 && !parsed.some(function(p) { return p.id === dp3.id; })) {
-              parsed.push(JSON.parse(JSON.stringify(dp3)));
-              changed = true;
-            }
-          }
-          // 4단계 누락 시 보강
-          if (!hasStage4) {
-            var dp4 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'family_approved'; });
-            if (dp4 && !parsed.some(function(p) { return p.id === dp4.id; })) {
-              parsed.push(JSON.parse(JSON.stringify(dp4)));
-              changed = true;
-            }
-          }
-          // 5단계 누락 시 보강
-          if (!hasStage5) {
-            var dp5 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'completed'; });
-            if (dp5 && !parsed.some(function(p) { return p.id === dp5.id; })) {
-              parsed.push(JSON.parse(JSON.stringify(dp5)));
-              changed = true;
-            }
-          }
-
-          if (changed) {
-            localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
-          }
-          return parsed;
+        });
+      }
+      // 2단계 누락 시 보강
+      if (!hasStage2) {
+        var dp2 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'interview_pending'; });
+        if (dp2 && !parsed.some(function(p) { return p.id === dp2.id; })) {
+          parsed.push(JSON.parse(JSON.stringify(dp2)));
+          changed = true;
         }
       }
-    } catch(e) {}
-    localStorage.setItem('yebaek_memoir_projects', JSON.stringify(DEFAULT_MEMOIR_PROJECTS));
-    return DEFAULT_MEMOIR_PROJECTS;
+      // 3단계 누락 시 보강
+      if (!hasStage3) {
+        var dp3 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'coach_reviewed'; });
+        if (dp3 && !parsed.some(function(p) { return p.id === dp3.id; })) {
+          parsed.push(JSON.parse(JSON.stringify(dp3)));
+          changed = true;
+        }
+      }
+      // 4단계 누락 시 보강
+      if (!hasStage4) {
+        var dp4 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'family_approved'; });
+        if (dp4 && !parsed.some(function(p) { return p.id === dp4.id; })) {
+          parsed.push(JSON.parse(JSON.stringify(dp4)));
+          changed = true;
+        }
+      }
+      // 5단계 누락 시 보강
+      if (!hasStage5) {
+        var dp5 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'completed'; });
+        if (dp5 && !parsed.some(function(p) { return p.id === dp5.id; })) {
+          parsed.push(JSON.parse(JSON.stringify(dp5)));
+          changed = true;
+        }
+      }
+
+      if (changed) {
+        localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
+      }
+      return parsed;
+    } catch(e) {
+      console.warn('[Memoir] getMemoirProjects fallback:', e);
+      return DEFAULT_MEMOIR_PROJECTS;
+    }
   }
 
   function saveMemoirProjects(projects) {
@@ -17450,64 +17456,6 @@ ${coachAppUrl}
     openMemoirCoachAssignModal(projectId);
   }
   window.assignCoachFromConsultCard = assignCoachFromConsultCard;
-      // [2단계] 현장 구술 인터뷰 단계
-      else if (p.status === 'interview_pending') {
-        html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인 및 3단계 감성윤문으로 이동">';
-        html += '<span>🎙️</span> 인터뷰 완료';
-        html += '</button>';
-        html += '<a href="coach-memoir.html?project=' + encodeURIComponent(p.id) + '&coach=' + encodeURIComponent(p.coachName || '') + '" target="_blank" class="btn-save-setting" style="background: #f8fafc; color: #334155; border: 1.2px solid #cbd5e1; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="코치 전담 글쓰기 스튜디오 새창 열기">';
-        html += '<span>✍️</span> 글쓰기앱';
-        html += '</a>';
-      } else if (p.status === 'interview_done') {
-        html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
-        html += '<span>✍️</span> AI윤문 &amp; 에디터';
-        html += '</button>';
-      }
-      // [3단계] AI 감성윤문 & 코치 교정 단계
-      else if (p.status === 'ai_drafted' || p.status === 'coach_reviewed') {
-        html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
-        html += '<span>✍️</span> 검수 에디터';
-        html += '</button>';
-        html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족용 디지털 플립북 링크 생성 및 가족 승인 요청">';
-        html += '<span>👨‍👩‍👧</span> 가족 승인요청';
-        html += '</button>';
-      }
-      // [4단계] 가족 승인 단계
-      else if (p.status === 'family_approved') {
-        html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 플립북 링크 복사">';
-        html += '<span>📖</span> 플립북 확인';
-        html += '</button>';
-        html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 최종 확인 완료 후 양장본 인쇄 발주 단계로 진입">';
-        html += '<span>🖨️</span> 인쇄 발주로 넘기기';
-        html += '</button>';
-      }
-      // [5단계] 인쇄 & 출판 완간 단계
-      else if (p.status === 'printing' || p.status === 'completed') {
-        html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="신국판 152×225 양장본 인쇄 조판 미리보기 및 PDF">';
-        html += '<span>🖨️</span> 양장본 인쇄 조판';
-        html += '</button>';
-        if (p.status === 'printing') {
-          html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 서재에 자동 전시">';
-          html += '✅ 완간 확정';
-          html += '</button>';
-        } else if (p.status === 'completed') {
-          html += '<a href="my-room.html" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="나의 서재에서 완간본 보기">';
-          html += '<span>📚</span> 완간 서재';
-          html += '</a>';
-        }
-      }
-
-      // 우측 끝에 프로젝트 삭제 버튼 (미니멀 디자인)
-      html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
-      
-      html += '</div>';
-      html += '</td>';
-
-      html += '</tr>';
-    });
-
-    tbody.innerHTML = html;
-  }
 
   // =========================================================================
   // 🤝 1-1. 자서전 전담 코치 배정 모달 (4대 비즈니스 관제와 100% 동일한 통합 구조)
@@ -17935,23 +17883,27 @@ ${coachAppUrl}
   window.completeMemoirPublication = completeMemoirPublication;
 
   function filterMemoirProjects(filterType, btn) {
-    currentMemoirFilter = filterType;
-    var group = document.getElementById('memoirFilterButtonGroup');
-    if (group) {
-      var btns = group.querySelectorAll('.memoir-pipeline-btn, .btn-mag-filter');
-      btns.forEach(function(b) { b.classList.remove('active'); });
-      if (btn) {
-        btn.classList.add('active');
-      } else {
-        btns.forEach(function(b) {
-          var onclickStr = b.getAttribute('onclick') || '';
-          if (onclickStr.indexOf("'" + filterType + "'") !== -1) {
-            b.classList.add('active');
-          }
-        });
+    try {
+      currentMemoirFilter = filterType || 'all';
+      var group = document.getElementById('memoirFilterButtonGroup');
+      if (group) {
+        var btns = group.querySelectorAll('.memoir-pipeline-btn, .btn-mag-filter');
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        if (btn && btn.classList) {
+          btn.classList.add('active');
+        } else {
+          btns.forEach(function(b) {
+            var onclickStr = b.getAttribute('onclick') || '';
+            if (onclickStr.indexOf("'" + filterType + "'") !== -1) {
+              b.classList.add('active');
+            }
+          });
+        }
       }
+      renderMemoirDashboard();
+    } catch(err) {
+      console.error('[Memoir] filterMemoirProjects 에러:', err);
     }
-    renderMemoirDashboard();
   }
   window.filterMemoirProjects = filterMemoirProjects;
 
