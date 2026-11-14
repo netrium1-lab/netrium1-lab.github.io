@@ -169,217 +169,540 @@
       line-height: 1.5;
     }
 
-    /* ================= 2. 앱 헤더 ================= */
-    .app-header {
-      background: var(--primary);
-      color: #fff;
-      padding: 14px 20px;
+    /* =========================================================================
+       2. 럭셔리 전문가 글쓰기 스튜디오 레이아웃 (2열 Sidebar + Workbench 구조)
+       ========================================================================= */
+    .studio-layout {
+      display: flex;
+      min-height: 100vh;
+      background: var(--bg);
+      position: relative;
+    }
+
+    /* 좌측 전문가 글쓰기 사이드바 대시보드 */
+    .studio-sidebar {
+      width: 320px;
+      min-width: 320px;
+      background: linear-gradient(180deg, #152d22 0%, #0d1e16 100%);
+      color: #f1f5f9;
+      border-right: 1.5px solid rgba(194, 155, 56, 0.28);
+      display: flex;
+      flex-direction: column;
       position: sticky;
       top: 0;
-      z-index: 1000;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 10px;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 1010;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.22);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .header-brand {
+    .studio-sidebar::-webkit-scrollbar { width: 5px; }
+    .studio-sidebar::-webkit-scrollbar-thumb { background: rgba(194,155,56,0.3); border-radius: 999px; }
+
+    /* 사이드바 헤더 & 브랜드 */
+    .sidebar-header {
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sidebar-brand {
       display: flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
       color: #fff;
     }
-    .brand-icon {
-      font-size: 1.6rem;
-      background: rgba(194, 155, 56, 0.25);
+    .sidebar-brand-icon {
+      font-size: 1.4rem;
+      background: rgba(194, 155, 56, 0.22);
       width: 38px;
       height: 38px;
-      border-radius: 10px;
+      border-radius: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(194, 155, 56, 0.4);
+      border: 1px solid rgba(194, 155, 56, 0.45);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.25);
     }
-    .brand-title {
+    .sidebar-brand-title {
       font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.12rem;
+      font-size: 1.05rem;
       font-weight: 850;
       letter-spacing: -0.3px;
+      color: #fff;
     }
-    .brand-sub {
-      font-size: 0.72rem;
-      color: var(--accent-light);
-      font-weight: 700;
-      letter-spacing: 0.5px;
+    .sidebar-brand-sub {
+      font-size: 0.68rem;
+      color: #e5c36a;
+      font-weight: 750;
+      letter-spacing: 0.8px;
     }
-    .header-user-info {
+    .sidebar-close-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    /* 코치 프로필 뱃지 */
+    .sidebar-coach-card {
+      margin: 12px 14px 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 9px 12px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 8px;
     }
-    .coach-pill {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.25);
-      padding: 5px 12px;
-      border-radius: 999px;
+    .coach-badge-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .coach-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #c29b38;
+      color: #152d22;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.0rem;
+      font-weight: 900;
+    }
+    .coach-name-label {
       font-size: 0.82rem;
-      font-weight: 800;
+      font-weight: 850;
       color: #fff;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 5px;
     }
-    .btn-logout {
+    .coach-online-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 6px #10b981;
+    }
+    .coach-role-label {
+      font-size: 0.68rem;
+      color: #94a3b8;
+    }
+    .btn-logout-sm {
       background: rgba(239, 68, 68, 0.18);
       border: 1px solid rgba(239, 68, 68, 0.4);
       color: #fca5a5;
-      padding: 5px 10px;
-      border-radius: 8px;
-      font-size: 0.78rem;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.72rem;
       font-weight: 750;
       cursor: pointer;
     }
 
-    /* ================= 3. 프로젝트 바 (활성 고객 정보) ================= */
-    .project-bar {
-      background: #ffffff;
-      border-bottom: 1.5px solid var(--border);
-      padding: 14px 20px;
+    /* 활성 어르신 프로필 카드 */
+    .sidebar-client-card {
+      margin: 0 14px 12px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1.5px solid rgba(194, 155, 56, 0.35);
+      border-radius: 13px;
+      padding: 13px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+    }
+    .client-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 7px;
+    }
+    .client-card-title {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.02rem;
+      font-weight: 850;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .client-pkg-pill {
+      background: rgba(194, 155, 56, 0.25);
+      border: 1px solid rgba(194, 155, 56, 0.5);
+      color: #fce79a;
+      font-size: 0.70rem;
+      font-weight: 850;
+      padding: 2px 7px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .client-meta-row {
+      font-size: 0.76rem;
+      color: #cbd5e1;
+      line-height: 1.45;
+      margin-bottom: 5px;
+    }
+    .client-applicant-row {
+      font-size: 0.72rem;
+      color: #94a3b8;
+      border-top: 1px dashed rgba(255,255,255,0.12);
+      padding-top: 5px;
+      margin-top: 5px;
+    }
+    .sidebar-select-project {
+      width: 100%;
+      margin-top: 9px;
+      background: #0d1e16;
+      border: 1px solid rgba(194, 155, 56, 0.4);
+      color: #f1f5f9;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.80rem;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    /* 5대 챕터 집필 공정 진행률 */
+    .sidebar-progress-card {
+      margin: 0 14px 12px;
+      background: rgba(0, 0, 0, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 11px 13px;
+    }
+    .progress-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
+      font-size: 0.75rem;
+      font-weight: 850;
+      color: #e5c36a;
+      margin-bottom: 6px;
     }
-    .project-left {
+    .progress-track {
+      width: 100%;
+      height: 7px;
+      background: rgba(255,255,255,0.12);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 9px;
+    }
+    .progress-fill {
+      height: 100%;
+      width: 20%;
+      background: linear-gradient(90deg, #c29b38 0%, #10b981 100%);
+      border-radius: 999px;
+      transition: width 0.4s ease;
+    }
+    .progress-stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5px;
+      text-align: center;
+      font-size: 0.70rem;
+    }
+    .stat-badge-item {
+      background: rgba(255,255,255,0.05);
+      padding: 4px 2px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stat-badge-val {
+      font-weight: 850;
+      color: #fff;
+      font-size: 0.76rem;
+    }
+    .stat-badge-lbl {
+      color: #94a3b8;
+      font-size: 0.66rem;
+    }
+
+    /* 사이드바 메뉴 네비게이션 */
+    .sidebar-nav-wrap {
+      flex: 1;
+      padding: 0 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .sidebar-section-title {
+      font-size: 0.68rem;
+      font-weight: 850;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      padding: 6px 8px 3px;
+    }
+    .sidebar-tab-btn {
+      width: 100%;
+      padding: 11px 12px;
+      background: transparent;
+      border: 1.5px solid transparent;
+      border-radius: 10px;
+      color: #cbd5e1;
+      font-size: 0.86rem;
+      font-weight: 800;
+      cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
+      gap: 9px;
+      text-align: left;
+      transition: all 0.2s ease;
+      position: relative;
     }
-    .project-avatar {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: rgba(194, 155, 56, 0.15);
-      color: #936f1c;
-      font-size: 1.5rem;
+    .sidebar-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .sidebar-tab-btn.active {
+      background: rgba(194, 155, 56, 0.18);
+      border-color: rgba(194, 155, 56, 0.5);
+      color: #fff;
+      font-weight: 900;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+    .sidebar-step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.12);
+      color: #cbd5e1;
+      font-size: 0.74rem;
+      font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 800;
-      border: 1px solid rgba(194, 155, 56, 0.35);
+      flex-shrink: 0;
     }
-    .project-title {
-      font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.20rem;
-      font-weight: 850;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    .sidebar-tab-btn.active .sidebar-step-num {
+      background: #c29b38;
+      color: #152d22;
     }
-    .project-meta {
-      font-size: 0.82rem;
-      color: var(--text-sub);
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
+    .sidebar-tab-label {
+      flex: 1;
+      line-height: 1.3;
     }
-    .pkg-badge {
-      background: rgba(30, 61, 47, 0.1);
-      color: var(--primary);
-      padding: 2px 8px;
-      border-radius: 6px;
-      font-weight: 850;
-      font-size: 0.74rem;
+    .sidebar-tab-desc {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #94a3b8;
+      margin-top: 2px;
     }
-    .project-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .select-project {
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1.5px solid var(--border);
-      background: #fff;
-      font-size: 0.86rem;
-      font-weight: 750;
-      color: var(--text);
-      cursor: pointer;
-    }
-    .btn-sync-cloud {
-      background: #ecfdf5;
-      color: #047857;
-      border: 1.5px solid #a7f3d0;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 0.84rem;
-      font-weight: 850;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
+    .sidebar-tab-btn.active .sidebar-tab-desc {
+      color: #fcd34d;
     }
 
-    /* ================= 4. 메인 탭바 ================= */
-    .app-tabs {
-      background: #ffffff;
-      border-bottom: 1.5px solid var(--border);
+    /* 챕터 서브 메뉴 */
+    .sidebar-sub-chapters {
+      margin-left: 28px;
+      padding-left: 10px;
+      border-left: 1.5px solid rgba(194, 155, 56, 0.35);
       display: flex;
-      overflow-x: auto;
-      scrollbar-width: none;
-      padding: 0 16px;
+      flex-direction: column;
+      gap: 3px;
+      margin-bottom: 6px;
+      margin-top: 2px;
     }
-    .app-tabs::-webkit-scrollbar { display: none; }
-    .tab-btn {
-      padding: 14px 18px;
-      background: none;
-      border: none;
-      border-bottom: 3px solid transparent;
-      font-size: 0.94rem;
-      font-weight: 800;
-      color: var(--text-sub);
-      white-space: nowrap;
+    .sub-chapter-item {
+      padding: 5px 8px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      color: #94a3b8;
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
       gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .sub-chapter-item:hover {
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+    }
+    .sub-chapter-item.active {
+      color: #fce79a;
+      font-weight: 850;
+      background: rgba(194, 155, 56, 0.18);
+    }
+
+    /* 사이드바 하단 도구 모음 */
+    .sidebar-footer {
+      padding: 12px 14px 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.22);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+    .sidebar-btn-sync {
+      width: 100%;
+      background: #059669;
+      color: #fff;
+      border: none;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-size: 0.82rem;
+      font-weight: 850;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 2px 8px rgba(5,150,105,0.3);
       transition: all 0.2s ease;
     }
-    .tab-btn:hover { color: var(--primary); }
-    .tab-btn.active {
-      color: var(--primary);
-      border-bottom-color: var(--primary);
-      font-weight: 900;
+    .sidebar-btn-sync:hover { background: #047857; }
+    .sidebar-btn-sub {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #cbd5e1;
+      padding: 7px 10px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 750;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      text-decoration: none;
     }
-    .tab-step-num {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: #e2e8f0;
-      color: #64748b;
-      font-size: 0.72rem;
-      font-weight: 900;
-      line-height: 20px;
-      text-align: center;
-    }
-    .tab-btn.active .tab-step-num {
-      background: var(--primary);
-      color: #fff;
+    .sidebar-btn-sub:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+    /* 우측 메인 영역 */
+    .studio-main-wrap {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
     }
 
-    /* ================= 5. 콘텐츠 영역 ================= */
+    /* 우측 상단 컴팩트 툴바 */
+    .studio-topbar {
+      background: #ffffff;
+      border-bottom: 1.5px solid var(--border);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 990;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .btn-toggle-sidebar {
+      display: none;
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+    }
+    .topbar-breadcrumb {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .topbar-btn {
+      padding: 7px 12px;
+      border-radius: 8px;
+      font-size: 0.80rem;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      border: 1px solid transparent;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .topbar-btn.primary {
+      background: #ecfdf5;
+      color: #047857;
+      border-color: #a7f3d0;
+    }
+    .topbar-btn.primary:hover { background: #d1fae5; }
+    .topbar-btn.gold {
+      background: #fdf8e6;
+      color: #936f1c;
+      border-color: #f1dfa5;
+    }
+    .topbar-btn.gold:hover { background: #faecc0; }
+    .topbar-btn.sub {
+      background: #ffffff;
+      color: var(--text-sub);
+      border-color: var(--border);
+    }
+    .topbar-btn.sub:hover { background: #f8fafc; color: var(--text); }
+
+    /* 메인 콘텐츠 영역 여백 최적화 */
     .app-main {
       flex: 1;
-      padding: 24px 20px 80px;
-      max-width: 1200px;
-      margin: 0 auto;
+      padding: 24px 28px 80px;
+      max-width: 1400px;
       width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    /* 모바일 반응형 (900px 이하) */
+    .studio-sidebar-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.55);
+      z-index: 1005;
+      backdrop-filter: blur(2px);
+    }
+    @media (max-width: 900px) {
+      .studio-sidebar {
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        transform: translateX(-100%);
+        box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+      }
+      .studio-sidebar.open {
+        transform: translateX(0);
+      }
+      .studio-sidebar-overlay.open {
+        display: block;
+      }
+      .btn-toggle-sidebar {
+        display: flex;
+      }
+      .app-main {
+        padding: 16px 14px 60px;
+      }
     }
     .tab-content { display: none; }
     .tab-content.active { display: block; animation: fadeIn 0.25s ease; }
@@ -788,9 +1111,10 @@
     /* 인쇄 전용 CSS (@media print) */
     @media print {
       body { background: #fff !important; }
-      .app-header, .project-bar, .app-tabs, .action-btn-row, #coachAuthOverlay {
+      .studio-sidebar, .studio-topbar, .studio-sidebar-overlay, .app-header, .project-bar, .app-tabs, .action-btn-row, #coachAuthOverlay {
         display: none !important;
       }
+      .studio-layout, .studio-main-wrap { display: block !important; }
       .app-main { padding: 0 !important; max-width: 100% !important; margin: 0 !important; }
       .tab-content { display: block !important; }
       #tab1, #tab2, #tab3 { display: none !important; }
@@ -854,71 +1178,197 @@
     </div>
   </div>
 
-  <!-- ================= 2. 앱 헤더 ================= -->
-  <header class="app-header">
-    <a href="javascript:void(0)" class="header-brand">
-      <div class="brand-icon">✍️</div>
-      <div>
-        <div class="brand-title">여백과 결 자서전 코치 앱</div>
-        <div class="brand-sub">MEMOIR COACH WRITING STUDIO</div>
-      </div>
-    </a>
-    <div class="header-user-info">
-      <div class="coach-pill" id="coachHeaderBadge">
-        <span>👤</span> <span id="coachDisplayName">이선영 코치</span>
-      </div>
-      <button type="button" class="btn-logout" onclick="coachLogout()">로그아웃</button>
-    </div>
-  </header>
+  <!-- ================= 2. 럭셔리 전문가 글쓰기 스튜디오 레이아웃 ================= -->
+  <div class="studio-layout">
 
-  <!-- ================= 3. 활성 프로젝트 및 고객 바 ================= -->
-  <section class="project-bar">
-    <div class="project-left">
-      <div class="project-avatar" id="clientAvatar">👵</div>
-      <div>
-        <div class="project-title" id="clientTitle">
-          <span id="clientNameDisplay">김순옥 어르신</span>
-          <span class="pkg-badge" id="clientPkgDisplay">인생 마스터피스</span>
+    <!-- 좌측 전문가 글쓰기 사이드바 대시보드 -->
+    <aside class="studio-sidebar" id="studioSidebar">
+      <!-- 1) 스튜디오 로고 & 헤더 -->
+      <div class="sidebar-header">
+        <a href="javascript:void(0)" class="sidebar-brand">
+          <div class="sidebar-brand-icon">✍️</div>
+          <div>
+            <div class="sidebar-brand-title">여백과 결 집필 스튜디오</div>
+            <div class="sidebar-brand-sub">MEMOIR WRITING STUDIO</div>
+          </div>
+        </a>
+        <button type="button" class="sidebar-close-btn" onclick="toggleStudioSidebar()" aria-label="메뉴 닫기">✕</button>
+      </div>
+
+      <!-- 2) 코치 프로필 뱃지 -->
+      <div class="sidebar-coach-card">
+        <div class="coach-badge-info">
+          <div class="coach-avatar">👤</div>
+          <div>
+            <div class="coach-name-label">
+              <span id="coachDisplayName">이선영 코치</span>
+              <span class="coach-online-dot" title="실시간 온라인"></span>
+            </div>
+            <div class="coach-role-label">공인 생애사 전문 작가</div>
+          </div>
         </div>
-        <div class="project-meta">
-          <span id="clientMetaInfo">78세 · 서울 서초구 방배동</span>
-          <span>|</span>
-          <span id="clientApplicantInfo">신청인: 김대현 (장남) · 010-8921-3421</span>
+        <button type="button" class="btn-logout-sm" onclick="coachLogout()">로그아웃</button>
+      </div>
+
+      <!-- 3) 활성 주인공 어르신 프로필 카드 -->
+      <div class="sidebar-client-card">
+        <div class="client-card-head">
+          <div class="client-card-title">
+            <span id="clientAvatar">👵</span>
+            <span id="clientNameDisplay">김순옥 어르신</span>
+          </div>
+          <span class="client-pkg-pill" id="clientPkgDisplay">인생 마스터피스</span>
+        </div>
+        <div class="client-meta-row" id="clientMetaInfo">
+          78세 · 서울 서초구 방배동
+        </div>
+        <div class="client-applicant-row" id="clientApplicantInfo">
+          신청인: 김대현 (장남) · 010-8921-3421
+        </div>
+        <select class="sidebar-select-project" id="projectSelectDropdown" onchange="switchActiveProject(this.value)">
+          <!-- JS 동적 주입 -->
+        </select>
+      </div>
+
+      <!-- 4) 생애 5대 챕터 집필 공정 진행률 -->
+      <div class="sidebar-progress-card">
+        <div class="progress-head">
+          <span>📖 5대 챕터 집필 공정</span>
+          <span id="sidebarProgressCount" style="color: #fce79a;">3 / 5 챕터 (60%)</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="sidebarProgressBar" style="width: 60%;"></div>
+        </div>
+        <div class="progress-stats-grid">
+          <div class="stat-badge-item">
+            <div class="stat-badge-val" id="sidebarStatRecordings">4건</div>
+            <div class="stat-badge-lbl">🎙️ 음성 녹음</div>
+          </div>
+          <div class="stat-badge-item">
+            <div class="stat-badge-val" id="sidebarStatPhotos">12장</div>
+            <div class="stat-badge-lbl">🎞️ 복원 사진</div>
+          </div>
+          <div class="stat-badge-item">
+            <div class="stat-badge-val" id="sidebarStatChars">8,420자</div>
+            <div class="stat-badge-lbl">✍️ 총 글자수</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="project-actions">
-      <select class="select-project" id="projectSelectDropdown" onchange="switchActiveProject(this.value)">
-        <!-- JS 동적 주입 -->
-      </select>
-      <button type="button" class="btn-sync-cloud" onclick="manualSyncToCloud()" title="본사 관리자 Firestore로 실시간 저장">
-        <span>☁️ 본사 실시간 전송</span>
-      </button>
-    </div>
-  </section>
 
-  <!-- ================= 4. 4단계 탭 내비게이션 ================= -->
-  <nav class="app-tabs">
-    <button class="tab-btn active" onclick="switchAppTab('tab1', this)">
-      <span class="tab-step-num">1</span>
-      <span>🎙️ 구술 녹취 &amp; 채록</span>
-    </button>
-    <button class="tab-btn" onclick="switchAppTab('tab2', this)">
-      <span class="tab-step-num">2</span>
-      <span>🤖 AI 목차 &amp; 초안 집필</span>
-    </button>
-    <button class="tab-btn" onclick="switchAppTab('tab3', this)">
-      <span class="tab-step-num">3</span>
-      <span>✍️ 챕터별 윤문 &amp; 사진</span>
-    </button>
-    <button class="tab-btn" onclick="switchAppTab('tab4', this)">
-      <span class="tab-step-num">4</span>
-      <span>📖 양장본 출판 &amp; PDF</span>
-    </button>
-  </nav>
+      <!-- 5) 4단계 전문가 집필 파이프라인 네비게이션 (Vertical Nav) -->
+      <div class="sidebar-nav-wrap">
+        <div class="sidebar-section-title">전문가 집필 워크플로우</div>
+        
+        <button type="button" class="sidebar-tab-btn active" id="sidebarTabBtn1" onclick="switchAppTab('tab1', this)">
+          <span class="sidebar-step-num">1</span>
+          <div class="sidebar-tab-label">
+            <span>🎙️ 1. 구술 녹취 &amp; 실시간 채록</span>
+            <span class="sidebar-tab-desc">고음질 녹음기 · 20문항 인터뷰 · STT</span>
+          </div>
+        </button>
 
-  <!-- ================= 5. 메인 본문 콘텐츠 ================= -->
-  <main class="app-main">
+        <button type="button" class="sidebar-tab-btn" id="sidebarTabBtn2" onclick="switchAppTab('tab2', this)">
+          <span class="sidebar-step-num">2</span>
+          <div class="sidebar-tab-label">
+            <span>🤖 2. AI 5대 목차 &amp; 생애 초안</span>
+            <span class="sidebar-tab-desc">문학 수필체 자동 집필 · 목차 조판</span>
+          </div>
+        </button>
+
+        <button type="button" class="sidebar-tab-btn" id="sidebarTabBtn3" onclick="switchAppTab('tab3', this)">
+          <span class="sidebar-step-num">3</span>
+          <div class="sidebar-tab-label">
+            <span>✍️ 3. 챕터별 전문 윤문 &amp; 사진</span>
+            <span class="sidebar-tab-desc">1~5챕터 세부 교정 · 캡션 배치</span>
+          </div>
+        </button>
+
+        <!-- 3단계 하위 5개 챕터 서브 네비게이션 -->
+        <div class="sidebar-sub-chapters" id="sidebarSubChapters">
+          <div class="sub-chapter-item active" onclick="selectChapterFromSidebar(1)" id="sidebarSubCh_1">
+            <span>제1장</span> <span>유년과 고향의 기억</span>
+          </div>
+          <div class="sub-chapter-item" onclick="selectChapterFromSidebar(2)" id="sidebarSubCh_2">
+            <span>제2장</span> <span>청춘, 사랑 그리고 첫 직장</span>
+          </div>
+          <div class="sub-chapter-item" onclick="selectChapterFromSidebar(3)" id="sidebarSubCh_3">
+            <span>제3장</span> <span>가족을 일군 뜨거운 땀방울</span>
+          </div>
+          <div class="sub-chapter-item" onclick="selectChapterFromSidebar(4)" id="sidebarSubCh_4">
+            <span>제4장</span> <span>삶의 파도와 시련을 넘어</span>
+          </div>
+          <div class="sub-chapter-item" onclick="selectChapterFromSidebar(5)" id="sidebarSubCh_5">
+            <span>제5장</span> <span>황혼의 여백과 남기는 당부</span>
+          </div>
+        </div>
+
+        <button type="button" class="sidebar-tab-btn" id="sidebarTabBtn4" onclick="switchAppTab('tab4', this)">
+          <span class="sidebar-step-num">4</span>
+          <div class="sidebar-tab-label">
+            <span>📖 4. 양장본 출판 도서 &amp; PDF</span>
+            <span class="sidebar-tab-desc">신국판 규격 조판 · 완성 PDF 생성</span>
+          </div>
+        </button>
+      </div>
+
+      <!-- 6) 사이드바 하단 도구 모음 -->
+      <div class="sidebar-footer">
+        <button type="button" class="sidebar-btn-sync" onclick="manualSyncToCloud()" title="본사 관리자 Firestore 및 로컬스토리지로 실시간 전송">
+          <span>☁️ 본사 관리자 실시간 전송</span>
+        </button>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+          <button type="button" class="sidebar-btn-sub" onclick="shareFamilyKakaoFlipbook()" title="가족 검수용 디지털 플립북 링크 복사">
+            <span>👨‍👩‍👧 가족 플립북</span>
+          </button>
+          <button type="button" class="sidebar-btn-sub" onclick="printBookPdf()" title="인쇄 및 PDF 다운로드">
+            <span>🖨️ 인쇄 / PDF</span>
+          </button>
+        </div>
+        <div style="font-size: 0.72rem; color: #a7f3d0; background: rgba(5,150,105,0.15); border: 1px solid rgba(5,150,105,0.3); border-radius: 8px; padding: 7px 10px; line-height: 1.4;">
+          💰 <strong>현장 코칭 활동비: 150,000원</strong><br>
+          인터뷰 완료 보고 시 05번 관제센터에서 즉시 송금 승인됩니다.
+        </div>
+        <a href="coach.html" class="sidebar-btn-sub" style="font-size: 0.76rem; color: #e2e8f0;">
+          <span>📱 모바일 코치 현장앱 이동 ➔</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- 모바일용 배경 오버레이 -->
+    <div class="studio-sidebar-overlay" id="studioSidebarOverlay" onclick="toggleStudioSidebar()"></div>
+
+    <!-- 우측 메인 워크벤치 캔버스 -->
+    <div class="studio-main-wrap">
+      <!-- 상단 컴팩트 툴바 -->
+      <header class="studio-topbar">
+        <div class="topbar-left">
+          <button type="button" class="btn-toggle-sidebar" onclick="toggleStudioSidebar()" aria-label="메뉴 열기">
+            <span>☰</span>
+          </button>
+          <div class="topbar-breadcrumb">
+            <span style="color: #64748b;">자서전 스튜디오</span>
+            <span style="color: #cbd5e1;">/</span>
+            <span id="topbarCurrentStageTitle" style="color: var(--primary); font-weight: 850;">🎙️ 1. 현장 구술 녹취 &amp; 실시간 채록</span>
+          </div>
+        </div>
+        <div class="topbar-actions">
+          <button type="button" class="topbar-btn primary" onclick="manualSyncToCloud()" title="본사 관리자 실시간 전송">
+            <span>☁️ 본사 실시간 전송</span>
+          </button>
+          <button type="button" class="topbar-btn gold" onclick="shareFamilyKakaoFlipbook()" title="가족 검수 디지털 플립북 링크 복사">
+            <span>👨‍👩‍👧 가족 플립북</span>
+          </button>
+          <button type="button" class="topbar-btn sub" onclick="printBookPdf()" title="인쇄 및 PDF 다운로드">
+            <span>🖨️ 양장본 PDF 인쇄</span>
+          </button>
+          <a href="index.html" class="topbar-btn sub" title="여백과 결 메인 사이트로 이동">
+            <span>메인 ➔</span>
+          </a>
+        </div>
+      </header>
+
+      <!-- 메인 콘텐츠 영역 -->
+      <main class="app-main">
 
     <!-- -------------------------------------------------------------
          탭 1: 🎙️ 구술 녹취 & 채록 (Voice Recording & Transcript)
@@ -1289,6 +1739,8 @@
     </section>
 
   </main>
+    </div> <!-- /.studio-main-wrap -->
+  </div> <!-- /.studio-layout -->
 
   <!-- ================= 6. 자바스크립트 엔진 ================= -->
   <script>
@@ -1632,6 +2084,41 @@
 
       // 5. 탭 4 양장본 출판 렌더링
       renderHardcoverBook(project);
+
+      // 6. 사이드바 5대 챕터 완성도 및 실시간 통계 갱신
+      updateSidebarProgressAndStats(project);
+    }
+
+    function updateSidebarProgressAndStats(project) {
+      if (!project) return;
+      const chapters = project.chapters || BASE_CHAPTERS_TEMPLATE;
+      let completedChs = 0;
+      let totalChars = 0;
+
+      chapters.forEach((ch, idx) => {
+        const len = (ch.content || '').trim().length;
+        totalChars += len;
+        if (len > 50) completedChs++;
+
+        // 사이드바 서브챕터 제목 동적 동기화
+        const subTitleEl = document.querySelector(`#sidebarSubCh_${idx + 1} span:last-child`);
+        if (subTitleEl && ch.title) {
+          subTitleEl.textContent = ch.title.replace(/^제\s*\d+\s*장[:.]?\s*/, '');
+        }
+      });
+
+      const pct = Math.round((completedChs / 5) * 100);
+      const progBar = document.getElementById('sidebarProgressBar');
+      const progCount = document.getElementById('sidebarProgressCount');
+      if (progBar) progBar.style.width = pct + '%';
+      if (progCount) progCount.textContent = `${completedChs} / 5 챕터 (${pct}%)`;
+
+      const statRec = document.getElementById('sidebarStatRecordings');
+      const statPhoto = document.getElementById('sidebarStatPhotos');
+      const statChars = document.getElementById('sidebarStatChars');
+      if (statRec) statRec.textContent = (project.recordingsCount || (project.fullTranscript ? 2 : 0)) + '건';
+      if (statPhoto) statPhoto.textContent = (project.photosCount || 12) + '장';
+      if (statChars) statChars.textContent = totalChars.toLocaleString() + '자';
     }
 
     function manualSyncToCloud() {
@@ -2030,6 +2517,12 @@
         b.classList.toggle('active', (i + 1) === chapterId);
       });
 
+      // 사이드바 서브챕터 활성화 동기화
+      for (let i = 1; i <= 5; i++) {
+        const subEl = document.getElementById('sidebarSubCh_' + i);
+        if (subEl) subEl.classList.toggle('active', i === chapterId);
+      }
+
       const chapters = (currentProject && currentProject.chapters) || BASE_CHAPTERS_TEMPLATE;
       const target = chapters.find(c => c.id === chapterId) || chapters[0];
 
@@ -2053,6 +2546,7 @@
       if (currentProject && currentProject.chapters) {
         const ch = currentProject.chapters.find(c => c.id === currentChapterId);
         if (ch) ch.content = val;
+        updateSidebarProgressAndStats(currentProject);
       }
       updateChapterWordCount();
     }
@@ -2305,11 +2799,66 @@
       const target = document.getElementById(tabId);
       if (target) target.classList.add('active');
 
-      const btns = document.querySelectorAll('.tab-btn');
-      btns.forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      // 사이드바 버튼 활성화 갱신
+      const sidebarBtns = document.querySelectorAll('.sidebar-tab-btn');
+      sidebarBtns.forEach(b => b.classList.remove('active'));
+
+      let activeSidebarBtn = btnEl;
+      if (!activeSidebarBtn) {
+        if (tabId === 'tab1') activeSidebarBtn = document.getElementById('sidebarTabBtn1');
+        else if (tabId === 'tab2') activeSidebarBtn = document.getElementById('sidebarTabBtn2');
+        else if (tabId === 'tab3') activeSidebarBtn = document.getElementById('sidebarTabBtn3');
+        else if (tabId === 'tab4') activeSidebarBtn = document.getElementById('sidebarTabBtn4');
+      }
+      if (activeSidebarBtn) activeSidebarBtn.classList.add('active');
+
+      // 상단 브레드크럼 타이틀 갱신
+      const breadcrumbMap = {
+        'tab1': '🎙️ 1. 현장 구술 녹취 & 실시간 채록',
+        'tab2': '🤖 2. AI 5대 목차 & 생애 초안',
+        'tab3': '✍️ 3. 챕터별 전문 윤문 & 사진',
+        'tab4': '📖 4. 양장본 출판 도서 & PDF'
+      };
+      const titleEl = document.getElementById('topbarCurrentStageTitle');
+      if (titleEl && breadcrumbMap[tabId]) {
+        titleEl.textContent = breadcrumbMap[tabId];
+      }
+
+      // 모바일 오프캔버스 사이드바 닫기
+      const sidebar = document.getElementById('studioSidebar');
+      const overlay = document.getElementById('studioSidebarOverlay');
+      if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+      }
+      if (overlay && overlay.classList.contains('open')) {
+        overlay.classList.remove('open');
+      }
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // 모바일 사이드바 토글 (오프캔버스 드로어)
+    function toggleStudioSidebar() {
+      const sidebar = document.getElementById('studioSidebar');
+      const overlay = document.getElementById('studioSidebarOverlay');
+      if (sidebar) sidebar.classList.toggle('open');
+      if (overlay) overlay.classList.toggle('open');
+    }
+
+    // 사이드바에서 5대 챕터 직접 선택 시 탭 3으로 이동 및 챕터 로드
+    function selectChapterFromSidebar(chId) {
+      switchAppTab('tab3', document.getElementById('sidebarTabBtn3'));
+      switchActiveChapter(chId);
+
+      // 모바일 오프캔버스 사이드바 닫기
+      const sidebar = document.getElementById('studioSidebar');
+      const overlay = document.getElementById('studioSidebarOverlay');
+      if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+      }
+      if (overlay && overlay.classList.contains('open')) {
+        overlay.classList.remove('open');
+      }
     }
 
     function escapeHtml(str) {
