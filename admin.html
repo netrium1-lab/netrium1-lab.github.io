@@ -2030,17 +2030,24 @@
           <span id="consultPendingBadge" style="background:#0284c7; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">신규</span>
         </button>
 
-        <!-- 🌟 03. 5대 비즈니스 운영 스튜디오 (Business Studio) -->
+        <!-- 🌟 03. 4대 비즈니스 관제 (4 Core Offline Services) -->
         <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster" style="color: #b83354; font-weight: 850;">
           <span class="nav-tab-icon">🌟</span>
-          <span>03. 5대 비즈니스 관제</span>
-          <span id="businessMasterBadge" style="background:#b83354; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">1호~5호</span>
+          <span>03. 4대 비즈니스 관제</span>
+          <span id="businessMasterBadge" style="background:#b83354; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">1호~4호</span>
         </button>
 
-        <!-- 🤝 04. 코칭스태프 & 정산 센터 (Coach Ops & Settlement) -->
+        <!-- 📖 04. [독립 분리] 디지털 자서전 출판 관제 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabMemoirDashboard', this)" id="navBtnMemoirDashboard" style="color: #936f1c; font-weight: 850; background: rgba(194, 155, 56, 0.08); border-left: 3px solid #c29b38;">
+          <span class="nav-tab-icon">📖</span>
+          <span>04. 자서전 출판 관제</span>
+          <span id="memoirDashboardBadge" style="background: linear-gradient(135deg, #c29b38, #9a7820); color:#fff; font-size:0.7rem; font-weight:900; padding:2px 7px; border-radius:999px; margin-left:auto;">AI윤문·조판</span>
+        </button>
+
+        <!-- 🤝 05. 코칭스태프 & 정산 센터 (Coach Ops & Settlement) -->
         <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="font-weight: 850;">
           <span class="nav-tab-icon">🤝</span>
-          <span>04. 코치 관제 &amp; 정산</span>
+          <span>05. 코치 관제 &amp; 정산</span>
           <span id="sidebarPendingBadge" style="background:#d97706; color:#fff; font-size:0.7rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">파견·정산</span>
         </button>
 
@@ -2049,20 +2056,19 @@
           CONTENT &amp; SYSTEM
         </div>
 
-        <!-- 📚 05. 여백서재 & 아카이브 (Content & Archive) -->
+        <!-- 📚 06. 여백서재 & 아카이브 (Content & Archive) -->
         <button class="nav-tab-btn" onclick="switchTab('tabMagazine', this)" id="navBtnMagazine">
           <span class="nav-tab-icon">📚</span>
-          <span>05. 여백서재 &amp; 아카이브</span>
+          <span>06. 여백서재 &amp; 아카이브</span>
         </button>
 
-        <!-- ⚙️ 06. 환경설정 & 채널연동 (Settings & Marketing) -->
+        <!-- ⚙️ 07. 환경설정 & 채널연동 (Settings & Marketing) -->
         <button class="nav-tab-btn" onclick="switchTab('tabSettings', this)" id="navBtnSettings">
           <span class="nav-tab-icon">⚙️</span>
-          <span>06. 환경설정 &amp; 채널연동</span>
+          <span>07. 환경설정 &amp; 채널연동</span>
         </button>
 
-        <!-- Hidden anchor buttons for 100% backward compatibility with external scripts/tests -->
-        <button id="navBtnMemoirDashboard" onclick="switchTab('tabMemoirDashboard', this)" style="display:none;"></button>
+        <!-- Hidden anchor button for 100% backward compatibility with legacy scripts expecting navBtnAcademy -->
         <button id="navBtnAcademy" onclick="switchTab('tabAcademy', this)" style="display:none;"></button>
       </nav>
 
@@ -2102,23 +2108,23 @@
             <span style="font-size: 1.15rem;">⚡</span> <strong style="color: #2b5a42;">비즈니스 라이프사이클:</strong>
           </span>
           <button type="button" onclick="switchTab('tabConsult')" class="btn-save-setting" style="background: #e0f2fe; color: #0369a1; border: 1.5px solid #bae6fd; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; cursor: pointer;">
-            <span>📋 1단계: 고객접수·상담</span>
+            <span>📋 1단계: 고객상담</span>
           </button>
           <span style="color: #cbd5e1; font-weight: 900;">➔</span>
           <button type="button" onclick="switchTab('tabBusinessMaster')" class="btn-save-setting" style="background: #fff0f3; color: #b83354; border: 1.5px solid #f8c8d2; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; cursor: pointer;">
-            <span>🌟 2단계: 5대 비즈니스 확정</span>
+            <span>🌟 2단계: 4대 비즈니스</span>
+          </button>
+          <span style="color: #cbd5e1; font-weight: 900;">➔</span>
+          <button type="button" onclick="switchTab('tabMemoirDashboard')" class="btn-save-setting" style="background: rgba(194, 155, 56, 0.15); color: #936f1c; border: 1.5px solid #c29b38; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; cursor: pointer;">
+            <span>📖 3단계: 자서전 출판</span>
           </button>
           <span style="color: #cbd5e1; font-weight: 900;">➔</span>
           <button type="button" onclick="switchTab('tabAcademy')" class="btn-save-setting" style="background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; cursor: pointer;">
-            <span>🤝 3단계: 코치 배정&amp;카톡</span>
+            <span>🤝 4단계: 코치 파견</span>
           </button>
           <span style="color: #cbd5e1; font-weight: 900;">➔</span>
-          <a href="coach.html" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #2d5a45 100%); color: #ffffff; text-decoration: none; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; box-shadow: 0 2px 6px rgba(30,61,47,0.25); display: inline-flex; align-items: center; gap: 4px;">
-            <span>📱 4단계: 코치 현장앱 ➔</span>
-          </a>
-          <span style="color: #cbd5e1; font-weight: 900;">➔</span>
           <button type="button" onclick="switchTab('tabCoachControl')" class="btn-save-setting" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-size: 0.82rem; font-weight: 850; padding: 6px 11px; cursor: pointer;">
-            <span>📸 5단계: 현장검수&amp;송금정산</span>
+            <span>📸 5단계: 검수&amp;정산</span>
           </button>
         </div>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;">
@@ -2219,20 +2225,20 @@
           </div>
         </div>
 
-        <!-- 🌟 5대 핵심 비즈니스 실시간 현황 보드 -->
+        <!-- 🌟 4대 오프라인 비즈니스 실시간 현황 보드 -->
         <div class="panel-card" style="margin-bottom: 24px;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">🌟</span>
               <div>
-                <h3 class="panel-title">5대 핵심 비즈니스 실시간 운영 현황</h3>
+                <h3 class="panel-title">4대 라이프케어 비즈니스 실시간 운영 현황</h3>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  여백과 결의 5개 시그니처 서비스별 진행 건수와 상태를 한눈에 파악합니다.
+                  여백과 결의 4대 오프라인 시그니처 케어 서비스별 진행 상태를 한눈에 파악합니다.
                 </p>
               </div>
             </div>
             <button type="button" class="btn-save-setting" onclick="switchTab('tabBusinessMaster')" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-              <span>5대 비즈니스 전체 관제 ➔</span>
+              <span>4대 비즈니스 전체 관제 ➔</span>
             </button>
           </div>
 
@@ -2281,15 +2287,32 @@
               <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: var(--text-main);" id="cockpitBizCount_party">진행 관제 ➔</div>
             </div>
 
-            <!-- 5호 디지털 자서전 출판 -->
-            <div onclick="switchTab('tabMemoirDashboard')" style="background: #fdfbf7; border: 1.5px solid #e7d8b5; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.4rem;">📖</span>
-                <span class="badge" style="background: #c29b38; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px;">AI양장본</span>
+          </div>
+        </div>
+
+        <!-- 📖 디지털 자서전 출판 & AI 스튜디오 전용 관제 배너 -->
+        <div class="panel-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #fdfbf7 0%, #faf5ea 100%); border: 1.5px solid #e7d8b5; padding: 20px 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <span style="font-size: 2.2rem; background: rgba(194,155,56,0.15); padding: 10px 14px; border-radius: 14px;">📖</span>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px;">
+                  <h3 style="font-size: 1.15rem; font-weight: 850; color: #936f1c; margin: 0;">04. 디지털 자서전 출판 &amp; AI 감성윤문 스튜디오</h3>
+                  <span class="badge" style="background: #c29b38; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">별도 독립 관제</span>
+                </div>
+                <p style="color: #785714; font-size: 0.86rem; margin: 4px 0 0;">
+                  생애 구술 채록 녹취부터 AI 5단계 감성 윤문, 스플릿뷰 에디터, 신국판 양장본 조판 및 완간 서재 연동까지 전용 파이프라인에서 관리합니다.
+                </p>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 850; color: #936f1c; margin-top: 8px;">#05 디지털 자서전 출판</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">채록·AI윤문·조판완료</div>
-              <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: #936f1c;" id="cockpitBizCount_memoir">전용관제 ➔</div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <div style="text-align: right; margin-right: 6px;">
+                <div style="font-size: 0.78rem; color: #785714; font-weight: 700;">진행 프로젝트</div>
+                <div style="font-size: 1.35rem; font-weight: 900; color: #936f1c;" id="cockpitBizCount_memoir">0건 진행중</div>
+              </div>
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #ffffff; border: none; font-weight: 850; padding: 10px 18px; box-shadow: 0 4px 12px rgba(194,155,56,0.3); cursor: pointer;">
+                <span>자서전 출판 스튜디오 열기 ➔</span>
+              </button>
             </div>
           </div>
         </div>
@@ -2724,6 +2747,23 @@
 
             <!-- ================= 탭 4: 🌟 03. 4대 비즈니스 통합 관제센터 & CRM ================= -->
       <section class="tab-panel" id="tabBusinessMaster">
+        <!-- 4대 비즈니스 헤더 배너 -->
+        <div class="panel-card" style="margin-bottom: 14px; background: linear-gradient(135deg, #fff5f7 0%, #ffffff 100%); border-left: 4px solid #d1516e; padding: 18px 22px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.8rem;">🌟</span>
+              <div>
+                <h2 style="font-size: 1.25rem; font-weight: 850; color: #b83354; margin: 0;">03. 4대 오프라인 라이프케어 비즈니스 관제</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 2px 0 0;">
+                  #01 뷰티케어(180분), #02 옷장비움, #03 유품정리, #04 생전 엔딩파티 현장 방문 서비스 전용 관제
+                </p>
+              </div>
+            </div>
+            <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: rgba(194, 155, 56, 0.12); color: #936f1c; border: 1.5px solid #c29b38; font-weight: 850; padding: 8px 14px; cursor: pointer;">
+              <span>📖 04. 자서전 출판 관제 바로가기 ➔</span>
+            </button>
+          </div>
+        </div>
 
         <!-- 1. 4대 비즈니스 카테고리 셀렉터 탭 바 -->
         <div class="biz-master-tabs">
@@ -2973,7 +3013,161 @@
         </div>
 
         <!-- 5. 5호 디지털 자서전 전용 배너 및 완성 도서 PDF 관리 카드 (자서전 탭 활성 시 표시) -->
-        <div id="bizMemoirBannerCard" style="display: none; margin-top: 24px;">
+        <!-- 📖 디지털 자서전 출판 관제 분리 안내 카드 -->
+        <div class="panel-card" style="margin-top: 24px; background: #fdfbf7; border: 1.5px solid #e7d8b5;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.8rem;">📖</span>
+              <div>
+                <div style="font-weight: 850; font-size: 0.98rem; color: #936f1c;">디지털 자서전 출판 &amp; AI 윤문 스튜디오 독립 관제</div>
+                <div style="color: #785714; font-size: 0.86rem; margin-top: 2px;">
+                  생애 구술 채록 인터뷰 녹취, AI 5단계 감성 윤문, 양장본 조판 및 완간 도서 PDF 관리는 <strong>[04. 자서전 출판 관제]</strong> 전용 스튜디오에서 독립적으로 관리됩니다.
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: #c29b38; color: #ffffff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(194,155,56,0.3); padding: 8px 16px; cursor: pointer;">
+              <span>자서전 출판 전용 스튜디오 열기 ➔</span>
+            </button>
+          </div>
+        </div>
+        <!-- 맞춤 진단 고객 접수 안내 배너 -->
+        <div class="panel-card" style="margin-top: 24px; background: #f0fdf4; border: 1.5px solid #bbf7d0;">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 1.8rem;">📋</span>
+              <div>
+                <div style="font-weight: 850; font-size: 0.98rem; color: #166534;">신규 고객 접수 및 1:1 방문 맞춤 상담 관리</div>
+                <div style="color: #15803d; font-size: 0.86rem; margin-top: 2px;">
+                  [맞춤 리셋 진단]을 통해 접수된 고객 명단과 전화/방문 상담 예약은 <strong>[02. 고객 접수 &amp; 상담 파이프라인]</strong> 탭에서 체계적으로 관리됩니다.
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn-save-setting" onclick="switchTab('tabConsult')" style="background: #15803d; color: #ffffff; border: none; font-weight: 850;">
+              <span>고객 접수 &amp; 상담 센터 바로가기 ➔</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 탭: 📖 04. 자서전 출판 관제센터 & AI 윤문 파이프라인 ================= -->
+      <section class="tab-panel" id="tabMemoirDashboard">
+        <!-- 자서전 출판 관제 전용 서브 내비게이션 -->
+        <div style="display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 2px solid rgba(194, 155, 56, 0.3); padding-bottom: 12px; flex-wrap: wrap;">
+          <button type="button" class="btn-save-setting" onclick="document.getElementById('memoirProjectsCard').scrollIntoView({behavior:'smooth'});" style="background: #c29b38; color: #ffffff; border: none; font-weight: 850;">
+            <span>📖 1. 출판 프로젝트 &amp; AI 감성윤문 파이프라인</span>
+          </button>
+          <button type="button" class="btn-save-setting" onclick="var p = document.getElementById('publishedMemoirsSection'); if(p) p.scrollIntoView({behavior:'smooth'});" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
+            <span>📚 2. 완간 자서전 도서 &amp; PDF 관리 (서재 연동)</span>
+          </button>
+          <button type="button" class="btn-save-setting" onclick="var b = document.getElementById('bizMemoirBannerCard'); if(b) { b.style.display='block'; b.scrollIntoView({behavior:'smooth'}); }" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
+            <span>📢 3. 메인 CTA 배너 (30일 워크북 증정) 설정</span>
+          </button>
+        </div>
+        <!-- 1. 관제센터 상단 헤더 -->
+        <div class="panel-card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(194, 155, 56, 0.08) 0%, rgba(30, 61, 47, 0.06) 100%); border: 1.5px solid rgba(194, 155, 56, 0.3);">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+            <div>
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #c29b38; color: #fff; border-radius: 999px; font-size: 0.76rem; font-weight: 850; margin-bottom: 8px;">
+                <span>📖</span> 04. 자서전 출판 관제센터 (Memoir Control &amp; AI Pipeline)
+              </div>
+              <h2 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.45rem; font-weight: 850; color: var(--text-primary); margin: 0 0 6px 0;">
+                생애 구술 채록 · AI 5단계 감성 윤문 · 양장본 출판 파이프라인
+              </h2>
+              <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
+                현장 코치의 20문항 구술 음성 업로드부터 Whisper 음성인식, '여백과 결' AI 감성 윤문, 스플릿 뷰 에디터 검수, 가족용 플립북 및 신국판 양장본 인쇄 조판까지 원스톱으로 관리합니다.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+              <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
+                <span>📱</span> 코치 글쓰기 앱 열기 ➔
+              </a>
+              <button type="button" onclick="openMemoirProjectCreateModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 18px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
+                <span>➕</span> 새 자서전 프로젝트 등록
+              </button>
+              <button type="button" onclick="renderMemoirDashboard()" class="btn-save-setting" style="background: var(--bg-card); color: var(--text-primary); border: 1.2px solid var(--border-color); font-size: 0.86rem; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
+                <span>🔄</span> 새로고침
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. 4대 핵심 KPI 카드 -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px;">
+          <!-- KPI 1 -->
+          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #c29b38;">
+            <div style="font-size: 2rem; background: rgba(194, 155, 56, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📚</div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">전체 자서전 프로젝트</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #c29b38;" id="statMemoirTotal">0건</div>
+            </div>
+          </div>
+          <!-- KPI 2 -->
+          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #2563eb;">
+            <div style="font-size: 2rem; background: rgba(37, 99, 235, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🎙️</div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">현장 구술 인터뷰 중</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb;" id="statMemoirInterview">0건</div>
+            </div>
+          </div>
+          <!-- KPI 3 -->
+          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #d97706;">
+            <div style="font-size: 2rem; background: rgba(217, 119, 6, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">✍️</div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">AI 윤문 &amp; 코치 교정 중</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #d97706;" id="statMemoirDrafting">0건</div>
+            </div>
+          </div>
+          <!-- KPI 4 -->
+          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #059669;">
+            <div style="font-size: 2rem; background: rgba(5, 150, 105, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🖨️</div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">인쇄·발주 &amp; 출판 완료</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #059669;" id="statMemoirCompleted">0건</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. 필터 툴바 & 프로젝트 목록 카드 -->
+        <div class="panel-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
+            <!-- 단계별 필터 버튼군 -->
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="memoirFilterButtonGroup">
+              <button type="button" class="btn-mag-filter active" onclick="filterMemoirProjects('all', this)">전체 (<span id="cntFilterMemoirAll">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 인터뷰 단계 (<span id="cntFilterMemoirInterview">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing', this)">🖨️ 인쇄·발주 (<span id="cntFilterMemoirPrinting">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('completed', this)">✅ 출판 완료 (<span id="cntFilterMemoirDone">0</span>)</button>
+            </div>
+            <!-- 검색창 -->
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신, 신청인, 코치명 검색..." style="padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.85rem; background: var(--bg-card); color: var(--text-primary); width: 220px;">
+            </div>
+          </div>
+
+          <!-- 프로젝트 데이터 테이블 -->
+          <div style="overflow-x: auto;">
+            <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
+              <thead>
+                <tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">
+                  <th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>
+                  <th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>
+                  <th style="padding: 10px 12px; width: 150px;">신청인 / 패키지</th>
+                  <th style="padding: 10px 12px; width: 100px;">담당 코치</th>
+                  <th style="padding: 10px 12px; width: 110px; text-align: center;">수집 자산</th>
+                  <th style="padding: 10px 12px; width: 150px;">5대 챕터 완성률</th>
+                  <th style="padding: 10px 12px; width: 110px; text-align: center;">진행 상태</th>
+                  <th style="padding: 10px 12px; width: 170px; text-align: center;">출판 관제 액션</th>
+                </tr>
+              </thead>
+              <tbody id="memoirProjectsTableBody">
+                <!-- JS 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+<div id="publishedMemoirsSection">
+        <div id="bizMemoirBannerCard" style="display: block; margin-top: 24px;">
           <!-- 메인 사이트 자서전 특별 혜택 및 신청 배너 설정 관리 틀 -->
           <div class="panel-card">
             <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
@@ -3100,130 +3294,7 @@
           </div>
         </div>
 
-        <!-- 맞춤 진단 고객 접수 안내 배너 -->
-        <div class="panel-card" style="margin-top: 24px; background: #f0fdf4; border: 1.5px solid #bbf7d0;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 1.8rem;">📋</span>
-              <div>
-                <div style="font-weight: 850; font-size: 0.98rem; color: #166534;">신규 고객 접수 및 1:1 방문 맞춤 상담 관리</div>
-                <div style="color: #15803d; font-size: 0.86rem; margin-top: 2px;">
-                  [맞춤 리셋 진단]을 통해 접수된 고객 명단과 전화/방문 상담 예약은 <strong>[02. 고객 접수 &amp; 상담 파이프라인]</strong> 탭에서 체계적으로 관리됩니다.
-                </div>
-              </div>
-            </div>
-            <button type="button" class="btn-save-setting" onclick="switchTab('tabConsult')" style="background: #15803d; color: #ffffff; border: none; font-weight: 850;">
-              <span>고객 접수 &amp; 상담 센터 바로가기 ➔</span>
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 탭: 📖 04. 자서전 출판 관제센터 & AI 윤문 파이프라인 ================= -->
-      <section class="tab-panel" id="tabMemoirDashboard">
-        <!-- 1. 관제센터 상단 헤더 -->
-        <div class="panel-card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(194, 155, 56, 0.08) 0%, rgba(30, 61, 47, 0.06) 100%); border: 1.5px solid rgba(194, 155, 56, 0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-            <div>
-              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #c29b38; color: #fff; border-radius: 999px; font-size: 0.76rem; font-weight: 850; margin-bottom: 8px;">
-                <span>📖</span> 04. 자서전 출판 관제센터 (Memoir Control &amp; AI Pipeline)
-              </div>
-              <h2 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.45rem; font-weight: 850; color: var(--text-primary); margin: 0 0 6px 0;">
-                생애 구술 채록 · AI 5단계 감성 윤문 · 양장본 출판 파이프라인
-              </h2>
-              <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
-                현장 코치의 20문항 구술 음성 업로드부터 Whisper 음성인식, '여백과 결' AI 감성 윤문, 스플릿 뷰 에디터 검수, 가족용 플립북 및 신국판 양장본 인쇄 조판까지 원스톱으로 관리합니다.
-              </p>
-            </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-              <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
-                <span>📱</span> 코치 글쓰기 앱 열기 ➔
-              </a>
-              <button type="button" onclick="openMemoirProjectCreateModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 18px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
-                <span>➕</span> 새 자서전 프로젝트 등록
-              </button>
-              <button type="button" onclick="renderMemoirDashboard()" class="btn-save-setting" style="background: var(--bg-card); color: var(--text-primary); border: 1.2px solid var(--border-color); font-size: 0.86rem; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
-                <span>🔄</span> 새로고침
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. 4대 핵심 KPI 카드 -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px;">
-          <!-- KPI 1 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #c29b38;">
-            <div style="font-size: 2rem; background: rgba(194, 155, 56, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📚</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">전체 자서전 프로젝트</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #c29b38;" id="statMemoirTotal">0건</div>
-            </div>
-          </div>
-          <!-- KPI 2 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #2563eb;">
-            <div style="font-size: 2rem; background: rgba(37, 99, 235, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🎙️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">현장 구술 인터뷰 중</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb;" id="statMemoirInterview">0건</div>
-            </div>
-          </div>
-          <!-- KPI 3 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #d97706;">
-            <div style="font-size: 2rem; background: rgba(217, 119, 6, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">✍️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">AI 윤문 &amp; 코치 교정 중</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #d97706;" id="statMemoirDrafting">0건</div>
-            </div>
-          </div>
-          <!-- KPI 4 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #059669;">
-            <div style="font-size: 2rem; background: rgba(5, 150, 105, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🖨️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">인쇄·발주 &amp; 출판 완료</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #059669;" id="statMemoirCompleted">0건</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. 필터 툴바 & 프로젝트 목록 카드 -->
-        <div class="panel-card">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
-            <!-- 단계별 필터 버튼군 -->
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="memoirFilterButtonGroup">
-              <button type="button" class="btn-mag-filter active" onclick="filterMemoirProjects('all', this)">전체 (<span id="cntFilterMemoirAll">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 인터뷰 단계 (<span id="cntFilterMemoirInterview">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing', this)">🖨️ 인쇄·발주 (<span id="cntFilterMemoirPrinting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('completed', this)">✅ 출판 완료 (<span id="cntFilterMemoirDone">0</span>)</button>
-            </div>
-            <!-- 검색창 -->
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신, 신청인, 코치명 검색..." style="padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.85rem; background: var(--bg-card); color: var(--text-primary); width: 220px;">
-            </div>
-          </div>
-
-          <!-- 프로젝트 데이터 테이블 -->
-          <div style="overflow-x: auto;">
-            <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
-              <thead>
-                <tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">
-                  <th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>
-                  <th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>
-                  <th style="padding: 10px 12px; width: 150px;">신청인 / 패키지</th>
-                  <th style="padding: 10px 12px; width: 100px;">담당 코치</th>
-                  <th style="padding: 10px 12px; width: 110px; text-align: center;">수집 자산</th>
-                  <th style="padding: 10px 12px; width: 150px;">5대 챕터 완성률</th>
-                  <th style="padding: 10px 12px; width: 110px; text-align: center;">진행 상태</th>
-                  <th style="padding: 10px 12px; width: 170px; text-align: center;">출판 관제 액션</th>
-                </tr>
-              </thead>
-              <tbody id="memoirProjectsTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
+</div>
       </section>
 
       <!-- ================= 탭 1: 🎓 01. 코치 아카데미 & 코치 배정 관리 ================= -->
@@ -5431,14 +5502,15 @@
         else if (tabId === 'tabAcademy') btn = document.getElementById('navBtnCoachControl') || document.getElementById('navBtnAcademy');
         else if (tabId === 'tabCoachControl') btn = document.getElementById('navBtnCoachControl');
         else if (tabId === 'tabBusinessMaster') btn = document.getElementById('navBtnBusinessMaster');
-        else if (tabId === 'tabMemoirDashboard') btn = document.getElementById('navBtnBusinessMaster') || document.getElementById('navBtnMemoirDashboard');
+        else if (tabId === 'tabMemoirDashboard') btn = document.getElementById('navBtnMemoirDashboard');
         else if (tabId === 'tabMagazine' || tabId === 'tabLounge' || tabId === 'tabArchive') btn = document.getElementById('navBtnMagazine');
         else if (tabId === 'tabSettings') btn = document.getElementById('navBtnSettings');
       }
 
       /* 04. 자서전 출판 관제센터 진입 시 실시간 렌더링 */
-      if (tabId === 'tabMemoirDashboard' && typeof renderMemoirDashboard === 'function') {
-        renderMemoirDashboard();
+      if (tabId === 'tabMemoirDashboard') {
+        if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
       }
 
       var panels = document.querySelectorAll('.tab-panel');
@@ -5513,7 +5585,10 @@
         // 3. 자서전 출판 프로젝트 수
         var memoirList = (typeof getMemoirProjects === 'function') ? getMemoirProjects() : [];
         var memoirElem = document.getElementById('cockpitActiveMemoirCount');
-        if (memoirElem) memoirElem.innerText = (memoirList.length || 0) + '건';
+        var memoirCount = (memoirList.length || 0);
+        if (memoirElem) memoirElem.innerText = memoirCount + '건';
+        var cockpitBizMemoir = document.getElementById('cockpitBizCount_memoir');
+        if (cockpitBizMemoir) cockpitBizMemoir.innerText = memoirCount + '건 진행중';
 
         // 4. 최근 현장 파견/활동 요약 5건 렌더링
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
