@@ -3264,13 +3264,13 @@
         <div class="panel-card" id="memoirProjectsCard">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
             <!-- 단계별 필터 버튼군 -->
-            <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="memoirFilterButtonGroup">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;" id="memoirFilterButtonGroup">
+              <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">출판 파이프라인:</span>
               <button type="button" class="btn-mag-filter active" onclick="filterMemoirProjects('all', this)">전체 (<span id="cntFilterMemoirAll">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 인터뷰 단계 (<span id="cntFilterMemoirInterview">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing', this)">🖨️ 인쇄·발주 (<span id="cntFilterMemoirPrinting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('completed', this)">✅ 출판 완료 (<span id="cntFilterMemoirDone">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 1. 구술 인터뷰 (<span id="cntFilterMemoirInterview">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 2. AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 3. 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing_done', this)">🖨️ 4. 인쇄 &amp; 출판완료 (<span id="cntFilterMemoirDone">0</span>)</button>
             </div>
             <!-- 검색창 -->
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -16317,21 +16317,18 @@ ${coachAppUrl}
     var fInt = document.getElementById('cntFilterMemoirInterview');
     var fDrf = document.getElementById('cntFilterMemoirDrafting');
     var fFam = document.getElementById('cntFilterMemoirFamily');
-    var fPrt = document.getElementById('cntFilterMemoirPrinting');
     var fDone = document.getElementById('cntFilterMemoirDone');
     if (fAll) fAll.innerText = total;
     if (fInt) fInt.innerText = cntInterview;
     if (fDrf) fDrf.innerText = cntDrafting;
     if (fFam) fFam.innerText = cntFamily;
-    if (fPrt) fPrt.innerText = cntPrinting;
-    if (fDone) fDone.innerText = cntCompleted;
+    if (fDone) fDone.innerText = (cntPrinting + cntCompleted);
 
     var filtered = projects.filter(function(p) {
       if (currentMemoirFilter === 'interview' && !(p.status === 'interview_pending' || p.status === 'interview_done')) return false;
       if (currentMemoirFilter === 'drafting' && !(p.status === 'ai_drafted' || p.status === 'coach_reviewed')) return false;
       if (currentMemoirFilter === 'family' && p.status !== 'family_approved') return false;
-      if (currentMemoirFilter === 'printing' && p.status !== 'printing') return false;
-      if (currentMemoirFilter === 'completed' && p.status !== 'completed') return false;
+      if ((currentMemoirFilter === 'printing_done' || currentMemoirFilter === 'printing' || currentMemoirFilter === 'completed') && !(p.status === 'printing' || p.status === 'completed')) return false;
 
       if (currentMemoirSearch) {
         var q = currentMemoirSearch.toLowerCase();
@@ -16452,20 +16449,6 @@ ${coachAppUrl}
       btns.forEach(function(b) { b.classList.remove('active'); });
     }
     if (btn) btn.classList.add('active');
-      var tabBreadcrumbMap = {
-        tabCockpit: '<span>📊</span> 01. 종합 관제 홈',
-        tabConsult: '<span>📋</span> 02. 고객 접수 & 상담',
-        tabBusinessMaster: '<span>🌟</span> 03. 4대 비즈니스 관제',
-        tabMemoirDashboard: '<span>📖</span> 04. 자서전 출판 관제',
-        tabCoachControl: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabAcademy: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabMagazine: '<span>📚</span> 06. 여백서재 & 아카이브',
-        tabSettings: '<span>⚙️</span> 07. 환경설정 & 채널연동'
-      };
-      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
-      if (headerTabBadge && tabBreadcrumbMap[tabId]) {
-        headerTabBadge.innerHTML = tabBreadcrumbMap[tabId];
-      }
     renderMemoirDashboard();
   }
 
