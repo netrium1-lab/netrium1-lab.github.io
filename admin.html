@@ -3350,7 +3350,7 @@
           <!-- 프로젝트 데이터 테이블 -->
           <div style="overflow-x: auto;">
             <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
-              <thead>
+              <thead id="memoirTableThead">
                 <tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">
                   <th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>
                   <th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>
@@ -4078,6 +4078,140 @@
           </button>
           <button type="button" onclick="closeMemoirSplitEditor()" class="btn-save-setting" style="background: var(--bg-card); border: 1px solid var(--border-color); font-size: 0.84rem; padding: 8px 14px; border-radius: 8px; cursor: pointer;">
             닫기
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= [신설] 모달: 📋 자서전 1:1 맞춤 상담 신청서 & 상담 일지 카드 ================= -->
+  <div class="cms-modal-overlay" id="memoirConsultCardModal" style="display: none; z-index: 10074;" onclick="closeMemoirConsultCardModalOnOverlay(event)">
+    <div style="background: var(--bg-card, #ffffff); max-width: 820px; width: 95%; border-radius: 18px; padding: 26px 28px; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #8b5cf6; max-height: 94vh; overflow-y: auto;">
+      
+      <!-- 상단 헤더 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1.5px solid var(--border-color);">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.7rem;">📋</span>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <span id="consultCardStatusBadge" style="background: rgba(139, 92, 246, 0.15); color: #7c3aed; font-size: 0.76rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">📋 접수 대기</span>
+              <span id="consultCardDateBadge" style="font-size: 0.76rem; color: var(--text-muted);">2026.11.14 접수</span>
+              <span id="consultCardIdBadge" style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">mem_1234</span>
+            </div>
+            <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.28rem; font-weight: 850; color: var(--text-primary); margin: 4px 0 0 0;">
+              자서전 1:1 맞춤 상담 신청서 &amp; 상담 일지
+            </h3>
+          </div>
+        </div>
+        <button type="button" onclick="closeMemoirConsultCardModal()" style="background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--text-muted);">✕</button>
+      </div>
+
+      <input type="hidden" id="consultCardProjectId">
+
+      <!-- 1. 주인공(어르신) & 신청인 2열 프로필 카드 -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px;">
+        <!-- 어르신 정보 -->
+        <div style="background: var(--bg-secondary); border: 1.2px solid var(--border-color); border-radius: 12px; padding: 14px 16px;">
+          <div style="font-size: 0.80rem; font-weight: 850; color: #c29b38; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
+            <span>👵</span> 주인공 (어르신) 정보
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">성함 / 연령</span>
+              <span id="consultCardElderName" style="font-weight: 800; color: var(--text-primary);">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">거주 지역 / 주소</span>
+              <span id="consultCardElderRegion" style="font-weight: 750; color: var(--text-primary); text-align: right; max-width: 65%;">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">신청 패키지</span>
+              <span id="consultCardPackage" style="font-weight: 800; color: #936f1c;">-</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 신청인 정보 -->
+        <div style="background: var(--bg-secondary); border: 1.2px solid var(--border-color); border-radius: 12px; padding: 14px 16px;">
+          <div style="font-size: 0.80rem; font-weight: 850; color: #0284c7; margin-bottom: 8px; display: flex; align-items: center; gap: 4px;">
+            <span>👤</span> 의뢰 신청인 (가족) 정보
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px; font-size: 0.88rem;">
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">신청인 성함</span>
+              <span id="consultCardApplicantName" style="font-weight: 800; color: var(--text-primary);">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span style="color: var(--text-muted);">어르신과의 관계</span>
+              <span id="consultCardRelation" style="font-weight: 750; color: var(--text-primary);">-</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="color: var(--text-muted);">연락처</span>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span id="consultCardPhone" style="font-weight: 800; color: #0284c7; font-family: monospace;">-</span>
+                <a id="consultCardCallBtn" href="#" class="btn-action-sm" style="background: #0284c7; color: #fff; text-decoration: none; padding: 2px 8px; font-size: 0.74rem; border-radius: 4px;">📞 전화</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. 고객 작성 상담 신청서 원문 (상담 요청 사유) -->
+      <div style="margin-bottom: 18px;">
+        <label style="display: block; font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-bottom: 6px;">
+          📝 고객 작성 상담 신청서 원문 (상담 요청 사유 및 희망사항)
+        </label>
+        <div id="consultCardNotesBox" style="background: #fffbeb; border: 1.2px solid #fde68a; border-radius: 10px; padding: 14px 16px; font-size: 0.90rem; line-height: 1.65; color: #1e293b; min-height: 60px; white-space: pre-wrap;">
+          -
+        </div>
+      </div>
+
+      <!-- 3. 상담 진행 상태 변경 바 -->
+      <div style="margin-bottom: 18px; background: var(--bg-secondary); border: 1.2px solid var(--border-color); border-radius: 12px; padding: 14px 16px;">
+        <label style="display: block; font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-bottom: 8px;">
+          🔄 상담 진행 상태 변경
+        </label>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;" id="consultCardStatusButtons">
+          <button type="button" class="btn-mag-filter" id="btnConsultStatus_pending" onclick="setConsultCardStatus('consult_pending', this)" style="padding: 8px 10px; font-size: 0.80rem; font-weight: 800; border-radius: 8px;">
+            📋 접수 대기
+          </button>
+          <button type="button" class="btn-mag-filter" id="btnConsultStatus_contacted" onclick="setConsultCardStatus('consult_contacted', this)" style="padding: 8px 10px; font-size: 0.80rem; font-weight: 800; border-radius: 8px;">
+            📞 1차상담 완료
+          </button>
+          <button type="button" class="btn-mag-filter" id="btnConsultStatus_hold" onclick="setConsultCardStatus('consult_hold', this)" style="padding: 8px 10px; font-size: 0.80rem; font-weight: 800; border-radius: 8px;">
+            ⏸️ 상담 보류
+          </button>
+          <button type="button" class="btn-mag-filter" id="btnConsultStatus_coach_assigned" onclick="setConsultCardStatus('coach_assigned', this)" style="padding: 8px 10px; font-size: 0.80rem; font-weight: 800; border-radius: 8px;">
+            🤝 코치배정 완료
+          </button>
+        </div>
+      </div>
+
+      <!-- 4. 1:1 상담 일지 & 코치 전달 메모 입력 -->
+      <div style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <label style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary);">
+            ✍️ 1:1 상담 일지 &amp; 관리자 특이사항 메모
+          </label>
+          <span style="font-size: 0.74rem; color: var(--text-muted);">통화 내용 및 방문 일정 협의 사항을 기록하세요</span>
+        </div>
+        <textarea id="consultCardLog" class="setting-textarea" rows="4" placeholder="예: 2026.11.14 전화 상담 완료: 칠순 잔치가 12월 20일이라 11월 중 인터뷰 마무리를 희망하심. 어르신 기억력 매우 좋으시고 옛 앨범 사진 20여 장 준비되어 있음. 주말 방문 희망." style="width: 100%; padding: 12px 14px; font-size: 0.88rem; line-height: 1.6; border-radius: 10px;"></textarea>
+      </div>
+
+      <!-- 하단 버튼 바 -->
+      <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1.5px solid var(--border-color); padding-top: 16px;">
+        <div>
+          <button type="button" id="consultCardAssignBtn" onclick="assignCoachFromConsultCard()" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-weight: 850; padding: 10px 18px; border-radius: 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 0.88rem; box-shadow: 0 2px 8px rgba(139,92,246,0.3);">
+            <span>🤝</span> 담당 작가코치 배정하기 ➔
+          </button>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" onclick="closeMemoirConsultCardModal()" style="background: var(--bg-secondary); color: var(--text-main); border: 1.2px solid var(--border-color); padding: 9px 16px; border-radius: 8px; font-size: 0.86rem; cursor: pointer;">
+            닫기
+          </button>
+          <button type="button" onclick="saveMemoirConsultCard()" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #ffffff; border: none; font-weight: 850; padding: 10px 22px; border-radius: 8px; font-size: 0.88rem; cursor: pointer;">
+            <span>💾</span> 상담일지 저장
           </button>
         </div>
       </div>
@@ -16445,7 +16579,7 @@ ${coachAppUrl}
 
   // 기본 5대 파이프라인 단계별 고품질 데모 프로젝트 데이터 (카테고리 누락 방지 완벽 구축)
   var DEFAULT_MEMOIR_PROJECTS = [
-    // [1단계] 자서전 상담 & 배정 대기
+    // [1단계] 자서전 1차 유선 상담 완료 (코치 매칭 조율 중)
     {
       id: 'mem_demo_consult_1',
       clientName: '이순자 어르신',
@@ -16458,19 +16592,46 @@ ${coachAppUrl}
       packageLabel: '인생 마스터피스 (시그니처)',
       coachName: '배정 대기',
       coachPhone: '-',
-      status: 'consult_pending',
-      statusLabel: '자서전 상담 접수',
+      status: 'consult_contacted',
+      statusLabel: '1차상담 완료',
+      preferredDate: '2026.11.22 (토) 오전',
       recordingsCount: 0,
       photosCount: 6,
-      notes: '부모님 칠순 기념 양장본 도서 5부 제작 및 옛 사진 복원 문의. 1차 유선 상담 접수 완료, 담당 작가코치 매칭 대기.',
+      notes: '부모님 칠순 기념 양장본 도서 5부 제작 및 옛 사진 복원 문의. 어르신께서 직접 말씀하시는 것을 좋아하셔서 따뜻하게 경청해줄 코치님 희망.',
+      consultLog: '2026.11.12 유선 1차 상담 완료: 칠순 잔치가 12월 말이라 11월 중 인터뷰 완료 희망하심. 주말 토요일 오전 방문 요청. 옛 흑백사진 앨범 2권 보관 중 확인. 자녀분과 코치 배정 일정 조율 완료.',
       familyFeedback: '',
       createdAt: '2026.11.12',
       updatedAt: '2026.11.12',
       chapters: []
     },
-    // [1단계] 코치 배정 완료 (카톡 알림톡 전송 대기)
+    // [1단계] 자서전 상담 신규 접수 대기
     {
       id: 'mem_demo_consult_2',
+      clientName: '홍길순 어르신',
+      clientAge: '70세',
+      region: '서울 용산구 후암동',
+      applicantName: '홍길순',
+      applicantPhone: '010-7788-3321',
+      relation: '본인',
+      packageType: 'masterpiece',
+      packageLabel: '인생 마스터피스 (시그니처)',
+      coachName: '배정 대기',
+      coachPhone: '-',
+      status: 'consult_pending',
+      statusLabel: '접수 대기',
+      preferredDate: '협의 예정',
+      recordingsCount: 0,
+      photosCount: 0,
+      notes: '내가 살아온 70년 삶을 자녀들에게 책으로 남겨주고 싶어 무료 상담을 신청합니다.',
+      consultLog: '',
+      familyFeedback: '',
+      createdAt: '2026.11.14',
+      updatedAt: '2026.11.14',
+      chapters: []
+    },
+    // [1단계] 코치 배정 완료 (카톡 알림톡 전송 대기)
+    {
+      id: 'mem_demo_consult_3',
       clientName: '정옥희 어르신',
       clientAge: '79세',
       region: '서울 마포구 상암동',
@@ -16483,9 +16644,11 @@ ${coachAppUrl}
       coachPhone: '010-9988-1234',
       status: 'coach_assigned',
       statusLabel: '코치 배정 완료',
+      preferredDate: '2026.11.16 (일) 오후 2시',
       recordingsCount: 0,
       photosCount: 8,
-      notes: '상담 완료 후 한지우 코치 배정 완료. 주말 현장 방문 인터뷰 일정 조율 중.',
+      notes: '어머니 팔순 생신 선물로 헌정본 제작 희망. 인터뷰 전 코치님 사전 통화 요청.',
+      consultLog: '2026.11.13 상담 완료: 한지우 작가코치 지정. 11월 16일 오후 2시 방문 일정 조율 완료. 글쓰기 앱 카톡 전송 대기.',
       familyFeedback: '',
       createdAt: '2026.11.11',
       updatedAt: '2026.11.11',
@@ -16616,17 +16779,33 @@ ${coachAppUrl}
         var parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
           // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
-          var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
+          var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
           var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
           var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
           var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
           var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
 
           var changed = false;
+
+          // 데모 프로젝트 필드(consultLog 등) 최신 속성 동기화
+          parsed.forEach(function(item) {
+            var demoMatch = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.id === item.id; });
+            if (demoMatch) {
+              if (demoMatch.consultLog && !item.consultLog) {
+                item.consultLog = demoMatch.consultLog;
+                changed = true;
+              }
+              if (demoMatch.preferredDate && !item.preferredDate) {
+                item.preferredDate = demoMatch.preferredDate;
+                changed = true;
+              }
+            }
+          });
+
           // 1단계 누락 시 보강
           if (!hasStage1) {
             DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
-              if (dp.status === 'consult_pending' || dp.status === 'coach_assigned') {
+              if (dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned') {
                 if (!parsed.some(function(p) { return p.id === dp.id; })) {
                   parsed.unshift(JSON.parse(JSON.stringify(dp)));
                   changed = true;
@@ -16702,7 +16881,7 @@ ${coachAppUrl}
 
     projects.forEach(function(p) {
       var st = p.status || 'consult_pending';
-      if (st === 'consult_pending' || st === 'consult_done' || st === 'coach_assigned') cntConsult++;
+      if (st === 'consult_pending' || st === 'consult_contacted' || st === 'consult_hold' || st === 'consult_done' || st === 'coach_assigned') cntConsult++;
       else if (st === 'interview_pending' || st === 'interview_done') cntInterview++;
       else if (st === 'ai_drafted' || st === 'coach_reviewed') cntDrafting++;
       else if (st === 'family_approved') cntFamily++;
@@ -16735,7 +16914,7 @@ ${coachAppUrl}
     if (fDone) fDone.innerText = (cntPrinting + cntCompleted);
 
     var filtered = projects.filter(function(p) {
-      if (currentMemoirFilter === 'consult' && !(p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned')) return false;
+      if (currentMemoirFilter === 'consult' && !(p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned')) return false;
       if (currentMemoirFilter === 'interview' && !(p.status === 'interview_pending' || p.status === 'interview_done')) return false;
       if (currentMemoirFilter === 'drafting' && !(p.status === 'ai_drafted' || p.status === 'coach_reviewed')) return false;
       if (currentMemoirFilter === 'family' && p.status !== 'family_approved') return false;
@@ -16752,6 +16931,34 @@ ${coachAppUrl}
       return true;
     });
 
+    // 💡 1단계 상담 단계와 2~5단계 출판 공정에 맞게 헤더 컬럼을 스마트하게 전환
+    var thead = document.getElementById('memoirTableThead');
+    if (thead) {
+      if (currentMemoirFilter === 'consult') {
+        thead.innerHTML = '<tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">' +
+          '<th style="padding: 10px 12px; width: 105px;">등록일 / ID</th>' +
+          '<th style="padding: 10px 12px; width: 130px;">주인공 (어르신)</th>' +
+          '<th style="padding: 10px 12px; width: 150px;">신청인 (가족) / 연락처</th>' +
+          '<th style="padding: 10px 12px; width: 135px;">희망일정 / 패키지</th>' +
+          '<th style="padding: 10px 12px; min-width: 220px;">상담 신청 내용 (요청 사유 &amp; 일지)</th>' +
+          '<th style="padding: 10px 12px; width: 125px; text-align: center;">상담 진행 상태</th>' +
+          '<th style="padding: 10px 12px; width: 100px; text-align: center;">담당 코치</th>' +
+          '<th style="padding: 10px 12px; width: 195px; text-align: center;">상담 &amp; 배정 액션</th>' +
+        '</tr>';
+      } else {
+        thead.innerHTML = '<tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">' +
+          '<th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>' +
+          '<th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>' +
+          '<th style="padding: 10px 12px; width: 150px;">신청인 / 패키지</th>' +
+          '<th style="padding: 10px 12px; width: 100px;">담당 코치</th>' +
+          '<th style="padding: 10px 12px; width: 110px; text-align: center;">수집 자산</th>' +
+          '<th style="padding: 10px 12px; width: 150px;">5대 챕터 완성률</th>' +
+          '<th style="padding: 10px 12px; width: 110px; text-align: center;">진행 상태</th>' +
+          '<th style="padding: 10px 12px; width: 170px; text-align: center;">출판 관제 액션</th>' +
+        '</tr>';
+      }
+    }
+
     var tbody = document.getElementById('memoirProjectsTableBody');
     if (!tbody) return;
 
@@ -16761,8 +16968,10 @@ ${coachAppUrl}
     }
 
     var statusConfig = {
-      'consult_pending': { label: '📋 자서전 상담 접수', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
-      'consult_done': { label: '📞 상담 완료', bg: 'rgba(139, 92, 246, 0.18)', color: '#6d28d9' },
+      'consult_pending': { label: '📋 접수 대기', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
+      'consult_contacted': { label: '📞 1차상담 완료', bg: 'rgba(37, 99, 235, 0.14)', color: '#1d4ed8' },
+      'consult_hold': { label: '⏸️ 상담 보류', bg: 'rgba(245, 158, 11, 0.14)', color: '#b45309' },
+      'consult_done': { label: '📞 상담 완료', bg: 'rgba(37, 99, 235, 0.14)', color: '#1d4ed8' },
       'coach_assigned': { label: '🤝 코치 배정 완료', bg: 'rgba(14, 165, 233, 0.14)', color: '#0284c7' },
       'interview_pending': { label: '🎙️ 인터뷰 진행 중', bg: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' },
       'interview_done': { label: '🎙️ 인터뷰 완료', bg: 'rgba(37, 99, 235, 0.16)', color: '#1d4ed8' },
@@ -16775,79 +16984,472 @@ ${coachAppUrl}
 
     var html = '';
     filtered.forEach(function(p) {
-      var st = statusConfig[p.status] || { label: p.status || '대기', bg: '#f1f5f9', color: '#475569' };
-      
-      var completedChapters = 0;
-      if (p.chapters && Array.isArray(p.chapters)) {
-        p.chapters.forEach(function(ch) {
-          if (ch.content && ch.content.trim().length > 50) completedChapters++;
-        });
-      }
-      var progressPercent = Math.round((completedChapters / 5) * 100);
+      if (currentMemoirFilter === 'consult') {
+        // ========================================================
+        // 📋 [1단계 전용 뷰] 자서전 상담신청서 & 코치 배정 집중 테이블
+        // ========================================================
+        var curSt = p.status || 'consult_pending';
+        var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기' || curSt !== 'coach_assigned';
 
-      html += '<tr style="border-bottom: 1px solid var(--border-color);">';
-      
-      html += '<td style="padding: 12px 10px;">';
-      html += '<div style="font-weight: 750; color: var(--text-primary); font-size: 0.84rem;">' + (p.createdAt || '-') + '</div>';
-      html += '<div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">' + (p.id || '') + '</div>';
-      html += '</td>';
+        html += '<tr style="border-bottom: 1px solid var(--border-color);">';
 
-      html += '<td style="padding: 12px 10px;">';
-      html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.94rem; display: flex; align-items: center; gap: 4px;">';
-      html += '<span>👵</span> <span>' + escapeHtml(p.clientName || '성함 미상') + '</span>';
-      html += '</div>';
-      html += '<div style="font-size: 0.78rem; color: var(--text-secondary);">' + (p.clientAge || '-') + ' · ' + escapeHtml(p.region || '지역 미지정') + '</div>';
-      html += '</td>';
+        // 1. 등록일 / ID
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-weight: 750; color: var(--text-primary); font-size: 0.84rem;">' + (p.createdAt || '-') + '</div>';
+        html += '<div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">' + (p.id || '') + '</div>';
+        html += '</td>';
 
-      html += '<td style="padding: 12px 10px;">';
-      html += '<div style="font-size: 0.84rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + ' (' + (p.relation || '의뢰') + ')</div>';
-      html += '<div style="display: inline-block; font-size: 0.72rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-top: 2px;">' + (p.packageLabel || '인생 마스터피스') + '</div>';
-      html += '</td>';
+        // 2. 주인공 (어르신)
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.94rem; display: flex; align-items: center; gap: 4px;">';
+        html += '<span>👵</span> <span>' + escapeHtml(p.clientName || '성함 미상') + '</span>';
+        html += '</div>';
+        html += '<div style="font-size: 0.78rem; color: var(--text-secondary);">' + (p.clientAge || '-') + ' · ' + escapeHtml(p.region || '지역 미지정') + '</div>';
+        html += '</td>';
 
-      html += '<td style="padding: 12px 10px;">';
-      var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기';
-      html += '<div style="font-weight: 800; color: ' + (isCoachPending ? '#8b5cf6' : 'var(--text-primary)') + '; font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 대기') + '</div>';
-      html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
-      html += '</td>';
+        // 3. 의뢰 신청인 (가족) / 연락처 (클릭 시 tel: 직결)
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-size: 0.84rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + ' (' + (p.relation || '의뢰') + ')</div>';
+        var phoneClean = (p.applicantPhone || p.clientPhone || '').replace(/[^0-9]/g, '');
+        if (phoneClean) {
+          html += '<a href="tel:' + phoneClean + '" style="display: inline-flex; align-items: center; gap: 3px; font-size: 0.76rem; color: #0284c7; text-decoration: none; font-weight: 750; margin-top: 2px;" title="클릭 시 바로 전화 연결">';
+          html += '<span>📞</span> ' + (p.applicantPhone || p.clientPhone) + '</a>';
+        } else {
+          html += '<div style="font-size: 0.74rem; color: var(--text-muted);">-</div>';
+        }
+        html += '</td>';
 
-      html += '<td style="padding: 12px 10px; text-align: center;">';
-      html += '<div style="font-size: 0.82rem; font-weight: 750; color: var(--text-secondary); display: flex; flex-direction: column; gap: 2px;">';
-      html += '<span>🎙️ 녹음 ' + (p.recordingsCount || 0) + '건</span>';
-      html += '<span>🎞️ 사진 ' + (p.photosCount || 0) + '장</span>';
-      html += '</div>';
-      html += '</td>';
+        // 4. 희망일정 / 패키지
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-size: 0.80rem; font-weight: 750; color: var(--text-primary);">' + (p.preferredDate || '방문일정 협의') + '</div>';
+        html += '<div style="display: inline-block; font-size: 0.72rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-top: 3px;">' + (p.packageLabel || '인생 마스터피스') + '</div>';
+        html += '</td>';
 
-      html += '<td style="padding: 12px 10px;">';
-      html += '<div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 4px;">';
-      html += '<span>' + completedChapters + ' / 5 챕터</span>';
-      html += '<span>' + progressPercent + '%</span>';
-      html += '</div>';
-      html += '<div style="width: 100%; height: 7px; background: var(--bg-secondary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color);">';
-      html += '<div style="height: 100%; width: ' + progressPercent + '%; background: linear-gradient(90deg, #c29b38, #059669); border-radius: 999px; transition: width 0.3s ease;"></div>';
-      html += '</div>';
-      html += '</td>';
+        // 5. 상담 신청 내용 (요청 사유 & 일지) - 클릭 시 상담 카드 모달 열림
+        html += '<td style="padding: 10px 10px;">';
+        html += '<div onclick="openMemoirConsultCardModal(\'' + p.id + '\')" style="cursor: pointer; padding: 7px 10px; background: rgba(0,0,0,0.02); border: 1.2px solid var(--border-color); border-radius: 8px; transition: all 0.15s ease;" onmouseover="this.style.background=\'rgba(139,92,246,0.06)\'" onmouseout="this.style.background=\'rgba(0,0,0,0.02)\'" title="클릭하여 상세 상담신청서 원문 &amp; 1:1 상담일지 카드 열기">';
+        html += '<div style="font-size: 0.82rem; color: var(--text-primary); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">';
+        html += '📝 ' + escapeHtml(p.notes || '(고객 작성 상담 사유 미기재)');
+        html += '</div>';
+        if (p.consultLog && p.consultLog.trim()) {
+          html += '<div style="margin-top: 4px; font-size: 0.74rem; color: #047857; font-weight: 800; display: flex; align-items: center; gap: 4px;">';
+          html += '<span>✍️ 일지:</span> <span style="font-weight: 600; color: var(--text-secondary); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + escapeHtml(p.consultLog) + '</span>';
+          html += '</div>';
+        } else {
+          html += '<div style="margin-top: 4px; font-size: 0.70rem; color: #8b5cf6; font-weight: 750;">+ 클릭하여 1:1 상담일지 작성하기</div>';
+        }
+        html += '</div>';
+        html += '</td>';
 
-      html += '<td style="padding: 12px 10px; text-align: center;">';
-      html += '<span style="display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 850; background: ' + st.bg + '; color: ' + st.color + ';">';
-      html += st.label;
-      html += '</span>';
-      html += '</td>';
+        // 6. 상담 진행 상태 (인라인 변경 셀렉트)
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        var selBg = (curSt === 'consult_contacted' || curSt === 'consult_done') ? 'rgba(37,99,235,0.1)' :
+                    (curSt === 'coach_assigned') ? 'rgba(14,165,233,0.12)' :
+                    (curSt === 'consult_hold') ? 'rgba(245,158,11,0.12)' : 'rgba(139,92,246,0.12)';
+        var selCol = (curSt === 'consult_contacted' || curSt === 'consult_done') ? '#1d4ed8' :
+                     (curSt === 'coach_assigned') ? '#0284c7' :
+                     (curSt === 'consult_hold') ? '#b45309' : '#7c3aed';
+        html += '<select onchange="changeMemoirConsultStatus(\'' + p.id + '\', this.value)" style="font-size: 0.78rem; font-weight: 850; padding: 4px 7px; border-radius: 6px; border: 1.2px solid var(--border-color); background: ' + selBg + '; color: ' + selCol + '; cursor: pointer;" title="상담 진행 상태 즉시 변경">';
+        html += '<option value="consult_pending"' + (curSt === 'consult_pending' ? ' selected' : '') + '>📋 접수 대기</option>';
+        html += '<option value="consult_contacted"' + (curSt === 'consult_contacted' || curSt === 'consult_done' ? ' selected' : '') + '>📞 1차상담 완료</option>';
+        html += '<option value="consult_hold"' + (curSt === 'consult_hold' ? ' selected' : '') + '>⏸️ 상담 보류</option>';
+        html += '<option value="coach_assigned"' + (curSt === 'coach_assigned' ? ' selected' : '') + '>🤝 코치배정 완료</option>';
+        html += '</select>';
+        html += '</td>';
 
-      // 💡 공정 단계별 스마트 단일/핵심 액션 버튼 렌더링
-      html += '<td style="padding: 12px 10px; text-align: center;">';
-      html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; align-items: center;">';
-      
-      // [1단계] 자서전 상담 및 코치 배정 단계
-      if (p.status === 'consult_pending' || isCoachPending) {
-        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="전담 작가 코치 지정 및 상담 확정">';
-        html += '<span>🤝</span> 코치 배정';
+        // 7. 담당 코치
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        if (isCoachPending) {
+          html += '<span style="font-weight: 800; color: #8b5cf6; font-size: 0.80rem;">배정 대기</span>';
+        } else {
+          html += '<div style="font-weight: 800; color: var(--text-primary); font-size: 0.84rem;">' + escapeHtml(p.coachName) + '</div>';
+          html += '<div style="font-size: 0.70rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
+        }
+        html += '</td>';
+
+        // 8. 상담 & 배정 액션
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        html += '<div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; align-items: center;">';
+        
+        // [📋 상담카드] 모달 열기 버튼
+        html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 1:1 상담 일지 열기">';
+        html += '<span>📋</span> 상담카드';
         html += '</button>';
-      } else if (p.status === 'coach_assigned') {
-        html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
-        html += '<span>💬</span> 코치카톡 전송 ➔';
-        html += '</button>';
-        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
+
+        if (isCoachPending) {
+          // [🤝 코치 배정] 버튼
+          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="전담 작가 코치 지정 및 일정 배정">';
+          html += '<span>🤝</span> 코치 배정';
+          html += '</button>';
+        } else {
+          // [💬 코치카톡 전송 ➔] 버튼
+          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
+          html += '<span>💬</span> 코치카톡 전송 ➔';
+          html += '</button>';
+          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.70rem; color: var(--text-muted); padding: 4px 5px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
+        }
+
+        // 삭제 버튼
+        html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
+        html += '</div>';
+        html += '</td>';
+
+        html += '</tr>';
+      } else {
+        // ========================================================
+        // 📚 [2~5단계 및 전체 공정 뷰] 수집자산 / 챕터 진척률 관리 테이블
+        // ========================================================
+        var st = statusConfig[p.status] || { label: p.status || '대기', bg: '#f1f5f9', color: '#475569' };
+        
+        var completedChapters = 0;
+        if (p.chapters && Array.isArray(p.chapters)) {
+          p.chapters.forEach(function(ch) {
+            if (ch.content && ch.content.trim().length > 50) completedChapters++;
+          });
+        }
+        var progressPercent = Math.round((completedChapters / 5) * 100);
+
+        html += '<tr style="border-bottom: 1px solid var(--border-color);">';
+        
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-weight: 750; color: var(--text-primary); font-size: 0.84rem;">' + (p.createdAt || '-') + '</div>';
+        html += '<div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">' + (p.id || '') + '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.94rem; display: flex; align-items: center; gap: 4px;">';
+        html += '<span>👵</span> <span>' + escapeHtml(p.clientName || '성함 미상') + '</span>';
+        html += '</div>';
+        html += '<div style="font-size: 0.78rem; color: var(--text-secondary);">' + (p.clientAge || '-') + ' · ' + escapeHtml(p.region || '지역 미지정') + '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="font-size: 0.84rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + ' (' + (p.relation || '의뢰') + ')</div>';
+        html += '<div style="display: inline-block; font-size: 0.72rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-top: 2px;">' + (p.packageLabel || '인생 마스터피스') + '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px;">';
+        var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기';
+        html += '<div style="font-weight: 800; color: ' + (isCoachPending ? '#8b5cf6' : 'var(--text-primary)') + '; font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 대기') + '</div>';
+        html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        html += '<div style="font-size: 0.82rem; font-weight: 750; color: var(--text-secondary); display: flex; flex-direction: column; gap: 2px;">';
+        html += '<span>🎙️ 녹음 ' + (p.recordingsCount || 0) + '건</span>';
+        html += '<span>🎞️ 사진 ' + (p.photosCount || 0) + '장</span>';
+        html += '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px;">';
+        html += '<div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 4px;">';
+        html += '<span>' + completedChapters + ' / 5 챕터</span>';
+        html += '<span>' + progressPercent + '%</span>';
+        html += '</div>';
+        html += '<div style="width: 100%; height: 7px; background: var(--bg-secondary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color);">';
+        html += '<div style="height: 100%; width: ' + progressPercent + '%; background: linear-gradient(90deg, #c29b38, #059669); border-radius: 999px; transition: width 0.3s ease;"></div>';
+        html += '</div>';
+        html += '</td>';
+
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        html += '<span style="display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 850; background: ' + st.bg + '; color: ' + st.color + ';">';
+        html += st.label;
+        html += '</span>';
+        html += '</td>';
+
+        // 💡 공정 단계별 스마트 단일/핵심 액션 버튼 렌더링
+        html += '<td style="padding: 12px 10px; text-align: center;">';
+        html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; align-items: center;">';
+        
+        // [1단계] 자서전 상담 및 코치 배정 단계 (전체 필터에서 볼 때)
+        if (p.status === 'consult_pending' || isCoachPending) {
+          html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 일지">';
+          html += '<span>📋</span> 상담';
+          html += '</button>';
+          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="전담 작가 코치 지정 및 상담 확정">';
+          html += '<span>🤝</span> 코치 배정';
+          html += '</button>';
+        } else if (p.status === 'coach_assigned') {
+          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
+          html += '<span>💬</span> 코치카톡 전송 ➔';
+          html += '</button>';
+          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
+        }
+        // [2단계] 현장 구술 인터뷰 단계
+        else if (p.status === 'interview_pending') {
+          html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인 및 3단계 감성윤문으로 이동">';
+          html += '<span>🎙️</span> 인터뷰 완료';
+          html += '</button>';
+          html += '<a href="coach-memoir.html?project=' + encodeURIComponent(p.id) + '&coach=' + encodeURIComponent(p.coachName || '') + '" target="_blank" class="btn-save-setting" style="background: #f8fafc; color: #334155; border: 1.2px solid #cbd5e1; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="코치 전담 글쓰기 스튜디오 새창 열기">';
+          html += '<span>✍️</span> 글쓰기앱';
+          html += '</a>';
+        } else if (p.status === 'interview_done') {
+          html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
+          html += '<span>✍️</span> AI윤문 &amp; 에디터';
+          html += '</button>';
+        }
+        // [3단계] AI 감성윤문 & 코치 교정 단계
+        else if (p.status === 'ai_drafted' || p.status === 'coach_reviewed') {
+          html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
+          html += '<span>✍️</span> 검수 에디터';
+          html += '</button>';
+          html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족용 디지털 플립북 링크 생성 및 가족 승인 요청">';
+          html += '<span>👨‍👩‍👧</span> 가족 승인요청';
+          html += '</button>';
+        }
+        // [4단계] 가족 승인 단계
+        else if (p.status === 'family_approved') {
+          html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 플립북 링크 복사">';
+          html += '<span>📖</span> 플립북 확인';
+          html += '</button>';
+          html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 최종 확인 완료 후 양장본 인쇄 발주 단계로 진입">';
+          html += '<span>🖨️</span> 인쇄 발주로 넘기기';
+          html += '</button>';
+        }
+        // [5단계] 인쇄 & 출판 완간 단계
+        else if (p.status === 'printing' || p.status === 'completed') {
+          html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="신국판 152×225 양장본 인쇄 조판 미리보기 및 PDF">';
+          html += '<span>🖨️</span> 양장본 인쇄 조판';
+          html += '</button>';
+          if (p.status === 'printing') {
+            html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 서재에 자동 전시">';
+            html += '✅ 완간 확정';
+            html += '</button>';
+          } else if (p.status === 'completed') {
+            html += '<a href="my-room.html" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="나의 서재에서 완간본 보기">';
+            html += '<span>📚</span> 완간 서재';
+            html += '</a>';
+          }
+        }
+
+        // 우측 끝에 프로젝트 삭제 버튼 (미니멀 디자인)
+        html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
+        
+        html += '</div>';
+        html += '</td>';
+
+        html += '</tr>';
       }
+    });
+
+    tbody.innerHTML = html;
+  }
+
+  // =========================================================================
+  // 📋 [신설] 1:1 자서전 상담신청서 & 상담일지 카드 모달 제어 함수군
+  // =========================================================================
+
+  var currentConsultCardStatus = 'consult_pending';
+
+  // 📋 자서전 상담 진행 상태 인라인 빠른 변경 (테이블 셀렉트용)
+  function changeMemoirConsultStatus(projectId, newStatus) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    p.status = newStatus;
+    if (newStatus === 'consult_pending') p.statusLabel = '자서전 상담 접수';
+    else if (newStatus === 'consult_contacted') p.statusLabel = '1차상담 완료';
+    else if (newStatus === 'consult_hold') p.statusLabel = '상담 보류';
+    else if (newStatus === 'coach_assigned') p.statusLabel = '코치 배정 완료';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+  }
+  window.changeMemoirConsultStatus = changeMemoirConsultStatus;
+
+  // 📋 자서전 1:1 상담신청서 & 일지 카드 모달 열기
+  function openMemoirConsultCardModal(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) {
+      alert('해당 자서전 상담 프로젝트를 찾을 수 없습니다.');
+      return;
+    }
+
+    var modal = document.getElementById('memoirConsultCardModal');
+    if (!modal) return;
+
+    // 기본 정보 바인딩
+    var idInput = document.getElementById('consultCardProjectId');
+    if (idInput) idInput.value = p.id;
+
+    var dateBadge = document.getElementById('consultCardDateBadge');
+    if (dateBadge) dateBadge.innerText = (p.createdAt || '-') + ' 접수';
+
+    var idBadge = document.getElementById('consultCardIdBadge');
+    if (idBadge) idBadge.innerText = p.id || '-';
+
+    // 어르신 정보 바인딩
+    var elderNameEl = document.getElementById('consultCardElderName');
+    if (elderNameEl) elderNameEl.innerText = (p.clientName || '성함 미상') + (p.clientAge ? ' (' + p.clientAge + ')' : '');
+
+    var elderRegionEl = document.getElementById('consultCardElderRegion');
+    if (elderRegionEl) elderRegionEl.innerText = p.region || '지역 미지정';
+
+    var packageEl = document.getElementById('consultCardPackage');
+    if (packageEl) packageEl.innerText = p.packageLabel || '인생 마스터피스 (시그니처)';
+
+    // 신청인 정보 바인딩
+    var applicantNameEl = document.getElementById('consultCardApplicantName');
+    if (applicantNameEl) applicantNameEl.innerText = p.applicantName || '-';
+
+    var relationEl = document.getElementById('consultCardRelation');
+    if (relationEl) relationEl.innerText = p.relation || '가족/의뢰';
+
+    var phone = p.applicantPhone || p.clientPhone || '-';
+    var phoneEl = document.getElementById('consultCardPhone');
+    if (phoneEl) phoneEl.innerText = phone;
+
+    var callBtn = document.getElementById('consultCardCallBtn');
+    if (callBtn) {
+      callBtn.href = 'tel:' + phone.replace(/[^0-9]/g, '');
+    }
+
+    // 고객 신청서 원문 표시
+    var notesBox = document.getElementById('consultCardNotesBox');
+    if (notesBox) {
+      notesBox.innerText = p.notes || '(고객이 작성한 추가 요청사항이 없습니다.)';
+    }
+
+    // 상담 일지 텍스트 바인딩
+    var logTextarea = document.getElementById('consultCardLog');
+    if (logTextarea) {
+      logTextarea.value = p.consultLog || '';
+    }
+
+    // 상태 버튼 UI 세팅
+    var st = p.status || 'consult_pending';
+    if (st === 'consult_done') st = 'consult_contacted';
+    setConsultCardStatus(st);
+
+    // 하단 코치 배정 버튼 텍스트 변경
+    var assignBtn = document.getElementById('consultCardAssignBtn');
+    if (assignBtn) {
+      if (p.coachName && p.coachName !== '배정 대기' && p.coachName !== '배정대기') {
+        assignBtn.innerHTML = '<span>🤝</span> 코치 재배정 (' + escapeHtml(p.coachName) + ')';
+      } else {
+        assignBtn.innerHTML = '<span>🤝</span> 담당 작가코치 배정하기 ➔';
+      }
+    }
+
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+  window.openMemoirConsultCardModal = openMemoirConsultCardModal;
+
+  function closeMemoirConsultCardModal() {
+    var modal = document.getElementById('memoirConsultCardModal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+  window.closeMemoirConsultCardModal = closeMemoirConsultCardModal;
+
+  function closeMemoirConsultCardModalOnOverlay(e) {
+    if (e && e.target && e.target.id === 'memoirConsultCardModal') {
+      closeMemoirConsultCardModal();
+    }
+  }
+  window.closeMemoirConsultCardModalOnOverlay = closeMemoirConsultCardModalOnOverlay;
+
+  function setConsultCardStatus(status, btnElement) {
+    currentConsultCardStatus = status;
+
+    // 모달 상단 뱃지 갱신
+    var badge = document.getElementById('consultCardStatusBadge');
+    if (badge) {
+      if (status === 'consult_pending') {
+        badge.innerText = '📋 접수 대기';
+        badge.style.background = 'rgba(139, 92, 246, 0.15)';
+        badge.style.color = '#7c3aed';
+      } else if (status === 'consult_contacted' || status === 'consult_done') {
+        badge.innerText = '📞 1차상담 완료';
+        badge.style.background = 'rgba(37, 99, 235, 0.15)';
+        badge.style.color = '#1d4ed8';
+      } else if (status === 'consult_hold') {
+        badge.innerText = '⏸️ 상담 보류';
+        badge.style.background = 'rgba(245, 158, 11, 0.15)';
+        badge.style.color = '#b45309';
+      } else if (status === 'coach_assigned') {
+        badge.innerText = '🤝 코치배정 완료';
+        badge.style.background = 'rgba(14, 165, 233, 0.15)';
+        badge.style.color = '#0284c7';
+      }
+    }
+
+    // 4개 상태 버튼 active 스타일 갱신
+    var btnMap = {
+      'consult_pending': 'btnConsultStatus_pending',
+      'consult_contacted': 'btnConsultStatus_contacted',
+      'consult_hold': 'btnConsultStatus_hold',
+      'coach_assigned': 'btnConsultStatus_coach_assigned'
+    };
+
+    Object.keys(btnMap).forEach(function(k) {
+      var b = document.getElementById(btnMap[k]);
+      if (b) {
+        if (k === status || (k === 'consult_contacted' && status === 'consult_done')) {
+          b.style.background = '#8b5cf6';
+          b.style.color = '#ffffff';
+          b.style.borderColor = '#7c3aed';
+          b.style.boxShadow = '0 2px 6px rgba(139,92,246,0.3)';
+        } else {
+          b.style.background = 'var(--bg-card, #ffffff)';
+          b.style.color = 'var(--text-secondary, #475569)';
+          b.style.borderColor = 'var(--border-color, #e2e8f0)';
+          b.style.boxShadow = 'none';
+        }
+      }
+    });
+  }
+  window.setConsultCardStatus = setConsultCardStatus;
+
+  function saveMemoirConsultCard() {
+    var idInput = document.getElementById('consultCardProjectId');
+    var projectId = idInput ? idInput.value : '';
+    if (!projectId) return;
+
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    var logVal = (document.getElementById('consultCardLog').value || '').trim();
+    p.consultLog = logVal;
+    p.status = currentConsultCardStatus || p.status;
+    if (p.status === 'consult_pending') p.statusLabel = '자서전 상담 접수';
+    else if (p.status === 'consult_contacted') p.statusLabel = '1차상담 완료';
+    else if (p.status === 'consult_hold') p.statusLabel = '상담 보류';
+    else if (p.status === 'coach_assigned') p.statusLabel = '코치 배정 완료';
+
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+
+    saveMemoirProjects(projects);
+    closeMemoirConsultCardModal();
+    renderMemoirDashboard();
+
+    alert('💾 [' + (p.clientName) + '] 님의 1:1 상담 일지 및 진행 상태가 성공적으로 저장되었습니다.');
+  }
+  window.saveMemoirConsultCard = saveMemoirConsultCard;
+
+  function assignCoachFromConsultCard() {
+    var idInput = document.getElementById('consultCardProjectId');
+    var projectId = idInput ? idInput.value : '';
+    if (!projectId) return;
+
+    // 현재 작성 중이던 상담 일지 자동 저장
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (p) {
+      var logVal = (document.getElementById('consultCardLog').value || '').trim();
+      if (logVal) p.consultLog = logVal;
+      saveMemoirProjects(projects);
+    }
+
+    closeMemoirConsultCardModal();
+    openMemoirCoachAssignModal(projectId);
+  }
+  window.assignCoachFromConsultCard = assignCoachFromConsultCard;
       // [2단계] 현장 구술 인터뷰 단계
       else if (p.status === 'interview_pending') {
         html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인 및 3단계 감성윤문으로 이동">';
@@ -18187,6 +18789,13 @@ ${coachAppUrl}
   window.closeMemoirProjectCreateModal = closeMemoirProjectCreateModal;
   window.handleCreateMemoirProject = handleCreateMemoirProject;
   window.deleteMemoirProject = deleteMemoirProject;
+  window.openMemoirConsultCardModal = openMemoirConsultCardModal;
+  window.closeMemoirConsultCardModal = closeMemoirConsultCardModal;
+  window.closeMemoirConsultCardModalOnOverlay = closeMemoirConsultCardModalOnOverlay;
+  window.setConsultCardStatus = setConsultCardStatus;
+  window.saveMemoirConsultCard = saveMemoirConsultCard;
+  window.assignCoachFromConsultCard = assignCoachFromConsultCard;
+  window.changeMemoirConsultStatus = changeMemoirConsultStatus;
   window.openMemoirCoachAssignModal = openMemoirCoachAssignModal;
   window.closeMemoirCoachAssignModal = closeMemoirCoachAssignModal;
   window.closeMemoirCoachAssignModalOnOverlay = closeMemoirCoachAssignModalOnOverlay;
