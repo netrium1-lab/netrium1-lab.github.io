@@ -16422,10 +16422,11 @@ ${coachAppUrl}
     }
   };
 
-  // 기본 고품질 데모 프로젝트 데이터
+  // 기본 5대 파이프라인 단계별 고품질 데모 프로젝트 데이터 (카테고리 누락 방지 완벽 구축)
   var DEFAULT_MEMOIR_PROJECTS = [
+    // [1단계] 자서전 상담 & 배정 대기
     {
-      id: 'mem_demo_consult',
+      id: 'mem_demo_consult_1',
       clientName: '이순자 어르신',
       clientAge: '74세',
       region: '서울 송파구 잠실동',
@@ -16446,6 +16447,30 @@ ${coachAppUrl}
       updatedAt: '2026.11.12',
       chapters: []
     },
+    // [1단계] 코치 배정 완료 (카톡 알림톡 전송 대기)
+    {
+      id: 'mem_demo_consult_2',
+      clientName: '정옥희 어르신',
+      clientAge: '79세',
+      region: '서울 마포구 상암동',
+      applicantName: '정민우 (장녀)',
+      applicantPhone: '010-4491-8820',
+      relation: '자녀',
+      packageType: 'basic',
+      packageLabel: '감사 헌정본 (Compact Tribute)',
+      coachName: '한지우 코치',
+      coachPhone: '010-9988-1234',
+      status: 'coach_assigned',
+      statusLabel: '코치 배정 완료',
+      recordingsCount: 0,
+      photosCount: 8,
+      notes: '상담 완료 후 한지우 코치 배정 완료. 주말 현장 방문 인터뷰 일정 조율 중.',
+      familyFeedback: '',
+      createdAt: '2026.11.11',
+      updatedAt: '2026.11.11',
+      chapters: []
+    },
+    // [2단계] 현장 구술 인터뷰 진행 중
     {
       id: 'mem_demo_park',
       clientName: '박판석 어르신',
@@ -16458,11 +16483,11 @@ ${coachAppUrl}
       packageLabel: '감사 헌정본 (Compact Tribute)',
       coachName: '박미정 코치',
       coachPhone: '010-8812-4455',
-      status: 'coach_assigned',
-      statusLabel: '코치 배정 완료',
-      recordingsCount: 1,
-      photosCount: 8,
-      notes: '상담 완료 후 박미정 코치 배정 완료. 팔순 잔치 낭독용 80페이지 포토 회고록 현장 구술 일정 조율 중.',
+      status: 'interview_pending',
+      statusLabel: '인터뷰 진행 중',
+      recordingsCount: 2,
+      photosCount: 12,
+      notes: '팔순 기념 80페이지 포토 회고록. 제1장, 제2장 유년 시절 구술 녹취 진행 완료.',
       familyFeedback: '',
       createdAt: '2026.11.09',
       updatedAt: '2026.11.10',
@@ -16474,6 +16499,7 @@ ${coachAppUrl}
         { id: 5, title: '제5장. 후손에게 전하는 유산', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' }
       ]
     },
+    // [3단계] AI 감성윤문 & 코치교정 중
     {
       id: 'mem_demo_kim',
       clientName: '김순옥 어르신',
@@ -16501,6 +16527,64 @@ ${coachAppUrl}
         { id: 4, title: CHAPTER_TEMPLATES[4].title, subtitle: CHAPTER_TEMPLATES[4].subtitle, status: 'completed', audioDuration: '19분 30초', transcript: CHAPTER_TEMPLATES[4].transcript, content: CHAPTER_TEMPLATES[4].content },
         { id: 5, title: CHAPTER_TEMPLATES[5].title, subtitle: CHAPTER_TEMPLATES[5].subtitle, status: 'completed', audioDuration: '15분 40초', transcript: CHAPTER_TEMPLATES[5].transcript, content: CHAPTER_TEMPLATES[5].content }
       ]
+    },
+    // [4단계] 가족 승인 대기
+    {
+      id: 'mem_demo_choi',
+      clientName: '최영호 어르신',
+      clientAge: '85세',
+      region: '서울 강남구 대치동',
+      applicantName: '최성민 (장남)',
+      applicantPhone: '010-7762-3341',
+      relation: '자녀',
+      packageType: 'masterpiece',
+      packageLabel: '인생 마스터피스 (시그니처)',
+      coachName: '윤지현 코치',
+      coachPhone: '010-4455-6677',
+      status: 'family_approved',
+      statusLabel: '가족 승인 대기',
+      recordingsCount: 5,
+      photosCount: 24,
+      notes: '월남 참전 및 건설 엔지니어 40년 회고록. 5개 챕터 초안 집필 완료 후 가족 플립북 공유 중.',
+      familyFeedback: '장남 최성민: 1968년 월남 파병 당시 전우들과 찍은 사진 캡션에 전우 이름(고 박상철 상병)을 추가해 주셨으면 합니다. 전체적으로 너무 감동적입니다.',
+      createdAt: '2026.11.05',
+      updatedAt: '2026.11.08',
+      chapters: [
+        { id: 1, title: '제1장. 유년과 고향의 기억', subtitle: '1.1. 지리산 자락 화개장터의 봄날', status: 'completed', audioDuration: '25분 10초', transcript: '화개장터 벚꽃길을 걸으며 어린 시절을 보냈지.', content: '1.1. 지리산 자락 화개장터의 봄날\n\n봄이면 섬진강 물결 위로 벚꽃 잎이 눈꽃처럼 흩날리던 고향...' },
+        { id: 2, title: '제2장. 청춘의 열정과 도전', subtitle: '2.1. 1968년 열사의 땅, 파병의 기억', status: 'completed', audioDuration: '30분 20초', transcript: '나라의 부름을 받고 청춘을 바쳤던 그 뜨거웠던 시절의 기록.', content: '2.1. 1968년 열사의 땅, 파병의 기억\n\n조국의 부름을 받고 떠났던 베트남 전선...' },
+        { id: 3, title: '제3장. 사랑과 가족의 결', subtitle: '3.1. 든든한 아내와 삼남매를 키워낸 세월', status: 'completed', audioDuration: '28분 00초', transcript: '언제나 내 곁을 묵묵히 지켜준 아내가 있었기에 오늘의 내가 있다.', content: '3.1. 든든한 아내와 삼남매를 키워낸 세월\n\n가장으로서 짊어졌던 무게는 가족의 사랑 덕분에 기쁨이 되었다...' },
+        { id: 4, title: '제4장. 시련을 넘은 삶의 지혜', subtitle: '4.1. 건설 현장에서 다진 뚝심', status: 'completed', audioDuration: '22분 15초', transcript: '포기하지 않고 한 걸음씩 나아가면 길은 반드시 열리는 법.', content: '4.1. 건설 현장에서 다진 뚝심\n\n수많은 빌딩과 교량을 세우며 다진 장인의 자부심...' },
+        { id: 5, title: '제5장. 후손에게 전하는 유산', subtitle: '5.1. 정직과 신의를 인생의 나침반으로', status: 'completed', audioDuration: '18분 40초', transcript: '아이들아, 물질보다 중요한 것은 마음에 품은 정직이란다.', content: '5.1. 정직과 신의를 인생의 나침반으로\n\n사랑하는 자손들에게 부끄럼 없는 삶의 궤적을 전한다...' }
+      ]
+    },
+    // [5단계] 인쇄 완료 & 출판 완간
+    {
+      id: 'mem_demo_kang',
+      clientName: '강명숙 어르신',
+      clientAge: '80세',
+      region: '부산 해운대구 우동',
+      applicantName: '이수현 (차녀)',
+      applicantPhone: '010-9112-5502',
+      relation: '자녀',
+      packageType: 'masterpiece',
+      packageLabel: '인생 마스터피스 (시그니처)',
+      coachName: '한지우 코치',
+      coachPhone: '010-9988-1234',
+      status: 'completed',
+      statusLabel: '출판 완간',
+      recordingsCount: 5,
+      photosCount: 30,
+      notes: '팔순 기념 하드커버 양장본 10부 제작 납품 완료. 나의 서재 및 디지털 뷰어 연동 완료.',
+      familyFeedback: '가족 일동: 표지 은박 가공과 종이 질감이 너무 고급스럽고, 부모님께서 책을 가슴에 안고 눈물을 흘리셨습니다. 최고의 효도 선물이 되었습니다.',
+      createdAt: '2026.10.28',
+      updatedAt: '2026.11.02',
+      chapters: [
+        { id: 1, title: '제1장. 유년과 고향의 기억', subtitle: '1.1. 자갈치 시장의 활기 속에서 피어난 꿈', status: 'completed', audioDuration: '27분 10초', transcript: '푸른 부산 앞바다와 함께 숨 쉬던 소녀 시절.', content: '1.1. 자갈치 시장의 활기 속에서 피어난 꿈\n\n파도 소리와 갈매기 울음소리가 일상의 자장가였던 남도의 바닷가...' },
+        { id: 2, title: '제2장. 청춘의 열정과 도전', subtitle: '2.1. 초등교사 35년, 아이들의 눈동자 속에서', status: 'completed', audioDuration: '35분 00초', transcript: '분필 가루를 날리며 아이들과 함께 웃고 울던 교단 35년.', content: '2.1. 초등교사 35년, 아이들의 눈동자 속에서\n\n참된 스승의 길을 걸으며 가슴속에 새긴 맑은 동심들...' },
+        { id: 3, title: '제3장. 사랑과 가족의 결', subtitle: '3.1. 따뜻한 밥상으로 엮어낸 행복', status: 'completed', audioDuration: '24분 30초', transcript: '자식들을 위해 정성껏 차려내던 어머니의 밥상.', content: '3.1. 따뜻한 밥상으로 엮어낸 행복\n\n소박하지만 온기가 넘쳐흐르던 우리 가족의 식탁...' },
+        { id: 4, title: '제4장. 시련을 넘은 삶의 지혜', subtitle: '4.1. 비바람 속에서도 꺼지지 않는 등불', status: 'completed', audioDuration: '20분 10초', transcript: '어려움이 닥칠 때마다 기도로 마음을 다잡았지.', content: '4.1. 비바람 속에서도 꺼지지 않는 등불\n\n지나온 고난의 시간들은 인생이라는 정원에 단비가 되었다...' },
+        { id: 5, title: '제5장. 후손에게 전하는 유산', subtitle: '5.1. 감사하는 마음이 가장 큰 복이란다', status: 'completed', audioDuration: '16분 50초', transcript: '언제나 감사하며 살아라. 그것이 인생의 가장 큰 비밀이다.', content: '5.1. 감사하는 마음이 가장 큰 복이란다\n\n아들과 딸, 사랑하는 손주들에게 바치는 어머니의 마지막 편지...' }
+      ]
     }
   ];
 
@@ -16510,18 +16594,59 @@ ${coachAppUrl}
       if (raw) {
         var parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // 💡 상담/배정 단계 건이 없으면 DEFAULT_MEMOIR_PROJECTS의 상담 항목을 자동 보강하여 누락 방지!
-          var hasConsult = parsed.some(function(p) {
-            return p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned';
-          });
-          if (!hasConsult) {
+          // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
+          var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
+          var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
+          var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
+          var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
+          var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
+
+          var changed = false;
+          // 1단계 누락 시 보강
+          if (!hasStage1) {
             DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
               if (dp.status === 'consult_pending' || dp.status === 'coach_assigned') {
                 if (!parsed.some(function(p) { return p.id === dp.id; })) {
-                  parsed.unshift(dp);
+                  parsed.unshift(JSON.parse(JSON.stringify(dp)));
+                  changed = true;
                 }
               }
             });
+          }
+          // 2단계 누락 시 보강
+          if (!hasStage2) {
+            var dp2 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'interview_pending'; });
+            if (dp2 && !parsed.some(function(p) { return p.id === dp2.id; })) {
+              parsed.push(JSON.parse(JSON.stringify(dp2)));
+              changed = true;
+            }
+          }
+          // 3단계 누락 시 보강
+          if (!hasStage3) {
+            var dp3 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'coach_reviewed'; });
+            if (dp3 && !parsed.some(function(p) { return p.id === dp3.id; })) {
+              parsed.push(JSON.parse(JSON.stringify(dp3)));
+              changed = true;
+            }
+          }
+          // 4단계 누락 시 보강
+          if (!hasStage4) {
+            var dp4 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'family_approved'; });
+            if (dp4 && !parsed.some(function(p) { return p.id === dp4.id; })) {
+              parsed.push(JSON.parse(JSON.stringify(dp4)));
+              changed = true;
+            }
+          }
+          // 5단계 누락 시 보강
+          if (!hasStage5) {
+            var dp5 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'completed'; });
+            if (dp5 && !parsed.some(function(p) { return p.id === dp5.id; })) {
+              parsed.push(JSON.parse(JSON.stringify(dp5)));
+              changed = true;
+            }
+          }
+
+          if (changed) {
             localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
           }
           return parsed;
@@ -16704,14 +16829,14 @@ ${coachAppUrl}
       }
       // [2단계] 현장 구술 인터뷰 단계
       else if (p.status === 'interview_pending') {
-        html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="코치에게 글쓰기 앱 카톡 재발송">';
-        html += '<span>💬</span> 코치 카톡';
-        html += '</button>';
-        html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 구술 인터뷰 녹음 완료 확인">';
+        html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인 및 3단계 감성윤문으로 이동">';
         html += '<span>🎙️</span> 인터뷰 완료';
         html += '</button>';
+        html += '<a href="coach-memoir.html?project=' + encodeURIComponent(p.id) + '&coach=' + encodeURIComponent(p.coachName || '') + '" target="_blank" class="btn-save-setting" style="background: #f8fafc; color: #334155; border: 1.2px solid #cbd5e1; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="코치 전담 글쓰기 스튜디오 새창 열기">';
+        html += '<span>✍️</span> 글쓰기앱';
+        html += '</a>';
       } else if (p.status === 'interview_done') {
-        html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
+        html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
         html += '<span>✍️</span> AI윤문 &amp; 에디터';
         html += '</button>';
       }
@@ -16742,6 +16867,10 @@ ${coachAppUrl}
           html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 서재에 자동 전시">';
           html += '✅ 완간 확정';
           html += '</button>';
+        } else if (p.status === 'completed') {
+          html += '<a href="my-room.html" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="나의 서재에서 완간본 보기">';
+          html += '<span>📚</span> 완간 서재';
+          html += '</a>';
         }
       }
 
@@ -17185,10 +17314,20 @@ ${coachAppUrl}
     if (group) {
       var btns = group.querySelectorAll('.memoir-pipeline-btn, .btn-mag-filter');
       btns.forEach(function(b) { b.classList.remove('active'); });
+      if (btn) {
+        btn.classList.add('active');
+      } else {
+        btns.forEach(function(b) {
+          var onclickStr = b.getAttribute('onclick') || '';
+          if (onclickStr.indexOf("'" + filterType + "'") !== -1) {
+            b.classList.add('active');
+          }
+        });
+      }
     }
-    if (btn) btn.classList.add('active');
     renderMemoirDashboard();
   }
+  window.filterMemoirProjects = filterMemoirProjects;
 
   function handleMemoirSearch(val) {
     currentMemoirSearch = val ? val.trim() : '';
