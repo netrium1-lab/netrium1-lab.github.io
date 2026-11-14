@@ -5883,20 +5883,6 @@
       var btns = document.querySelectorAll('[id^="filterConsult_"]');
       btns.forEach(function(b) { b.classList.remove('active'); });
       if (btn) btn.classList.add('active');
-      var tabBreadcrumbMap = {
-        tabCockpit: '<span>📊</span> 01. 종합 관제 홈',
-        tabConsult: '<span>📋</span> 02. 고객 접수 & 상담',
-        tabBusinessMaster: '<span>🌟</span> 03. 4대 비즈니스 관제',
-        tabMemoirDashboard: '<span>📖</span> 04. 자서전 출판 관제',
-        tabCoachControl: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabAcademy: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabMagazine: '<span>📚</span> 06. 여백서재 & 아카이브',
-        tabSettings: '<span>⚙️</span> 07. 환경설정 & 채널연동'
-      };
-      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
-      if (headerTabBadge && tabBreadcrumbMap[tabId]) {
-        headerTabBadge.innerHTML = tabBreadcrumbMap[tabId];
-      }
 
       var tbody = document.getElementById('diagReservationTableBody');
       if (!tbody || typeof getDiagReservations !== 'function') return;
@@ -5922,8 +5908,23 @@
         var date = item.createdAt || item.date || '-';
         var itemStatus = item.status || '대기';
 
-        var statusStyle = itemStatus === '완료' ? 'background:#dcfce7; color:#15803d; border:1px solid #86efac;' :
-          (itemStatus === '진행' ? 'background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc;' : 'background:#fef3c7; color:#b45309; border:1px solid #fde68a;');
+        var statusBadgeHtml = '';
+        if (itemStatus === '완료') {
+          statusBadgeHtml = '<button class="badge-pin" style="background:#dcfce7; color:#15803d; border:1.2px solid #86efac; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 완료 (클릭하여 상태 변경)">✓ 완료</button>';
+        } else if (itemStatus === '진행') {
+          statusBadgeHtml = '<button class="badge-pin" style="background:#e0f2fe; color:#0284c7; border:1.2px solid #7dd3fc; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 진행중 (클릭하여 상태 변경)">📞 진행중</button>';
+        } else {
+          statusBadgeHtml = '<button class="badge-pin" style="background:#fffbeb; color:#b45309; border:1.2px solid #fde68a; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 대기 (클릭하여 상태 변경)">⏳ 대기</button>';
+        }
+
+        var isMemoir = cat.indexOf('자서전') !== -1;
+        var assignBtnHtml = '';
+        if (isMemoir) {
+          var targetMemoirId = item.memoirProjectId || 'mem_demo_consult_1';
+          assignBtnHtml = '<button type="button" class="btn-action-sm" onclick="connectConsultToMemoirAssign(\'' + targetMemoirId + '\')" style="background:#8b5cf6; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="자서전 전담 코치 배정 모달 열기">🤝 코치배정</button>';
+        } else {
+          assignBtnHtml = '<button type="button" class="btn-action-sm" onclick="openDispatchModal()" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="현장 코치 파견 배정">🤝 코치배정</button>';
+        }
 
         return '<tr>' +
           '<td><span style="display:inline-block; padding:3px 8px; border-radius:6px; background:rgba(43,90,66,0.08); color:var(--accent); font-size:0.8rem; font-weight:800;">' + escapeHtml(cat) + '</span></td>' +
@@ -5931,9 +5932,12 @@
           '<td><a href="tel:' + escapeHtml(phone) + '" style="color:var(--accent); font-weight:700;">' + escapeHtml(phone) + '</a></td>' +
           '<td style="max-width:280px; font-size:0.85rem; color:var(--text-sub);">' + escapeHtml(note) + '</td>' +
           '<td style="font-size:0.82rem; color:var(--text-muted);">' + escapeHtml(date) + '</td>' +
-          '<td style="text-align:center;"><span style="display:inline-block; padding:3px 8px; border-radius:999px; font-size:0.75rem; font-weight:850; ' + statusStyle + '">' + escapeHtml(itemStatus) + '</span></td>' +
+          '<td style="text-align:center;">' + statusBadgeHtml + '</td>' +
           '<td style="text-align:center;">' +
-            '<button type="button" class="btn-action-sm" onclick="openDispatchModal();" style="padding:4px 8px; font-size:0.76rem; background:#fffbeb; color:#b45309; border:1px solid #fde68a;">🤝 코치배정</button>' +
+            '<div style="display:flex; gap:4px; justify-content:center; align-items:center;">' +
+              assignBtnHtml +
+              '<button class="btn-action-sm del" onclick="deleteDiagReservation(\'' + item.id + '\')" title="상담 내역 삭제">삭제</button>' +
+            '</div>' +
           '</td>' +
         '</tr>';
       }).join('');
@@ -13268,9 +13272,24 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         const note = item.note || item.memo || '-';
         const date = item.createdAt || item.date || '-';
         const status = item.status || '대기';
+        let statusBadgeHtml = '';
+        if (status === '완료') {
+          statusBadgeHtml = `<button class="badge-pin" style="background:#dcfce7; color:#15803d; border:1.2px solid #86efac; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 완료 (클릭하여 상태 변경)">✓ 완료</button>`;
+        } else if (status === '진행') {
+          statusBadgeHtml = `<button class="badge-pin" style="background:#e0f2fe; color:#0284c7; border:1.2px solid #7dd3fc; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 진행중 (클릭하여 상태 변경)">📞 진행중</button>`;
+        } else {
+          statusBadgeHtml = `<button class="badge-pin" style="background:#fffbeb; color:#b45309; border:1.2px solid #fde68a; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 대기 (클릭하여 상태 변경)">⏳ 대기</button>`;
+        }
 
-        const statusClass = status === '완료' ? 'pinned' : (status === '진행' ? 'active-step' : 'unpinned');
-        const statusStyle = status === '진행' ? 'background:#e0f2fe; color:#0369a1; border:1px solid #7dd3fc;' : '';
+        // 분야별 코치 배정 연계 버튼
+        let assignBtnHtml = '';
+        const isMemoir = cat.indexOf('자서전') !== -1;
+        if (isMemoir) {
+          const targetMemoirId = item.memoirProjectId || 'mem_demo_consult_1';
+          assignBtnHtml = `<button type="button" class="btn-action-sm" onclick="connectConsultToMemoirAssign('${targetMemoirId}')" style="background:#8b5cf6; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="자서전 전담 코치 배정 모달 열기">🤝 코치배정</button>`;
+        } else {
+          assignBtnHtml = `<button type="button" class="btn-action-sm" onclick="openDispatchModal()" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="현장 코치 파견 배정">🤝 코치배정</button>`;
+        }
 
         return `
           <tr>
@@ -13284,17 +13303,28 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             <td style="max-width:280px; line-height:1.4; font-size:0.88rem;">${escapeHtml(note)}</td>
             <td style="color:var(--text-muted); font-size:0.85rem;">${escapeHtml(date)}</td>
             <td style="text-align:center;">
-              <button class="badge-pin ${statusClass}" style="${statusStyle}" onclick="toggleDiagReservationStatus('${item.id}')" title="클릭하여 상태 변경">
-                ${escapeHtml(status)}
-              </button>
+              ${statusBadgeHtml}
             </td>
             <td style="text-align:center;">
-              <button class="btn-action-sm del" onclick="deleteDiagReservation('${item.id}')">삭제</button>
+              <div style="display:flex; gap:4px; justify-content:center; align-items:center;">
+                ${assignBtnHtml}
+                <button class="btn-action-sm del" onclick="deleteDiagReservation('${item.id}')" title="상담 내역 삭제">삭제</button>
+              </div>
             </td>
           </tr>
         `;
       }).join('');
     }
+
+    // 02번 탭에서 자서전 코치 배정 연계 함수
+    function connectConsultToMemoirAssign(memoirProjectId) {
+      if (typeof openMemoirCoachAssignModal === 'function') {
+        openMemoirCoachAssignModal(memoirProjectId);
+      } else {
+        switchTab('tabMemoirDashboard');
+      }
+    }
+    window.connectConsultToMemoirAssign = connectConsultToMemoirAssign;
 
     function toggleDiagReservationStatus(id) {
       const list = getDiagReservations();
@@ -16893,6 +16923,9 @@ ${coachAppUrl}
   function openMemoirCoachAssignModal(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) {
+      p = projects.find(function(item) { return item.status === 'consult_pending' || item.status === 'coach_assigned'; }) || projects[0];
+    }
     if (!p) {
       alert('자서전 프로젝트 정보를 찾을 수 없습니다.');
       return;

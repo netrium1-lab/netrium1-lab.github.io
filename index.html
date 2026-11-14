@@ -9728,9 +9728,9 @@
         packageType: pkgType,
         packageLabel: pkgLabel,
         notes: notes || '',
-        status: 'interview_pending',
-        statusLabel: '인터뷰 대기',
-        coachName: '배정 중',
+        status: 'consult_pending',
+        statusLabel: '자서전 상담 접수',
+        coachName: '배정 대기',
         coachPhone: '',
         recordingsCount: 0,
         photosCount: 0,
@@ -9751,7 +9751,7 @@
       }
 
       try {
-        // 1. LocalStorage 저장
+        // 1. LocalStorage yebaek_memoir_projects 저장 (04. 자서전 출판 관제 파이프라인 연동)
         var localProjects = [];
         try {
           var raw = localStorage.getItem('yebaek_memoir_projects');
@@ -9759,6 +9759,26 @@
         } catch(err) {}
         localProjects.unshift(projectData);
         localStorage.setItem('yebaek_memoir_projects', JSON.stringify(localProjects));
+
+        // 1-2. 02. 고객 접수 & 맞춤 상담 파이프라인(yebaek_diag_reservations) 동시 등록
+        try {
+          var diagList = [];
+          var rawDiag = localStorage.getItem('yebaek_diag_reservations');
+          if (rawDiag) diagList = JSON.parse(rawDiag);
+          diagList.unshift({
+            id: 'cs_diag_' + projectId,
+            memoirProjectId: projectId,
+            category: '✍️ 내 인생의 디지털 자서전',
+            role: seniorName + ' 어르신 (' + relation + ' ' + applicantName + ' 신청)',
+            phone: applicantPhone,
+            note: '[' + pkgLabel + '] ' + (region ? '지역: ' + region + ' / ' : '') + notes,
+            status: '대기',
+            createdAt: dateStr + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0')
+          });
+          localStorage.setItem('yebaek_diag_reservations', JSON.stringify(diagList));
+        } catch(diagErr) {
+          console.warn('[Memoir] 진단 상담 목록 연동:', diagErr);
+        }
 
         // 2. Firestore memoir_projects 저장
         if (typeof db !== 'undefined' && db) {
