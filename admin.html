@@ -3877,7 +3877,7 @@
   </div>
 
 <!-- ================= [신설] 모달: 🎙️ 비포/애프터 자서전 스플릿 뷰 스마트 에디터 ================= -->
-  <div class="cms-modal-overlay" id="memoirSplitEditorModal" style="display: none; z-index: 10070;">
+  <div class="cms-modal-overlay" id="memoirSplitEditorModal" style="display: none; z-index: 10070;" onclick="closeMemoirSplitEditorOnOverlay(event)">
     <div style="background: var(--bg-card, #ffffff); max-width: 1360px; width: 96%; height: 94vh; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.35); border: 2px solid #c29b38; display: flex; flex-direction: column; overflow: hidden;">
       
       <!-- 상단 헤더 & 프로젝트 메타바 -->
@@ -17234,8 +17234,8 @@ ${coachAppUrl}
     var p = projects.find(function(item) { return item.id === projectId; });
     if (!p) return;
 
-    var flipbookUrl = window.location.origin + window.location.pathname.replace('admin.html', '') + 'memoir-flipbook.html?id=' + projectId;
-    var msg = `[여백과 결] ${p.clientName} 어르신 자서전 초안 가족 검수 안내\n\n가족 여러분 안녕하세요!\n어르신의 귀한 생애 구술 인터뷰를 바탕으로 정성껏 다듬은 자서전 초안이 완성되었습니다.\n\n📖 가족 전용 디지털 플립북 열람 링크:\n${flipbookUrl}\n\n내용을 함께 읽어보시고 수정 희망 사항이 있으시면 코치 또는 운영팀에 편히 말씀해 주세요!`;
+    var flipbookUrl = window.location.origin + window.location.pathname.replace('admin.html', '') + 'my-room.html?memoir=' + projectId;
+    var msg = `[여백과 결] ${p.clientName} 어르신 자서전 초안 가족 검수 안내\n\n가족 여러분 안녕하세요!\n어르신의 귀한 생애 구술 인터뷰를 바탕으로 정성껏 다듬은 자서전 초안이 완성되었습니다.\n\n📖 가족 전용 디지털 서재/플립북 열람 링크:\n${flipbookUrl}\n\n내용을 함께 읽어보시고 수정 희망 사항이 있으시면 코치 또는 본사 운영팀에 편히 말씀해 주세요!`;
     
     try {
       navigator.clipboard.writeText(msg);
@@ -17247,7 +17247,7 @@ ${coachAppUrl}
     saveMemoirProjects(projects);
     renderMemoirDashboard();
 
-    alert('👨‍👩‍👧 가족 검수 안내문과 디지털 플립북 링크가 클립보드에 복사되었습니다!\n\n프로젝트가 [4. 가족 승인] 단계로 전환되었습니다.');
+    alert('👨‍👩‍👧 가족 검수 안내문과 디지털 서재 링크가 클립보드에 복사되었습니다!\n\n프로젝트가 [4. 가족 승인] 단계로 전환되었습니다.');
   }
   window.requestFamilyApproval = requestFamilyApproval;
 
@@ -17337,6 +17337,33 @@ ${coachAppUrl}
   // ==========================================
   // 스플릿 뷰 에디터 모달 제어
   // ==========================================
+  // 챕터별 테마 복원 사진 자산 데이터
+  var CHAPTER_THEME_PHOTOS = {
+    1: [
+      { img: 'images/showcase-senior-memoir.jpg', caption: '1962년 고향집 앞마당' },
+      { img: 'images/care-beauty-hero.jpg', caption: '어머니의 젊은 날' }
+    ],
+    2: [
+      { img: 'images/showcase-senior-interior.jpg', caption: '1970년 상경 첫 일터' },
+      { img: 'images/care-rehab-hero.jpg', caption: '청춘의 열정과 땀방울' }
+    ],
+    3: [
+      { img: 'images/showcase-senior-memoir.jpg', caption: '1978년 결혼식 기념' },
+      { img: 'images/care-beauty-hero.jpg', caption: '삼남매 돌잔치' }
+    ],
+    4: [
+      { img: 'images/care-rehab-hero.jpg', caption: '1995년 건설 현장과 성취' },
+      { img: 'images/showcase-senior-interior.jpg', caption: '시련을 이겨낸 감사패' }
+    ],
+    5: [
+      { img: 'images/showcase-senior-memoir.jpg', caption: '2026년 칠순 잔치 가족 일동' },
+      { img: 'images/care-beauty-hero.jpg', caption: '사랑하는 손주들과 함께' }
+    ]
+  };
+
+  // ==========================================
+  // 스플릿 뷰 에디터 모달 제어 (완벽 동기화 엔진)
+  // ==========================================
   function openMemoirSplitEditor(projectId, chapterId) {
     var projects = getMemoirProjects();
     var project = projects.find(function(p) { return p.id === projectId; });
@@ -17354,11 +17381,20 @@ ${coachAppUrl}
     var elStatusSelect = document.getElementById('splitProjectStatusSelect');
     var elFeedback = document.getElementById('splitFamilyFeedbackMemo');
 
-    if (elElderBadge) elElderBadge.innerText = (project.clientName || '어르신') + ' (' + (project.clientAge || '-') + ')';
-    if (elPackageBadge) elPackageBadge.innerText = project.packageLabel || '인생 마스터피스';
+    if (elElderBadge) elElderBadge.innerText = (project.clientName || '어르신') + ' (' + (project.clientAge || '-') + ' · ' + (project.region || '') + ')';
+    if (elPackageBadge) elPackageBadge.innerText = project.packageLabel || '인생 마스터피스 (시그니처)';
     if (elCoachBadge) elCoachBadge.innerText = '담당: ' + (project.coachName || '배정 대기');
     if (elStatusSelect) elStatusSelect.value = project.status || 'interview_pending';
     if (elFeedback) elFeedback.value = project.familyFeedback || '';
+
+    // 챕터 탭 바(1~5장) 활성 버튼 동기화
+    var tabBar = document.getElementById('splitChapterTabBar');
+    if (tabBar) {
+      var btns = tabBar.querySelectorAll('.btn-mag-filter');
+      btns.forEach(function(b, idx) {
+        b.classList.toggle('active', (idx + 1) === activeMemoirChapterId);
+      });
+    }
 
     bindSplitChapterData(project, activeMemoirChapterId);
 
@@ -17366,41 +17402,49 @@ ${coachAppUrl}
     if (modal) {
       modal.style.display = 'flex';
       modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
   }
+  window.openMemoirSplitEditor = openMemoirSplitEditor;
 
   function closeMemoirSplitEditor() {
     if (isSplitAudioPlaying) toggleSplitAudioSim();
+    var realAudio = document.getElementById('splitRealAudioElement');
+    if (realAudio) {
+      realAudio.pause();
+      realAudio.currentTime = 0;
+    }
     var modal = document.getElementById('memoirSplitEditorModal');
     if (modal) {
       modal.style.display = 'none';
       modal.classList.remove('open');
+      document.body.style.overflow = '';
     }
     renderMemoirDashboard();
   }
+  window.closeMemoirSplitEditor = closeMemoirSplitEditor;
+
+  function closeMemoirSplitEditorOnOverlay(e) {
+    if (e && e.target && e.target.id === 'memoirSplitEditorModal') {
+      closeMemoirSplitEditor();
+    }
+  }
+  window.closeMemoirSplitEditorOnOverlay = closeMemoirSplitEditorOnOverlay;
 
   function switchSplitChapter(chapterId, btn) {
     activeMemoirChapterId = chapterId;
     var tabBar = document.getElementById('splitChapterTabBar');
     if (tabBar) {
       var btns = tabBar.querySelectorAll('.btn-mag-filter');
-      btns.forEach(function(b) { b.classList.remove('active'); });
+      btns.forEach(function(b, idx) {
+        if (btn) {
+          b.classList.remove('active');
+        } else {
+          b.classList.toggle('active', (idx + 1) === chapterId);
+        }
+      });
+      if (btn) btn.classList.add('active');
     }
-    if (btn) btn.classList.add('active');
-      var tabBreadcrumbMap = {
-        tabCockpit: '<span>📊</span> 01. 종합 관제 홈',
-        tabConsult: '<span>📋</span> 02. 고객 접수 & 상담',
-        tabBusinessMaster: '<span>🌟</span> 03. 4대 비즈니스 관제',
-        tabMemoirDashboard: '<span>📖</span> 04. 자서전 출판 관제',
-        tabCoachControl: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabAcademy: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabMagazine: '<span>📚</span> 06. 여백서재 & 아카이브',
-        tabSettings: '<span>⚙️</span> 07. 환경설정 & 채널연동'
-      };
-      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
-      if (headerTabBadge && tabBreadcrumbMap[tabId]) {
-        headerTabBadge.innerHTML = tabBreadcrumbMap[tabId];
-      }
 
     var projects = getMemoirProjects();
     var project = projects.find(function(p) { return p.id === activeMemoirProjectId; });
@@ -17408,6 +17452,7 @@ ${coachAppUrl}
       bindSplitChapterData(project, chapterId);
     }
   }
+  window.switchSplitChapter = switchSplitChapter;
 
   function bindSplitChapterData(project, chapterId) {
     var chapters = project.chapters || [];
@@ -17422,7 +17467,7 @@ ${coachAppUrl}
         subtitle: tpl.subtitle,
         transcript: tpl.transcript,
         content: tpl.content,
-        audioDuration: '20분 내외'
+        audioDuration: (20 + chapterId * 3) + '분 내외'
       };
       if (!project.chapters) project.chapters = [];
       project.chapters.push(chapter);
@@ -17438,8 +17483,23 @@ ${coachAppUrl}
     if (elSubtitle) elSubtitle.value = chapter.subtitle || '';
     if (elContent) elContent.value = chapter.content || '';
 
+    // 챕터별 테마 사진 갤러리 프리뷰 동적 렌더링
+    var photoContainer = document.getElementById('splitPhotosPreview');
+    if (photoContainer) {
+      var photos = CHAPTER_THEME_PHOTOS[chapterId] || CHAPTER_THEME_PHOTOS[1];
+      var photoHtml = '';
+      photos.forEach(function(item) {
+        photoHtml += '<div style="width: 110px; height: 80px; border-radius: 8px; background: #e2e8f0; border: 1.5px solid var(--border-color); overflow: hidden; position: relative; box-shadow: 0 2px 5px rgba(0,0,0,0.06);">';
+        photoHtml += '<img src="' + item.img + '" alt="' + item.caption + '" style="width: 100%; height: 100%; object-fit: cover;">';
+        photoHtml += '<span style="position: absolute; bottom: 3px; left: 3px; right: 3px; background: rgba(0,0,0,0.65); color: #fff; font-size: 0.65rem; padding: 2px 4px; border-radius: 4px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + item.caption + '</span>';
+        photoHtml += '</div>';
+      });
+      photoContainer.innerHTML = photoHtml;
+    }
+
     updateSplitCharCount();
   }
+  window.bindSplitChapterData = bindSplitChapterData;
 
   function loadSplitTranscriptToEditor() {
     var elTranscript = document.getElementById('splitTranscriptText');
@@ -17451,6 +17511,7 @@ ${coachAppUrl}
       updateSplitCharCount();
     }
   }
+  window.loadSplitTranscriptToEditor = loadSplitTranscriptToEditor;
 
   function updateSplitCharCount() {
     var elContent = document.getElementById('splitChapterContent');
@@ -17462,6 +17523,7 @@ ${coachAppUrl}
       badge.innerText = len.toLocaleString() + '자 · 신국판 약 ' + pages + '페이지';
     }
   }
+  window.updateSplitCharCount = updateSplitCharCount;
 
   // 🤖 원클릭 AI 음성 녹취 & 5단계 감성 윤문 자동 생성기
   function runOneClickAiMemoirPipeline() {
@@ -17473,7 +17535,7 @@ ${coachAppUrl}
     var btn = document.getElementById('btnAiOneClickPipeline');
     if (btn) {
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳ 음성인식 &amp; 여백 윤문 AI 작동 중 (5단계)...</span>';
+      btn.innerHTML = '<span>⏳ Whisper 음성인식 &amp; 여백 윤문 AI 작동 중 (5단계)...</span>';
     }
 
     setTimeout(function() {
@@ -17524,6 +17586,7 @@ ${coachAppUrl}
       alert('✨ [AI 파이프라인 가동 완료]\n\n1. 음성 녹음 데이터 ➔ Whisper STT 한국어 텍스트화 완료\n2. 여백과 결 5단계 감성 윤문 엔진 ➔ 1장~5장 생애 서사 완성!\n\n우측 에디터에서 완성된 윤문 원고를 검수하시고 가족들과 피드백을 나눠보세요.');
     }, 1200);
   }
+  window.runOneClickAiMemoirPipeline = runOneClickAiMemoirPipeline;
 
   // 스마트 AI 윤문 도구
   function runAiPolishTool(toolType) {
@@ -17563,6 +17626,7 @@ ${coachAppUrl}
     }
     updateSplitCharCount();
   }
+  window.runAiPolishTool = runAiPolishTool;
 
   // 오디오 파일 업로드 핸들러
   function handleAudioFileUpload(e) {
@@ -17584,6 +17648,7 @@ ${coachAppUrl}
 
     alert('🎙️ [' + file.name + '] 녹음 파일이 로드되었습니다.\n[🤖 원클릭 AI 음성 녹취 & 5단계 감성 윤문 생성] 버튼을 누르면 AI가 본문을 자동으로 작성합니다.');
   }
+  window.handleAudioFileUpload = handleAudioFileUpload;
 
   function toggleSplitAudioSim() {
     var btn = document.getElementById('splitAudioPlayBtn');
@@ -17607,6 +17672,7 @@ ${coachAppUrl}
       }, 1000);
     }
   }
+  window.toggleSplitAudioSim = toggleSplitAudioSim;
 
   function saveMemoirSplitChapter() {
     if (!activeMemoirProjectId) return;
@@ -17635,8 +17701,10 @@ ${coachAppUrl}
     project.updatedAt = new Date().toISOString().slice(0,10).replace(/-/g, '.');
 
     saveMemoirProjects(projects);
+    renderMemoirDashboard();
     alert('💾 제' + activeMemoirChapterId + '장 윤문 원고 및 가족 피드백이 저장되었습니다!');
   }
+  window.saveMemoirSplitChapter = saveMemoirSplitChapter;
 
   function handleSplitStatusChange(newStatus) {
     if (!activeMemoirProjectId) return;
@@ -17649,15 +17717,18 @@ ${coachAppUrl}
     saveMemoirProjects(projects);
     renderMemoirDashboard();
   }
+  window.handleSplitStatusChange = handleSplitStatusChange;
 
-  function copyFlipbookLink() {
-    var url = window.location.origin + window.location.pathname.replace('admin.html', 'my-room.html') + '?memoir=' + (activeMemoirProjectId || 'demo');
+  function copyFlipbookLink(projectId) {
+    var targetId = projectId || activeMemoirProjectId || 'demo';
+    var url = window.location.origin + window.location.pathname.replace('admin.html', '') + 'my-room.html?memoir=' + targetId;
     navigator.clipboard.writeText(url).then(function() {
       alert('📖 가족 전용 온라인 감상 및 피드백 서재 링크가 복사되었습니다!\n\n가족들에게 카카오톡으로 전달하여 부모님의 윤문 원고를 감상하고 피드백을 나눌 수 있습니다:\n' + url);
     }).catch(function() {
       prompt('아래 가족 전용 서재 링크를 복사해 사용하세요:', url);
     });
   }
+  window.copyFlipbookLink = copyFlipbookLink;
 
   // ==========================================
   // 🖨️ 양장본 인쇄 규격 (신국판 152×225) 실제 출판 PDF 생성기
@@ -18072,6 +18143,7 @@ ${coachAppUrl}
   window.handleMemoirSearch = handleMemoirSearch;
   window.openMemoirSplitEditor = openMemoirSplitEditor;
   window.closeMemoirSplitEditor = closeMemoirSplitEditor;
+  window.closeMemoirSplitEditorOnOverlay = closeMemoirSplitEditorOnOverlay;
   window.switchSplitChapter = switchSplitChapter;
   window.bindSplitChapterData = bindSplitChapterData;
   window.loadSplitTranscriptToEditor = loadSplitTranscriptToEditor;
