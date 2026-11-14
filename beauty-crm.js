@@ -882,12 +882,19 @@ function goToCoachControlForClient(name) {
   if (typeof switchTab === 'function') {
     switchTab('tabCoachControl');
   }
+  // 이름에서 괄호 및 호칭 정리하여 가장 정확한 검색 키워드 도출
+  const cleanKeyword = (name || '').replace(/\s*\([^)]*\)/g, '').replace(/어머니|어르신|님|모친/g, '').trim();
   const searchInput = document.getElementById('inputControlSearch');
   if (searchInput) {
-    searchInput.value = name || '';
-    if (typeof handleControlSearch === 'function') {
-      handleControlSearch(name || '');
-    }
+    searchInput.value = cleanKeyword || name || '';
+  }
+  // 상태 필터를 'all'로 리셋하여 특정 상태에 가려지지 않도록 보장
+  if (typeof filterControlFeed === 'function') {
+    const allBtn = document.getElementById('btnFilterControl_all');
+    filterControlFeed('all', allBtn);
+  }
+  if (typeof handleControlSearch === 'function') {
+    handleControlSearch(cleanKeyword || name || '');
   }
 }
 
