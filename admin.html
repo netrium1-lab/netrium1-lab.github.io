@@ -2028,10 +2028,29 @@
     /* 파이프라인 단계 필터 버튼 바 */
     .pipeline-step-bar {
       display: flex;
+      align-items: center;
       gap: 8px;
       overflow-x: auto;
       margin: 18px 0 20px;
       padding-bottom: 4px;
+    }
+    .kpi-filter-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 14px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+      position: relative;
+    }
+    .kpi-filter-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+    }
+    .kpi-filter-card.active {
+      background: #ffffff !important;
+      box-shadow: 0 0 0 2px currentColor, 0 6px 20px rgba(0, 0, 0, 0.1);
     }
     .pipeline-step-btn {
       padding: 8px 16px;
@@ -2057,6 +2076,24 @@
       color: #ffffff;
       border-color: #b83354;
       box-shadow: 0 2px 8px rgba(184, 51, 84, 0.3);
+    }
+    .pipeline-step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 850;
+      background: rgba(0, 0, 0, 0.08);
+      color: currentColor;
+      line-height: 1;
+    }
+    .pipeline-step-btn.active .pipeline-step-badge {
+      background: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
     }
 
     /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
@@ -2925,38 +2962,60 @@
             </div>
           </div>
 
-          <!-- 4대 핵심 원스톱 파이프라인 KPI 카드 -->
+          <!-- 4대 핵심 원스톱 파이프라인 KPI 카드 (클릭 시 하위 필터로 즉시 연동) -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 18px 0 22px;">
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #d1516e;">
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 고객 상담 접수 (Lead)</div>
+            <div id="bizKpiCard_step1" class="kpi-filter-card" onclick="switchPipelineStep('step1')" style="border-left: 4px solid #d1516e;" title="클릭 시 ① 고객 상담 접수(Lead) 단계로 필터링합니다">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 고객 상담 접수 (Lead)</div>
+                <span style="font-size: 0.72rem; color: #b83354; background: #fff0f3; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+              </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: #b83354; margin-top: 4px;" id="bizKpi_lead">1건</div>
               <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">신규 문의 및 예약</div>
             </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #0284c7;">
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 공인 코치 배정 완료</div>
+            <div id="bizKpiCard_step2" class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7;" title="클릭 시 ② 공인 코치 배정 완료 단계로 필터링합니다">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 공인 코치 배정 완료</div>
+                <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+              </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">1건</div>
               <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">전담 매칭 완료율 100%</div>
             </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #2b7a4b;">
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ 180분/현장케어 완료</div>
+            <div id="bizKpiCard_step3" class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ③ 180분/현장케어 완료 단계로 필터링합니다">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ 180분/현장케어 완료</div>
+                <span style="font-size: 0.72rem; color: #2b7a4b; background: #f0fdf4; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+              </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">1건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP & 사진 검수</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP &amp; 사진 검수</div>
             </div>
-            <div style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; border-left: 4px solid #8b5cf6;">
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">④ CRM 사후관리 & 리텐션</div>
+            <div id="bizKpiCard_step4" class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #8b5cf6;" title="클릭 시 ④ CRM 사후관리 &amp; 리텐션 단계로 필터링합니다">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">④ CRM 사후관리 &amp; 리텐션</div>
+                <span style="font-size: 0.72rem; color: #7c3aed; background: #faf5ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+              </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">1건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 & AGAIN180</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 &amp; AGAIN180</div>
             </div>
           </div>
 
           <!-- 4단계 파이프라인 진행 상태 필터 바 -->
           <div class="pipeline-step-bar">
             <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">파이프라인 필터:</span>
-            <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">전체보기</button>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step1" onclick="switchPipelineStep('step1')">① 상담신청 접수</button>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">② 코치 배정</button>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">③ 현장케어/일지</button>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">④ CRM 사후 리텐션</button>
+            <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">
+              전체보기 <span class="pipeline-step-badge" id="pipelineStepBadge_all">4</span>
+            </button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step1" onclick="switchPipelineStep('step1')">
+              ① 상담신청 접수 <span class="pipeline-step-badge" id="pipelineStepBadge_step1">1</span>
+            </button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">
+              ② 코치 배정 <span class="pipeline-step-badge" id="pipelineStepBadge_step2">1</span>
+            </button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">
+              ③ 현장케어/일지 <span class="pipeline-step-badge" id="pipelineStepBadge_step3">1</span>
+            </button>
+            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">
+              ④ CRM 사후 리텐션 <span class="pipeline-step-badge" id="pipelineStepBadge_step4">1</span>
+            </button>
           </div>
 
           <!-- 3-1. [1호 뷰티 라이프케어 전용 파이프라인 래퍼] -->

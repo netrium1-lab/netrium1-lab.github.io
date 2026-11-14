@@ -13,14 +13,32 @@ function getStoredBeautyBookings() {
     const raw = localStorage.getItem('seniorBeautyBookings');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length >= 4) return parsed;
     }
   } catch(e) {
     console.error('예약 데이터 파싱 실패:', e);
   }
 
-  // 기본 견본 데이터 (사업계획서 예시)
+  // 기본 견본 데이터 (4대 파이프라인 전 단계 완벽 시연용)
   const defaultList = [
+    {
+      id: 'BK-202612',
+      programType: '시니어 뷰티 라이프케어',
+      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
+      role: '자녀 대리 신청 (40대)',
+      applicantName: '박지영',
+      phone: '010-8273-1920',
+      seniorName: '정순임 어르신 (76세)',
+      place: '자택 방문 1:1 케어',
+      visitDate: '2026-11-15T14:00',
+      address: '서울시 강남구 압구정로 18길 35 (현대아파트 102동)',
+      options: ['기미·주름 커버 투명 윤광 메이크업', '목·승모근 림프 이완 테라피'],
+      memo: '친정어머니 팔순 잔치를 앞두고 화사하고 자연스러운 시니어 메이크업을 받고 싶습니다.',
+      status: '접수완료',
+      assignedCoach: '미배정 (배정 대기중)',
+      coachPhone: '',
+      createdAt: '2026-11-14T09:30:00.000Z'
+    },
     {
       id: 'BK-202611',
       programType: '시니어 뷰티 라이프케어',
@@ -30,23 +48,70 @@ function getStoredBeautyBookings() {
       phone: '010-9613-5913',
       seniorName: '이영숙 어머니 (72세)',
       place: '자택 방문 1:1 케어',
-      visitDate: '2026-11-10T10:00',
+      visitDate: '2026-11-16T10:00',
       address: '서울시 서초구 반포대로 12길 (301호)',
       options: ['목·승모근 림프 이완 테라피', '기미·주름 커버 투명 윤광 메이크업', '주거 공간 낙상 안전 동선 점검'],
       memo: '어머니께서 오랜만에 외출하시길 무척 기대하고 계십니다.',
       status: '코치배정',
       assignedCoach: '김서연 전문 라이프 코치 (40대 시니어 뷰티&라이프스타일 1급)',
       coachPhone: '010-9613-5913',
-      createdAt: '2026-11-08T09:00:00.000Z',
-      completedAt: '2026-11-08T12:00:00.000Z',
+      createdAt: '2026-11-13T10:00:00.000Z'
+    },
+    {
+      id: 'BK-202610',
+      programType: '시니어 뷰티 라이프케어',
+      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
+      role: '본인 어르신 신청',
+      applicantName: '최순자',
+      phone: '010-3849-5912',
+      seniorName: '최순자 어르신 (78세)',
+      place: '자택 방문 1:1 케어',
+      visitDate: '2026-11-14T13:30',
+      address: '서울시 송파구 올림픽로 35길 (잠실 르엘 204동)',
+      options: ['목·승모근 림프 이완 테라피', '헤어 볼륨 스타일링', '인생 사진 촬영'],
+      memo: '동창 모임 가기 전 우아하고 자연스러운 스타일링 희망.',
+      status: '진행중',
+      assignedCoach: '박지은 수석 코치 (시니어 뷰티&공간리셋 1급)',
+      coachPhone: '010-3344-5566',
+      photoBase64: 'registered',
+      createdAt: '2026-11-12T11:00:00.000Z',
       diagnostic: {
-        moistureBefore: 24,
-        moistureAfter: 68,
+        moistureBefore: 26,
+        moistureAfter: 70,
         elasticityBefore: '보통 이하',
         elasticityAfter: '매우 우수 (윤광 회복)',
-        wardrobe: '소장 실크 플라워 스카프 + 베이지 투피스 매칭',
+        wardrobe: '소장 에메랄드 실크 스카프 매칭',
         safetyChecked: true,
-        endingNote: '오늘 거울을 마주하며 지난 40년 세월 중 가장 환하게 웃어보았습니다. 젊은 시절 내가 얼마나 눈부셨는지 다시 깨닫게 해준 소중한 3시간이었습니다. 사랑하는 가족에게 고마움을 전합니다.'
+        endingNote: '현장에서 180분 집중 케어를 정성껏 마쳤으며 어르신 만족도가 매우 높았습니다.'
+      }
+    },
+    {
+      id: 'BK-202609',
+      programType: '시니어 뷰티 라이프케어',
+      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
+      role: '자녀 대리 신청',
+      applicantName: '한지민',
+      phone: '010-7788-9900',
+      seniorName: '강명숙 어머니 (70세)',
+      place: '자택 방문 1:1 케어',
+      visitDate: '2026-08-10T10:00',
+      address: '서울시 마포구 마포대로 28길 (래미안 105동)',
+      options: ['목·승모근 림프 이완 테라피', '기미·주름 커버 투명 윤광 메이크업', '소장 의상 리스타일링'],
+      memo: '따님 결혼식 혼주 메이크업 리허설 케어 완료 건',
+      status: '케어완료',
+      assignedCoach: '이은영 전문 코치 (시니어 라이프스타일 1급)',
+      coachPhone: '010-7788-9900',
+      createdAt: '2026-08-08T09:00:00.000Z',
+      completedAt: '2026-08-10T13:00:00.000Z',
+      photoBase64: 'registered',
+      diagnostic: {
+        moistureBefore: 24,
+        moistureAfter: 72,
+        elasticityBefore: '보통 이하',
+        elasticityAfter: '최상 (탄력 복원)',
+        wardrobe: '연분홍 실크 한복 매칭',
+        safetyChecked: true,
+        endingNote: '케어 3개월 차 무료 피부 재진단 및 AGAIN180 리텐션 루프 대상 고객입니다.'
       }
     }
   ];
@@ -63,22 +128,69 @@ function getStoredGeneralConsults() {
     const raw = localStorage.getItem('seniorConsultList');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      if (Array.isArray(parsed) && parsed.length >= 10) return parsed;
     }
   } catch(e) {}
 
-  // 기본 견본 데이터
+  // 기본 견본 데이터 (2호~4호 비즈니스별 4단계 완벽 시연용)
   const defaultConsults = [
+    // 👗 2호 일상과 비움의 미학 (옷장/공간)
     {
       id: 'CS-101',
       category: '👗 일상과 비움의 미학 (옷장/공간)',
       role: '자녀 대리',
       name: '이지현',
       phone: '010-3344-5566',
-      date: '2026-11-08 오전 10:15',
+      date: '2026-11-14 오전 10:15',
       message: '어머니 댁 옷장 정리 및 겨울 외출복 동선 수납 컨설팅을 희망합니다.',
       status: '상담대기',
+      assignedCoach: '미배정'
+    },
+    {
+      id: 'CS-105',
+      category: '👗 일상과 비움의 미학 (옷장/공간)',
+      role: '본인 어르신',
+      name: '김영자 어르신',
+      phone: '010-2233-4455',
+      date: '2026-11-13 오후 14:00',
+      message: '안방 붙박이장과 서랍장 옷장 수납 최적화 코칭을 요청합니다.',
+      status: '코치배정',
       assignedCoach: '박지은 수석 코치'
+    },
+    {
+      id: 'CS-106',
+      category: '👗 일상과 비움의 미학 (옷장/공간)',
+      role: '자녀 대리',
+      name: '박성훈',
+      phone: '010-4455-6677',
+      date: '2026-11-12 오전 11:30',
+      message: '부모님 댁 주방 수납 및 침실 옷장 안전 동선 비움 현장 진행 중입니다.',
+      status: '진행중',
+      assignedCoach: '김서연 전문 코치'
+    },
+    {
+      id: 'CS-107',
+      category: '👗 일상과 비움의 미학 (옷장/공간)',
+      role: '본인 어르신',
+      name: '최명희 어르신',
+      phone: '010-6677-8899',
+      date: '2026-11-10 오후 16:00',
+      message: '사계절 옷장 비움 및 아름다운 외출복 재정돈 컨설팅이 만족스럽게 완료되었습니다.',
+      status: '완료',
+      assignedCoach: '박지은 수석 코치'
+    },
+
+    // 📦 3호 기억의 계승 (유품/생전정리)
+    {
+      id: 'CS-108',
+      category: '📦 기억의 계승 (유품/생전정리)',
+      role: '자녀 대리',
+      name: '윤서진',
+      phone: '010-8899-1122',
+      date: '2026-11-14 오후 13:20',
+      message: '부모님 댁 오래된 서책과 옛 가재도구 정돈 및 유품 보관 상담을 신청합니다.',
+      status: '상담대기',
+      assignedCoach: '미배정'
     },
     {
       id: 'CS-102',
@@ -86,10 +198,56 @@ function getStoredGeneralConsults() {
       role: '본인 어르신',
       name: '최영철 어르신',
       phone: '010-7788-9900',
-      date: '2026-11-07 오후 14:30',
+      date: '2026-11-13 오전 10:30',
       message: '서재에 오래 쌓인 책과 소장품을 후대에 전할 유품으로 우아하게 정돈하고 싶습니다.',
       status: '코치배정',
       assignedCoach: '이은영 전문 코치'
+    },
+    {
+      id: 'CS-109',
+      category: '📦 기억의 계승 (유품/생전정리)',
+      role: '자녀 대리',
+      name: '문태양',
+      phone: '010-9900-2233',
+      date: '2026-11-12 오후 15:00',
+      message: '30년 세월 가재도구 선별 및 추억 앨범 디지털 유품 아카이빙 진행 중입니다.',
+      status: '진행중',
+      assignedCoach: '박지은 수석 코치'
+    },
+    {
+      id: 'CS-110',
+      category: '📦 기억의 계승 (유품/생전정리)',
+      role: '본인 어르신',
+      name: '송순복 어르신',
+      phone: '010-1122-3344',
+      date: '2026-11-09 오전 10:00',
+      message: '소장 고서화 및 생전 소장품 아카이빙 도록 제작이 완료되었습니다.',
+      status: '완료',
+      assignedCoach: '이은영 전문 코치'
+    },
+
+    // 💌 4호 아름다운 마침표 (생전 엔딩 파티)
+    {
+      id: 'CS-111',
+      category: '💌 아름다운 마침표 (생전 엔딩 파티)',
+      role: '본인 어르신',
+      name: '조경호 어르신',
+      phone: '010-3344-7788',
+      date: '2026-11-14 오전 11:00',
+      message: '팔순을 맞아 평생 고마웠던 옛 친구들과 은사님을 모시는 감사 파티 기획을 상담받고 싶습니다.',
+      status: '상담대기',
+      assignedCoach: '미배정'
+    },
+    {
+      id: 'CS-112',
+      category: '💌 아름다운 마침표 (생전 엔딩 파티)',
+      role: '자녀 대리',
+      name: '강동훈',
+      phone: '010-4455-8899',
+      date: '2026-11-13 오후 15:40',
+      message: '어머니 은퇴 및 생애 감사 엔딩 파티 전담 코치 배정 및 식순 협의 요청.',
+      status: '코치배정',
+      assignedCoach: '김서연 전문 라이프 코치'
     },
     {
       id: 'CS-103',
@@ -97,21 +255,21 @@ function getStoredGeneralConsults() {
       role: '자녀 대리',
       name: '정우진',
       phone: '010-5566-7788',
-      date: '2026-11-06 오전 11:20',
-      message: '부모님 결혼 50주년 기념 감사 회고 파티 기획을 상담받고 싶습니다.',
+      date: '2026-11-12 오전 11:20',
+      message: '부모님 결혼 50주년 기념 감사 회고 파티 기획 현장 진행 중입니다.',
       status: '진행중',
       assignedCoach: '김서연 전문 라이프 코치'
     },
     {
-      id: 'CS-104',
-      category: '✍️ 디지털 자서전 (생애사 인터뷰)',
+      id: 'CS-113',
+      category: '💌 아름다운 마침표 (생전 엔딩 파티)',
       role: '본인 어르신',
-      name: '한상훈 어르신',
-      phone: '010-8899-0011',
-      date: '2026-11-05 오후 16:00',
-      message: '청춘 시절 교직 생활의 발자취를 양장본 회고록으로 남기고자 합니다.',
-      status: '상담대기',
-      assignedCoach: '미배정'
+      name: '배정남 어르신',
+      phone: '010-5566-9900',
+      date: '2026-11-08 오후 17:00',
+      message: '가족과 친지 30여 명이 함께한 생전 감사 회고 엔딩 파티가 감동 속에 성공적으로 완료되었습니다.',
+      status: '완료',
+      assignedCoach: '김서연 전문 라이프 코치'
     }
   ];
 
@@ -165,7 +323,65 @@ function switchPipelineStep(step) {
       }
     }
   });
+
+  // 상단 4대 KPI 카드 액티브 상태 하이라이트 동기화
+  const cardSteps = ['step1', 'step2', 'step3', 'step4'];
+  cardSteps.forEach(s => {
+    const card = document.getElementById(`bizKpiCard_${s}`);
+    if (card) {
+      if (currentPipelineStep === s) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    }
+  });
+
   renderBusinessMasterDashboard();
+}
+
+// 4-1. 파이프라인 버튼 텍스트 및 실시간 건수 뱃지 갱신 헬퍼
+function updatePipelineStepButtons(counts, bizType) {
+  const btnAll = document.getElementById('pipelineStepBtn_all');
+  const btnStep1 = document.getElementById('pipelineStepBtn_step1');
+  const btnStep2 = document.getElementById('pipelineStepBtn_step2');
+  const btnStep3 = document.getElementById('pipelineStepBtn_step3');
+  const btnStep4 = document.getElementById('pipelineStepBtn_step4');
+
+  if (btnAll) btnAll.innerHTML = `전체보기 <span class="pipeline-step-badge">${counts.all}</span>`;
+  if (btnStep1) btnStep1.innerHTML = `① 상담신청 접수 <span class="pipeline-step-badge">${counts.step1}</span>`;
+  if (btnStep2) btnStep2.innerHTML = `② 코치 배정 <span class="pipeline-step-badge">${counts.step2}</span>`;
+  if (btnStep3) {
+    btnStep3.innerHTML = (bizType === 'beauty')
+      ? `③ 현장케어/일지 <span class="pipeline-step-badge">${counts.step3}</span>`
+      : `③ 현장진행 <span class="pipeline-step-badge">${counts.step3}</span>`;
+  }
+  if (btnStep4) {
+    btnStep4.innerHTML = (bizType === 'beauty')
+      ? `④ CRM 사후 리텐션 <span class="pipeline-step-badge">${counts.step4}</span>`
+      : `④ 완료/사후관리 <span class="pipeline-step-badge">${counts.step4}</span>`;
+  }
+
+  // 상단 KPI 카드 액티브 클래스 동기화
+  const cardSteps = ['step1', 'step2', 'step3', 'step4'];
+  cardSteps.forEach(s => {
+    const card = document.getElementById(`bizKpiCard_${s}`);
+    if (card) {
+      if (currentPipelineStep === s) {
+        card.classList.add('active');
+      } else {
+        card.classList.remove('active');
+      }
+    }
+  });
+}
+
+function getPipelineStepName(step, bizType) {
+  if (step === 'step1') return '① 상담신청 접수';
+  if (step === 'step2') return '② 코치 배정';
+  if (step === 'step3') return (bizType === 'beauty') ? '③ 180분 현장케어/일지' : '③ 현장진행';
+  if (step === 'step4') return (bizType === 'beauty') ? '④ CRM 사후관리 & 리텐션' : '④ 완료/사후관리';
+  return '전체 목록';
 }
 
 // 5. 비즈니스 마스터 대시보드 메인 렌더링 함수
@@ -238,21 +454,31 @@ function renderBusinessMasterDashboard() {
 
 // 6. 뷰티 라이프케어 4단계 파이프라인 렌더링
 function renderBeautyPipeline(list) {
-  // KPI 계산
+  // 단계별 실시간 건수 계산
   const total = list.length;
-  const assigned = list.filter(i => i.status === '코치배정' || i.assignedCoach).length;
-  const completed = list.filter(i => i.status === '케어완료' || i.completedAt).length;
-  const reminders = completed;
+  const step1Count = list.filter(i => i.status === '접수완료' || i.status === '상담대기' || i.status === '상담중').length;
+  const step2Count = list.filter(i => i.status === '코치배정' || i.status === '배정대기').length;
+  const step3Count = list.filter(i => i.status === '진행중' || (i.status === '케어완료' && !i.completedAt)).length;
+  const step4Count = list.filter(i => i.completedAt || i.status === '케어완료').length;
 
   const kpi1 = document.getElementById('bizKpi_lead');
   const kpi2 = document.getElementById('bizKpi_assigned');
   const kpi3 = document.getElementById('bizKpi_done');
   const kpi4 = document.getElementById('bizKpi_retention');
 
-  if (kpi1) kpi1.textContent = `${total}건`;
-  if (kpi2) kpi2.textContent = `${assigned}건`;
-  if (kpi3) kpi3.textContent = `${completed}건`;
-  if (kpi4) kpi4.textContent = `${reminders}건`;
+  if (kpi1) kpi1.textContent = `${step1Count}건`;
+  if (kpi2) kpi2.textContent = `${step2Count}건`;
+  if (kpi3) kpi3.textContent = `${step3Count}건`;
+  if (kpi4) kpi4.textContent = `${step4Count}건`;
+
+  // 필터 버튼 라벨 및 뱃지 실시간 업데이트
+  updatePipelineStepButtons({
+    all: total,
+    step1: step1Count,
+    step2: step2Count,
+    step3: step3Count,
+    step4: step4Count
+  }, 'beauty');
 
   // 뷰티 전용 테이블 컨테이너 표시
   const beautyWrap = document.getElementById('beautyPipelineWrap');
@@ -267,7 +493,7 @@ function renderBeautyPipeline(list) {
   } else if (currentPipelineStep === 'step2') {
     filtered = list.filter(i => i.status === '코치배정' || i.status === '배정대기');
   } else if (currentPipelineStep === 'step3') {
-    filtered = list.filter(i => i.status === '진행중' || i.status === '케어완료');
+    filtered = list.filter(i => i.status === '진행중' || (i.status === '케어완료' && !i.completedAt));
   } else if (currentPipelineStep === 'step4') {
     filtered = list.filter(i => i.completedAt || i.status === '케어완료');
   }
@@ -276,7 +502,10 @@ function renderBeautyPipeline(list) {
   const bTable = document.getElementById('beautyBookingTableBody');
   if (bTable) {
     if (filtered.length === 0) {
-      bTable.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:32px; color:var(--text-muted);">해당 단계에 진행 중인 건이 없습니다.</td></tr>`;
+      bTable.innerHTML = `<tr><td colspan="9" style="text-align:center; padding:36px; color:var(--text-muted); font-size:0.92rem;">
+        <span style="font-size:1.5rem; display:block; margin-bottom:8px;">🔍</span>
+        <strong>[${getPipelineStepName(currentPipelineStep, 'beauty')}]</strong> 단계에 해당하는 예약 건이 없습니다.
+      </td></tr>`;
     } else {
       bTable.innerHTML = filtered.map(item => {
         const hasPhoto = !!item.photoBase64;
@@ -309,10 +538,11 @@ function renderBeautyPipeline(list) {
               </select>
             </td>
             <td style="text-align:center;">
-              <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:800; color:${item.status === '케어완료' ? '#2e7d32' : '#b83354'};" onchange="changeBeautyStatus('${item.id}', this.value)">
+              <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:800; color:${item.status === '케어완료' ? '#2e7d32' : (item.status === '진행중' ? '#0284c7' : '#b83354')};" onchange="changeBeautyStatus('${item.id}', this.value)">
                 <option value="접수완료" ${item.status === '접수완료' ? 'selected' : ''}>① 접수/상담</option>
                 <option value="코치배정" ${item.status === '코치배정' ? 'selected' : ''}>② 코치배정</option>
-                <option value="케어완료" ${item.status === '케어완료' ? 'selected' : ''}>③ 케어완료</option>
+                <option value="진행중" ${item.status === '진행중' ? 'selected' : ''}>③ 현장진행</option>
+                <option value="케어완료" ${item.status === '케어완료' ? 'selected' : ''}>④ 케어완료</option>
               </select>
             </td>
             <td style="text-align:center; white-space:nowrap;">
@@ -337,29 +567,34 @@ function renderBeautyPipeline(list) {
   // 2. 4단계 사후관리 & 리텐션 테이블
   const fTable = document.getElementById('beautyFollowupTableBody');
   if (fTable) {
-    fTable.innerHTML = list.map(item => {
-      const compDate = item.completedAt ? new Date(item.completedAt) : new Date();
-      const d3 = new Date(compDate); d3.setMonth(d3.getMonth() + 3);
-      const d6 = new Date(compDate); d6.setMonth(d6.getMonth() + 6);
-      const fmt = (d) => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+    const followupList = list.filter(i => i.completedAt || i.status === '케어완료');
+    if (followupList.length === 0) {
+      fTable.innerHTML = `<tr><td colspan="8" style="text-align:center; padding:24px; color:var(--text-muted);">케어 완료 후 리텐션 대상 건이 아직 없습니다.</td></tr>`;
+    } else {
+      fTable.innerHTML = followupList.map(item => {
+        const compDate = item.completedAt ? new Date(item.completedAt) : new Date();
+        const d3 = new Date(compDate); d3.setMonth(d3.getMonth() + 3);
+        const d6 = new Date(compDate); d6.setMonth(d6.getMonth() + 6);
+        const fmt = (d) => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
 
-      return `
-        <tr>
-          <td><strong style="color: #b83354;">${escapeHtml(item.id)}</strong></td>
-          <td><strong>${escapeHtml(item.seniorName)}</strong></td>
-          <td>${fmt(compDate)}</td>
-          <td><span style="color:#2e7d32; font-weight:800;">${fmt(d3)}</span></td>
-          <td style="text-align:center;"><span class="badge" style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:999px; font-size:0.8rem;">무료재진단 대상</span></td>
-          <td><span style="color:#b83354; font-weight:800;">${fmt(d6)}</span></td>
-          <td style="text-align:center;"><span class="badge" style="background:#fee7ec; color:#b83354; padding:3px 8px; border-radius:999px; font-size:0.8rem;">AGAIN180 활성</span></td>
-          <td style="text-align:center;">
-            <button type="button" class="btn-save-setting" onclick="alert('[${item.seniorName} 어르신]께 3개월 차 무료 피부 재진단 및 안부 알림톡이 전송되었습니다!')" style="padding:4px 8px; font-size:0.8rem; background:#2b7a4b; color:#fff; border:none;">
-              ✉️ 알림톡
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
+        return `
+          <tr>
+            <td><strong style="color: #b83354;">${escapeHtml(item.id)}</strong></td>
+            <td><strong>${escapeHtml(item.seniorName)}</strong></td>
+            <td>${fmt(compDate)}</td>
+            <td><span style="color:#2e7d32; font-weight:800;">${fmt(d3)}</span></td>
+            <td style="text-align:center;"><span class="badge" style="background:#e8f5e9; color:#2e7d32; padding:3px 8px; border-radius:999px; font-size:0.8rem;">무료재진단 대상</span></td>
+            <td><span style="color:#b83354; font-weight:800;">${fmt(d6)}</span></td>
+            <td style="text-align:center;"><span class="badge" style="background:#fee7ec; color:#b83354; padding:3px 8px; border-radius:999px; font-size:0.8rem;">AGAIN180 활성</span></td>
+            <td style="text-align:center;">
+              <button type="button" class="btn-save-setting" onclick="alert('[${item.seniorName} 어르신]께 3개월 차 무료 피부 재진단 및 안부 알림톡이 전송되었습니다!')" style="padding:4px 8px; font-size:0.8rem; background:#2b7a4b; color:#fff; border:none; font-weight:800;">
+                ✉️ 알림톡
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
   }
 }
 
@@ -386,27 +621,52 @@ function renderGeneralBusinessPipeline(biz, consults) {
 
   // KPI 계산
   const total = list.length;
-  const assigned = list.filter(i => i.status === '코치배정' || (i.assignedCoach && i.assignedCoach !== '미배정')).length;
-  const completed = list.filter(i => i.status === '완료').length;
-  const active = total - completed;
+  const step1Count = list.filter(i => i.status === '상담대기' || i.status === '접수완료').length;
+  const step2Count = list.filter(i => i.status === '코치배정').length;
+  const step3Count = list.filter(i => i.status === '진행중').length;
+  const step4Count = list.filter(i => i.status === '완료').length;
 
   const kpi1 = document.getElementById('bizKpi_lead');
   const kpi2 = document.getElementById('bizKpi_assigned');
   const kpi3 = document.getElementById('bizKpi_done');
   const kpi4 = document.getElementById('bizKpi_retention');
 
-  if (kpi1) kpi1.textContent = `${total}건`;
-  if (kpi2) kpi2.textContent = `${assigned}건`;
-  if (kpi3) kpi3.textContent = `${completed}건`;
-  if (kpi4) kpi4.textContent = `${active}건`;
+  if (kpi1) kpi1.textContent = `${step1Count}건`;
+  if (kpi2) kpi2.textContent = `${step2Count}건`;
+  if (kpi3) kpi3.textContent = `${step3Count}건`;
+  if (kpi4) kpi4.textContent = `${step4Count}건`;
+
+  // 필터 버튼 라벨 및 뱃지 실시간 업데이트
+  updatePipelineStepButtons({
+    all: total,
+    step1: step1Count,
+    step2: step2Count,
+    step3: step3Count,
+    step4: step4Count
+  }, biz);
+
+  // 파이프라인 단계별 필터링
+  let filtered = list;
+  if (currentPipelineStep === 'step1') {
+    filtered = list.filter(i => i.status === '상담대기' || i.status === '접수완료');
+  } else if (currentPipelineStep === 'step2') {
+    filtered = list.filter(i => i.status === '코치배정');
+  } else if (currentPipelineStep === 'step3') {
+    filtered = list.filter(i => i.status === '진행중');
+  } else if (currentPipelineStep === 'step4') {
+    filtered = list.filter(i => i.status === '완료');
+  }
 
   // 테이블 렌더링
   const gTable = document.getElementById('generalBusinessTableBody');
   if (gTable) {
-    if (list.length === 0) {
-      gTable.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:32px; color:var(--text-muted);">현재 접수된 상담 내역이 없습니다.</td></tr>`;
+    if (filtered.length === 0) {
+      gTable.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:36px; color:var(--text-muted); font-size:0.92rem;">
+        <span style="font-size:1.5rem; display:block; margin-bottom:8px;">🔍</span>
+        <strong>[${getPipelineStepName(currentPipelineStep, biz)}]</strong> 단계에 해당하는 상담 건이 없습니다.
+      </td></tr>`;
     } else {
-      gTable.innerHTML = list.map(item => {
+      gTable.innerHTML = filtered.map(item => {
         const coach = item.assignedCoach || '박지은 수석 코치';
         return `
           <tr>
@@ -430,7 +690,7 @@ function renderGeneralBusinessPipeline(biz, consults) {
               </select>
             </td>
             <td style="text-align:center;">
-              <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:800; color:${item.status === '완료' ? '#2e7d32' : 'var(--accent)'};" onchange="changeGeneralStatus('${item.id}', this.value)">
+              <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:800; color:${item.status === '완료' ? '#2e7d32' : (item.status === '진행중' ? '#0284c7' : 'var(--accent)')};" onchange="changeGeneralStatus('${item.id}', this.value)">
                 <option value="상담대기" ${item.status === '상담대기' ? 'selected' : ''}>① 상담대기</option>
                 <option value="코치배정" ${item.status === '코치배정' ? 'selected' : ''}>② 코치배정</option>
                 <option value="진행중" ${item.status === '진행중' ? 'selected' : ''}>③ 현장진행</option>
