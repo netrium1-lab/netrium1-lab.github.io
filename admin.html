@@ -2096,6 +2096,54 @@
       color: #ffffff;
     }
 
+    /* 📖 04. 자서전 출판 전용 프리미엄 파이프라인 버튼 & 뱃지 스타일 */
+    .memoir-pipeline-btn {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1.2px solid var(--border-color);
+      background: var(--bg-card, #ffffff);
+      font-size: 0.85rem;
+      font-weight: 850;
+      color: var(--text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+    .memoir-pipeline-btn:hover {
+      background: #fdfbf7;
+      border-color: #c29b38;
+      color: #936f1c;
+      transform: translateY(-1px);
+    }
+    .memoir-pipeline-btn.active {
+      background: linear-gradient(135deg, #c29b38 0%, #a37a1b 100%);
+      color: #ffffff;
+      border-color: #8c6712;
+      box-shadow: 0 3px 12px rgba(194, 155, 56, 0.35);
+    }
+    .memoir-pipeline-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 20px;
+      height: 20px;
+      padding: 0 6px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 900;
+      background: rgba(0, 0, 0, 0.06);
+      color: currentColor;
+      line-height: 1;
+    }
+    .memoir-pipeline-btn.active .memoir-pipeline-badge {
+      background: rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+    }
+
     /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
     /* 🛡️ 본문 이미지 카드 및 조작 툴바 완전 은폐 */
     .img-control-bar, .photo-action-bar, button[onclick*="replaceThisSectionImage"], button[onclick*="removeThisSectionImage"], [onclick*="replaceThisSectionImage"], [onclick*="removeThisSectionImage"] {
@@ -3272,14 +3320,26 @@
         <div class="panel-card" id="memoirProjectsCard">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
             <!-- 단계별 필터 버튼군 -->
-            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;" id="memoirFilterButtonGroup">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;" id="memoirFilterButtonGroup">
               <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">출판 파이프라인:</span>
-              <button type="button" class="btn-mag-filter active" onclick="filterMemoirProjects('all', this)">전체 (<span id="cntFilterMemoirAll">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('consult', this)">📋 1. 자서전 상담 &amp; 배정 (<span id="cntFilterMemoirConsult">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 2. 구술 인터뷰 (<span id="cntFilterMemoirInterview">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 3. AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 4. 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing_done', this)">🖨️ 5. 인쇄 &amp; 출판완료 (<span id="cntFilterMemoirDone">0</span>)</button>
+              <button type="button" class="memoir-pipeline-btn active" onclick="filterMemoirProjects('all', this)">
+                <span>전체</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirAll">0</span>
+              </button>
+              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('consult', this)">
+                <span>📋 1. 자서전 상담 &amp; 배정</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirConsult">0</span>
+              </button>
+              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('interview', this)">
+                <span>🎙️ 2. 구술 인터뷰</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirInterview">0</span>
+              </button>
+              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('drafting', this)">
+                <span>🤖 3. AI윤문 &amp; 코치교정</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirDrafting">0</span>
+              </button>
+              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('family', this)">
+                <span>👨‍👩‍👧 4. 가족 승인</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirFamily">0</span>
+              </button>
+              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('printing_done', this)">
+                <span>🖨️ 5. 인쇄 &amp; 출판완료</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirDone">0</span>
+              </button>
             </div>
             <!-- 검색창 -->
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -16298,7 +16358,23 @@ ${coachAppUrl}
       var raw = localStorage.getItem('yebaek_memoir_projects');
       if (raw) {
         var parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          // 💡 상담/배정 단계 건이 없으면 DEFAULT_MEMOIR_PROJECTS의 상담 항목을 자동 보강하여 누락 방지!
+          var hasConsult = parsed.some(function(p) {
+            return p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned';
+          });
+          if (!hasConsult) {
+            DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
+              if (dp.status === 'consult_pending' || dp.status === 'coach_assigned') {
+                if (!parsed.some(function(p) { return p.id === dp.id; })) {
+                  parsed.unshift(dp);
+                }
+              }
+            });
+            localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
+          }
+          return parsed;
+        }
       }
     } catch(e) {}
     localStorage.setItem('yebaek_memoir_projects', JSON.stringify(DEFAULT_MEMOIR_PROJECTS));
@@ -16391,13 +16467,13 @@ ${coachAppUrl}
       'consult_pending': { label: '📋 자서전 상담 접수', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
       'consult_done': { label: '📞 상담 완료', bg: 'rgba(139, 92, 246, 0.18)', color: '#6d28d9' },
       'coach_assigned': { label: '🤝 코치 배정 완료', bg: 'rgba(14, 165, 233, 0.14)', color: '#0284c7' },
-      'interview_pending': { label: '🎙️ 인터뷰 대기', bg: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' },
+      'interview_pending': { label: '🎙️ 인터뷰 진행 중', bg: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' },
       'interview_done': { label: '🎙️ 인터뷰 완료', bg: 'rgba(37, 99, 235, 0.16)', color: '#1d4ed8' },
       'ai_drafted': { label: '🤖 AI 윤문 완료', bg: 'rgba(217, 119, 6, 0.12)', color: '#d97706' },
       'coach_reviewed': { label: '✍️ 코치 교정 중', bg: 'rgba(194, 155, 56, 0.16)', color: '#936f1c' },
       'family_approved': { label: '👨‍👩‍👧 가족 승인', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
       'printing': { label: '🖨️ 양장본 인쇄 중', bg: 'rgba(5, 150, 105, 0.14)', color: '#059669' },
-      'completed': { label: '✅ 출판 완료', bg: 'rgba(5, 150, 105, 0.22)', color: '#047857' }
+      'completed': { label: '✅ 출판 완간', bg: 'rgba(5, 150, 105, 0.22)', color: '#047857' }
     };
 
     var html = '';
@@ -16460,27 +16536,67 @@ ${coachAppUrl}
       html += '</span>';
       html += '</td>';
 
+      // 💡 공정 단계별 스마트 단일/핵심 액션 버튼 렌더링
       html += '<td style="padding: 12px 10px; text-align: center;">';
-      html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">';
+      html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; align-items: center;">';
       
-      if (p.status === 'consult_pending' || p.status === 'consult_done' || isCoachPending) {
-        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="전담 작가 코치 즉시 배정 및 상담완료">';
+      // [1단계] 자서전 상담 및 코치 배정 단계
+      if (p.status === 'consult_pending' || isCoachPending) {
+        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="전담 작가 코치 지정 및 상담 확정">';
         html += '<span>🤝</span> 코치 배정';
         html += '</button>';
-      } else {
-        html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 코치에게 글쓰기 대시보드 카톡 링크 및 안내 발송">';
+      } else if (p.status === 'coach_assigned') {
+        html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
+        html += '<span>💬</span> 코치카톡 전송 ➔';
+        html += '</button>';
+        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
+      }
+      // [2단계] 현장 구술 인터뷰 단계
+      else if (p.status === 'interview_pending') {
+        html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="코치에게 글쓰기 앱 카톡 재발송">';
         html += '<span>💬</span> 코치 카톡';
         html += '</button>';
+        html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 구술 인터뷰 녹음 완료 확인">';
+        html += '<span>🎙️</span> 인터뷰 완료';
+        html += '</button>';
+      } else if (p.status === 'interview_done') {
+        html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
+        html += '<span>✍️</span> AI윤문 &amp; 에디터';
+        html += '</button>';
       }
-      html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
-      html += '<span>✍️</span> 검수 에디터';
-      html += '</button>';
-      html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: rgba(194, 155, 56, 0.15); color: #936f1c; border: 1px solid #c29b38; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer;" title="양장본 인쇄 규격 PDF 책자 미리보기 & 발주">';
-      html += '🖨️ 인쇄';
-      html += '</button>';
-      html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 6px; padding: 4px 7px; font-size: 0.76rem; color: #ef4444; cursor: pointer;">';
-      html += '🗑️';
-      html += '</button>';
+      // [3단계] AI 감성윤문 & 코치 교정 단계
+      else if (p.status === 'ai_drafted' || p.status === 'coach_reviewed') {
+        html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
+        html += '<span>✍️</span> 검수 에디터';
+        html += '</button>';
+        html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족용 디지털 플립북 링크 생성 및 가족 승인 요청">';
+        html += '<span>👨‍👩‍👧</span> 가족 승인요청';
+        html += '</button>';
+      }
+      // [4단계] 가족 승인 단계
+      else if (p.status === 'family_approved') {
+        html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 플립북 링크 복사">';
+        html += '<span>📖</span> 플립북 확인';
+        html += '</button>';
+        html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 최종 확인 완료 후 양장본 인쇄 발주 단계로 진입">';
+        html += '<span>🖨️</span> 인쇄 발주로 넘기기';
+        html += '</button>';
+      }
+      // [5단계] 인쇄 & 출판 완간 단계
+      else if (p.status === 'printing' || p.status === 'completed') {
+        html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="신국판 152×225 양장본 인쇄 조판 미리보기 및 PDF">';
+        html += '<span>🖨️</span> 양장본 인쇄 조판';
+        html += '</button>';
+        if (p.status === 'printing') {
+          html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 서재에 자동 전시">';
+          html += '✅ 완간 확정';
+          html += '</button>';
+        }
+      }
+
+      // 우측 끝에 프로젝트 삭제 버튼 (미니멀 디자인)
+      html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
+      
       html += '</div>';
       html += '</td>';
 
@@ -16490,7 +16606,7 @@ ${coachAppUrl}
     tbody.innerHTML = html;
   }
 
-  // 🤝 자서전 상담 완료 후 전담 코치 배정 함수
+  // 🤝 1-1. 자서전 상담 완료 후 전담 코치 배정 함수
   function assignCoachToMemoirProject(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
@@ -16518,15 +16634,148 @@ ${coachAppUrl}
     saveMemoirProjects(projects);
     renderMemoirDashboard();
 
-    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + selectedName + '] 님이 배정되었습니다!\n\n이제 [💬 코치 카톡] 버튼을 눌러 모바일 글쓰기 대시보드 링크를 전송할 수 있습니다.');
+    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + selectedName + '] 님이 배정되었습니다!\n\n이제 [💬 코치카톡 전송 ➔] 버튼을 눌러 모바일 글쓰기 대시보드 링크를 코치님께 전송하세요.');
   }
   window.assignCoachToMemoirProject = assignCoachToMemoirProject;
+
+  // 💬 1-2. 코치 카톡 전송 및 2단계(구술 인터뷰)로 자동 전진
+  function sendCoachMemoirKakaoAndAdvance(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    // 카톡 링크 전송 로직 수행
+    sendCoachMemoirKakao(projectId);
+
+    // 공정 단계 전진: coach_assigned ➔ interview_pending
+    p.status = 'interview_pending';
+    p.statusLabel = '인터뷰 진행 중';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+
+    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [2. 구술 인터뷰] 단계로 자동 전진되었습니다. 코치님이 현장 방문 후 20문항 구술 음성을 등록하면 AI 감성윤문 검수를 시작할 수 있습니다.');
+  }
+  window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
+
+  // 🎙️ 2-1. 현장 구술 인터뷰 완료 확인
+  function advanceToInterviewDone(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    p.status = 'interview_done';
+    p.statusLabel = '구술 인터뷰 완료';
+    p.recordingsCount = Math.max(p.recordingsCount || 0, 4);
+    p.photosCount = Math.max(p.photosCount || 0, 12);
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+
+    alert('🎙️ [' + (p.clientName) + '] 님의 현장 구술 녹취 및 사진 수집이 완료 처리되었습니다!\n\n이제 [✍️ AI윤문 & 에디터] 버튼을 눌러 AI 5단계 감성 윤문을 가동하세요.');
+  }
+  window.advanceToInterviewDone = advanceToInterviewDone;
+
+  // ✍️ 2-2. AI 윤문 에디터 열고 3단계로 전진
+  function openMemoirSplitEditorAndDraft(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (p && p.status === 'interview_done') {
+      p.status = 'ai_drafted';
+      p.statusLabel = 'AI 윤문 완료';
+      p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+      saveMemoirProjects(projects);
+      renderMemoirDashboard();
+    }
+    openMemoirSplitEditor(projectId, 1);
+  }
+  window.openMemoirSplitEditorAndDraft = openMemoirSplitEditorAndDraft;
+
+  // 👨‍👩‍👧 3-1. 가족 승인 요청 및 4단계로 전진
+  function requestFamilyApproval(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    var flipbookUrl = window.location.origin + window.location.pathname.replace('admin.html', '') + 'memoir-flipbook.html?id=' + projectId;
+    var msg = `[여백과 결] ${p.clientName} 어르신 자서전 초안 가족 검수 안내\n\n가족 여러분 안녕하세요!\n어르신의 귀한 생애 구술 인터뷰를 바탕으로 정성껏 다듬은 자서전 초안이 완성되었습니다.\n\n📖 가족 전용 디지털 플립북 열람 링크:\n${flipbookUrl}\n\n내용을 함께 읽어보시고 수정 희망 사항이 있으시면 코치 또는 운영팀에 편히 말씀해 주세요!`;
+    
+    try {
+      navigator.clipboard.writeText(msg);
+    } catch(e) {}
+
+    p.status = 'family_approved';
+    p.statusLabel = '가족 승인 대기';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+
+    alert('👨‍👩‍👧 가족 검수 안내문과 디지털 플립북 링크가 클립보드에 복사되었습니다!\n\n프로젝트가 [4. 가족 승인] 단계로 전환되었습니다.');
+  }
+  window.requestFamilyApproval = requestFamilyApproval;
+
+  // 🖨️ 4-1. 가족 최종 승인 완료 후 인쇄 발주(5단계)로 넘기기
+  function approveAndSendToPrint(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    if (!confirm('[' + (p.clientName) + '] 님의 자서전 가족 검수가 완료되었습니까?\n\n최종 확인 후 [5. 인쇄 & 출판완료] 단계로 진입하여 양장본 인쇄 규격 조판을 생성합니다.')) return;
+
+    p.status = 'printing';
+    p.statusLabel = '양장본 인쇄 발주';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+
+    alert('🖨️ 가족 승인이 확정되어 [5. 인쇄 & 출판완료] 단계로 진입했습니다!\n\n바로 [양장본 인쇄 조판] 버튼을 눌러 인쇄용 신국판 PDF를 생성하고 인쇄소 발주를 진행하세요.');
+  }
+  window.approveAndSendToPrint = approveAndSendToPrint;
+
+  // ✅ 5-1. 최종 출판 완간 확정 및 서재 등록
+  function completeMemoirPublication(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    if (!confirm('[' + (p.clientName) + '] 님의 자서전 도서가 인쇄소에서 완간되었습니까?\n\n완간 처리 시 [나의 서재(my-room.html)]에 정식 디지털 도서로 등록되어 유가족과 독자가 열람할 수 있습니다.')) return;
+
+    p.status = 'completed';
+    p.statusLabel = '출판 완간';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+
+    // 하단 완간 도서 목록(publishedMemoirs)에 자동 등록
+    try {
+      var pubList = getPublishedMemoirs();
+      if (!pubList.some(function(item) { return item.title.indexOf(p.clientName) !== -1; })) {
+        pubList.unshift({
+          id: 'pub_' + Date.now(),
+          title: (p.clientName || '어르신') + '의 생애 자서전 · 나의 결 나의 이야기',
+          author: p.clientName || '어르신',
+          pageCount: '160P (신국판 양장본)',
+          coachName: p.coachName || '전문 코치',
+          publishDate: new Date().toISOString().slice(0,10).replace(/-/g, '.'),
+          pdfUrl: 'data/sample-memoir.pdf',
+          coverImg: 'assets/images/memoir-cover-sample.jpg',
+          isPublic: true
+        });
+        savePublishedMemoirs(pubList);
+      }
+    } catch(e) {}
+
+    renderMemoirDashboard();
+    if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
+
+    alert('🎉 축하합니다! [' + (p.clientName) + '] 님의 자서전 출판이 공식 완간되었습니다!\n\n[04-2. 완간 도서 & PDF 관리]와 [나의 서재]에 자동 등록되었습니다.');
+  }
+  window.completeMemoirPublication = completeMemoirPublication;
 
   function filterMemoirProjects(filterType, btn) {
     currentMemoirFilter = filterType;
     var group = document.getElementById('memoirFilterButtonGroup');
     if (group) {
-      var btns = group.querySelectorAll('.btn-mag-filter');
+      var btns = group.querySelectorAll('.memoir-pipeline-btn, .btn-mag-filter');
       btns.forEach(function(b) { b.classList.remove('active'); });
     }
     if (btn) btn.classList.add('active');
@@ -17286,6 +17535,13 @@ ${coachAppUrl}
   window.closeMemoirProjectCreateModal = closeMemoirProjectCreateModal;
   window.handleCreateMemoirProject = handleCreateMemoirProject;
   window.deleteMemoirProject = deleteMemoirProject;
+  window.assignCoachToMemoirProject = assignCoachToMemoirProject;
+  window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
+  window.advanceToInterviewDone = advanceToInterviewDone;
+  window.openMemoirSplitEditorAndDraft = openMemoirSplitEditorAndDraft;
+  window.requestFamilyApproval = requestFamilyApproval;
+  window.approveAndSendToPrint = approveAndSendToPrint;
+  window.completeMemoirPublication = completeMemoirPublication;
   window.initAdminMemoirListener = initAdminMemoirListener;
 
   // DOMContentLoaded 이벤트 리스너 등록
