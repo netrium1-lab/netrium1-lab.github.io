@@ -17077,22 +17077,20 @@ ${coachAppUrl}
         html += '<td style="padding: 12px 10px; text-align: center;">';
         html += '<div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; align-items: center;">';
         
-        // [📋 상담카드] 모달 열기 버튼
-        html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 1:1 상담 일지 열기">';
-        html += '<span>📋</span> 상담카드';
-        html += '</button>';
-
         if (isCoachPending) {
-          // [🤝 코치 배정] 버튼
+          // [코치 배정 대기 상태] 📋 상담카드 + 🤝 코치 배정 버튼
+          html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 1:1 상담 일지 열기">';
+          html += '<span>📋</span> 상담카드';
+          html += '</button>';
           html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="전담 작가 코치 지정 및 일정 배정">';
           html += '<span>🤝</span> 코치 배정';
           html += '</button>';
         } else {
-          // [💬 코치카톡 전송 ➔] 버튼
-          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
+          // [코치 배정 완료 상태] 복잡한 상담카드는 숨기고, 핵심인 카톡 전송 & 재배정만 명확하게 제공
+          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
           html += '<span>💬</span> 코치카톡 전송 ➔';
           html += '</button>';
-          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.70rem; color: var(--text-muted); padding: 4px 5px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
+          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
         }
 
         // 삭제 버튼
