@@ -3224,8 +3224,8 @@
           </div>
         </div>
 
-        <!-- 2. 4대 핵심 KPI 카드 -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px;">
+        <!-- 2. 5대 핵심 KPI 카드 (상담·배정부터 출판 완간까지 원스톱) -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;">
           <!-- KPI 1 -->
           <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #c29b38;">
             <div style="font-size: 2rem; background: rgba(194, 155, 56, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📚</div>
@@ -3234,7 +3234,15 @@
               <div style="font-size: 1.45rem; font-weight: 900; color: #c29b38;" id="statMemoirTotal">0건</div>
             </div>
           </div>
-          <!-- KPI 2 -->
+          <!-- KPI 2: 자서전 상담 & 코치배정 (신규 추가) -->
+          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #8b5cf6;">
+            <div style="font-size: 2rem; background: rgba(139, 92, 246, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📋</div>
+            <div>
+              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">자서전 상담 &amp; 코치배정</div>
+              <div style="font-size: 1.45rem; font-weight: 900; color: #8b5cf6;" id="statMemoirConsult">0건</div>
+            </div>
+          </div>
+          <!-- KPI 3 -->
           <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #2563eb;">
             <div style="font-size: 2rem; background: rgba(37, 99, 235, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🎙️</div>
             <div>
@@ -3242,7 +3250,7 @@
               <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb;" id="statMemoirInterview">0건</div>
             </div>
           </div>
-          <!-- KPI 3 -->
+          <!-- KPI 4 -->
           <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #d97706;">
             <div style="font-size: 2rem; background: rgba(217, 119, 6, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">✍️</div>
             <div>
@@ -3250,7 +3258,7 @@
               <div style="font-size: 1.45rem; font-weight: 900; color: #d97706;" id="statMemoirDrafting">0건</div>
             </div>
           </div>
-          <!-- KPI 4 -->
+          <!-- KPI 5 -->
           <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #059669;">
             <div style="font-size: 2rem; background: rgba(5, 150, 105, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🖨️</div>
             <div>
@@ -3267,10 +3275,11 @@
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;" id="memoirFilterButtonGroup">
               <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">출판 파이프라인:</span>
               <button type="button" class="btn-mag-filter active" onclick="filterMemoirProjects('all', this)">전체 (<span id="cntFilterMemoirAll">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 1. 구술 인터뷰 (<span id="cntFilterMemoirInterview">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 2. AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 3. 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
-              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing_done', this)">🖨️ 4. 인쇄 &amp; 출판완료 (<span id="cntFilterMemoirDone">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('consult', this)">📋 1. 자서전 상담 &amp; 배정 (<span id="cntFilterMemoirConsult">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('interview', this)">🎙️ 2. 구술 인터뷰 (<span id="cntFilterMemoirInterview">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('drafting', this)">🤖 3. AI윤문 &amp; 코치교정 (<span id="cntFilterMemoirDrafting">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('family', this)">👨‍👩‍👧 4. 가족 승인 (<span id="cntFilterMemoirFamily">0</span>)</button>
+              <button type="button" class="btn-mag-filter" onclick="filterMemoirProjects('printing_done', this)">🖨️ 5. 인쇄 &amp; 출판완료 (<span id="cntFilterMemoirDone">0</span>)</button>
             </div>
             <!-- 검색창 -->
             <div style="display: flex; align-items: center; gap: 8px;">
@@ -16205,6 +16214,56 @@ ${coachAppUrl}
   // 기본 고품질 데모 프로젝트 데이터
   var DEFAULT_MEMOIR_PROJECTS = [
     {
+      id: 'mem_demo_consult',
+      clientName: '이순자 어르신',
+      clientAge: '74세',
+      region: '서울 송파구 잠실동',
+      applicantName: '이정호 (차남)',
+      applicantPhone: '010-3342-9901',
+      relation: '자녀',
+      packageType: 'masterpiece',
+      packageLabel: '인생 마스터피스 (시그니처)',
+      coachName: '배정 대기',
+      coachPhone: '-',
+      status: 'consult_pending',
+      statusLabel: '자서전 상담 접수',
+      recordingsCount: 0,
+      photosCount: 6,
+      notes: '부모님 칠순 기념 양장본 도서 5부 제작 및 옛 사진 복원 문의. 1차 유선 상담 접수 완료, 담당 작가코치 매칭 대기.',
+      familyFeedback: '',
+      createdAt: '2026.11.12',
+      updatedAt: '2026.11.12',
+      chapters: []
+    },
+    {
+      id: 'mem_demo_park',
+      clientName: '박판석 어르신',
+      clientAge: '82세',
+      region: '경기 수원시 팔달구',
+      applicantName: '박지민 (딸)',
+      applicantPhone: '010-5542-1980',
+      relation: '자녀',
+      packageType: 'basic',
+      packageLabel: '감사 헌정본 (Compact Tribute)',
+      coachName: '박미정 코치',
+      coachPhone: '010-8812-4455',
+      status: 'coach_assigned',
+      statusLabel: '코치 배정 완료',
+      recordingsCount: 1,
+      photosCount: 8,
+      notes: '상담 완료 후 박미정 코치 배정 완료. 팔순 잔치 낭독용 80페이지 포토 회고록 현장 구술 일정 조율 중.',
+      familyFeedback: '',
+      createdAt: '2026.11.09',
+      updatedAt: '2026.11.10',
+      chapters: [
+        { id: 1, title: '제1장. 유년과 고향의 기억', subtitle: '1.1. 남한강 뱃사공의 아들로 자라난 강변 마을', status: 'completed', audioDuration: '21분 10초', transcript: '[00:01:00] 남한강 상류 여주 강변에서 뗏목을 타며 자랐어. 강물이 얼어붙으면 썰매를 타고, 봄이 오면 버들피리를 불었지.', content: '1.1. 남한강 뱃사공의 아들로 자라난 강변 마을\n\n남한강 푸른 물줄기가 굽이쳐 흐르던 여주 강변 마을, 나의 유년은 온통 강물 소리로 가득했다...' },
+        { id: 2, title: '제2장. 청춘의 열정과 도전', subtitle: '', status: 'pending', audioDuration: '18분 30초', transcript: '기술을 배우러 수원으로 나와 정미소와 목공소를 전전하며 성실 하나로 일어섰지.', content: '' },
+        { id: 3, title: '제3장. 사랑과 가족의 결', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' },
+        { id: 4, title: '제4장. 시련을 넘은 삶의 지혜', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' },
+        { id: 5, title: '제5장. 후손에게 전하는 유산', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' }
+      ]
+    },
+    {
       id: 'mem_demo_kim',
       clientName: '김순옥 어르신',
       clientAge: '78세',
@@ -16230,34 +16289,6 @@ ${coachAppUrl}
         { id: 3, title: CHAPTER_TEMPLATES[3].title, subtitle: CHAPTER_TEMPLATES[3].subtitle, status: 'completed', audioDuration: '28분 50초', transcript: CHAPTER_TEMPLATES[3].transcript, content: CHAPTER_TEMPLATES[3].content },
         { id: 4, title: CHAPTER_TEMPLATES[4].title, subtitle: CHAPTER_TEMPLATES[4].subtitle, status: 'completed', audioDuration: '19분 30초', transcript: CHAPTER_TEMPLATES[4].transcript, content: CHAPTER_TEMPLATES[4].content },
         { id: 5, title: CHAPTER_TEMPLATES[5].title, subtitle: CHAPTER_TEMPLATES[5].subtitle, status: 'completed', audioDuration: '15분 40초', transcript: CHAPTER_TEMPLATES[5].transcript, content: CHAPTER_TEMPLATES[5].content }
-      ]
-    },
-    {
-      id: 'mem_demo_park',
-      clientName: '박판석 어르신',
-      clientAge: '82세',
-      region: '경기 수원시 팔달구',
-      applicantName: '박지민 (딸)',
-      applicantPhone: '010-5542-1980',
-      relation: '자녀',
-      packageType: 'basic',
-      packageLabel: '감사 헌정본 (Compact Tribute)',
-      coachName: '박미정 코치',
-      coachPhone: '010-8812-4455',
-      status: 'interview_done',
-      statusLabel: '구술 인터뷰 완료',
-      recordingsCount: 2,
-      photosCount: 12,
-      notes: '팔순 잔치에서 손주들에게 직접 낭독해 주실 80페이지 포토 회고록 제작 희망.',
-      familyFeedback: '',
-      createdAt: '2026.11.09',
-      updatedAt: '2026.11.10',
-      chapters: [
-        { id: 1, title: '제1장. 유년과 고향의 기억', subtitle: '1.1. 남한강 뱃사공의 아들로 자라난 강변 마을', status: 'completed', audioDuration: '21분 10초', transcript: '[00:01:00] 남한강 상류 여주 강변에서 뗏목을 타며 자랐어. 강물이 얼어붙으면 썰매를 타고, 봄이 오면 버들피리를 불었지.', content: '1.1. 남한강 뱃사공의 아들로 자라난 강변 마을\n\n남한강 푸른 물줄기가 굽이쳐 흐르던 여주 강변 마을, 나의 유년은 온통 강물 소리로 가득했다...' },
-        { id: 2, title: '제2장. 청춘의 열정과 도전', subtitle: '', status: 'pending', audioDuration: '18분 30초', transcript: '기술을 배우러 수원으로 나와 정미소와 목공소를 전전하며 성실 하나로 일어섰지.', content: '' },
-        { id: 3, title: '제3장. 사랑과 가족의 결', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' },
-        { id: 4, title: '제4장. 시련을 넘은 삶의 지혜', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' },
-        { id: 5, title: '제5장. 후손에게 전하는 유산', subtitle: '', status: 'pending', audioDuration: '', transcript: '', content: '' }
       ]
     }
   ];
@@ -16289,6 +16320,7 @@ ${coachAppUrl}
     var projects = getMemoirProjects();
 
     var total = projects.length;
+    var cntConsult = 0;
     var cntInterview = 0;
     var cntDrafting = 0;
     var cntFamily = 0;
@@ -16296,8 +16328,9 @@ ${coachAppUrl}
     var cntCompleted = 0;
 
     projects.forEach(function(p) {
-      var st = p.status || 'interview_pending';
-      if (st === 'interview_pending' || st === 'interview_done') cntInterview++;
+      var st = p.status || 'consult_pending';
+      if (st === 'consult_pending' || st === 'consult_done' || st === 'coach_assigned') cntConsult++;
+      else if (st === 'interview_pending' || st === 'interview_done') cntInterview++;
       else if (st === 'ai_drafted' || st === 'coach_reviewed') cntDrafting++;
       else if (st === 'family_approved') cntFamily++;
       else if (st === 'printing') cntPrinting++;
@@ -16305,26 +16338,31 @@ ${coachAppUrl}
     });
 
     var elTotal = document.getElementById('statMemoirTotal');
+    var elConsult = document.getElementById('statMemoirConsult');
     var elInterview = document.getElementById('statMemoirInterview');
     var elDrafting = document.getElementById('statMemoirDrafting');
     var elCompleted = document.getElementById('statMemoirCompleted');
     if (elTotal) elTotal.innerText = total + '건';
+    if (elConsult) elConsult.innerText = cntConsult + '건';
     if (elInterview) elInterview.innerText = cntInterview + '건';
     if (elDrafting) elDrafting.innerText = cntDrafting + '건';
     if (elCompleted) elCompleted.innerText = (cntPrinting + cntCompleted) + '건';
 
     var fAll = document.getElementById('cntFilterMemoirAll');
+    var fCns = document.getElementById('cntFilterMemoirConsult');
     var fInt = document.getElementById('cntFilterMemoirInterview');
     var fDrf = document.getElementById('cntFilterMemoirDrafting');
     var fFam = document.getElementById('cntFilterMemoirFamily');
     var fDone = document.getElementById('cntFilterMemoirDone');
     if (fAll) fAll.innerText = total;
+    if (fCns) fCns.innerText = cntConsult;
     if (fInt) fInt.innerText = cntInterview;
     if (fDrf) fDrf.innerText = cntDrafting;
     if (fFam) fFam.innerText = cntFamily;
     if (fDone) fDone.innerText = (cntPrinting + cntCompleted);
 
     var filtered = projects.filter(function(p) {
+      if (currentMemoirFilter === 'consult' && !(p.status === 'consult_pending' || p.status === 'consult_done' || p.status === 'coach_assigned')) return false;
       if (currentMemoirFilter === 'interview' && !(p.status === 'interview_pending' || p.status === 'interview_done')) return false;
       if (currentMemoirFilter === 'drafting' && !(p.status === 'ai_drafted' || p.status === 'coach_reviewed')) return false;
       if (currentMemoirFilter === 'family' && p.status !== 'family_approved') return false;
@@ -16350,6 +16388,9 @@ ${coachAppUrl}
     }
 
     var statusConfig = {
+      'consult_pending': { label: '📋 자서전 상담 접수', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
+      'consult_done': { label: '📞 상담 완료', bg: 'rgba(139, 92, 246, 0.18)', color: '#6d28d9' },
+      'coach_assigned': { label: '🤝 코치 배정 완료', bg: 'rgba(14, 165, 233, 0.14)', color: '#0284c7' },
       'interview_pending': { label: '🎙️ 인터뷰 대기', bg: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' },
       'interview_done': { label: '🎙️ 인터뷰 완료', bg: 'rgba(37, 99, 235, 0.16)', color: '#1d4ed8' },
       'ai_drafted': { label: '🤖 AI 윤문 완료', bg: 'rgba(217, 119, 6, 0.12)', color: '#d97706' },
@@ -16391,8 +16432,9 @@ ${coachAppUrl}
       html += '</td>';
 
       html += '<td style="padding: 12px 10px;">';
-      html += '<div style="font-weight: 800; color: var(--text-primary); font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 중') + '</div>';
-      html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + (p.coachPhone || '') + '</div>';
+      var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기';
+      html += '<div style="font-weight: 800; color: ' + (isCoachPending ? '#8b5cf6' : 'var(--text-primary)') + '; font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 대기') + '</div>';
+      html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
       html += '</td>';
 
       html += '<td style="padding: 12px 10px; text-align: center;">';
@@ -16420,9 +16462,16 @@ ${coachAppUrl}
 
       html += '<td style="padding: 12px 10px; text-align: center;">';
       html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;">';
-      html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 코치에게 글쓰기 대시보드 카톡 링크 및 안내 발송">';
-      html += '<span>💬</span> 코치 카톡';
-      html += '</button>';
+      
+      if (p.status === 'consult_pending' || p.status === 'consult_done' || isCoachPending) {
+        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="전담 작가 코치 즉시 배정 및 상담완료">';
+        html += '<span>🤝</span> 코치 배정';
+        html += '</button>';
+      } else {
+        html += '<button type="button" onclick="sendCoachMemoirKakao(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 5px 8px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="현장 코치에게 글쓰기 대시보드 카톡 링크 및 안내 발송">';
+        html += '<span>💬</span> 코치 카톡';
+        html += '</button>';
+      }
       html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
       html += '<span>✍️</span> 검수 에디터';
       html += '</button>';
@@ -16440,6 +16489,38 @@ ${coachAppUrl}
 
     tbody.innerHTML = html;
   }
+
+  // 🤝 자서전 상담 완료 후 전담 코치 배정 함수
+  function assignCoachToMemoirProject(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    var choice = prompt('[' + (p.clientName || '고객') + '] 님의 자서전 전담 코치를 선택하세요:\n\n1. 김은영 수석코치 (전문 생애사 작가)\n2. 박미정 코치 (시니어 심리상담 1급)\n3. 최진우 코치 (가문 역사 아키비스트)\n\n(번호 1, 2, 3 또는 코치명을 입력하세요)', '1');
+    if (!choice) return;
+
+    var selectedName = '김은영 수석코치';
+    var selectedPhone = '010-3321-7788';
+    if (choice === '2' || choice.indexOf('박미정') !== -1) {
+      selectedName = '박미정 코치';
+      selectedPhone = '010-8812-4455';
+    } else if (choice === '3' || choice.indexOf('최진우') !== -1) {
+      selectedName = '최진우 코치';
+      selectedPhone = '010-7712-4499';
+    }
+
+    p.coachName = selectedName;
+    p.coachPhone = selectedPhone;
+    p.status = 'coach_assigned';
+    p.statusLabel = '코치 배정 완료';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+
+    saveMemoirProjects(projects);
+    renderMemoirDashboard();
+
+    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + selectedName + '] 님이 배정되었습니다!\n\n이제 [💬 코치 카톡] 버튼을 눌러 모바일 글쓰기 대시보드 링크를 전송할 수 있습니다.');
+  }
+  window.assignCoachToMemoirProject = assignCoachToMemoirProject;
 
   function filterMemoirProjects(filterType, btn) {
     currentMemoirFilter = filterType;
@@ -17025,6 +17106,16 @@ ${coachAppUrl}
       });
     }
 
+    var initStatus = 'consult_pending';
+    var initStatusLabel = '자서전 상담 접수';
+    if (autoDraft) {
+      initStatus = 'ai_drafted';
+      initStatusLabel = 'AI 윤문 완료';
+    } else if (coachName && coachName !== '배정 대기') {
+      initStatus = 'coach_assigned';
+      initStatusLabel = '코치 배정 완료';
+    }
+
     var newProject = {
       id: 'mem_' + Date.now(),
       clientName: elderName,
@@ -17036,9 +17127,9 @@ ${coachAppUrl}
       packageType: pkgType,
       packageLabel: pkgMap[pkgType] || '인생 마스터피스',
       coachName: coachName,
-      coachPhone: '010-3321-7788',
-      status: autoDraft ? 'ai_drafted' : 'interview_pending',
-      statusLabel: autoDraft ? 'AI 윤문 완료' : '인터뷰 대기',
+      coachPhone: coachName === '배정 대기' ? '-' : '010-3321-7788',
+      status: initStatus,
+      statusLabel: initStatusLabel,
       recordingsCount: autoDraft ? 4 : 0,
       photosCount: autoDraft ? 18 : 0,
       notes: notes,
