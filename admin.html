@@ -4211,7 +4211,129 @@
     </div>
   </div>
 
-  <!-- ================= [신설] 모달: 🖨️ 양장본 인쇄 규격(신국판 152×225) 실제 출판 도서 조판 및 PDF 생성 뷰어 ================= -->
+  <!-- ================= [신설] 모달: 🤝 자서전 전담 코치 배정 & 현장 파견 등록 모달 (4대 비즈니스 일원화) ================= -->
+  <div class="cms-modal-overlay" id="memoirCoachAssignModal" style="display: none; z-index: 10078;" onclick="closeMemoirCoachAssignModalOnOverlay(event)">
+    <div class="coach-modal-card" style="max-width: 640px; width: 95%; background: var(--bg-card, #ffffff); border-radius: 18px; padding: 26px 24px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); border: 2px solid #c29b38; max-height: 92vh; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 12px;">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 1.4rem;">🤝</span>
+          <div>
+            <h3 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.25rem; font-weight: 850; color: var(--text-primary); margin: 0;">
+              자서전 전담 코치 배정 &amp; 현장 파견 등록
+            </h3>
+            <p style="font-size: 0.80rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              공인 코치를 배정하면 통합 파견 명부 및 코치 현장 파트너앱(coach.html)에 즉시 연동됩니다.
+            </p>
+          </div>
+        </div>
+        <button type="button" onclick="closeMemoirCoachAssignModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">✕</button>
+      </div>
+
+      <form id="memoirCoachAssignForm" onsubmit="handleMemoirCoachAssignSubmit(event)" style="display: flex; flex-direction: column; gap: 14px;">
+        <input type="hidden" id="memoirAssignProjectId">
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">주인공 어르신 성함 *</label>
+            <input type="text" id="memoirAssignElderName" class="setting-input" readonly style="background: var(--bg-secondary); font-weight: 850; color: var(--text-primary);">
+          </div>
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">신청인(가족) 및 연락처</label>
+            <input type="text" id="memoirAssignApplicant" class="setting-input" readonly style="background: var(--bg-secondary); color: var(--text-secondary);">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">선택 출판 패키지</label>
+            <input type="text" id="memoirAssignPackage" class="setting-input" readonly style="background: var(--bg-secondary); font-weight: 750; color: #936f1c;">
+          </div>
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">신청 서비스 분야 *</label>
+            <input type="text" id="memoirAssignServiceType" class="setting-input" value="✍️ 디지털 자서전 (인생 구술)" readonly style="background: #fdf8e6; font-weight: 800; color: #936f1c;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">📅 현장 방문 희망일시 *</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="date" id="memoirAssignDate" class="setting-input" style="flex: 1.25; padding: 9px 8px; font-weight: 750; cursor: pointer; background: #fff;" required>
+            <select id="memoirAssignTime" class="setting-input" style="flex: 1; padding: 9px 6px; font-weight: 750; background: #fff; cursor: pointer;">
+              <option value="오전 09:30">오전 09:30</option>
+              <option value="오전 10:00" selected>오전 10:00</option>
+              <option value="오전 10:30">오전 10:30</option>
+              <option value="오전 11:00">오전 11:00</option>
+              <option value="오후 01:00">오후 01:00</option>
+              <option value="오후 01:30">오후 01:30</option>
+              <option value="오후 02:00">오후 02:00</option>
+              <option value="오후 02:30">오후 02:30</option>
+              <option value="오후 03:00">오후 03:00</option>
+              <option value="오후 03:30">오후 03:30</option>
+              <option value="오후 04:00">오후 04:00</option>
+              <option value="오후 05:00">오후 05:00</option>
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); margin: 0;">📍 방문 장소 / 고객 주소 *</label>
+            <button type="button" class="btn-action-sm" onclick="openDaumPostcodeForMemoirAssign()" style="background: #c29b38; color: #fff; font-size: 0.78rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; border: none;">
+              <span>🔍</span> 주소 찾기
+            </button>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <div style="display: flex; gap: 6px;">
+              <input type="text" id="memoirAssignAddress" class="setting-input" placeholder="도로명/지번 기본 주소 (우측 '주소 찾기' 클릭)" style="flex: 1;" required>
+              <button type="button" class="btn-save-setting" onclick="openDaumPostcodeForMemoirAssign()" style="padding: 0 14px; background: #e2e8f0; color: #1e293b; font-size: 0.82rem; font-weight: 800; border: 1px solid #cbd5e1; cursor: pointer; white-space: nowrap;">
+                주소 검색
+              </button>
+            </div>
+            <input type="text" id="memoirAssignAddressDetail" class="setting-input" placeholder="상세 주소 (예: 101동 1204호, 2층 등)">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px;">
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: #0284c7; display: block; margin-bottom: 5px;">
+              ⭐ 전담 공인 코치 선택 *
+            </label>
+            <select id="memoirAssignCoachSelect" class="setting-input" style="background:#fff; font-weight: 800; border: 1.5px solid #0284c7;" required onchange="onMemoirCoachSelectChange(this.value)">
+              <option value="">-- 공인 코치를 선택하세요 --</option>
+            </select>
+            <div id="memoirAssignCoachPreview" style="font-size: 0.76rem; color: #0284c7; margin-top: 4px; font-weight: 700;"></div>
+          </div>
+          <div>
+            <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">코치 활동비 (수수료) *</label>
+            <input type="number" id="memoirAssignFee" class="setting-input" placeholder="150000" value="150000" step="10000" required>
+          </div>
+        </div>
+
+        <!-- 4대 비즈니스와 일치하는 업무 프로세스 안내 배너 -->
+        <div style="background: #fdfbf7; border: 1.5px dashed #c29b38; border-radius: 10px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.3rem;">💡</span>
+          <div style="font-size: 0.82rem; color: #475569; line-height: 1.45;">
+            <strong style="color: #936f1c;">4대 비즈니스 통합 관제 연동:</strong> 코치 배정 시 <strong>05. 코치 관제 &amp; 정산 센터</strong> 및 <strong>코치 현장 파트너앱(coach.html)</strong>에 실시간 파견 임무 카드로 등록됩니다.<br>
+            배정 완료 후 <strong>[💬 코치카톡 전송 ➔]</strong> 버튼을 누르시면 코치님께 방문 안내와 글쓰기 앱 링크가 즉시 전송되며, <strong>[2. 구술 인터뷰]</strong> 단계로 자동 전진합니다.
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size: 0.84rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 5px;">구술 인터뷰 특이사항 &amp; 코치 전달 메모</label>
+          <textarea id="memoirAssignNotes" class="setting-textarea" rows="2" placeholder="어르신의 구술 편의성, 유의사항, 강조하고 싶은 삶의 이야기 등을 입력하세요."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+          <button type="button" class="btn-save-setting" onclick="closeMemoirCoachAssignModal()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+            취소
+          </button>
+          <button type="submit" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #ffffff; border: none; font-weight: 850; padding: 10px 20px;">
+            💾 코치 배정 및 현장 파견 등록
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="cms-modal-overlay" id="memoirPrintPreviewModal" style="display: none; z-index: 10080;">
     <div style="background: #2d3748; max-width: 900px; width: 95%; height: 94vh; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.4); border: 2px solid #c29b38; display: flex; flex-direction: column; overflow: hidden;">
       
@@ -13789,6 +13911,26 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         coachReport: ""
       },
       {
+        id: "disp_mem_demo_park",
+        memoirProjectId: "mem_demo_park",
+        customerName: "박판석 어르신 (박지민 님 의뢰)",
+        phone: "010-8812-4455",
+        serviceType: "✍️ 디지털 자서전 (인생 구술)",
+        preferredDate: "2026.11.09 오전 10:00",
+        address: "경기 수원시 팔달구 매산로 12",
+        coach: "박미정 코치",
+        coachPhone: "010-8812-4455",
+        step: "진행중",
+        fee: 150000,
+        notes: "[감사 헌정본] 20문항 구술 인터뷰 1/5 챕터 진행 중. 월남전 참전 시절 옛날 흑백사진 수집 및 첫 사옥 설립 회고",
+        arrivalStamp: "09시 52분 도착",
+        completionDate: "",
+        beforePhoto: "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&auto=format&fit=crop&q=80",
+        processPhoto: "https://images.unsplash.com/photo-1457369804613-52c61a468e7d?w=600&auto=format&fit=crop&q=80",
+        afterPhoto: "",
+        coachReport: "1챕터 소년기 구술 채록 진행 중"
+      },
+      {
         id: "disp_205",
         customerName: "박성민 님",
         phone: "010-5192-3301",
@@ -13892,6 +14034,15 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         try {
           const parsed = JSON.parse(saved);
           if (Array.isArray(parsed) && parsed.length >= 8) {
+            // 💡 자서전 파견 건 누락 방지 자동 보강
+            const hasMemoirDisp = parsed.some(d => (d.serviceType || '').includes('자서전'));
+            if (!hasMemoirDisp) {
+              const defMemoir = DEFAULT_DISPATCHES.find(d => (d.serviceType || '').includes('자서전'));
+              if (defMemoir) {
+                parsed.push(defMemoir);
+                localStorage.setItem(DISPATCH_STORAGE_KEY, JSON.stringify(parsed));
+              }
+            }
             // 필드 호환 정규화
             return parsed.map(d => ({
               id: d.id || 'disp_' + Date.now(),
@@ -16606,35 +16757,278 @@ ${coachAppUrl}
     tbody.innerHTML = html;
   }
 
-  // 🤝 1-1. 자서전 상담 완료 후 전담 코치 배정 함수
-  function assignCoachToMemoirProject(projectId) {
+  // =========================================================================
+  // 🤝 1-1. 자서전 전담 코치 배정 모달 (4대 비즈니스 관제와 100% 동일한 통합 구조)
+  // =========================================================================
+
+  function openMemoirCoachAssignModal(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
-    if (!p) return;
-
-    var choice = prompt('[' + (p.clientName || '고객') + '] 님의 자서전 전담 코치를 선택하세요:\n\n1. 김은영 수석코치 (전문 생애사 작가)\n2. 박미정 코치 (시니어 심리상담 1급)\n3. 최진우 코치 (가문 역사 아키비스트)\n\n(번호 1, 2, 3 또는 코치명을 입력하세요)', '1');
-    if (!choice) return;
-
-    var selectedName = '김은영 수석코치';
-    var selectedPhone = '010-3321-7788';
-    if (choice === '2' || choice.indexOf('박미정') !== -1) {
-      selectedName = '박미정 코치';
-      selectedPhone = '010-8812-4455';
-    } else if (choice === '3' || choice.indexOf('최진우') !== -1) {
-      selectedName = '최진우 코치';
-      selectedPhone = '010-7712-4499';
+    if (!p) {
+      alert('자서전 프로젝트 정보를 찾을 수 없습니다.');
+      return;
     }
 
-    p.coachName = selectedName;
-    p.coachPhone = selectedPhone;
+    var modal = document.getElementById('memoirCoachAssignModal');
+    if (!modal) return;
+
+    // 프로젝트 정보 폼에 바인딩
+    var idInput = document.getElementById('memoirAssignProjectId');
+    var elderInput = document.getElementById('memoirAssignElderName');
+    var applicantInput = document.getElementById('memoirAssignApplicant');
+    var packageInput = document.getElementById('memoirAssignPackage');
+    var dateInput = document.getElementById('memoirAssignDate');
+    var timeSelect = document.getElementById('memoirAssignTime');
+    var addressInput = document.getElementById('memoirAssignAddress');
+    var detailInput = document.getElementById('memoirAssignAddressDetail');
+    var feeInput = document.getElementById('memoirAssignFee');
+    var notesInput = document.getElementById('memoirAssignNotes');
+    var coachSelect = document.getElementById('memoirAssignCoachSelect');
+
+    if (idInput) idInput.value = p.id;
+    if (elderInput) elderInput.value = (p.clientName || '어르신') + (p.clientAge ? ' (' + p.clientAge + ')' : '');
+    if (applicantInput) applicantInput.value = (p.applicantName || '-') + (p.relation ? ' (' + p.relation + ')' : '') + (p.applicantPhone ? ' · ' + p.applicantPhone : '');
+    if (packageInput) packageInput.value = p.packageLabel || '인생 마스터피스 양장본';
+
+    // 기본 방문 일정: 내일 날짜
+    var tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    var defaultDateStr = tomorrow.toISOString().slice(0, 10);
+    if (dateInput) {
+      if (p.preferredDate && p.preferredDate.length >= 10 && p.preferredDate.includes('-')) {
+        dateInput.value = p.preferredDate.slice(0, 10);
+      } else {
+        dateInput.value = defaultDateStr;
+      }
+    }
+    if (timeSelect) {
+      timeSelect.value = "오전 10:00";
+    }
+
+    if (addressInput) addressInput.value = p.region || '서울시 송파구 잠실동 22-1';
+    if (detailInput) detailInput.value = p.addressDetail || '';
+    if (feeInput) feeInput.value = p.fee || 150000;
+    if (notesInput) notesInput.value = p.notes || (p.clientName + ' 어르신 생애 구술 인터뷰 20문항 녹취 및 사진 수집');
+
+    // 공인 코치 풀(getCoaches) 동적 로드 및 셀렉트 박스 채우기
+    if (coachSelect) {
+      coachSelect.innerHTML = '<option value="">-- 공인 코치를 선택하세요 --</option>';
+      var coaches = (typeof getCoaches === 'function') ? getCoaches() : [];
+
+      // 자서전 전문 코치가 목록에 없는 경우 자동 보강
+      var hasMemoirCoach = coaches.some(function(c) {
+        return (c.specialty && c.specialty.includes('자서전')) || c.name.includes('이선영') || c.name.includes('김은영');
+      });
+      if (!hasMemoirCoach) {
+        coaches.push({
+          id: 'coach_memoir_spec',
+          name: '이선영 코치',
+          phone: '010-3333-4444',
+          specialty: '✍️ 디지털 자서전 구술 코칭',
+          region: '수도권 전지역',
+          rating: '4.95'
+        });
+      }
+
+      var defaultSelectedCoach = '';
+      coaches.forEach(function(c) {
+        var opt = document.createElement('option');
+        var cleanName = c.name.endsWith('코치') ? c.name : c.name + ' 코치';
+        opt.value = cleanName;
+        opt.textContent = cleanName + ' (' + (c.specialty || '라이프케어 코칭') + ' · ' + (c.phone || '-') + ')';
+        opt.setAttribute('data-phone', c.phone || '010-3333-4444');
+        opt.setAttribute('data-specialty', c.specialty || '✍️ 디지털 자서전 전문 코칭');
+
+        // 이미 배정된 코치가 있거나 자서전 전문 코치 우선 선택
+        if (p.coachName && (p.coachName.includes(c.name) || c.name.includes(p.coachName))) {
+          opt.selected = true;
+          defaultSelectedCoach = cleanName;
+        } else if (!defaultSelectedCoach && (c.specialty && c.specialty.includes('자서전'))) {
+          opt.selected = true;
+          defaultSelectedCoach = cleanName;
+        }
+        coachSelect.appendChild(opt);
+      });
+
+      if (!defaultSelectedCoach && coachSelect.options.length > 1) {
+        coachSelect.options[1].selected = true;
+        defaultSelectedCoach = coachSelect.options[1].value;
+      }
+      onMemoirCoachSelectChange(defaultSelectedCoach);
+    }
+
+    modal.style.display = 'flex';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMemoirCoachAssignModal() {
+    var modal = document.getElementById('memoirCoachAssignModal');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closeMemoirCoachAssignModalOnOverlay(e) {
+    if (e.target.id === 'memoirCoachAssignModal') closeMemoirCoachAssignModal();
+  }
+
+  // 🔍 다음/카카오 도로명 주소 검색 (자서전 코치 배정 전용)
+  function openDaumPostcodeForMemoirAssign() {
+    if (typeof daum === 'undefined' || !daum.Postcode) {
+      var manual = prompt('도로명 주소를 직접 입력해주세요:', document.getElementById('memoirAssignAddress')?.value || '');
+      if (manual !== null) {
+        var loc = document.getElementById('memoirAssignAddress');
+        if (loc) loc.value = manual.trim();
+      }
+      return;
+    }
+
+    new daum.Postcode({
+      oncomplete: function(data) {
+        var fullRoadAddr = data.roadAddress;
+        var extraRoadAddr = '';
+        if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+          extraRoadAddr += data.bname;
+        }
+        if (data.buildingName !== '' && data.apartment === 'Y') {
+          extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+        }
+        if (extraRoadAddr !== '') {
+          extraRoadAddr = ' (' + extraRoadAddr + ')';
+        }
+
+        var finalAddr = fullRoadAddr + extraRoadAddr;
+        var addrInput = document.getElementById('memoirAssignAddress');
+        if (addrInput) addrInput.value = finalAddr;
+
+        var detailInput = document.getElementById('memoirAssignAddressDetail');
+        if (detailInput) {
+          detailInput.focus();
+        }
+      }
+    }).open();
+  }
+
+  // 코치 드롭다운 변경 시 미리보기 업데이트
+  function onMemoirCoachSelectChange(coachVal) {
+    var preview = document.getElementById('memoirAssignCoachPreview');
+    var select = document.getElementById('memoirAssignCoachSelect');
+    if (!preview || !select) return;
+
+    if (!coachVal) {
+      preview.textContent = '코치를 선택하시면 연락처와 전담 분야가 표시됩니다.';
+      return;
+    }
+    var selectedOpt = select.options[select.selectedIndex];
+    var phone = selectedOpt ? selectedOpt.getAttribute('data-phone') : '';
+    var spec = selectedOpt ? selectedOpt.getAttribute('data-specialty') : '';
+    preview.textContent = '✓ ' + coachVal + ' | ' + spec + ' (연락처: ' + phone + ')';
+  }
+
+  // 💾 자서전 코치 배정 제출 처리 (memoir_projects 및 yebaek_dispatches_v1 동시 갱신)
+  function handleMemoirCoachAssignSubmit(e) {
+    if (e && e.preventDefault) e.preventDefault();
+
+    var projId = document.getElementById('memoirAssignProjectId')?.value;
+    var coachSelect = document.getElementById('memoirAssignCoachSelect');
+    var coachName = coachSelect ? coachSelect.value : '';
+    var dateVal = document.getElementById('memoirAssignDate')?.value || '';
+    var timeVal = document.getElementById('memoirAssignTime')?.value || '오전 10:00';
+    var baseAddr = document.getElementById('memoirAssignAddress')?.value || '';
+    var detailAddr = document.getElementById('memoirAssignAddressDetail')?.value || '';
+    var feeVal = parseInt(document.getElementById('memoirAssignFee')?.value || '150000', 10);
+    var notesVal = document.getElementById('memoirAssignNotes')?.value || '';
+
+    if (!projId || !coachName) {
+      alert('배정할 공인 코치를 선택해 주세요.');
+      return;
+    }
+
+    var selectedOpt = coachSelect.options[coachSelect.selectedIndex];
+    var coachPhone = selectedOpt ? (selectedOpt.getAttribute('data-phone') || '010-3333-4444') : '010-3333-4444';
+    var fullAddress = baseAddr + (detailAddr ? ' ' + detailAddr : '');
+    var visitSchedule = (dateVal ? dateVal.replace(/-/g, '.') + ' ' : '') + timeVal;
+
+    // 1. memoir_projects 업데이트
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projId; });
+    if (!p) {
+      alert('프로젝트를 찾을 수 없습니다.');
+      return;
+    }
+
+    p.coachName = coachName;
+    p.coachPhone = coachPhone;
+    p.preferredDate = visitSchedule;
+    p.region = fullAddress || p.region;
+    p.addressDetail = detailAddr;
+    p.fee = feeVal;
+    p.notes = notesVal;
     p.status = 'coach_assigned';
     p.statusLabel = '코치 배정 완료';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
 
     saveMemoirProjects(projects);
+
+    // 2. 4대 비즈니스 통합 파견 명부(yebaek_dispatches_v1) 등록 및 실시간 동기화
+    try {
+      var dispatches = (typeof getDispatches === 'function') ? getDispatches() : [];
+      var dispId = 'disp_memoir_' + p.id;
+      var existingIdx = dispatches.findIndex(function(d) {
+        return d.id === dispId || d.memoirProjectId === p.id;
+      });
+
+      var dispatchData = {
+        id: dispId,
+        memoirProjectId: p.id,
+        customerName: (p.clientName || '어르신') + (p.applicantName ? ' (' + p.applicantName + ')' : ''),
+        phone: p.applicantPhone || p.clientPhone || '010-0000-0000',
+        serviceType: '✍️ 디지털 자서전 (인생 구술)',
+        preferredDate: visitSchedule,
+        address: fullAddress,
+        coach: coachName,
+        coachPhone: coachPhone,
+        step: '배정완료',
+        status: '진행중',
+        fee: feeVal,
+        notes: (p.packageLabel ? '[' + p.packageLabel + '] ' : '') + notesVal,
+        arrivalStamp: '',
+        completionDate: '',
+        beforePhoto: '',
+        processPhoto: '',
+        afterPhoto: '',
+        coachReport: '',
+        createdAt: p.createdAt || new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+        updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.')
+      };
+
+      if (existingIdx !== -1) {
+        dispatches[existingIdx] = Object.assign(dispatches[existingIdx], dispatchData);
+      } else {
+        dispatches.unshift(dispatchData);
+      }
+
+      if (typeof saveDispatches === 'function') {
+        saveDispatches(dispatches);
+      } else {
+        localStorage.setItem('yebaek_dispatches_v1', JSON.stringify(dispatches));
+      }
+    } catch(err) {
+      console.warn('[Memoir] 파견 명부 연동 알림:', err);
+    }
+
+    closeMemoirCoachAssignModal();
     renderMemoirDashboard();
 
-    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + selectedName + '] 님이 배정되었습니다!\n\n이제 [💬 코치카톡 전송 ➔] 버튼을 눌러 모바일 글쓰기 대시보드 링크를 코치님께 전송하세요.');
+    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + coachName + '] 님이 성공적으로 배정되었습니다!\n\n05. 코치 관제 & 정산 센터 및 코치 현장 파트너앱(coach.html)에 즉시 등록되었습니다.\n\n이제 [💬 코치카톡 전송 ➔] 버튼을 눌러 모바일 글쓰기 앱 링크를 전송하세요.');
+  }
+
+  // 테이블 [🤝 코치 배정] 및 [재배정] 버튼 클릭 시 모달 열기
+  function assignCoachToMemoirProject(projectId) {
+    openMemoirCoachAssignModal(projectId);
   }
   window.assignCoachToMemoirProject = assignCoachToMemoirProject;
 
@@ -16647,14 +17041,28 @@ ${coachAppUrl}
     // 카톡 링크 전송 로직 수행
     sendCoachMemoirKakao(projectId);
 
-    // 공정 단계 전진: coach_assigned ➔ interview_pending
+    // 공정 단계 전진: coach_assigned ➔ interview_pending (2단계 구술 인터뷰)
     p.status = 'interview_pending';
     p.statusLabel = '인터뷰 진행 중';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
+
+    // 파견 명부 상태도 실시간 동기화
+    try {
+      var dispatches = (typeof getDispatches === 'function') ? getDispatches() : [];
+      var targetDisp = dispatches.find(function(d) { return d.memoirProjectId === projectId || d.id === 'disp_memoir_' + projectId; });
+      if (targetDisp) {
+        targetDisp.step = '도착/진행중';
+        targetDisp.status = '진행중';
+        if (typeof saveDispatches === 'function') saveDispatches(dispatches);
+      }
+    } catch(e) {}
+
+    // 필터를 '2. 구술 인터뷰'로 전환하여 방금 전진된 건이 바로 보이도록 지원
+    filterMemoirProjects('interview');
     renderMemoirDashboard();
 
-    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [2. 구술 인터뷰] 단계로 자동 전진되었습니다. 코치님이 현장 방문 후 20문항 구술 음성을 등록하면 AI 감성윤문 검수를 시작할 수 있습니다.');
+    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 현장 파견 및 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [2. 구술 인터뷰] 단계로 자동 전진되었습니다. 코치님이 현장 방문 후 20문항 구술 음성을 등록하면 AI 감성윤문 검수를 시작할 수 있습니다.');
   }
   window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
 
@@ -17420,25 +17828,34 @@ ${coachAppUrl}
       return;
     }
 
-    var baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'coach-memoir.html');
-    var shareUrl = baseUrl + '?project=' + encodeURIComponent(p.id) + 
-                   '&coach=' + encodeURIComponent(p.coachName || '') + 
-                   '&phone=' + encodeURIComponent(p.coachPhone || '');
+    var coachAppBase = window.location.origin + window.location.pathname.replace('admin.html', 'coach.html');
+    var memoirAppBase = window.location.origin + window.location.pathname.replace('admin.html', 'coach-memoir.html');
+    var memoirShareUrl = memoirAppBase + '?project=' + encodeURIComponent(p.id) + 
+                         '&coach=' + encodeURIComponent(p.coachName || '') + 
+                         '&phone=' + encodeURIComponent(p.coachPhone || '');
 
-    var msg = '✨ [여백과 결 | 디지털 자서전 현장 집필 임무 전달]\n\n' +
-              '안녕하세요, ' + (p.coachName || '담당') + ' 전문 코치님.\n' +
-              '새로운 생애 자서전 집필 프로젝트가 배정되었습니다.\n\n' +
+    var feeStr = (Number(p.fee) || 150000).toLocaleString();
+    var cleanCoachName = (p.coachName || '코치').replace(/ 코치$/, '');
+
+    var msg = '✨ [여백과 결 | ✍️ 디지털 자서전 현장 구술 인터뷰 파견 안내]\n\n' +
+              '안녕하세요, ' + cleanCoachName + ' 전문 코치님!\n' +
+              '새로운 생애 자서전 구술 채록 및 집필 임무가 배정되었습니다.\n\n' +
               '👵 주인공: ' + (p.clientName || '어르신') + ' (' + (p.clientAge || '-') + ')\n' +
-              '📍 방문지: ' + (p.region || '배정 주소지') + '\n' +
-              '📦 플랜: ' + (p.packageLabel || '인생 마스터피스 양장본') + '\n\n' +
-              '아래 현장 코치 전용 글쓰기 대시보드 링크로 접속하시면\n' +
-              '1. 원터치 현장 음성 녹취 및 실시간 한글 STT 받아쓰기\n' +
-              '2. AI 5대 생애 챕터 목차 및 1인칭 수필 초안 자동 집필\n' +
-              '3. 챕터별 현장 윤문 교정 및 흑백/가족사진 캡션 배치\n' +
-              '4. 신국판 양장본 규격 PDF 원클릭 다운로드\n' +
-              '를 수행하실 수 있습니다.\n\n' +
-              '🔗 코치 전용 글쓰기 앱 접속:\n' + shareUrl + '\n\n' +
-              '* 본인 인증(성함/연락처) 후 즉시 작업하실 수 있으며, 작업 내용은 본사 관리자 화면에 실시간 자동 동기화됩니다.';
+              '👨‍👩‍👧 의뢰인: ' + (p.applicantName || '-') + (p.relation ? ' (' + p.relation + ')' : '') + '\n' +
+              '📅 방문일시: ' + (p.preferredDate || '일정 협의') + '\n' +
+              '📍 방문장소: ' + (p.region || '배정 주소지') + '\n' +
+              '📦 진행플랜: ' + (p.packageLabel || '인생 마스터피스 양장본') + '\n' +
+              '💰 활동비: ' + feeStr + '원 (현장 완료 검수 후 즉시 입금)\n' +
+              (p.notes ? '📝 특이사항: ' + p.notes + '\n\n' : '\n') +
+              '━━━━━━━━━━━━━━━━━━━━━\n' +
+              '📱 [1. 코치 현장 파트너앱 (도착 스탬프 & 정산 관리)]\n' +
+              coachAppBase + '\n\n' +
+              '✍️ [2. 디지털 자서전 글쓰기 스튜디오 (20문항 녹취 & AI 윤문)]\n' +
+              memoirShareUrl + '\n' +
+              '━━━━━━━━━━━━━━━━━━━━━\n' +
+              '* 현장에 도착하시면 코치앱에서 [📍 도착 스탬프]를 찍으신 후,\n' +
+              '  자서전 글쓰기 앱에서 원터치 음성 녹음 및 인터뷰를 진행해 주세요.\n' +
+              '* 작업 내용은 본사 관리자 화면에 실시간 자동 동기화됩니다.';
 
     // 카카오톡 SDK 공유 가능 여부 확인
     if (typeof Kakao !== 'undefined' && Kakao.isInitialized && Kakao.isInitialized()) {
@@ -17447,19 +17864,19 @@ ${coachAppUrl}
           objectType: 'feed',
           content: {
             title: '📖 [여백과 결] ' + (p.clientName || '') + ' 어르신 자서전 현장 집필 임무',
-            description: (p.coachName || '코치') + '님, 현장 방문 녹취 및 AI 목차/초안 자동 집필을 진행해 주세요.',
+            description: cleanCoachName + '님, 현장 방문 녹취 및 AI 목차/초안 자동 집필을 진행해 주세요.',
             imageUrl: 'https://netrium1-lab.github.io/images/og-share-cover.jpg',
             link: {
-              mobileWebUrl: shareUrl,
-              webUrl: shareUrl
+              mobileWebUrl: memoirShareUrl,
+              webUrl: memoirShareUrl
             }
           },
           buttons: [
             {
               title: '✍️ 코치 글쓰기 대시보드 열기',
               link: {
-                mobileWebUrl: shareUrl,
-                webUrl: shareUrl
+                mobileWebUrl: memoirShareUrl,
+                webUrl: memoirShareUrl
               }
             }
           ]
@@ -17472,12 +17889,12 @@ ${coachAppUrl}
     // 클립보드 복사 처리
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(msg).then(function() {
-        alert('💬 [' + (p.coachName || '코치') + ' 코치님]께 전송할 카카오톡 발송 안내문과 전용 글쓰기 앱 링크가 클립보드에 복사되었습니다!\n\n카카오톡 대화방에 [붙여넣기]하여 전송해 주세요.\n\n-------------------------\n' + shareUrl);
+        alert('💬 [' + (p.coachName || '코치') + ' 코치님]께 전송할 카카오톡 현장 파견 안내문과 앱 링크가 클립보드에 복사되었습니다!\n\n카카오톡 대화방에 [붙여넣기]하여 전송해 주세요.\n\n-------------------------\n' + memoirShareUrl);
       }).catch(function() {
-        prompt('아래 링크와 메시지를 복사하여 코치님 카톡으로 전송하세요:', shareUrl);
+        prompt('아래 링크와 메시지를 복사하여 코치님 카톡으로 전송하세요:', memoirShareUrl);
       });
     } else {
-      prompt('아래 링크를 복사하여 코치님 카톡으로 전송하세요:', shareUrl);
+      prompt('아래 링크를 복사하여 코치님 카톡으로 전송하세요:', memoirShareUrl);
     }
   }
 
@@ -17535,6 +17952,12 @@ ${coachAppUrl}
   window.closeMemoirProjectCreateModal = closeMemoirProjectCreateModal;
   window.handleCreateMemoirProject = handleCreateMemoirProject;
   window.deleteMemoirProject = deleteMemoirProject;
+  window.openMemoirCoachAssignModal = openMemoirCoachAssignModal;
+  window.closeMemoirCoachAssignModal = closeMemoirCoachAssignModal;
+  window.closeMemoirCoachAssignModalOnOverlay = closeMemoirCoachAssignModalOnOverlay;
+  window.openDaumPostcodeForMemoirAssign = openDaumPostcodeForMemoirAssign;
+  window.onMemoirCoachSelectChange = onMemoirCoachSelectChange;
+  window.handleMemoirCoachAssignSubmit = handleMemoirCoachAssignSubmit;
   window.assignCoachToMemoirProject = assignCoachToMemoirProject;
   window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
   window.advanceToInterviewDone = advanceToInterviewDone;

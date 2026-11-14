@@ -1919,8 +1919,8 @@
 
             ${(m.serviceType && m.serviceType.includes('자서전')) ? `
               <div style="margin-top: 10px;">
-                <a href="coach-memoir.html" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #c29b38 0%, #a27b20 100%); color: #fff; text-decoration: none; padding: 11px 16px; border-radius: 10px; font-weight: 850; font-size: 0.88rem; box-shadow: 0 4px 12px rgba(194,155,56,0.25);">
-                  <span>✍️</span> 디지털 자서전 전문 글쓰기 앱 열기 ➔
+                <a href="coach-memoir.html?project=${encodeURIComponent(m.memoirProjectId || (m.id ? m.id.replace('disp_memoir_', '') : ''))}&coach=${encodeURIComponent(m.coach || (currentCoach ? currentCoach.name : ''))}&phone=${encodeURIComponent(m.coachPhone || (currentCoach ? currentCoach.phone : ''))}" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; background: linear-gradient(135deg, #c29b38 0%, #a27b20 100%); color: #fff; text-decoration: none; padding: 12px 16px; border-radius: 10px; font-weight: 850; font-size: 0.90rem; box-shadow: 0 4px 14px rgba(194,155,56,0.28);">
+                  <span>✍️</span> 디지털 자서전 전문 글쓰기 앱 열기 (20문항 녹취 &amp; AI윤문) ➔
                 </a>
               </div>
             ` : ''}
