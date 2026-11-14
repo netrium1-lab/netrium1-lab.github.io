@@ -2879,52 +2879,26 @@
 
             <!-- ================= 탭 4: 🌟 03. 4대 비즈니스 통합 관제센터 & CRM ================= -->
       <section class="tab-panel" id="tabBusinessMaster">
-        <!-- 🌟 03. 4대 오프라인 라이프케어 비즈니스 관제 슬림 헤더 (안티그래비티 테크 콘솔) -->
-        <div class="panel-card" style="margin-bottom: 16px; border-top: 3.5px solid #b83354; padding: 18px 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="panel-icon" style="font-size: 1.8rem; line-height: 1;">🌟</span>
-              <div>
-                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <h2 class="panel-title" style="margin: 0; font-size: 1.25rem; color: #b83354;">03. 4대 오프라인 라이프케어 비즈니스 관제</h2>
-                  <span class="badge" style="background: #fff0f3; color: #b83354; border: 1px solid #fecdd3; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">좌측 메뉴에서 즉시 전환</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
-                  #01 뷰티케어(180분), #02 공간비움, #03 유품정리, #04 생전 엔딩파티 현장 방문 서비스 전용 관제
-                </p>
-              </div>
-            </div>
-            
-            <!-- 상단 슬림 미니 스위처 (좌측 사이드바와 100% 실시간 양방향 연동) -->
-            <div style="display: flex; align-items: center; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 10px; border: 1px solid #e2e8f0;">
-              <button type="button" class="biz-slim-pill active" id="bizPill_beauty" onclick="switchBusinessMasterTab('beauty')">💄 뷰티 (180분)</button>
-              <button type="button" class="biz-slim-pill" id="bizPill_wardrobe" onclick="switchBusinessMasterTab('wardrobe')">👗 공간비움</button>
-              <button type="button" class="biz-slim-pill" id="bizPill_legacy" onclick="switchBusinessMasterTab('legacy')">📦 유품정리</button>
-              <button type="button" class="biz-slim-pill" id="bizPill_party" onclick="switchBusinessMasterTab('party')">💌 엔딩파티</button>
-            </div>
-          </div>
-
-          <!-- 하위 호환성을 완벽히 보장하기 위한 히든 앵커 및 엘리먼트 (기존 JS/스크립트 100% 호환) -->
-          <div style="display: none;">
-            <select id="bizProgramSelector" onchange="switchBusinessMasterTab(this.value)">
-              <option value="beauty">뷰티</option>
-              <option value="wardrobe">옷장</option>
-              <option value="legacy">유품</option>
-              <option value="party">파티</option>
-            </select>
-            <div id="bizCard_beauty" class="active"><span class="biz-card-status-text"></span></div>
-            <div id="bizCard_wardrobe"><span class="biz-card-status-text"></span></div>
-            <div id="bizCard_legacy"><span class="biz-card-status-text"></span></div>
-            <div id="bizCard_party"><span class="biz-card-status-text"></span></div>
-            <button id="bizTabBtn_beauty"></button>
-            <button id="bizTabBtn_wardrobe"></button>
-            <button id="bizTabBtn_legacy"></button>
-            <button id="bizTabBtn_party"></button>
-            <button id="bizTabBtn_memoir"></button>
-          </div>
+        <!-- 하위 호환성을 위한 히든 앵커 및 엘리먼트 (상단 중복 카드 완전 삭제) -->
+        <div style="display: none;">
+          <select id="bizProgramSelector" onchange="switchBusinessMasterTab(this.value)">
+            <option value="beauty">뷰티</option>
+            <option value="wardrobe">옷장</option>
+            <option value="legacy">유품</option>
+            <option value="party">파티</option>
+          </select>
+          <div id="bizCard_beauty" class="active"><span class="biz-card-status-text"></span></div>
+          <div id="bizCard_wardrobe"><span class="biz-card-status-text"></span></div>
+          <div id="bizCard_legacy"><span class="biz-card-status-text"></span></div>
+          <div id="bizCard_party"><span class="biz-card-status-text"></span></div>
+          <button id="bizTabBtn_beauty"></button>
+          <button id="bizTabBtn_wardrobe"></button>
+          <button id="bizTabBtn_legacy"></button>
+          <button id="bizTabBtn_party"></button>
+          <button id="bizTabBtn_memoir"></button>
         </div>
         <!-- 2. 상단 비즈니스 메타 헤더 & 4대 파이프라인 KPI 카드 -->
-        <div class="panel-card" style="margin-top: 14px; border-top: 4px solid #d1516e;">
+        <div class="panel-card" style="margin-top: 0; border-top: 4px solid #d1516e;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" id="currentBizIcon" style="font-size: 1.8rem;">🌟</span>
