@@ -17179,17 +17179,32 @@ ${coachAppUrl}
           html += '</button>';
           html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
         }
-        // [2단계] 현장 구술 인터뷰 단계
+        // [2단계] 현장 구술 인터뷰 단계 (코치가 글쓰기 대시보드에서 작성한 글 보기 집중)
         else if (p.status === 'interview_pending') {
-          html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인 및 3단계 감성윤문으로 이동">';
+          var coachAppUrl = 'coach-memoir.html?project=' + encodeURIComponent(p.id) +
+                            '&coach=' + encodeURIComponent(p.coachName || '') +
+                            '&phone=' + encodeURIComponent(p.coachPhone || '') +
+                            '&mode=admin';
+          // 1. 코치가 글쓰기 대시보드에서 작성한 글을 바로 확인하는 버튼 (감수에디터 대신 제공)
+          html += '<a href="' + coachAppUrl + '" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="코치가 글쓰기 대시보드에서 작성한 20문항 구술 녹취 원고 바로보기">';
+          html += '<span>📖</span> 코치 작성글 보기';
+          html += '</a>';
+          // 2. 현장 구술 녹취 완료 확인 버튼
+          html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인">';
           html += '<span>🎙️</span> 인터뷰 완료';
           html += '</button>';
-          html += '<a href="coach-memoir.html?project=' + encodeURIComponent(p.id) + '&coach=' + encodeURIComponent(p.coachName || '') + '" target="_blank" class="btn-save-setting" style="background: #f8fafc; color: #334155; border: 1.2px solid #cbd5e1; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="코치 전담 글쓰기 스튜디오 새창 열기">';
-          html += '<span>✍️</span> 글쓰기앱';
-          html += '</a>';
         } else if (p.status === 'interview_done') {
-          html += '<button type="button" onclick="openMemoirSplitEditorAndDraft(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="AI 감성윤문 가동 및 에디터 열기">';
-          html += '<span>✍️</span> AI윤문 &amp; 에디터';
+          var coachAppUrl = 'coach-memoir.html?project=' + encodeURIComponent(p.id) +
+                            '&coach=' + encodeURIComponent(p.coachName || '') +
+                            '&phone=' + encodeURIComponent(p.coachPhone || '') +
+                            '&mode=admin';
+          // 1. 코치 작성글 보기 버튼
+          html += '<a href="' + coachAppUrl + '" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="코치가 글쓰기 대시보드에서 작성한 20문항 구술 녹취 원고 바로보기">';
+          html += '<span>📖</span> 코치 작성글 보기';
+          html += '</a>';
+          // 2. 3단계 AI윤문 & 코치교정 단계로 전진 버튼 (감수에디터 대신 단계 전진)
+          html += '<button type="button" onclick="advanceToDraftingPhase(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(194,155,56,0.3);" title="3단계 AI윤문 & 코치교정 단계로 전진">';
+          html += '<span>🤖</span> 3단계 AI윤문 전진 ➔';
           html += '</button>';
         }
         // [3단계] AI 감성윤문 & 코치 교정 단계
@@ -17781,11 +17796,28 @@ ${coachAppUrl}
     saveMemoirProjects(projects);
     renderMemoirDashboard();
 
-    alert('🎙️ [' + (p.clientName) + '] 님의 현장 구술 녹취 및 사진 수집이 완료 처리되었습니다!\n\n이제 [✍️ AI윤문 & 에디터] 버튼을 눌러 AI 5단계 감성 윤문을 가동하세요.');
+    alert('🎙️ [' + (p.clientName) + '] 님의 현장 구술 녹취 및 사진 수집이 완료 처리되었습니다!\n\n이제 [📖 코치 작성글 보기]로 작성 원고를 확인하거나, [🤖 3단계 AI윤문 전진 ➔] 버튼을 눌러 다음 단계로 진행하세요.');
   }
   window.advanceToInterviewDone = advanceToInterviewDone;
 
-  // ✍️ 2-2. AI 윤문 에디터 열고 3단계로 전진
+  // 🤖 2-2. [신설] 3단계 AI윤문 & 코치교정 단계로 전진 (감수에디터 대신 단계 전진)
+  function advanceToDraftingPhase(projectId) {
+    var projects = getMemoirProjects();
+    var p = projects.find(function(item) { return item.id === projectId; });
+    if (!p) return;
+
+    p.status = 'ai_drafted';
+    p.statusLabel = 'AI 윤문 완료';
+    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(projects);
+    filterMemoirProjects('drafting');
+    renderMemoirDashboard();
+
+    alert('✨ [' + (p.clientName) + '] 님의 프로젝트가 [3. AI윤문 & 코치교정] 단계로 전진되었습니다!\n\n이제 3단계 탭에서 AI 5단계 감성윤문 검수 에디터를 열람하실 수 있습니다.');
+  }
+  window.advanceToDraftingPhase = advanceToDraftingPhase;
+
+  // ✍️ 2-3. AI 윤문 에디터 열고 3단계로 전진 (하위 호환 유지)
   function openMemoirSplitEditorAndDraft(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
@@ -18755,6 +18787,7 @@ ${coachAppUrl}
   window.assignCoachToMemoirProject = assignCoachToMemoirProject;
   window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
   window.advanceToInterviewDone = advanceToInterviewDone;
+  window.advanceToDraftingPhase = advanceToDraftingPhase;
   window.openMemoirSplitEditorAndDraft = openMemoirSplitEditorAndDraft;
   window.requestFamilyApproval = requestFamilyApproval;
   window.approveAndSendToPrint = approveAndSendToPrint;

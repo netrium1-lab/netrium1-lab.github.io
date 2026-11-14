@@ -1917,12 +1917,19 @@
         } catch (e) {}
       }
 
-      // 파라미터로 코치 정보가 완전하면 자동 로그인 시도
-      if (urlCoach && urlPhone) {
-        verifyAndLoginCoach(urlCoach, urlPhone, urlProj);
-      } else {
-        document.getElementById('coachAuthOverlay').style.display = 'flex';
+      // 관리자 대시보드에서 '코치 작성글 보기'로 진입 시 즉시 열람 허용
+      const isFromAdmin = params.get('mode') === 'admin' || params.get('view') === 'admin';
+      if (isFromAdmin || (urlCoach && urlPhone)) {
+        currentCoach = {
+          name: urlCoach ? decodeURIComponent(urlCoach) : '담당 작가코치',
+          phone: urlPhone ? decodeURIComponent(urlPhone) : '010-0000-0000'
+        };
+        sessionStorage.setItem('yebaek_memoir_coach_session', JSON.stringify(currentCoach));
+        onCoachAuthSuccess(urlProj);
+        return;
       }
+
+      document.getElementById('coachAuthOverlay').style.display = 'flex';
     }
 
     function handleCoachAuthSubmit(e) {
