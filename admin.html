@@ -3700,11 +3700,10 @@
                   <th style="width: 135px;">신청 고객</th>
                   <th style="width: 155px;">서비스 분야</th>
                   <th style="width: 105px;">담당 코치</th>
-                  <th style="min-width: 170px;">방문 일시 &amp; 장소</th>
+                  <th style="min-width: 220px;">방문 일시 &amp; 장소</th>
                   <th style="width: 140px; text-align: center;">현장 스탬프</th>
-                  <th style="width: 110px; text-align: center;">📸 현장 사진</th>
                   <th style="width: 110px; text-align: right;">💰 활동비</th>
-                  <th style="width: 120px; text-align: center;">작업진행 카드</th>
+                  <th style="width: 130px; text-align: center;">작업진행 카드</th>
                 </tr>
               </thead>
               <tbody id="controlTableBody">
@@ -15583,7 +15582,7 @@ ${coachAppUrl}
       if (filtered.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="10" style="text-align: center; padding: 50px 20px; color: #64748b;">
+            <td colspan="9" style="text-align: center; padding: 50px 20px; color: #64748b;">
               <span style="font-size: 2.4rem; display: block; margin-bottom: 8px;">🌿</span>
               <strong style="font-size: 1.05rem; color: #0f172a;">조건에 부합하는 현장 관제 및 정산 내역이 없습니다</strong>
               <p style="font-size: 0.84rem; margin: 6px 0 0; color: #94a3b8;">상태 필터나 코치 필터, 검색어를 변경해 보세요.</p>
@@ -15612,28 +15611,16 @@ ${coachAppUrl}
           statusBadge = '<span style="background:#f1f5f9; color:#475569; padding:4px 8px; border-radius:6px; font-size:0.76rem; font-weight:800; white-space:nowrap; display:inline-block;">⏳ 배정완료</span>';
         }
 
-        // 사진 카운트 및 미니 썸네일 박스 (단계별 최대 3장씩, 총 9장 지원)
+        // 사진 카운트 (상세 썸네일은 작업카드 모달에서 시원하게 확인)
         const allThumbs = [
           ...(Array.isArray(d.beforePhotos) ? d.beforePhotos : (d.beforePhoto ? [d.beforePhoto] : [])),
           ...(Array.isArray(d.processPhotos) ? d.processPhotos : (d.processPhoto ? [d.processPhoto] : [])),
           ...(Array.isArray(d.afterPhotos) ? d.afterPhotos : (d.afterPhoto ? [d.afterPhoto] : []))
         ];
         const photoCount = allThumbs.length;
-        let photoThumbsHtml = '';
-        if (photoCount > 0) {
-          const visibleThumbs = allThumbs.slice(0, 3);
-          const thumbImgs = visibleThumbs.map(src => `<img src="${src}" class="control-mini-thumb" alt="현장사진">`).join('');
-          photoThumbsHtml = `
-            <div style="display:flex; flex-direction:column; align-items:center; gap:3px;">
-              <div class="control-mini-thumbs-wrap">${thumbImgs}</div>
-              <span style="font-size:0.74rem; font-weight:850; color:#059669;">총 ${photoCount}장 등록</span>
-            </div>
-          `;
-        } else {
-          photoThumbsHtml = `
-            <span style="font-size:0.76rem; color:#94a3b8; font-weight:700;">미등록</span>
-          `;
-        }
+        const photoBadge = photoCount > 0 
+          ? `<span style="background: rgba(255,255,255,0.28); font-size: 0.72rem; padding: 1px 6px; border-radius: 999px; font-weight: 900; letter-spacing: -0.2px;">📸 ${photoCount}</span>` 
+          : '';
 
         return `
           <tr class="control-row ${isPending ? 'pending-row' : ''}" onclick="openDispatchReportModal('${d.id}')" title="클릭하여 [${escapeHtml(d.customerName)}] 현장 작업진행 카드(사진 3종 &amp; 소감 &amp; 송금 승인)를 확인합니다.">
@@ -15661,7 +15648,7 @@ ${coachAppUrl}
             </td>
             <td>
               <div style="font-weight: 800; font-size: 0.84rem; color: #1e293b;">${escapeHtml(d.preferredDate)}</div>
-              <div style="font-size: 0.78rem; color: #64748b; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px;" title="${escapeHtml(d.address)}">
+              <div style="font-size: 0.78rem; color: #64748b; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px;" title="${escapeHtml(d.address)}">
                 📍 ${escapeHtml(d.address)}
               </div>
             </td>
@@ -15669,15 +15656,13 @@ ${coachAppUrl}
               <span style="color: ${d.arrivalStamp ? '#0284c7' : '#94a3b8'}; font-weight: 750;">도착: ${escapeHtml(d.arrivalStamp || '대기')}</span><br>
               <span style="color: ${d.completionDate ? '#059669' : '#94a3b8'}; font-weight: 750;">완료: ${escapeHtml(d.completionDate || '대기')}</span>
             </td>
-            <td style="text-align: center;">
-              ${photoThumbsHtml}
-            </td>
             <td style="text-align: right;">
               <strong style="color: #d97706; font-size: 0.94rem;">${fee.toLocaleString()}원</strong>
             </td>
             <td style="text-align: center;">
-              <button type="button" class="btn-action-sm edit" onclick="openDispatchReportModal('${d.id}'); event.stopPropagation();" style="font-weight: 850; padding: 6px 12px; background: var(--accent); color: #ffffff; border: none; border-radius: 8px; box-shadow: 0 2px 6px rgba(30,61,47,0.2); white-space: nowrap;" title="작업진행 카드 모달 열기">
-                <span>🔍</span> 작업카드
+              <button type="button" class="btn-action-sm edit" onclick="openDispatchReportModal('${d.id}'); event.stopPropagation();" style="font-weight: 850; padding: 6px 12px; background: var(--accent); color: #ffffff; border: none; border-radius: 8px; box-shadow: 0 2px 6px rgba(30,61,47,0.2); white-space: nowrap; display: inline-flex; align-items: center; gap: 5px;" title="작업진행 카드 모달 열기 (등록 사진 ${photoCount}장 &amp; 코치 소감 &amp; 송금 승인)">
+                <span>🔍 작업카드</span>
+                ${photoBadge}
               </button>
             </td>
           </tr>
