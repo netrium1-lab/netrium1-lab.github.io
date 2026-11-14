@@ -2226,15 +2226,15 @@
         <div class="sidebar-subnav" id="sidebarSubnavMemoir">
           <button type="button" class="subnav-link active" id="sideSub_memoir_projects" onclick="selectMemoirFromSidebar('projects')">
             <span class="subnav-icon">✍️</span>
-            <span>1. 집필·윤문 스튜디오</span>
+            <span>1. 출판 프로젝트 &amp; AI윤문</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_published" onclick="selectMemoirFromSidebar('published')">
             <span class="subnav-icon">📚</span>
-            <span>2. 완간 도서 &amp; PDF</span>
+            <span>2. 완간 자서전 도서 &amp; PDF</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_banner" onclick="selectMemoirFromSidebar('banner')">
-            <span class="subnav-icon">🎨</span>
-            <span>3. 메인 워크북 배너</span>
+            <span class="subnav-icon">📢</span>
+            <span>3. 메인 CTA 배너 설정</span>
           </button>
         </div>
 
@@ -3196,18 +3196,6 @@
 
       <!-- ================= 탭: 📖 04. 자서전 출판 관제센터 & AI 윤문 파이프라인 ================= -->
       <section class="tab-panel" id="tabMemoirDashboard">
-        <!-- 자서전 출판 관제 전용 서브 내비게이션 -->
-        <div style="display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 2px solid rgba(194, 155, 56, 0.3); padding-bottom: 12px; flex-wrap: wrap;">
-          <button type="button" class="btn-save-setting" onclick="document.getElementById('memoirProjectsCard').scrollIntoView({behavior:'smooth'});" style="background: #c29b38; color: #ffffff; border: none; font-weight: 850;">
-            <span>📖 1. 출판 프로젝트 &amp; AI 감성윤문 파이프라인</span>
-          </button>
-          <button type="button" class="btn-save-setting" onclick="var p = document.getElementById('publishedMemoirsSection'); if(p) p.scrollIntoView({behavior:'smooth'});" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-            <span>📚 2. 완간 자서전 도서 &amp; PDF 관리 (서재 연동)</span>
-          </button>
-          <button type="button" class="btn-save-setting" onclick="var b = document.getElementById('bizMemoirBannerCard'); if(b) { b.style.display='block'; b.scrollIntoView({behavior:'smooth'}); }" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-            <span>📢 3. 메인 CTA 배너 (30일 워크북 증정) 설정</span>
-          </button>
-        </div>
         <!-- 1. 관제센터 상단 헤더 -->
         <div class="panel-card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(194, 155, 56, 0.08) 0%, rgba(30, 61, 47, 0.06) 100%); border: 1.5px solid rgba(194, 155, 56, 0.3);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
@@ -3272,8 +3260,8 @@
           </div>
         </div>
 
-        <!-- 3. 필터 툴바 & 프로젝트 목록 카드 -->
-        <div class="panel-card">
+        <!-- 04-1. 3. 필터 툴바 & 프로젝트 목록 카드 (출판 프로젝트 & AI 감성윤문 파이프라인) -->
+        <div class="panel-card" id="memoirProjectsCard">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
             <!-- 단계별 필터 버튼군 -->
             <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="memoirFilterButtonGroup">
@@ -3311,9 +3299,53 @@
             </table>
           </div>
         </div>
-<div id="publishedMemoirsSection">
+
+        <!-- 04-2. 완간된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동) -->
+        <div class="panel-card" id="publishedMemoirsSection" style="margin-top: 24px;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon">📚</span>
+              <div>
+                <h2 class="panel-title">출판 완료된 디지털 자서전 도서 &amp; PDF 파일 관리 (서재 자동 연동)</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                  전문 구술 인터뷰와 교정을 거쳐 완간된 디지털 자서전 도서와 <strong>PDF 파일</strong>을 관리합니다. 등록된 도서는 <strong>[나의 서재(my-room.html)]</strong>에 자동 전시되어 어르신과 가족이 직접 다운로드할 수 있습니다.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
+                <span>➕</span> 신규 완성 자서전 &amp; PDF 등록
+              </button>
+              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                <span>📥</span> 도서 목록(CSV) 다운로드
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 70px; text-align: center;">표지</th>
+                  <th style="width: 180px;">자서전 도서명</th>
+                  <th style="width: 100px;">저자 (어르신)</th>
+                  <th style="width: 85px; text-align: center;">총 분량</th>
+                  <th style="width: 100px;">전담 코치</th>
+                  <th style="width: 100px;">완간 일자</th>
+                  <th style="width: 220px;">자서전 PDF 파일 &amp; 다운로드</th>
+                  <th style="width: 100px; text-align: center;">서재 공개</th>
+                  <th style="width: 110px; text-align: center;">관리</th>
+                </tr>
+              </thead>
+              <tbody id="publishedMemoirsTableBody">
+                <!-- JS 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 04-3. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 틀 -->
         <div id="bizMemoirBannerCard" style="display: block; margin-top: 24px;">
-          <!-- 메인 사이트 자서전 특별 혜택 및 신청 배너 설정 관리 틀 -->
           <div class="panel-card">
             <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
               <div class="panel-title-wrap">
@@ -3393,53 +3425,7 @@
               </div>
             </div>
           </div>
-
-          <!-- 출판 완료된 디지털 자서전 도서 & PDF 관리 -->
-          <div class="panel-card" style="margin-top: 24px;">
-            <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
-              <div class="panel-title-wrap">
-                <span class="panel-icon">📚</span>
-                <div>
-                  <h2 class="panel-title">출판 완료된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동)</h2>
-                  <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                    전문 구술 인터뷰와 교정을 거쳐 완간된 디지털 자서전 도서와 <strong>PDF 파일</strong>을 관리합니다. 등록된 도서는 <strong>[나의 서재(my-room.html)]</strong>에 자동 전시되어 어르신과 가족이 직접 다운로드할 수 있습니다.
-                  </p>
-                </div>
-              </div>
-              <div style="display: flex; gap: 8px;">
-                <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
-                  <span>➕</span> 신규 완성 자서전 & PDF 등록
-                </button>
-                <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                  <span>📥</span> 도서 목록(CSV) 다운로드
-                </button>
-              </div>
-            </div>
-
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 70px; text-align: center;">표지</th>
-                    <th style="width: 180px;">자서전 도서명</th>
-                    <th style="width: 100px;">저자 (어르신)</th>
-                    <th style="width: 85px; text-align: center;">총 분량</th>
-                    <th style="width: 100px;">전담 코치</th>
-                    <th style="width: 100px;">완간 일자</th>
-                    <th style="width: 220px;">자서전 PDF 파일 & 다운로드</th>
-                    <th style="width: 100px; text-align: center;">서재 공개</th>
-                    <th style="width: 110px; text-align: center;">관리</th>
-                  </tr>
-                </thead>
-                <tbody id="publishedMemoirsTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
         </div>
-
-</div>
       </section>
 
       <!-- ================= 탭 1: 🎓 01. 코치 아카데미 & 코치 배정 관리 ================= -->
@@ -16020,13 +16006,45 @@ ${coachAppUrl}
 
     // 📖 좌측 사이드바에서 자서전 출판 서브탭 원클릭 선택
     function selectMemoirFromSidebar(subTab) {
-      switchTab('tabMemoirDashboard');
-      if (typeof switchMemoirSubTab === 'function') {
-        switchMemoirSubTab(subTab);
+      if (typeof switchTab === 'function') {
+        switchTab('tabMemoirDashboard');
       }
-      var mainEl = document.querySelector('.admin-main');
-      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+      switchMemoirSubTab(subTab);
     }
+    window.selectMemoirFromSidebar = selectMemoirFromSidebar;
+
+    // 📖 자서전 출판 관제 섹션 전환 및 부드러운 스크롤 이동
+    function switchMemoirSubTab(subTab) {
+      var subLinks = document.querySelectorAll('#sidebarSubnavMemoir .subnav-link');
+      subLinks.forEach(function(l) { l.classList.remove('active'); });
+
+      var targetId = 'memoirProjectsCard';
+      var activeBtnId = 'sideSub_memoir_projects';
+
+      if (subTab === 'projects') {
+        targetId = 'memoirProjectsCard';
+        activeBtnId = 'sideSub_memoir_projects';
+      } else if (subTab === 'published') {
+        targetId = 'publishedMemoirsSection';
+        activeBtnId = 'sideSub_memoir_published';
+      } else if (subTab === 'banner') {
+        targetId = 'bizMemoirBannerCard';
+        activeBtnId = 'sideSub_memoir_banner';
+        var bannerCard = document.getElementById('bizMemoirBannerCard');
+        if (bannerCard) bannerCard.style.display = 'block';
+      }
+
+      var activeBtn = document.getElementById(activeBtnId);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      var targetEl = document.getElementById(targetId);
+      if (targetEl) {
+        setTimeout(function() {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      }
+    }
+    window.switchMemoirSubTab = switchMemoirSubTab;
 
     // 🌟 03. 4대 비즈니스 카테고리 전환 함수
     function switchBusinessMasterTab(bizCategory) {
