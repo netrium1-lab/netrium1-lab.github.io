@@ -3341,9 +3341,12 @@
                 <span>🖨️ 5. 인쇄 &amp; 출판완료</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirDone">0</span>
               </button>
             </div>
-            <!-- 검색창 -->
+            <!-- 검색창 및 기본 데이터 복원 -->
             <div style="display: flex; align-items: center; gap: 8px;">
-              <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신, 신청인, 코치명 검색..." style="padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.85rem; background: var(--bg-card); color: var(--text-primary); width: 220px;">
+              <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신, 신청인, 코치명 검색..." style="padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.85rem; background: var(--bg-card); color: var(--text-primary); width: 200px;">
+              <button type="button" onclick="resetAndRestoreMemoirDemoData()" class="btn-save-setting" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed; border: 1.2px solid #8b5cf6; font-size: 0.80rem; font-weight: 850; padding: 7px 11px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;" title="기본 데모 상담 신청 데이터 및 파이프라인 데이터 초기화/복원">
+                <span>🔄</span> 기본 데이터 복원
+              </button>
             </div>
           </div>
 
@@ -16535,6 +16538,17 @@ ${coachAppUrl}
 (function(window) {
   'use strict';
 
+  // 🛡️ XSS 방어 및 문자열 안전 변환 헬퍼 (자서전 모듈 스코프 내 독립 정의)
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
   var currentMemoirFilter = 'all';
   var currentMemoirSearch = '';
   var activeMemoirProjectId = null;
@@ -16785,16 +16799,85 @@ ${coachAppUrl}
         return parsed;
       }
 
+      var changed = false;
+
+      // 💡 [실시간 연동] 02. 고객 맞춤 상담(yebaek_diag_reservations)에서 자서전 신청 건 자동 흡수
+      try {
+        var rawDiag = localStorage.getItem('yebaek_diag_reservations');
+        if (rawDiag) {
+          var diagList = JSON.parse(rawDiag);
+          if (Array.isArray(diagList)) {
+            diagList.forEach(function(diag) {
+              var isMemoirCategory = diag.category && (
+                diag.category.indexOf('자서전') !== -1 ||
+                diag.category.indexOf('회고록') !== -1 ||
+                diag.category.indexOf('생애') !== -1
+              );
+              if (isMemoirCategory) {
+                var exists = parsed.some(function(p) {
+                  return (diag.memoirProjectId && p.id === diag.memoirProjectId) || 
+                         (p.applicantPhone && diag.phone && p.applicantPhone.replace(/[^0-9]/g, '') === diag.phone.replace(/[^0-9]/g, ''));
+                });
+                if (!exists) {
+                  var elderName = '어르신';
+                  var applicantName = '가족';
+                  var relation = '자녀';
+                  if (diag.role) {
+                    var roleMatch = diag.role.match(/^(.+?)\s*(?:어르신)?\s*(?:\((?:(.+?)\s+)?(.+?)\s*신청\))?$/);
+                    if (roleMatch) {
+                      elderName = (roleMatch[1] || '어르신').replace(/어르신/g, '').trim() + ' 어르신';
+                      relation = roleMatch[2] || '가족';
+                      applicantName = roleMatch[3] || roleMatch[1] || '신청인';
+                    } else {
+                      elderName = diag.role;
+                    }
+                  }
+                  var newProjId = diag.memoirProjectId || ('mem_' + Date.now() + '_' + Math.floor(Math.random()*1000));
+                  var newProj = {
+                    id: newProjId,
+                    clientName: elderName,
+                    clientAge: '70대',
+                    region: '지역 협의',
+                    applicantName: applicantName,
+                    applicantPhone: diag.phone || '',
+                    relation: relation,
+                    packageType: 'masterpiece',
+                    packageLabel: '인생 마스터피스 (시그니처)',
+                    coachName: '배정 대기',
+                    coachPhone: '-',
+                    status: 'consult_pending',
+                    statusLabel: '접수 대기',
+                    preferredDate: '방문일정 협의',
+                    recordingsCount: 0,
+                    photosCount: 0,
+                    notes: diag.note || '온라인 1:1 맞춤 상담 신청 건',
+                    consultLog: '',
+                    familyFeedback: '',
+                    createdAt: (diag.createdAt ? String(diag.createdAt).slice(0, 10).replace(/-/g, '.') : new Date().toISOString().slice(0, 10).replace(/-/g, '.')),
+                    updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+                    chapters: []
+                  };
+                  parsed.unshift(newProj);
+                  changed = true;
+                }
+              }
+            });
+          }
+        }
+      } catch(diagSyncErr) {
+        console.warn('[Memoir] diag sync warn:', diagSyncErr);
+      }
+
       // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
-      var hasStage1 = parsed.some(function(p) { return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned'; });
+      var stage1Count = parsed.filter(function(p) {
+        return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned';
+      }).length;
       var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
       var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
       var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
       var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
 
-      var changed = false;
-
-      // 데모 프로젝트 필드(consultLog 등) 최신 속성 동기화
+      // 데모 프로젝트 필드(consultLog, preferredDate 등) 최신 속성 동기화
       parsed.forEach(function(item) {
         var demoMatch = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.id === item.id; });
         if (demoMatch) {
@@ -16809,46 +16892,67 @@ ${coachAppUrl}
         }
       });
 
-      // 1단계 누락 시 보강
-      if (!hasStage1) {
-        DEFAULT_MEMOIR_PROJECTS.forEach(function(dp) {
-          if (dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned') {
-            if (!parsed.some(function(p) { return p.id === dp.id; })) {
-              parsed.unshift(JSON.parse(JSON.stringify(dp)));
-              changed = true;
-            }
+      // 1단계 누락 방지: 1단계 상담 대기 건이 0건이거나 부족할 때 상시 3건 보장
+      if (stage1Count === 0) {
+        var defaultStage1 = DEFAULT_MEMOIR_PROJECTS.filter(function(dp) {
+          return dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned';
+        });
+        defaultStage1.forEach(function(dp, idx) {
+          var existsInParsed = parsed.some(function(p) { return p.id === dp.id; });
+          var clone = JSON.parse(JSON.stringify(dp));
+          if (existsInParsed) {
+            clone.id = dp.id + '_auto_' + (idx + 1);
           }
+          parsed.unshift(clone);
+          changed = true;
         });
       }
+
       // 2단계 누락 시 보강
       if (!hasStage2) {
         var dp2 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'interview_pending'; });
-        if (dp2 && !parsed.some(function(p) { return p.id === dp2.id; })) {
-          parsed.push(JSON.parse(JSON.stringify(dp2)));
+        if (dp2) {
+          var clone2 = JSON.parse(JSON.stringify(dp2));
+          if (parsed.some(function(p) { return p.id === clone2.id; })) {
+            clone2.id = clone2.id + '_auto_2';
+          }
+          parsed.push(clone2);
           changed = true;
         }
       }
       // 3단계 누락 시 보강
       if (!hasStage3) {
         var dp3 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'coach_reviewed'; });
-        if (dp3 && !parsed.some(function(p) { return p.id === dp3.id; })) {
-          parsed.push(JSON.parse(JSON.stringify(dp3)));
+        if (dp3) {
+          var clone3 = JSON.parse(JSON.stringify(dp3));
+          if (parsed.some(function(p) { return p.id === clone3.id; })) {
+            clone3.id = clone3.id + '_auto_3';
+          }
+          parsed.push(clone3);
           changed = true;
         }
       }
       // 4단계 누락 시 보강
       if (!hasStage4) {
         var dp4 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'family_approved'; });
-        if (dp4 && !parsed.some(function(p) { return p.id === dp4.id; })) {
-          parsed.push(JSON.parse(JSON.stringify(dp4)));
+        if (dp4) {
+          var clone4 = JSON.parse(JSON.stringify(dp4));
+          if (parsed.some(function(p) { return p.id === clone4.id; })) {
+            clone4.id = clone4.id + '_auto_4';
+          }
+          parsed.push(clone4);
           changed = true;
         }
       }
       // 5단계 누락 시 보강
       if (!hasStage5) {
         var dp5 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'completed'; });
-        if (dp5 && !parsed.some(function(p) { return p.id === dp5.id; })) {
-          parsed.push(JSON.parse(JSON.stringify(dp5)));
+        if (dp5) {
+          var clone5 = JSON.parse(JSON.stringify(dp5));
+          if (parsed.some(function(p) { return p.id === clone5.id; })) {
+            clone5.id = clone5.id + '_auto_5';
+          }
+          parsed.push(clone5);
           changed = true;
         }
       }
@@ -18791,7 +18895,34 @@ ${coachAppUrl}
   window.openMemoirSplitEditorAndDraft = openMemoirSplitEditorAndDraft;
   window.requestFamilyApproval = requestFamilyApproval;
   window.approveAndSendToPrint = approveAndSendToPrint;
+  // 🔄 자서전 상담 및 출판 파이프라인 기본 데모 데이터 원클릭 초기화/복원
+  function resetAndRestoreMemoirDemoData() {
+    if (!confirm('자서전 상담 및 5대 출판 파이프라인 기본 데이터(총 6건)를 초기 상태로 복원하시겠습니까?\n\n- 1단계 상담 대기(이순자, 홍길순, 정옥희 어르신)\n- 2단계 인터뷰(박판석 어르신)\n- 3단계 AI윤문(김순옥 어르신)\n- 4단계 가족승인(최영호 어르신)\n- 5단계 출판완간(강명숙 어르신)이 즉시 재구성됩니다.')) {
+      return;
+    }
+    try {
+      localStorage.setItem('yebaek_memoir_projects', JSON.stringify(DEFAULT_MEMOIR_PROJECTS));
+      currentMemoirFilter = 'all';
+      currentMemoirSearch = '';
+      var searchInput = document.getElementById('memoirSearchInput');
+      if (searchInput) searchInput.value = '';
+      var group = document.getElementById('memoirFilterButtonGroup');
+      if (group) {
+        var btns = group.querySelectorAll('.memoir-pipeline-btn');
+        btns.forEach(function(b) { b.classList.remove('active'); });
+        var firstBtn = group.querySelector('.memoir-pipeline-btn');
+        if (firstBtn) firstBtn.classList.add('active');
+      }
+      renderMemoirDashboard();
+      alert('✅ 자서전 상담 및 출판 파이프라인 데이터가 성공적으로 복원되었습니다!');
+    } catch(err) {
+      console.error('[Memoir] 복원 에러:', err);
+      alert('복원 중 오류가 발생했습니다: ' + err.message);
+    }
+  }
+
   window.completeMemoirPublication = completeMemoirPublication;
+  window.resetAndRestoreMemoirDemoData = resetAndRestoreMemoirDemoData;
   window.initAdminMemoirListener = initAdminMemoirListener;
 
   // DOMContentLoaded 이벤트 리스너 등록
