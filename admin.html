@@ -3046,114 +3046,38 @@
             </div>
           </div>
 
-          <!-- 4단계 파이프라인 진행 상태 필터 바 -->
-          <div class="pipeline-step-bar">
-            <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">파이프라인 필터:</span>
+          <!-- 4단계 파이프라인 진행 상태 필터 바 (단계별 순차 흐름 인디케이터) -->
+          <div class="pipeline-step-bar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 18px 0 20px;">
+            <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">파이프라인 단계:</span>
             <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">
               전체보기 <span class="pipeline-step-badge" id="pipelineStepBadge_all">4</span>
             </button>
+            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
             <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step1" onclick="switchPipelineStep('step1')">
               ① 상담신청 접수 <span class="pipeline-step-badge" id="pipelineStepBadge_step1">1</span>
             </button>
+            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
             <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">
               ② 코치 배정 <span class="pipeline-step-badge" id="pipelineStepBadge_step2">1</span>
             </button>
+            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
             <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">
               ③ 현장케어/일지 <span class="pipeline-step-badge" id="pipelineStepBadge_step3">1</span>
             </button>
+            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
             <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">
               ④ CRM 사후 리텐션 <span class="pipeline-step-badge" id="pipelineStepBadge_step4">1</span>
             </button>
           </div>
 
-          <!-- 3-1. [1호 뷰티 라이프케어 전용 파이프라인 래퍼] -->
+          <!-- 3-1. [1호 뷰티 라이프케어 전용 파이프라인 래퍼 (단계별 특화 렌더링)] -->
           <div id="beautyPipelineWrap">
-            <!-- 마스터 180분 예약 & 코치 배정 & 현장일지 테이블 -->
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
-              <h3 style="font-size: 1.05rem; font-weight: 850; color: #b83354; margin: 0; display: flex; align-items: center; gap: 6px;">
-                <span>📋</span> 180분 마스터 케어 예약 &amp; 코치 배정 파이프라인
-              </h3>
-            </div>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 105px;">예약 ID</th>
-                    <th style="width: 130px;">신청인 (관계)</th>
-                    <th style="width: 130px;">대상 어르신</th>
-                    <th style="width: 120px;">연락처</th>
-                    <th>희망 일시 &amp; 장소</th>
-                    <th style="width: 85px; text-align: center;">리즈 사진</th>
-                    <th style="width: 140px;">배정 코치</th>
-                    <th style="width: 105px; text-align: center;">처리 상태</th>
-                    <th style="width: 130px; text-align: center;">현장 일지 관리</th>
-                  </tr>
-                </thead>
-                <tbody id="beautyBookingTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
-
-            <!-- 사후관리 및 3·6개월 리텐션 루프 테이블 -->
-            <div style="background: #fff9fa; border: 1.5px solid #f8c8d2; border-radius: 14px; padding: 16px 20px; margin: 24px 0 14px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
-                <div>
-                  <h4 style="font-size: 1rem; font-weight: 850; color: #b83354; margin: 0 0 4px;">
-                    🔄 선순환 리텐션 루프(Retention Loop) 자동 관리
-                  </h4>
-                  <p style="font-size: 0.84rem; color: var(--text-secondary); margin: 0;">
-                    완료일 기준 <strong>=EDATE 3개월</strong> 무료 피부 재진단 알림톡 및 <strong>6개월</strong> AGAIN180 감사 할인 쿠폰 자동 추적
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 105px;">예약 ID</th>
-                    <th style="width: 110px;">어르신 성함</th>
-                    <th style="width: 110px;">케어 완료일</th>
-                    <th style="width: 140px;">3개월 알림 예정일</th>
-                    <th style="width: 120px; text-align: center;">피부 재진단 상태</th>
-                    <th style="width: 140px;">6개월 알림 예정일</th>
-                    <th style="width: 120px; text-align: center;">AGAIN180 쿠폰</th>
-                    <th style="width: 110px; text-align: center;">알림톡 전송</th>
-                  </tr>
-                </thead>
-                <tbody id="beautyFollowupTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
+            <!-- JS(beauty-crm.js)가 단계별 특화 화면을 동적으로 렌더링합니다 -->
           </div>
 
-          <!-- 3-2. [2호~5호 비즈니스 공용 파이프라인 래퍼] -->
+          <!-- 3-2. [2호~5호 비즈니스 공용 파이프라인 래퍼 (단계별 특화 렌더링)] -->
           <div id="generalBusinessWrap" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
-              <h3 style="font-size: 1.05rem; font-weight: 850; color: var(--accent); margin: 0; display: flex; align-items: center; gap: 6px;">
-                <span>📋</span> 분야별 고객 상담 및 전담 코치 배정 파이프라인
-              </h3>
-            </div>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 95px;">접수 ID</th>
-                    <th style="width: 120px;">고객 성함 (구분)</th>
-                    <th style="width: 120px;">연락처</th>
-                    <th>상담 요청 내용 &amp; 접수일시</th>
-                    <th style="width: 150px;">담당 배정 코치</th>
-                    <th style="width: 120px; text-align: center;">진행 상태</th>
-                    <th style="width: 90px; text-align: center;">관리</th>
-                  </tr>
-                </thead>
-                <tbody id="generalBusinessTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
+            <!-- JS(beauty-crm.js)가 단계별 특화 화면을 동적으로 렌더링합니다 -->
           </div>
         </div>
 
@@ -16526,7 +16450,7 @@ ${coachAppUrl}
       }
     });
   </script>
-  <script src="beauty-crm.js"></script>
+  <script src="beauty-crm.js?v=20261115_v2"></script>
 
   <!-- ==========================================================
        [NEW] 04. Memoir Publication Control Center & AI Engine
