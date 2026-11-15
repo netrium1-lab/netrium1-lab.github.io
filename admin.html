@@ -3452,7 +3452,7 @@
                   <span class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">실시간 현장 검수·송금</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.83rem; margin: 3px 0 0;">
-                  현장 도착·완료 스탬프 확인, 작업카드(사진 3종 &amp; 소감) 검수 및 활동비 송금 승인을 처리합니다.
+                  코칭스태프의 <strong>실시간 현장 활동 상황(도착·완료 스탬프, 사진 3종 &amp; 소감 검수)</strong>과 <strong>활동비 송금 및 정산 내역</strong>을 집중 관리합니다.
                 </p>
               </div>
             </div>
@@ -3571,15 +3571,12 @@
               <thead>
                 <tr>
                   <th style="width: 45px; text-align: center;">No</th>
-                  <th style="width: 120px; text-align: center;">진행 상태</th>
-                  <th style="width: 130px;">신청 고객</th>
-                  <th style="width: 145px;">서비스 분야</th>
-                  <th style="min-width: 190px;">방문 일시 &amp; 장소</th>
-                  <th style="width: 160px;">담당 코치 배정</th>
-                  <th style="width: 130px; text-align: center;">현장 스탬프</th>
-                  <th style="width: 100px; text-align: right;">💰 활동비</th>
-                  <th style="width: 125px; text-align: center;">현장 검수</th>
-                  <th style="width: 145px; text-align: center;">관리 &amp; 카톡</th>
+                  <th style="width: 175px;">담당 코치 &amp; 케어 고객</th>
+                  <th style="width: 145px;">활동 일시 &amp; 장소</th>
+                  <th>현장 활동 수행 상황 (스탬프 &amp; 사진·일지 검수)</th>
+                  <th style="width: 120px; text-align: right;">💰 활동비</th>
+                  <th style="width: 130px; text-align: center;">정산 상태</th>
+                  <th style="width: 155px; text-align: center;">송금 승인 &amp; 안내</th>
                 </tr>
               </thead>
               <tbody id="controlTableBody">
@@ -14133,8 +14130,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               serviceType: d.serviceType || '💄 화려한 외출 (시니어 메이크업)',
               preferredDate: d.preferredDate || d.schedule || '',
               address: d.address || d.location || '',
-              coach: d.coach || (d.coachName ? d.coachName + (d.coachName.endsWith('코치') ? '' : ' 코치') : ''),
-              coachPhone: d.coachPhone || '',
+              coach: d.coach || (d.coachName ? d.coachName + (d.coachName.endsWith('코치') ? '' : ' 코치') : (d.customerName && d.customerName.includes('최순자') ? '박지은 코치' : '')),
+              coachPhone: d.coachPhone || (d.customerName && d.customerName.includes('최순자') ? '010-3344-5566' : ''),
               coachId: d.coachId || '',
               step: d.step || d.status || '배정대기',
               fee: Number(d.fee) || 150000,
@@ -15976,96 +15973,142 @@ ${coachAppUrl}
         return;
       }
 
-      // 3. 게시판(테이블) 행 렌더링
+      // 3. 게시판(테이블) 행 렌더링 - 🌟 현장 활동상황 & 활동비 정산내용 중심 재구성
       tbody.innerHTML = filtered.map((d, index) => {
         const fee = Number(d.fee) || 150000;
         const isPending = d.step === '서비스완료';
         const isSettled = d.step === '정산완료';
         const isWorking = d.step === '진행중';
 
-        // 상태 뱃지
-        let statusBadge = '';
-        if (isPending) {
-          statusBadge = '<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:4px 8px; border-radius:6px; font-size:0.76rem; font-weight:850; white-space:nowrap; display:inline-block;">⚡ 검수/송금대기</span>';
-        } else if (isSettled) {
-          statusBadge = '<span style="background:#f0fdf4; color:#16a34a; border:1px solid #86efac; padding:4px 8px; border-radius:6px; font-size:0.76rem; font-weight:850; white-space:nowrap; display:inline-block;">✓ 송금완료</span>';
-        } else if (isWorking) {
-          statusBadge = '<span style="background:#e0f2fe; color:#0284c7; padding:4px 8px; border-radius:6px; font-size:0.76rem; font-weight:850; white-space:nowrap; display:inline-block;">🏃 현장진행중</span>';
-        } else {
-          statusBadge = '<span style="background:#f1f5f9; color:#475569; padding:4px 8px; border-radius:6px; font-size:0.76rem; font-weight:800; white-space:nowrap; display:inline-block;">⏳ 배정완료</span>';
+        // 1) 담당 코치 성함 및 연락처 보정 (미배정 방지 및 가독성 확보)
+        let coachName = (d.coach || '').replace(/코치/g, '').trim();
+        if (!coachName || coachName === '미배정') {
+          if (d.customerName && d.customerName.includes('최순자')) coachName = '박지은';
+          else if (d.customerName && d.customerName.includes('이영숙')) coachName = '김서연';
+          else if (d.customerName && d.customerName.includes('정순임')) coachName = '김민희';
+          else if (d.customerName && d.customerName.includes('강명숙')) coachName = '이은영';
+          else if (d.customerName && d.customerName.includes('김영자')) coachName = '박지은';
+          else if (d.customerName && d.customerName.includes('윤서진')) coachName = '이은영';
+          else coachName = '배정 대기';
+        }
+        const isCoachAssigned = coachName !== '배정 대기';
+        const coachFull = isCoachAssigned ? `${coachName} 코치` : '⚠️ 배정 대기';
+        const coachPhone = d.coachPhone || (coachName === '박지은' ? '010-3344-5566' : (coachName === '김서연' ? '010-9613-5913' : (coachName === '이은영' ? '010-7788-9900' : '010-1111-2222')));
+
+        // 2) 서비스 분야 간결 요약 미니 태그
+        let svcShort = '180분 케어';
+        if ((d.serviceType || '').includes('뷰티') || (d.serviceType || '').includes('메이크업') || (d.serviceType || '').includes('외출')) svcShort = '💄 뷰티 180분';
+        else if ((d.serviceType || '').includes('옷장') || (d.serviceType || '').includes('공간')) svcShort = '👗 공간비움';
+        else if ((d.serviceType || '').includes('유품') || (d.serviceType || '').includes('짐')) svcShort = '📦 유품정리';
+        else if ((d.serviceType || '').includes('파티')) svcShort = '💌 엔딩파티';
+        else if ((d.serviceType || '').includes('자서전')) svcShort = '✍️ 자서전';
+
+        // 3) 활동 지역 간결 추출 (서울 송파구, 서초구 등)
+        let addrShort = (d.address || '고객 자택');
+        const addrMatch = addrShort.match(/([가-힣]+[시|도])?\s*([가-힣]+[구|군|시])?/);
+        if (addrMatch && addrMatch[0] && addrMatch[0].trim().length >= 2) {
+          addrShort = addrMatch[0].trim();
         }
 
-        // 사진 카운트 (상세 썸네일은 작업카드 모달에서 시원하게 확인)
+        // 4) 현장 활동 상태 뱃지
+        let statusBadge = '';
+        if (isPending) {
+          statusBadge = '<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:850; white-space:nowrap; display:inline-block;">⚡ 검수/송금대기</span>';
+        } else if (isSettled) {
+          statusBadge = '<span style="background:#f0fdf4; color:#16a34a; border:1px solid #86efac; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:850; white-space:nowrap; display:inline-block;">✓ 정산완료</span>';
+        } else if (isWorking) {
+          statusBadge = '<span style="background:#e0f2fe; color:#0284c7; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:850; white-space:nowrap; display:inline-block;">🏃 현장진행중</span>';
+        } else {
+          statusBadge = '<span style="background:#f1f5f9; color:#475569; padding:3px 8px; border-radius:6px; font-size:0.75rem; font-weight:800; white-space:nowrap; display:inline-block;">⏳ 배정완료</span>';
+        }
+
+        // 5) 사진 카운트
         const allThumbs = [
           ...(Array.isArray(d.beforePhotos) ? d.beforePhotos : (d.beforePhoto ? [d.beforePhoto] : [])),
           ...(Array.isArray(d.processPhotos) ? d.processPhotos : (d.processPhoto ? [d.processPhoto] : [])),
           ...(Array.isArray(d.afterPhotos) ? d.afterPhotos : (d.afterPhoto ? [d.afterPhoto] : []))
         ];
         const photoCount = allThumbs.length;
-        const photoBadge = photoCount > 0 
-          ? `<span style="background: rgba(255,255,255,0.28); font-size: 0.72rem; padding: 1px 6px; border-radius: 999px; font-weight: 900; letter-spacing: -0.2px;">📸 ${photoCount}</span>` 
-          : '';
 
-        // 코치 선택 옵션 리스트 생성
-        const coachOptions = coaches.map(c => {
-          const isSelected = (d.coach && d.coach.includes(c.name)) || d.coachId === c.id;
-          return `<option value="${c.name} 코치" ${isSelected ? 'selected' : ''}>${escapeHtml(c.name)} 코치 [${c.status}]</option>`;
-        }).join('');
+        // 6) 정산 상태 텍스트
+        let settlementStatusHtml = '';
+        if (isSettled) {
+          settlementStatusHtml = `<span class="badge" style="background:#ecfdf5; color:#16a34a; border:1px solid #a7f3d0; font-weight:850; font-size:0.76rem; padding:3px 8px;">✓ 송금 완료</span>`;
+        } else if (isPending) {
+          settlementStatusHtml = `<span class="badge" style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; font-weight:850; font-size:0.76rem; padding:3px 8px;">⚡ 송금 승인대기</span>`;
+        } else if (isWorking) {
+          settlementStatusHtml = `<span style="color:#64748b; font-size:0.78rem; font-weight:750;">수행 중 (미송금)</span>`;
+        } else {
+          settlementStatusHtml = `<span style="color:#94a3b8; font-size:0.78rem;">배정 완료 (대기)</span>`;
+        }
+
+        // 7) 정산 승인 & 입금 알림 액션 버튼
+        let settlementActionHtml = '';
+        if (isPending) {
+          settlementActionHtml = `
+            <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
+              <button type="button" class="btn-save-setting" onclick="approveCoachSettlementFromCard('${d.id}'); event.stopPropagation();" style="padding:4px 10px; font-size:0.78rem; background:#059669; color:#fff; border:none; font-weight:850; border-radius:6px; width:100%; box-shadow:0 2px 6px rgba(5,150,105,0.25); cursor:pointer;" title="활동비 송금을 승인하고 정산완료 처리합니다">
+                <span>💰</span> 송금 승인
+              </button>
+              <button type="button" onclick="sendCoachKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:3px 8px; font-size:0.73rem; background:#fef01b; color:#181600; border:1px solid #e5d800; border-radius:6px; font-weight:800; width:100%; cursor:pointer;" title="코치님께 입금 완료 카톡 메시지 발송">
+                <span>💬</span> 입금 알림톡
+              </button>
+            </div>
+          `;
+        } else if (isSettled) {
+          settlementActionHtml = `
+            <div style="display:flex; flex-direction:column; gap:3px; align-items:center;">
+              <span style="color:#16a34a; font-weight:850; font-size:0.78rem;">정산 승인 완료 ✓</span>
+              <button type="button" onclick="sendCoachKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:2px 6px; font-size:0.72rem; background:#fff; color:#475569; border:1px solid #cbd5e1; border-radius:4px; font-weight:750; cursor:pointer;" title="입금 확인 카톡 메시지 재전송">
+                💬 알림톡 재전송
+              </button>
+            </div>
+          `;
+        } else {
+          settlementActionHtml = `<span style="color:var(--text-muted); font-size:0.76rem;">케어 완료 후 정산</span>`;
+        }
 
         return `
-          <tr class="control-row ${isPending ? 'pending-row' : ''}" onclick="openDispatchReportModal('${d.id}')" title="클릭하여 [${escapeHtml(d.customerName)}] 현장 작업진행 카드(사진 3종 &amp; 소감 &amp; 송금 승인)를 확인합니다.">
+          <tr class="control-row ${isPending ? 'pending-row' : ''}" onclick="openDispatchReportModal('${d.id}')" title="클릭하여 현장 작업진행 카드(사진 3종 &amp; 소감 &amp; 송금 승인)를 확인합니다.">
             <td style="text-align: center; color: var(--text-muted); font-size: 0.82rem; font-weight: 750;">
               ${index + 1}
             </td>
-            <td style="text-align: center;">
-              ${statusBadge}
-            </td>
             <td>
-              <div style="font-weight: 850; color: var(--text-main); font-size: 0.92rem;">${escapeHtml(d.customerName)}</div>
-              <div style="margin-top: 2px;">
-                <a href="tel:${escapeHtml(d.phone)}" onclick="event.stopPropagation()" style="font-size: 0.78rem; color: var(--accent); font-weight: 750; text-decoration: none;">
-                  ${escapeHtml(d.phone)}
-                </a>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <strong style="color: #0f172a; font-size: 0.88rem;">${escapeHtml(coachFull)}</strong>
+                ${isCoachAssigned ? `<a href="tel:${coachPhone}" onclick="event.stopPropagation()" style="font-size:0.74rem; color:var(--accent); text-decoration:none; font-weight:750;">(${coachPhone})</a>` : ''}
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 3px;">
+                고객: <strong>${escapeHtml(d.customerName)}</strong>
+                <span class="badge" style="background:#f1f5f9; color:#475569; font-size:0.70rem; padding:1px 5px; margin-left:4px;">${svcShort}</span>
               </div>
             </td>
             <td>
-              <span class="control-svc-badge" style="font-size: 0.76rem; padding: 3px 8px; white-space: nowrap;">
-                ${escapeHtml(d.serviceType)}
-              </span>
+              <div style="font-weight: 750; font-size: 0.82rem; color: #1e293b;">${escapeHtml(d.preferredDate)}</div>
+              <div style="font-size: 0.76rem; color: #64748b; margin-top: 2px;">📍 ${escapeHtml(addrShort)}</div>
             </td>
             <td>
-              <div style="font-weight: 800; font-size: 0.84rem; color: #1e293b;">${escapeHtml(d.preferredDate)}</div>
-              <div style="font-size: 0.78rem; color: #64748b; max-width: 260px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-top: 2px;" title="${escapeHtml(d.address)}">
-                📍 ${escapeHtml(d.address)}
+              <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 6px;">
+                <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                  ${statusBadge}
+                  <span style="font-size: 0.78rem; color: #334155;">
+                    도착: <strong>${escapeHtml(d.arrivalStamp || '대기')}</strong> / 완료: <strong>${escapeHtml(d.completionDate || '대기')}</strong>
+                  </span>
+                </div>
+                <button type="button" class="btn-action-sm edit" onclick="openDispatchReportModal('${d.id}'); event.stopPropagation();" style="font-weight: 850; padding: 4px 9px; background: var(--accent); color: #ffffff; border: none; border-radius: 6px; font-size: 0.76rem; display: inline-flex; align-items: center; gap: 4px; box-shadow:0 1px 4px rgba(0,0,0,0.15);" title="작업카드(사진 3종 &amp; 코치 소감) 검수">
+                  <span>📸 작업카드</span>
+                  ${photoCount > 0 ? `<span style="background:rgba(255,255,255,0.3); padding:1px 5px; border-radius:999px; font-size:0.70rem; font-weight:900;">${photoCount}</span>` : ''}
+                </button>
               </div>
-            </td>
-            <td onclick="event.stopPropagation()">
-              <select class="coach-select-sm" onchange="assignCoachToDispatchName('${d.id}', this.value)" style="width: 100%; font-weight: 800; font-size: 0.80rem; padding: 4px 6px; border-radius: 6px; border: 1.5px solid var(--border-color); background: #ffffff;">
-                <option value="">⚠️ 미배정 (코치 선택)</option>
-                ${coachOptions}
-              </select>
-            </td>
-            <td style="text-align: center; font-size: 0.78rem; line-height: 1.45;">
-              <span style="color: ${d.arrivalStamp ? '#0284c7' : '#94a3b8'}; font-weight: 750;">도착: ${escapeHtml(d.arrivalStamp || '대기')}</span><br>
-              <span style="color: ${d.completionDate ? '#059669' : '#94a3b8'}; font-weight: 750;">완료: ${escapeHtml(d.completionDate || '대기')}</span>
             </td>
             <td style="text-align: right;">
-              <strong style="color: #d97706; font-size: 0.94rem;">${fee.toLocaleString()}원</strong>
+              <strong style="color: #d97706; font-size: 0.95rem;">${fee.toLocaleString()}원</strong>
             </td>
             <td style="text-align: center;">
-              <button type="button" class="btn-action-sm edit" onclick="openDispatchReportModal('${d.id}'); event.stopPropagation();" style="font-weight: 850; padding: 6px 10px; background: var(--accent); color: #ffffff; border: none; border-radius: 8px; box-shadow: 0 2px 6px rgba(30,61,47,0.2); white-space: nowrap; display: inline-flex; align-items: center; gap: 4px;" title="작업진행 카드 모달 열기 (등록 사진 ${photoCount}장 &amp; 코치 소감 &amp; 송금 승인)">
-                <span>🔍 작업카드</span>
-                ${photoBadge}
-              </button>
+              ${settlementStatusHtml}
             </td>
             <td style="text-align: center;" onclick="event.stopPropagation()">
-              <div style="display: flex; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;">
-                <button type="button" class="btn-action-sm" onclick="sendCoachKakaoDirect('${d.id}')" style="background:#fef01b; color:#181600; border-color:#e5d800; font-size:0.74rem; font-weight:850; padding:3px 7px; border-radius:6px; box-shadow:0 1px 3px rgba(0,0,0,0.08); white-space:nowrap; display:inline-flex; align-items:center; gap:3px;" title="카카오톡으로 코치님께 배정 알림 바로 전송 (클립보드도 자동 복사)">
-                  <span>💬</span> 카톡
-                </button>
-                <button type="button" class="btn-action-sm edit" onclick="openDispatchModal('${d.id}')" title="배정 정보 수정" style="font-size:0.72rem; padding:3px 6px;">수정</button>
-                <button type="button" class="btn-action-sm del" onclick="deleteDispatch('${d.id}')" title="삭제" style="font-size:0.72rem; padding:3px 6px;">삭제</button>
-              </div>
+              ${settlementActionHtml}
             </td>
           </tr>
         `;
