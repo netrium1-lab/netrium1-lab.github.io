@@ -13726,6 +13726,23 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
     function saveArchiveClients(list) {
       localStorage.setItem(ARCHIVE_CLIENTS_KEY, JSON.stringify(list));
+      // ☁️ 서비스 등록 고객 본인확인(성함+뒤4자리 로그인)을 위해 Firestore senior_consults에도 실시간 동기화
+      if (typeof fbDb !== 'undefined' && fbDb && Array.isArray(list)) {
+        list.forEach(c => {
+          if (!c || !c.id || !c.name) return;
+          try {
+            fbDb.collection('senior_consults').doc('archive_client_' + c.id).set({
+              recordType: 'archive_client',
+              name: c.name,
+              clientName: c.name,
+              phone: c.phone || '',
+              category: c.category || '서재 구축',
+              stage: c.stage || '접수',
+              updatedAt: Date.now()
+            }, { merge: true });
+          } catch (err) {}
+        });
+      }
       renderArchiveClientsTable();
     }
 

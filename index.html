@@ -87,8 +87,8 @@
     }
   </script>
   
-  <!-- Kakao JavaScript SDK v2 (카카오톡 공유 및 로그인 정식 지원) -->
-  <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
+  <!-- Kakao JavaScript SDK (클라이언트 1초 팝업 로그인 Kakao.Auth.login 및 카카오톡 공유 동시 지원) -->
+  <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
   
   <!-- 웹 폰트 (Pretendard & 티스토리 표준 한글 서체) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -6866,33 +6866,44 @@
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 10px;">
-        <!-- 💬 카카오 정식 간편 로그인/회원가입 버튼 -->
-        <button type="button" onclick="loginWithKakao()" style="width: 100%; padding: 14px 18px; background: #FEE500; color: #191600; border: none; border-radius: 12px; font-weight: 800; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.35); transition: transform 0.2s ease;">
+        <!-- 💬 카카오 정식 1초 간편 로그인/회원가입 버튼 (일반 방문자 누구나 입장) -->
+        <button type="button" id="btnKakaoLoginIndex" onclick="loginWithKakao()" style="width: 100%; padding: 14px 18px; background: #FEE500; color: #191600; border: none; border-radius: 12px; font-weight: 850; font-size: 1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; box-shadow: 0 4px 12px rgba(254, 229, 0, 0.35); transition: transform 0.2s ease;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="#3C1E1E">
             <path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.87 5.33 4.71 6.73-.21.78-.77 2.83-.88 3.26-.14.54.2.53.42.39.29-.19 3.42-2.34 3.99-2.73.57.08 1.16.12 1.76.12 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/>
           </svg>
-          <span>카카오로 3초 만에 시작하기</span>
+          <span>카카오로 1초 만에 시작하기</span>
         </button>
 
-        <!-- ✍️ 성함으로 바로 서재 열기 (직접 입력 토글) -->
-        <button type="button" onclick="toggleSimpleNameLogin()" style="width: 100%; padding: 12px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 12px; font-weight: 700; font-size: 0.92rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
-          <span>✍️ 성함으로 바로 서재 열기 (직접 입력)</span>
+        <!-- 🔑 자서전·서비스 이용 등록 고객 전용 로그인 토글 -->
+        <button type="button" onclick="toggleSimpleNameLogin()" style="width: 100%; padding: 12px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-radius: 12px; font-weight: 750; font-size: 0.90rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+          <span>🔑 자서전 · 서비스 이용 고객 로그인 (성함 + 뒤 4자리)</span>
         </button>
 
-        <!-- 성함 직접 입력 간편 폼 -->
-        <div id="simpleNameLoginForm" style="display: none; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; margin-top: 4px; text-align: left;">
-          <label for="directLoginName" style="display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 6px; color: var(--text-primary);">어르신 성함 입력</label>
-          <div style="display: flex; gap: 6px;">
-            <input type="text" id="directLoginName" placeholder="예: 김순옥" style="flex: 1; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.95rem; box-sizing: border-box;" onkeypress="if(event.key==='Enter') loginWithDirectName()">
-            <button type="button" onclick="loginWithDirectName()" style="padding: 10px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 750; font-size: 0.92rem; cursor: pointer; white-space: nowrap;">
-              입장
-            </button>
+        <!-- 자서전·서비스 등록 고객 전용 성함+뒤4자리 확인 폼 -->
+        <div id="simpleNameLoginForm" style="display: none; background: var(--bg-primary); border: 1.2px solid rgba(43, 106, 56, 0.3); border-radius: 12px; padding: 14px; margin-top: 4px; text-align: left;">
+          <div style="font-size: 0.78rem; color: var(--accent); font-weight: 750; margin-bottom: 10px; line-height: 1.45;">
+            📋 여백과 결 <strong>자서전 제작 또는 라이프케어 서비스 등록 고객 전용</strong> 입장입니다.<br>
+            일반 이용자께서는 위 <strong>[카카오로 1초 만에 시작하기]</strong>로 바로 입장해 주세요.
           </div>
+          <div style="display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 8px; margin-bottom: 10px;">
+            <div>
+              <label for="directLoginName" style="display: block; font-size: 0.8rem; font-weight: 750; margin-bottom: 4px; color: var(--text-primary);">등록 어르신 성함</label>
+              <input type="text" id="directLoginName" placeholder="예: 홍길동" style="width: 100%; padding: 10px 11px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.94rem; box-sizing: border-box;" onkeypress="if(event.key==='Enter') loginWithDirectName()">
+            </div>
+            <div>
+              <label for="directLoginPhone4" style="display: block; font-size: 0.8rem; font-weight: 750; margin-bottom: 4px; color: var(--text-primary);">전화번호 뒤 4자리</label>
+              <input type="tel" id="directLoginPhone4" placeholder="예: 1234" maxlength="4" style="width: 100%; padding: 10px 11px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.94rem; box-sizing: border-box;" onkeypress="if(event.key==='Enter') loginWithDirectName()">
+            </div>
+          </div>
+          <button type="button" id="btnDirectServiceLoginIndex" onclick="loginWithDirectName()" style="width: 100%; padding: 10px 16px; background: var(--accent); color: #fff; border: none; border-radius: 8px; font-weight: 800; font-size: 0.92rem; cursor: pointer;">
+            등록 고객 확인 후 내 서재 입장 ➔
+          </button>
+          <div id="directLoginNoticeIndex" style="display: none; margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; font-size: 0.8rem; line-height: 1.5;"></div>
         </div>
       </div>
 
-      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 18px; line-height: 1.5;">
-        처음 오셨더라도 별도 회원가입 없이<br>카카오 인증 즉시 나만의 전용 서재가 자동 개설됩니다.
+      <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 16px; line-height: 1.5;">
+        처음 방문하셨다면 <strong>카카오 1초 로그인</strong>으로<br>별도 가입 없이 나만의 전용 서재가 즉시 열립니다.
       </p>
 
       <div style="margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--border-color); text-align: center;">
@@ -8097,7 +8108,7 @@
           <div class="slb-content">
             <div class="slb-badge gold">CATEGORY 06 · 🏛️ 프라이빗 온라인룸</div>
             <h3 class="slb-title">나의 고유한 보물 서재</h3>
-            <p class="slb-desc">오직 나와 가족만을 위해 열리는 독립된 인생 보관소입니다. 비움 일기장, 추억 사진전시관, 인생 애장품 전시관, 모바일 웹북을 영구 보관하세요.</p>
+            <p class="slb-desc">오직 나와 가족만을 위해 열리는 독립된 인생 보관소입니다. 나의 일상 일기장, 추억 사진전시관, 인생 애장품 전시관, 모바일 웹북을 영구 보관하세요.</p>
           </div>
         </div>
         <div class="section-header">
@@ -8127,10 +8138,10 @@
           <!-- 4대 핵심 보물 서가 기능 그리드 (2x2 대칭) -->
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px;">
             <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 16px; padding: 22px; transition: transform 0.2s;">
-              <div style="font-size: 1.6rem; margin-bottom: 10px;">💬</div>
-              <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; color: var(--text-primary);">마음의 비움 일기장</h4>
+              <div style="font-size: 1.6rem; margin-bottom: 10px;">📔</div>
+              <h4 style="font-size: 1.1rem; font-weight: 800; margin-bottom: 6px; color: var(--text-primary);">나의 일상 일기장</h4>
               <p style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; word-break: keep-all;">
-                오늘의 감사한 마음과 일상의 비움 기록, 나만의 비밀 노트를 차분하게 모아두는 첫 번째 서가.
+                살아생전 매순간 내가 하고 있는 소중한 일상과 감사를 사진과 함께 차곡차곡 남기는 나만의 프라이빗 일기장.
               </p>
             </div>
 
@@ -11357,32 +11368,160 @@
       }
     }
 
-    // 직접 성함 입력으로 서재 즉시 개설
-    function loginWithDirectName() {
-      const input = document.getElementById('directLoginName');
-      const name = input ? input.value.trim() : '';
-      if (!name) {
-        alert('성함을 입력해 주세요.');
-        if (input) input.focus();
+    function normalizeServiceCheckName(raw) {
+      return String(raw || '').replace(/어르신|님$/g, '').replace(/\s+/g, '').trim();
+    }
+
+    function extractServiceCheckPhone4(raw) {
+      const digits = String(raw || '').replace(/\D/g, '');
+      return digits.length >= 4 ? digits.slice(-4) : digits;
+    }
+
+    // 🔑 자서전·라이프케어 서비스 등록 고객 본인 확인 (Firestore + 로컬 명단 통합 조회)
+    async function verifyRegisteredServiceCustomer(rawName, rawPhone4) {
+      const targetName = normalizeServiceCheckName(rawName);
+      const targetPhone4 = extractServiceCheckPhone4(rawPhone4);
+      if (!targetName || targetPhone4.length < 4) return { allowed: false, reason: 'input' };
+
+      const candidates = [];
+      const addRec = (names, phone, label) => {
+        const cleanNames = (Array.isArray(names) ? names : [names])
+          .map(normalizeServiceCheckName)
+          .filter(Boolean);
+        if (!cleanNames.length) return;
+        candidates.push({
+          names: cleanNames,
+          phone4: extractServiceCheckPhone4(phone || ''),
+          label: label || '여백과 결 등록 고객'
+        });
+      };
+
+      // 1. 클라우드 Firestore 조회 (memoir_projects & senior_consults)
+      const activeDb = (typeof fbDb !== 'undefined' && fbDb)
+        ? fbDb
+        : ((typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) ? firebase.firestore() : null);
+
+      if (activeDb) {
+        try {
+          const [memSnap, conSnap] = await Promise.all([
+            activeDb.collection('memoir_projects').get().catch(() => null),
+            activeDb.collection('senior_consults').get().catch(() => null)
+          ]);
+          if (memSnap) {
+            memSnap.forEach(doc => {
+              const d = doc.data() || {};
+              addRec([d.ownerName, d.clientName, d.applicantName], d.ownerPhoneLast4 || d.applicantPhone || d.phone, d.bookTitle || '디지털 자서전 고객');
+            });
+          }
+          if (conSnap) {
+            conSnap.forEach(doc => {
+              const d = doc.data() || {};
+              addRec([d.name, d.clientName, d.applicantName, d.elderName], d.phone || d.applicantPhone, d.category || d.service || '여백과 결 서비스 고객');
+            });
+          }
+        } catch (err) {
+          console.warn('[Service Verify Firestore]', err);
+        }
+      }
+
+      // 2. 로컬스토리지 등록 고객 조회 (관리자 등록 서재 고객·프로젝트·출판 도서·상담 신청)
+      const lsSources = [
+        { key: 'yebaek_memoir_projects', get: d => [[d.ownerName, d.clientName, d.applicantName], d.ownerPhoneLast4 || d.applicantPhone || d.phone, d.bookTitle || '자서전 고객'] },
+        { key: 'yebaek_archive_clients_v1', get: d => [[d.name], d.phone, d.category || '서재 구축 고객'] },
+        { key: 'reset_senior_consult_list', get: d => [[d.name, d.clientName, d.applicantName], d.phone, d.category || '서비스 신청 고객'] },
+        { key: 'yebaek_published_memoirs_v1', get: d => [[d.author, d.ownerName], d.phone || d.ownerPhoneLast4, d.title || '출판 자서전 저자'] }
+      ];
+      lsSources.forEach(src => {
+        try {
+          const arr = JSON.parse(localStorage.getItem(src.key) || '[]');
+          if (Array.isArray(arr)) {
+            arr.forEach(d => {
+              if (!d || typeof d !== 'object') return;
+              // 카카오 일반 가입 로그는 성함 단독 로그인 대상에서 제외
+              if (d.category === '카카오 간편가입') return;
+              const [names, phone, label] = src.get(d);
+              addRec(names, phone, label);
+            });
+          }
+        } catch (e) {}
+      });
+
+      // 성함 일치 + (전화번호가 등록된 고객은 뒤 4자리까지 일치) 확인
+      const matched = candidates.find(c => {
+        if (!c.names.includes(targetName)) return false;
+        if (c.phone4 && c.phone4.length === 4) {
+          return c.phone4 === targetPhone4;
+        }
+        return true;
+      });
+
+      return matched ? { allowed: true, label: matched.label } : { allowed: false, reason: 'not_found' };
+    }
+
+    // 자서전·서비스 이용 등록 고객 전용 성함+뒤4자리 로그인
+    async function loginWithDirectName() {
+      const nameInput = document.getElementById('directLoginName');
+      const phoneInput = document.getElementById('directLoginPhone4');
+      const noticeEl = document.getElementById('directLoginNoticeIndex');
+      const submitBtn = document.getElementById('btnDirectServiceLoginIndex');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone4 = phoneInput ? extractServiceCheckPhone4(phoneInput.value) : '';
+
+      if (noticeEl) noticeEl.style.display = 'none';
+
+      if (!name || phone4.length < 4) {
+        alert('등록된 성함과 전화번호 뒤 4자리를 정확히 입력해 주세요.');
+        if (!name && nameInput) nameInput.focus();
+        else if (phoneInput) phoneInput.focus();
         return;
       }
 
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ 서비스 등록 고객 확인 중...';
+      }
+
+      const verifyRes = await verifyRegisteredServiceCustomer(name, phone4);
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '등록 고객 확인 후 내 서재 입장 ➔';
+      }
+
+      if (!verifyRes.allowed) {
+        if (noticeEl) {
+          noticeEl.innerHTML = '⚠️ <strong>자서전 또는 여백과 결 서비스 등록 고객 명단에서 확인되지 않습니다.</strong><br>일반 이용자께서는 상단의 노란색 <strong>[💬 카카오로 1초 만에 시작하기]</strong> 버튼으로 별도 가입 없이 바로 입장하실 수 있습니다!';
+          noticeEl.style.display = 'block';
+        }
+        const kakaoBtn = document.getElementById('btnKakaoLoginIndex');
+        if (kakaoBtn) {
+          kakaoBtn.style.boxShadow = '0 0 0 4px rgba(254, 229, 0, 0.75)';
+          setTimeout(() => { kakaoBtn.style.boxShadow = '0 4px 12px rgba(254, 229, 0, 0.35)'; }, 2200);
+        }
+        return;
+      }
+
+      const cleanName = normalizeServiceCheckName(name);
       const userData = {
-        id: 'direct_' + Date.now(),
-        name: name,
-        nickname: name,
+        id: 'service_' + Date.now(),
+        name: cleanName,
+        nickname: cleanName,
+        phone: phone4,
         loginType: 'direct',
+        isServiceMember: true,
+        serviceLabel: verifyRes.label,
         loginAt: new Date().toISOString()
       };
 
       localStorage.setItem('reset_logged_in_user', JSON.stringify(userData));
-      localStorage.setItem('reset_user_name', name);
+      localStorage.setItem('reset_user_name', cleanName);
 
       closeLoginModal();
       renderHeaderLoginState();
 
-      alert(`🎉 반갑습니다, ${name}님!\n전용 서재가 생성되었습니다. 서재로 이동합니다.`);
-      window.location.href = 'my-room.html';
+      alert(`🎉 환영합니다, ${cleanName} 어르신!\n[${verifyRes.label}] 등록 고객 확인이 완료되어 전용 서재로 입장합니다.`);
+      window.location.href = 'my-room.html?mode=user';
     }
 
     // 상단 네비게이션 로그인 버튼 상태 업데이트 (로그인 전/후 분기)

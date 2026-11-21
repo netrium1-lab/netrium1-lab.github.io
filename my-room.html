@@ -3261,7 +3261,7 @@
       <div class="hero-stat-cards">
         <div class="hero-stat">
           <div class="num" id="statNotes">28</div>
-          <div class="label">비움 일기장</div>
+          <div class="label">나의 일상 일기장</div>
         </div>
         <div class="hero-stat">
           <div class="num" id="statPhotos">12</div>
@@ -3275,11 +3275,11 @@
     </div>
   </section>
 
-  <!-- 4대 핵심 보물 서가 탭 바 (비움 일기장 · 추억 사진전시관 · 인생 애장품 전시관 · 모바일 웹북) -->
+  <!-- 4대 핵심 보물 서가 탭 바 (나의 일상 일기장 · 추억 사진전시관 · 인생 애장품 전시관 · 모바일 웹북) -->
   <nav class="room-tabs-bar">
     <div class="room-tabs-container">
       <button class="room-tab-btn active" onclick="switchTab('tab-diary')">
-        💬 비움 일기장 <span class="tab-counter" id="tabCounterDiary">28편</span>
+        📔 나의 일상 일기장 <span class="tab-counter" id="tabCounterDiary">28편</span>
       </button>
       <button class="room-tab-btn" onclick="switchTab('tab-gallery')">
         🖼️ 추억 사진전시관 <span class="tab-counter" id="tabCounterGallery">12장</span>
@@ -3296,108 +3296,133 @@
   <!-- 서재 메인 컨텐츠 영역 -->
   <main class="room-content">
 
-    <!-- [서가 1] 💬 마음의 비움 일기장 (첫 번째 기본 서가) -->
+    <!-- [서가 1] 📔 나의 일상 일기장 (글쓰기 최우선 → 내 일기 목록 → 예시 구분 버튼) -->
     <div id="tab-diary" class="tab-pane active">
       <div class="shelf-header">
         <div>
-          <h2 class="shelf-title">💬 마음의 비움 일기장</h2>
-          <p class="shelf-desc" id="diaryShelfDesc">오늘 내려놓고 싶은 물건이나 감정, 감사한 단상을 오른쪽 입력창에 편하게 적어 보관하세요.</p>
+          <h2 class="shelf-title">📔 나의 일상 일기장</h2>
+          <p class="shelf-desc" id="diaryShelfDesc">살아생전 매순간 내가 하고 있는 소중한 일상과 감사를 사진과 함께 차곡차곡 남기는 나만의 일기장입니다.</p>
         </div>
-        <button type="button" class="btn-guide-example" onclick="toggleSampleDiaryView()">
-          👁️ 김순옥 일기 예시 보기
+      </div>
+
+      <!-- 1️⃣ 맨 위: 사진과 함께 쓰는 오늘의 일상 일기장 작성 박스 (광장 공유 없이 나만의 프라이빗 기록) -->
+      <div class="new-note-box" id="diaryComposerCard" style="position: static; margin-bottom: 28px; border: 1.6px solid rgba(197, 155, 39, 0.42); background: linear-gradient(180deg, rgba(197, 155, 39, 0.05) 0%, var(--paper-card) 90px); padding: 24px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+          <h4 style="margin: 0; font-size: 1.15rem; display: flex; align-items: center; gap: 6px;">
+            <span>✍️</span> 오늘의 일상 기록하기 <span style="font-size: 0.78rem; font-weight: 750; color: var(--accent-green); background: rgba(43, 106, 56, 0.1); padding: 3px 10px; border-radius: 999px;">🔒 나만의 서재 보관</span>
+          </h4>
+          <span style="font-size: 0.82rem; color: var(--text-muted);">사진과 글을 함께 남겨 오늘을 기억하세요</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center; margin-bottom: 10px;">
+          <input type="text" id="inputDiaryTitle" class="login-input" placeholder="오늘의 제목 (예: 손주와 공원 산책 / 아침에 끓인 된장찌개 — 비워두면 자동 입력)" style="font-size: 0.96rem; padding: 11px 14px; margin: 0;">
+          <input type="file" id="inputDiaryPhotoFile" accept="image/*" style="display: none;" onchange="handleDiaryPhotoSelected(event)">
+          <button type="button" onclick="document.getElementById('inputDiaryPhotoFile').click()" style="padding: 11px 16px; border-radius: 10px; border: 1.4px solid var(--accent-green); background: rgba(43, 106, 56, 0.08); color: var(--accent-green); font-size: 0.9rem; font-weight: 800; cursor: pointer; white-space: nowrap; font-family: inherit;">
+            📷 오늘 사진 첨부
+          </button>
+        </div>
+
+        <!-- 첨부한 오늘 사진 미리보기 -->
+        <div id="diaryPhotoPreviewWrap" style="display: none; margin-bottom: 12px; background: var(--paper-warm); border: 1px solid var(--paper-border); border-radius: 12px; padding: 10px 12px; align-items: center; gap: 12px;">
+          <img id="diaryPhotoPreviewImg" src="" alt="첨부한 일기 사진" style="width: 78px; height: 78px; object-fit: cover; border-radius: 8px; border: 1px solid var(--paper-border);">
+          <div style="flex: 1; font-size: 0.85rem; color: var(--accent-green); font-weight: 750;">
+            ✅ 오늘의 사진이 첨부되었습니다. 아래에 일기를 적고 보관해 보세요!
+          </div>
+          <button type="button" onclick="removeDiaryPhoto()" style="padding: 6px 12px; border-radius: 8px; border: 1px solid #fecaca; background: #fef2f2; color: #dc2626; font-size: 0.8rem; font-weight: 750; cursor: pointer;">✕ 사진 빼기</button>
+        </div>
+
+        <textarea id="inputNewNote" class="note-textarea" placeholder="지금 이 순간 무엇을 하고 계신가요? 맛있는 식사, 반가운 만남, 산책길 풍경, 오늘의 감사한 마음을 사진과 함께 편하게 남겨 보세요..." style="min-height: 115px; margin-bottom: 14px;"></textarea>
+
+        <button type="button" class="btn-save-note" onclick="saveNewNote()" style="font-size: 1rem; padding: 13px;">
+          📔 오늘의 일상 일기 서재에 보관하기
         </button>
       </div>
 
-      <div class="empty-notes-layout">
-        <!-- 좌측: 저장된 비움 일기 목록 구역 -->
-        <div class="user-written-section" id="userDiarySection" style="margin-bottom: 0;">
-          <div class="user-written-header">
-            <h3 class="user-written-title">
-              <span>✍️</span> 내가 기록한 비움 일기 (<span id="userDiaryCount">0</span>편)
-            </h3>
-            <span style="font-size: 0.85rem; color: var(--text-sub);">기록된 일기는 언제든 열람하거나 삭제하실 수 있습니다.</span>
+      <!-- 2️⃣ 중간: 내가 기록한 일상 일기 목록 -->
+      <div class="user-written-section" id="userDiarySection" style="margin-bottom: 0;">
+        <div class="user-written-header">
+          <h3 class="user-written-title">
+            <span>📔</span> 내가 기록한 일상 일기 (<span id="userDiaryCount">0</span>편)
+          </h3>
+          <span style="font-size: 0.85rem; color: var(--text-sub);">기록된 일기와 사진은 나만의 서재에 안전하게 보관됩니다.</span>
+        </div>
+
+        <!-- 등록된 일기가 없을 때 안내 -->
+        <div id="userDiaryEmptyBox" class="shelf-empty-box">
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">📔</div>
+          <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">아직 작성된 일상 일기가 없습니다</div>
+          <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0;">
+            위 <strong>[✍️ 오늘의 일상 기록하기]</strong>에서 사진과 함께 오늘의 첫 이야기를 남겨 보세요.
+          </p>
+        </div>
+
+        <!-- 실제 작성된 일상 일기 카드들이 꽂히는 그리드 -->
+        <div id="notesListContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 18px;">
+          <!-- JS에서 동적 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 3️⃣ 맨 아래: 예시 구분 바 + 전용 토글 버튼 (클릭 시 아래에 김순옥 어르신 예시 펼침/접기) -->
+      <div style="margin-top: 34px; padding-top: 22px; border-top: 2px dashed var(--paper-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: var(--paper-warm); border: 1.4px solid var(--paper-border); border-radius: 16px; padding: 14px 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--accent-gold); color: #ffffff; font-size: 0.75rem; font-weight: 850;">참고 예시</span>
+            <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-main);">👵 김순옥 어르신은 일상을 이렇게 기록하셨어요 (사진 일기 3편)</span>
           </div>
+          <button type="button" id="btnToggleSampleDiary" onclick="toggleSampleDiaryView()" style="padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--accent-gold); background: var(--paper-card); color: #8c6610; font-size: 0.86rem; font-weight: 850; cursor: pointer; font-family: inherit;">
+            👁️ 작성 예시 보기 ▾
+          </button>
+        </div>
 
-          <!-- 등록된 일기가 없을 때 안내 -->
-          <div id="userDiaryEmptyBox" class="shelf-empty-box">
-            <div style="font-size: 2.2rem; margin-bottom: 8px;">💬</div>
-            <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">아직 작성된 비움 일기가 없습니다</div>
-            <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0;">
-              오른쪽 <strong>[오늘 마음 비워내기]</strong> 입력창에 오늘 하루 비워낸 생각이나 감사를 바로 적어보세요.
-            </p>
-          </div>
-
-          <!-- 실제 작성된 비움 일기 카드들이 꽂히는 컨테이너 -->
-          <div id="notesListContainer">
-            <!-- JS에서 동적 렌더링 -->
-          </div>
-
-          <!-- 👵 김순옥 어르신 비움 일기 예시 섹션 -->
-          <div id="sampleDiaryArea" style="margin-top: 36px; padding-top: 24px; border-top: 1.5px dashed var(--paper-border);">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
-              <h3 style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin: 0;">
-                👵 김순옥 어르신 비움 일기 (3편 예시)
-              </h3>
-              <span style="font-size: 0.82rem; color: var(--accent-gold); font-weight: 750;">서재 보관 예시</span>
-            </div>
-
-            <!-- 노트 1 (공개 글) -->
-            <div class="note-card sample-note-item">
-              <span class="note-tag public">🌐 메인 광장 공개 글</span>
-              <p class="note-text">
-                "30년 동안 장롱 깊숙이 걸려있던 옛 정장 세 벌을 이웃 나눔함에 넣고 왔습니다. 옷걸이 세 개가 텅 비었을 뿐인데, 내 마음의 어깨가 이토록 가벼워질 줄 몰랐습니다."
+        <div id="sampleDiaryArea" style="display: none; margin-top: 18px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px;">
+            <!-- 예시 일기 1 -->
+            <div class="note-card sample-note-item" style="margin-bottom: 0; display: flex; flex-direction: column;">
+              <div style="border-radius: 10px; overflow: hidden; height: 170px; margin-bottom: 12px; border: 1px solid var(--paper-border);">
+                <img src="images/hero-bg.jpg" alt="아침 산책길 햇살" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <span class="note-tag private" style="align-self: flex-start;">📔 일상 사진 일기 · 예시</span>
+              <h4 style="font-size: 1.02rem; font-weight: 850; margin: 4px 0 8px; color: var(--text-main);">아침 공원 산책과 따뜻한 보이차 한 잔</h4>
+              <p class="note-text" style="flex: 1;">
+                "아침 일찍 동네 둑방길을 한 바퀴 돌고 와서 따뜻한 보이차를 우렸습니다. 나뭇잎 사이로 비치는 가을 햇살이 어찌나 곱던지, 오늘도 두 발로 걸을 수 있음에 참 감사한 하루입니다."
               </p>
               <div class="note-meta">
                 <span>2026. 09. 21 기록</span>
-                <span>공감 142회 · 응원 댓글 18개</span>
+                <span>김순옥 어르신 예시</span>
               </div>
             </div>
 
-            <!-- 노트 2 (비밀 글) -->
-            <div class="note-card sample-note-item">
-              <span class="note-tag private">🔒 나만의 비밀 일기</span>
-              <p class="note-text">
-                "자식들이 바쁘다고 주말에 못 온다는 전화를 받고 잠시 서운함이 차올랐다. 하지만 저녁 산책길에 바람을 맞으며 생각해보니, 아이들이 제 몫의 삶을 치열하게 살아내고 있다는 것이 감사한 일이다. 서운함을 바람에 날려 보냈다."
+            <!-- 예시 일기 2 -->
+            <div class="note-card sample-note-item" style="margin-bottom: 0; display: flex; flex-direction: column;">
+              <div style="border-radius: 10px; overflow: hidden; height: 170px; margin-bottom: 12px; border: 1px solid var(--paper-border);">
+                <img src="images/showcase-senior-writing.jpg" alt="손주에게 편지 쓰는 오후" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <span class="note-tag private" style="align-self: flex-start;">📔 일상 사진 일기 · 예시</span>
+              <h4 style="font-size: 1.02rem; font-weight: 850; margin: 4px 0 8px; color: var(--text-main);">오후에 손주들과 영상통화하고 적은 메모</h4>
+              <p class="note-text" style="flex: 1;">
+                "주말에 바빠서 못 온다던 손주가 전화로 '할머니 사랑해요' 하고 하트를 그려 보여주었습니다. 화면 너머 환한 웃음 덕분에 거실이 온종일 환해진 기분이었습니다."
               </p>
               <div class="note-meta">
                 <span>2026. 09. 14 기록</span>
-                <span>비공개 안전 보관</span>
+                <span>김순옥 어르신 예시</span>
               </div>
             </div>
 
-            <!-- 노트 3 -->
-            <div class="note-card sample-note-item">
-              <span class="note-tag public">🌐 메인 광장 공개 글</span>
-              <p class="note-text">
-                "화장대 서랍을 정리하며 유통기한 지난 옛 화장품들을 비워냈습니다. 박지은 코치님이 알려주신 수분 크림 하나만 단정하게 남기니 아침 거울 보는 시간이 한결 즐겁습니다."
+            <!-- 예시 일기 3 -->
+            <div class="note-card sample-note-item" style="margin-bottom: 0; display: flex; flex-direction: column;">
+              <div style="border-radius: 10px; overflow: hidden; height: 170px; margin-bottom: 12px; border: 1px solid var(--paper-border);">
+                <img src="images/showcase-senior-happy-book.jpg" alt="베란다 국화 화분 가꾸기" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <span class="note-tag private" style="align-self: flex-start;">📔 일상 사진 일기 · 예시</span>
+              <h4 style="font-size: 1.02rem; font-weight: 850; margin: 4px 0 8px; color: var(--text-main);">베란다 노란 국화가 활짝 핀 날</h4>
+              <p class="note-text" style="flex: 1;">
+                "지난달 화원에서 데려온 작은 국화 화분에 드디어 노란 꽃망울이 터졌습니다. 매일 아침 물 주며 말 걸어준 보람이 있네요. 사진을 찍어 딸에게도 보내주었습니다."
               </p>
               <div class="note-meta">
                 <span>2026. 09. 08 기록</span>
-                <span>공감 98회</span>
+                <span>김순옥 어르신 예시</span>
               </div>
             </div>
-          </div>
-        </div>
-
-        <!-- 새 비움 일기 쓰기 사이드 박스 -->
-        <div>
-          <div class="new-note-box">
-            <h4>✍️ 오늘 마음 비워내기 (즉석 저장)</h4>
-            <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 12px;">
-              오늘 내려놓고 싶은 물건, 서운했던 감정, 비워낸 생각을 자유롭게 적어보세요.
-            </p>
-            <textarea id="inputNewNote" class="note-textarea" placeholder="예: 오늘 다용도실의 쓰지 않던 냄비들을 정리했습니다..."></textarea>
-
-            <div style="display: flex; gap: 8px; margin-bottom: 12px; font-size: 0.85rem;">
-              <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
-                <input type="radio" name="noteScope" value="private" checked> 나만 보기
-              </label>
-              <label style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
-                <input type="radio" name="noteScope" value="public"> 광장 공유
-              </label>
-            </div>
-
-            <button class="btn-save-note" onclick="saveNewNote()">서재에 정갈하게 보관하기</button>
           </div>
         </div>
       </div>
@@ -3410,14 +3435,9 @@
           <h2 class="shelf-title">🖼️ 추억 사진전시관</h2>
           <p class="shelf-desc" id="galleryShelfDesc">내가 간직한 소중한 사진들을 올려 전시하고, 그날의 따뜻한 기억과 추억의 글을 남겨 보세요.</p>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <button class="btn-share" onclick="openUploadModal('gallery')" style="background: var(--accent-green);">
-            📷+✍️ 소중한 사진 &amp; 추억 글 올리기
-          </button>
-          <button type="button" class="btn-guide-example" onclick="toggleSampleGalleryView()">
-            👁️ 예시 보기
-          </button>
-        </div>
+        <button class="btn-share" onclick="openUploadModal('gallery')" style="background: var(--accent-green);">
+          📷+✍️ 소중한 사진 &amp; 추억 글 올리기
+        </button>
       </div>
 
       <!-- 📸 내가 등록한 추억 사진 구역 -->
@@ -3444,14 +3464,18 @@
         </div>
       </div>
 
-      <!-- 👵 김순옥 어르신 추억 사진전시관 예시 섹션 -->
-      <div id="sampleGalleryArea" style="margin-top: 36px; padding-top: 24px; border-top: 1.5px dashed var(--paper-border);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
-          <h3 style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin: 0;">
-            👵 김순옥 어르신 추억 사진전시관 (3장 예시)
-          </h3>
-          <span style="font-size: 0.82rem; color: var(--accent-gold); font-weight: 750;">추억 사진 · 사연 전시 예시</span>
+      <!-- 👵 김순옥 어르신 추억 사진전시관 예시 구분 바 & 접이식 영역 -->
+      <div style="margin-top: 34px; padding-top: 22px; border-top: 2px dashed var(--paper-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: var(--paper-warm); border: 1.4px solid var(--paper-border); border-radius: 16px; padding: 14px 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="display: inline-block; padding: 3px 10px; border-radius: 999px; background: var(--accent-green); color: #ffffff; font-size: 0.75rem; font-weight: 850;">참고 예시</span>
+            <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-main);">👵 김순옥 어르신 추억 사진전시관 예시 (3장)</span>
+          </div>
+          <button type="button" id="btnToggleSampleGallery" onclick="toggleSampleGalleryView()" style="padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--accent-green); background: var(--paper-card); color: var(--accent-green); font-size: 0.86rem; font-weight: 850; cursor: pointer; font-family: inherit;">
+            👁️ 전시 예시 보기 ▾
+          </button>
         </div>
+        <div id="sampleGalleryArea" style="display: none; margin-top: 18px;">
         <div class="memory-gallery-grid">
           <!-- 사진 카드 1 -->
           <div class="memory-card sample-memory-item">
@@ -3513,6 +3537,7 @@
             </div>
           </div>
         </div>
+        </div>
       </div>
     </div><!-- /tab-gallery -->
 
@@ -3523,14 +3548,9 @@
           <h2 class="shelf-title">✨ 인생 애장품 전시관</h2>
           <p class="shelf-desc" id="keepsakeShelfDesc">평생 아끼고 손때 묻은 소중한 물건의 사진을 올리고, 그 애장품에 담긴 사연과 가족들에게 남기고 싶은 마음을 정갈하게 담아 두세요.</p>
         </div>
-        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <button class="btn-share" onclick="openUploadModal('keepsake')" style="background: #8f4726;">
-            🎁+✍️ 내 인생 애장품 올리기
-          </button>
-          <button type="button" class="btn-guide-example" onclick="toggleSampleKeepsakeView()">
-            👁️ 예시 보기
-          </button>
-        </div>
+        <button class="btn-share" onclick="openUploadModal('keepsake')" style="background: #8f4726;">
+          🎁+✍️ 내 인생 애장품 올리기
+        </button>
       </div>
 
       <!-- 🎁 내가 전시한 인생 애장품 구역 -->
@@ -3558,15 +3578,19 @@
         </div>
       </div>
 
-      <!-- 👵 김순옥 어르신 인생 애장품 전시 예시 -->
-      <div id="sampleKeepsakeArea" style="margin-top: 36px; padding-top: 24px; border-top: 1.5px dashed var(--paper-border);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
-          <h3 style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.15rem; font-weight: 800; color: var(--text-main); margin: 0;">
-            👵 김순옥 어르신 인생 애장품 전시관 (3점 예시)
-          </h3>
-          <span style="font-size: 0.82rem; color: var(--accent-gold); font-weight: 750;">가족에게 전하는 소중한 물건 예시</span>
+      <!-- 👵 김순옥 어르신 인생 애장품 예시 구분 바 & 접이식 영역 -->
+      <div style="margin-top: 34px; padding-top: 22px; border-top: 2px dashed var(--paper-border);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; background: var(--paper-warm); border: 1.4px solid var(--paper-border); border-radius: 16px; padding: 14px 18px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span style="display: inline-block; padding: 3px 10px; border-radius: 999px; background: #8f4726; color: #ffffff; font-size: 0.75rem; font-weight: 850;">참고 예시</span>
+            <span style="font-size: 0.92rem; font-weight: 800; color: var(--text-main);">👵 김순옥 어르신 인생 애장품 전시 예시 (3점)</span>
+          </div>
+          <button type="button" id="btnToggleSampleKeepsake" onclick="toggleSampleKeepsakeView()" style="padding: 9px 16px; border-radius: 999px; border: 1.5px solid #8f4726; background: var(--paper-card); color: #8f4726; font-size: 0.86rem; font-weight: 850; cursor: pointer; font-family: inherit;">
+            👁️ 애장품 예시 보기 ▾
+          </button>
         </div>
 
+        <div id="sampleKeepsakeArea" style="display: none; margin-top: 18px;">
         <div class="keepsake-grid">
           <!-- 예시 애장품 1 -->
           <div class="keepsake-card sample-keepsake-item">
@@ -3651,6 +3675,7 @@
               </div>
             </div>
           </div>
+        </div>
         </div>
       </div>
     </div><!-- /tab-keepsake -->
@@ -3842,8 +3867,8 @@
         <div class="category-chip-group" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
           <label class="category-chip" id="chipDiary" onclick="selectShelfCategory('diary')">
             <input type="radio" name="shelfCategory" value="diary">
-            <span style="font-size: 1.25rem;">💬</span>
-            <span>비움 일기장</span>
+            <span style="font-size: 1.25rem;">📔</span>
+            <span>일상 일기장</span>
           </label>
           <label class="category-chip active" id="chipGallery" onclick="selectShelfCategory('gallery')">
             <input type="radio" name="shelfCategory" value="gallery" checked>
@@ -3983,32 +4008,33 @@
       <button type="button" onclick="closeLoginModal()" class="btn-modal-close-back" style="position: absolute; top: 16px; right: 16px;" aria-label="닫고 이전 화면으로">✕ 닫기</button>
       <div style="font-size: 3rem; margin-bottom: 12px; margin-top: 10px;">🗝️</div>
       <h2>내 서재 열기</h2>
-      <p>카카오톡으로 3초 만에 시작하시거나, <strong>성함</strong>과 <strong>전화번호</strong>로 간편하게 입장하세요.</p>
+      <p>일반 이용자께서는 <strong>카카오 1초 로그인</strong>으로 즉시 입장하실 수 있으며, 자서전·서비스 이용 고객께서는 등록된 성함으로 입장하실 수 있습니다.</p>
 
-      <!-- 💬 카카오 3초 간편 로그인 -->
-      <button type="button" onclick="loginWithKakao()" style="width: 100%; padding: 13px; background: #FEE500; color: #191600; border: none; border-radius: 12px; font-weight: 800; font-size: 0.96rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; box-shadow: 0 3px 10px rgba(254, 229, 0, 0.35);">
+      <!-- 💬 카카오 1초 간편 로그인 (일반 이용자 누구나) -->
+      <button type="button" id="btnKakaoLoginRoom" onclick="loginWithKakao()" style="width: 100%; padding: 13px; background: #FEE500; color: #191600; border: none; border-radius: 12px; font-weight: 850; font-size: 0.98rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 16px; box-shadow: 0 3px 10px rgba(254, 229, 0, 0.35);">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#3C1E1E">
           <path d="M12 3C6.48 3 2 6.58 2 11c0 2.84 1.87 5.33 4.71 6.73-.21.78-.77 2.83-.88 3.26-.14.54.2.53.42.39.29-.19 3.42-2.34 3.99-2.73.57.08 1.16.12 1.76.12 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/>
         </svg>
-        <span>카카오로 3초 만에 내 서재 열기</span>
+        <span>카카오로 1초 만에 내 서재 열기</span>
       </button>
 
-      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 14px; color: var(--text-muted); font-size: 0.82rem;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: var(--text-muted); font-size: 0.8rem;">
         <span style="flex: 1; height: 1px; background: var(--border-color);"></span>
-        <span>또는 성함으로 직접 입장</span>
+        <span>🔑 자서전 · 서비스 이용 고객 전용</span>
         <span style="flex: 1; height: 1px; background: var(--border-color);"></span>
       </div>
 
       <form onsubmit="handleSeniorLogin(event)">
         <div class="login-input-group">
-          <label for="inputSeniorName">어르신 성함</label>
-          <input type="text" id="inputSeniorName" class="login-input" placeholder="예: 김순옥" required>
+          <label for="inputSeniorName">등록 어르신 성함</label>
+          <input type="text" id="inputSeniorName" class="login-input" placeholder="예: 홍길동" required>
         </div>
         <div class="login-input-group">
           <label for="inputSeniorPhone">전화번호 뒤 4자리</label>
           <input type="tel" id="inputSeniorPhone" class="login-input" placeholder="예: 1234" maxlength="4" required>
         </div>
-        <button type="submit" class="btn-login-submit">내 서재 입장하기 ➔</button>
+        <button type="submit" id="btnDirectServiceLoginRoom" class="btn-login-submit">등록 고객 확인 후 서재 입장 ➔</button>
+        <div id="directLoginNoticeRoom" style="display: none; margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #fffbeb; border: 1px solid #fcd34d; color: #92400e; font-size: 0.8rem; line-height: 1.5; text-align: left;"></div>
       </form>
 
       <button type="button" class="btn-demo-quick" onclick="loadSampleRoom()">
@@ -4492,7 +4518,7 @@
       <span>이전으로</span>
     </button>
     <button type="button" class="mb-quick-btn active" id="mbBtnDiary" onclick="switchTab('tab-diary')">
-      <span class="btn-icon">💬</span>
+      <span class="btn-icon">📔</span>
       <span>일기장</span>
     </button>
     <button type="button" class="mb-quick-btn" id="mbBtnGallery" onclick="switchTab('tab-gallery')">
@@ -5695,27 +5721,81 @@
       }
     }
 
-    // 비움 일기 쓰기 & 로컬스토리지 영구 저장 및 실시간 서재 렌더링
+    // 📷 나의 일상 일기장 사진 첨부 (900px JPEG 자동 압축) & 즉석 저장
+    let currentDiaryPhotoBase64 = null;
+
+    function handleDiaryPhotoSelected(e) {
+      const file = e.target && e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('이미지 파일(사진)만 첨부하실 수 있습니다.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const img = new Image();
+        img.onload = function() {
+          try {
+            const maxW = 900;
+            let w = img.width;
+            let h = img.height;
+            if (w > maxW) {
+              h = Math.round(h * (maxW / w));
+              w = maxW;
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            currentDiaryPhotoBase64 = canvas.toDataURL('image/jpeg', 0.78);
+          } catch (err) {
+            currentDiaryPhotoBase64 = evt.target.result;
+          }
+          const pImg = document.getElementById('diaryPhotoPreviewImg');
+          const pWrap = document.getElementById('diaryPhotoPreviewWrap');
+          if (pImg) pImg.src = currentDiaryPhotoBase64;
+          if (pWrap) pWrap.style.display = 'flex';
+        };
+        img.src = evt.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeDiaryPhoto() {
+      currentDiaryPhotoBase64 = null;
+      const inp = document.getElementById('inputDiaryPhotoFile');
+      const pImg = document.getElementById('diaryPhotoPreviewImg');
+      const pWrap = document.getElementById('diaryPhotoPreviewWrap');
+      if (inp) inp.value = '';
+      if (pImg) pImg.src = '';
+      if (pWrap) pWrap.style.display = 'none';
+    }
+
     function saveNewNote() {
+      const titleInput = document.getElementById('inputDiaryTitle');
       const textarea = document.getElementById('inputNewNote');
-      const text = textarea.value.trim();
-      if (!text) {
-        alert('비워낼 마음이나 일상의 사연을 입력해 주세요.');
+      const customTitle = titleInput ? titleInput.value.trim() : '';
+      const text = textarea ? textarea.value.trim() : '';
+
+      if (!text && !currentDiaryPhotoBase64) {
+        alert('오늘의 일상 이야기나 사진을 입력해 주세요.');
+        if (textarea) textarea.focus();
         return;
       }
 
-      const scopeRadio = document.querySelector('input[name="noteScope"]:checked');
-      const scope = scopeRadio ? scopeRadio.value : 'private';
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+      const autoTitle = customTitle || (text ? (text.length > 24 ? text.substring(0, 24) + '...' : text) : `${dateStr} 오늘의 사진 기록`);
 
       const newNote = {
         id: Date.now(),
-        title: text.length > 22 ? text.substring(0, 22) + '...' : text,
-        year: '오늘의 비움',
-        story: text,
+        title: autoTitle,
+        year: `${dateStr} ${timeStr}`,
+        story: text || '오늘의 소중한 순간을 사진으로 남겼습니다.',
         category: 'diary',
-        scope: scope,
-        image: null,
-        dateStr: new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        image: currentDiaryPhotoBase64,
+        dateStr: dateStr
       };
 
       let list = [];
@@ -5727,11 +5807,18 @@
       }
 
       list.unshift(newNote);
-      localStorage.setItem('reset_custom_memories', JSON.stringify(list));
+      try {
+        localStorage.setItem('reset_custom_memories', JSON.stringify(list));
+      } catch (storageErr) {
+        alert('브라우저 저장 공간이 부족합니다. 오래된 사진 기록을 일부 정리하신 후 다시 시도해 주세요.');
+        return;
+      }
 
-      textarea.value = '';
+      if (titleInput) titleInput.value = '';
+      if (textarea) textarea.value = '';
+      removeDiaryPhoto();
       renderCustomMemories();
-      alert('✨ 어르신의 소중한 비움 노트가 서재에 정갈하게 기록되었습니다.');
+      alert('📔 오늘의 일상 일기가 나만의 서재에 정갈하게 보관되었습니다!');
     }
 
     // 글자 크기 조절
@@ -5854,34 +5941,143 @@
       }
     }
 
-    // 시니어 간편 로그인 처리
-    function handleSeniorLogin(e) {
-      e.preventDefault();
-      const name = document.getElementById('inputSeniorName').value.trim();
-      const phone = document.getElementById('inputSeniorPhone').value.trim();
+    // 🔑 자서전·서비스 이용 등록 고객 본인 확인 (Firestore + 로컬 등록 명단 조회)
+    async function verifyRegisteredServiceCustomerInRoom(rawName, rawPhone4) {
+      const targetName = normalizeRoomOwnerName(rawName);
+      const targetPhone4 = extractRoomPhoneLast4(rawPhone4);
+      if (!targetName || targetPhone4.length < 4) return { allowed: false, reason: 'input' };
 
-      if (!name || phone.length < 4) {
-        alert('성함과 전화번호 뒤 4자리를 정확히 입력해 주세요.');
+      const candidates = [];
+      const addRec = (names, phone, label) => {
+        const cleanNames = (Array.isArray(names) ? names : [names])
+          .map(normalizeRoomOwnerName)
+          .filter(Boolean);
+        if (!cleanNames.length) return;
+        candidates.push({
+          names: cleanNames,
+          phone4: extractRoomPhoneLast4(phone || ''),
+          label: label || '여백과 결 등록 고객'
+        });
+      };
+
+      if (roomFbDb) {
+        try {
+          const [memSnap, conSnap] = await Promise.all([
+            roomFbDb.collection('memoir_projects').get().catch(() => null),
+            roomFbDb.collection('senior_consults').get().catch(() => null)
+          ]);
+          if (memSnap) {
+            memSnap.forEach(doc => {
+              const d = doc.data() || {};
+              addRec([d.ownerName, d.clientName, d.applicantName], d.ownerPhoneLast4 || d.applicantPhone || d.phone, d.bookTitle || '디지털 자서전 고객');
+            });
+          }
+          if (conSnap) {
+            conSnap.forEach(doc => {
+              const d = doc.data() || {};
+              addRec([d.name, d.clientName, d.applicantName, d.elderName], d.phone || d.applicantPhone, d.category || d.service || '여백과 결 서비스 고객');
+            });
+          }
+        } catch (err) {
+          console.warn('[MyRoom Service Verify Firestore]', err);
+        }
+      }
+
+      const lsSources = [
+        { key: 'yebaek_memoir_projects', get: d => [[d.ownerName, d.clientName, d.applicantName], d.ownerPhoneLast4 || d.applicantPhone || d.phone, d.bookTitle || '자서전 고객'] },
+        { key: 'yebaek_archive_clients_v1', get: d => [[d.name], d.phone, d.category || '서재 구축 고객'] },
+        { key: 'reset_senior_consult_list', get: d => [[d.name, d.clientName, d.applicantName], d.phone, d.category || '서비스 신청 고객'] },
+        { key: 'yebaek_published_memoirs_v1', get: d => [[d.author, d.ownerName], d.phone || d.ownerPhoneLast4, d.title || '출판 자서전 저자'] }
+      ];
+      lsSources.forEach(src => {
+        try {
+          const arr = JSON.parse(localStorage.getItem(src.key) || '[]');
+          if (Array.isArray(arr)) {
+            arr.forEach(d => {
+              if (!d || typeof d !== 'object') return;
+              if (d.category === '카카오 간편가입') return;
+              const [names, phone, label] = src.get(d);
+              addRec(names, phone, label);
+            });
+          }
+        } catch (e) {}
+      });
+
+      const matched = candidates.find(c => {
+        if (!c.names.includes(targetName)) return false;
+        if (c.phone4 && c.phone4.length === 4) {
+          return c.phone4 === targetPhone4;
+        }
+        return true;
+      });
+
+      return matched ? { allowed: true, label: matched.label } : { allowed: false, reason: 'not_found' };
+    }
+
+    // 자서전·서비스 이용 등록 고객 전용 성함+뒤4자리 로그인 처리
+    async function handleSeniorLogin(e) {
+      e.preventDefault();
+      const nameInput = document.getElementById('inputSeniorName');
+      const phoneInput = document.getElementById('inputSeniorPhone');
+      const noticeEl = document.getElementById('directLoginNoticeRoom');
+      const submitBtn = document.getElementById('btnDirectServiceLoginRoom');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const phone4 = phoneInput ? extractRoomPhoneLast4(phoneInput.value) : '';
+
+      if (noticeEl) noticeEl.style.display = 'none';
+
+      if (!name || phone4.length < 4) {
+        alert('등록된 성함과 전화번호 뒤 4자리를 정확히 입력해 주세요.');
         return;
       }
 
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ 서비스 등록 고객 확인 중...';
+      }
+
+      const verifyRes = await verifyRegisteredServiceCustomerInRoom(name, phone4);
+
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.textContent = '등록 고객 확인 후 서재 입장 ➔';
+      }
+
+      if (!verifyRes.allowed) {
+        if (noticeEl) {
+          noticeEl.innerHTML = '⚠️ <strong>자서전 또는 여백과 결 서비스 등록 고객 명단에서 확인되지 않습니다.</strong><br>일반 이용자께서는 상단의 노란색 <strong>[💬 카카오로 1초 만에 내 서재 열기]</strong> 버튼으로 바로 입장해 주세요!';
+          noticeEl.style.display = 'block';
+        }
+        const kakaoBtn = document.getElementById('btnKakaoLoginRoom');
+        if (kakaoBtn) {
+          kakaoBtn.style.boxShadow = '0 0 0 4px rgba(254, 229, 0, 0.78)';
+          setTimeout(() => { kakaoBtn.style.boxShadow = '0 3px 10px rgba(254, 229, 0, 0.35)'; }, 2200);
+        }
+        return;
+      }
+
+      const cleanName = normalizeRoomOwnerName(name);
       const userData = {
-        id: 'senior_' + Date.now(),
-        name: name,
-        nickname: name,
-        phone: phone,
+        id: 'service_' + Date.now(),
+        name: cleanName,
+        nickname: cleanName,
+        phone: phone4,
         loginType: 'direct',
+        isServiceMember: true,
+        serviceLabel: verifyRes.label,
         loginAt: new Date().toISOString()
       };
       localStorage.setItem('reset_logged_in_user', JSON.stringify(userData));
-      localStorage.setItem('reset_user_name', name);
+      localStorage.setItem('reset_user_name', cleanName);
+      isSampleModeActive = false;
 
       closeLoginModal();
       updateRoomDisplayMode();
       if (typeof loadPersonalPublishedWebbooksForUser === 'function') {
         loadPersonalPublishedWebbooksForUser(true);
       }
-      alert(`환영합니다! ${name} 어르신의 전용 서재가 열렸습니다.`);
+      alert(`🎉 환영합니다, ${cleanName} 어르신!\n[${verifyRes.label}] 등록 고객 확인이 완료되어 전용 서재가 열렸습니다.`);
     }
 
     // ==========================================
@@ -6305,11 +6501,11 @@
         if (storyLabel) storyLabel.textContent = "5. 사진에 담긴 추억의 글 *";
         if (storyInput) storyInput.placeholder = "사진 속 사람들과 그날의 기억, 지금 떠올려도 미소 짓게 되는 추억을 편하게 적어보세요...";
       } else {
-        if (titleLabel) titleLabel.textContent = "3. 오늘 일기 제목 *";
-        if (titleInput) titleInput.placeholder = "예: 30년 된 옛 정장 세 벌을 정리하며 / 가을 산책길";
+        if (titleLabel) titleLabel.textContent = "3. 오늘의 일기 제목 *";
+        if (titleInput) titleInput.placeholder = "예: 손주와 공원 산책 / 아침에 끓인 된장찌개";
         if (yearLabel) yearLabel.textContent = "📅 4. 기록 날짜 선택";
-        if (storyLabel) storyLabel.textContent = "5. 오늘 마음의 비움과 단상 *";
-        if (storyInput) storyInput.placeholder = "오늘 내려놓은 물건이나 감정, 일상 속 감사했던 마음을 자유롭게 적어보세요...";
+        if (storyLabel) storyLabel.textContent = "5. 오늘의 일상 이야기 *";
+        if (storyInput) storyInput.placeholder = "살아생전 오늘 내가 하고 있는 소중한 일들과 감사한 순간을 사진과 함께 편하게 적어 보세요...";
       }
     }
 
@@ -6448,29 +6644,27 @@
       const userPhotos = list.filter(item => item.category === 'gallery');
       const userKeepsakes = list.filter(item => item.category === 'keepsake' || item.category === 'memoir');
 
-      // 1. [서가 1] 💬 비움 일기장 렌더링
+      // 1. [서가 1] 📔 나의 일상 일기장 렌더링 (사진 + 글 프라이빗 카드)
       if (notesContainer) {
         notesContainer.innerHTML = '';
         userNotes.forEach(item => {
           const noteCard = document.createElement('div');
           noteCard.className = 'note-card custom-memory-item';
-          const isPub = item.scope === 'public';
+          noteCard.style.cssText = 'margin-bottom: 0; display: flex; flex-direction: column;';
           noteCard.innerHTML = `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span class="note-tag ${isPub ? 'public' : 'private'}">
-                ${isPub ? '🌐 광장 공유 일기' : '🔒 나만의 비밀 일기'} [${escapeHtml(item.year || '비움')}]
-              </span>
-              <button onclick="deleteMemory(${item.id})" style="background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 0.82rem; font-weight: 700;">
+            ${item.image ? `<div onclick="openMemoryReadModal(${item.id})" style="cursor: pointer; border-radius: 10px; overflow: hidden; height: 180px; margin-bottom: 12px; border: 1px solid var(--paper-border);"><img src="${item.image}" alt="${escapeHtml(item.title)}" style="width: 100%; height: 100%; object-fit: cover; display: block;"></div>` : ''}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 8px;">
+              <span class="note-tag private">📔 일상 일기 · ${escapeHtml(item.year || item.dateStr || '오늘')}</span>
+              <button onclick="deleteMemory(${item.id})" style="background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 0.82rem; font-weight: 700; flex-shrink: 0;">
                 🗑️ 삭제
               </button>
             </div>
-            <h4 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px;">${escapeHtml(item.title)}</h4>
-            <p class="note-text" style="white-space: pre-wrap;">"${escapeHtml(item.story)}"</p>
-            ${item.image ? `<div style="margin: 10px 0;"><img src="${item.image}" style="max-height: 140px; border-radius: 8px; border: 1px solid var(--paper-border);"></div>` : ''}
+            <h4 style="font-size: 1.04rem; font-weight: 850; margin: 0 0 6px; color: var(--text-main);">${escapeHtml(item.title)}</h4>
+            <p class="note-text" style="white-space: pre-wrap; flex: 1;">"${escapeHtml(item.story)}"</p>
             <div class="note-meta">
               <span>기록일: ${escapeHtml(item.dateStr || '')}</span>
-              <button type="button" onclick="openMemoryReadModal(${item.id})" style="background: var(--accent-gold); color: #fff; border: none; padding: 4px 10px; border-radius: 6px; font-size: 0.80rem; font-weight: 700; cursor: pointer;">
-                📖 전체 읽기
+              <button type="button" onclick="openMemoryReadModal(${item.id})" style="background: var(--accent-gold); color: #fff; border: none; padding: 5px 11px; border-radius: 7px; font-size: 0.80rem; font-weight: 750; cursor: pointer;">
+                📖 크게 보기
               </button>
             </div>
           `;
@@ -6595,7 +6789,7 @@
         const bodyEl = document.getElementById('viewMemoryBody');
 
         const badgeMap = {
-          diary: '💬 비움 일기장',
+          diary: '📔 나의 일상 일기장',
           gallery: '🖼️ 추억 사진전시관',
           keepsake: '✨ 인생 애장품 전시관',
           memoir: '✨ 인생 애장품 전시관'
@@ -6669,31 +6863,36 @@
     }
 
     // ==========================================
-    // 👵 4대 서가 김순옥 완성 예시 부드러운 스크롤 안내 함수
+    // 👵 3대 서가 김순옥 작성 예시 구분 버튼 펼침/접기 토글
     // ==========================================
-    function toggleSampleKeepsakeView() {
-      const target = document.getElementById('sampleKeepsakeArea');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-
-    function toggleSampleMemoirView() {
-      toggleSampleKeepsakeView();
-    }
-
-    function toggleSampleGalleryView() {
-      const target = document.getElementById('sampleGalleryArea');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    function toggleSampleBlock(areaId, btnId, openLabel, closeLabel) {
+      const target = document.getElementById(areaId);
+      const btn = document.getElementById(btnId);
+      if (!target) return;
+      const isHidden = (target.style.display === 'none' || !target.style.display);
+      target.style.display = isHidden ? 'block' : 'none';
+      if (btn) btn.textContent = isHidden ? closeLabel : openLabel;
+      if (isHidden) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 60);
       }
     }
 
     function toggleSampleDiaryView() {
-      const target = document.getElementById('sampleDiaryArea');
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      toggleSampleBlock('sampleDiaryArea', 'btnToggleSampleDiary', '👁️ 작성 예시 보기 ▾', '🙈 작성 예시 접기 ▴');
+    }
+
+    function toggleSampleGalleryView() {
+      toggleSampleBlock('sampleGalleryArea', 'btnToggleSampleGallery', '👁️ 전시 예시 보기 ▾', '🙈 전시 예시 접기 ▴');
+    }
+
+    function toggleSampleKeepsakeView() {
+      toggleSampleBlock('sampleKeepsakeArea', 'btnToggleSampleKeepsake', '👁️ 애장품 예시 보기 ▾', '🙈 애장품 예시 접기 ▴');
+    }
+
+    function toggleSampleMemoirView() {
+      toggleSampleKeepsakeView();
     }
 
     function toggleSampleVaultView() {
@@ -7575,7 +7774,7 @@
           label: '표지',
           kicker: 'MY LIFE WEBBOOK · PERSONAL EDITION',
           title: `${user.name}의 인생 기록`,
-          subtitle: '비움 일기, 추억 사진전시관, 인생 애장품 전시관에 담은 소중한 기록을 한 권의 모바일 책자로 엮었습니다.',
+          subtitle: '나의 일상 일기장, 추억 사진전시관, 인생 애장품 전시관에 담은 소중한 기록을 한 권의 모바일 책자로 엮었습니다.',
           author: `지은이: ${user.name} 어르신 · 발행: 여백과 결`
         });
 
@@ -7583,9 +7782,9 @@
         myDiaries.slice(0, 5).forEach((d, idx) => {
           contentPages.push({
             type: 'chapter',
-            label: d.title || `비움 일기 ${idx + 1}`,
-            kicker: `💬 마음의 비움 일기 · ${d.year || '오늘의 여백'}`,
-            title: d.title || `비움의 기록 ${idx + 1}`,
+            label: d.title || `일상 일기 ${idx + 1}`,
+            kicker: `📔 나의 일상 일기 · ${d.year || '소중한 하루'}`,
+            title: d.title || `오늘의 기록 ${idx + 1}`,
             image: d.image || '',
             caption: '',
             body: d.story || ''
@@ -7890,7 +8089,7 @@
             <div style="font-size: 3rem;">📖✨</div>
             <h3 style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.35rem; font-weight: 850; margin: 0;">${escapeHtml(page.userName)} 어르신의 첫 웹북을 시작해 보세요</h3>
             <p style="font-size: 0.94rem; color: var(--text-sub); line-height: 1.65; margin: 0;">
-              [비움 일기장], [추억 사진전시관], [인생 애장품 전시관]에 기록을 남기시거나, 전담 코치와 완성한 자서전 PDF가 등록되면 이곳에 자동으로 모바일 웹북이 열립니다.
+              [나의 일상 일기장], [추억 사진전시관], [인생 애장품 전시관]에 기록을 남기시거나, 전담 코치와 완성한 자서전 PDF가 등록되면 이곳에 자동으로 모바일 웹북이 열립니다.
             </p>
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 8px;">
               <button type="button" onclick="openUploadModal('gallery')" class="wb-nav-btn primary" style="width: 100%;">🖼️ 추억 사진 · 애장품 올리러 가기</button>
@@ -8097,7 +8296,7 @@
         return cleanSpeechText([greeting, pg.message].filter(Boolean).join('\n'));
       }
       if (pg.type === 'empty') {
-        return cleanSpeechText(`${pg.userName || '어르신'}의 첫 웹북을 시작해 보세요.\n비움 일기장, 추억 사진전시관, 인생 애장품 전시관에 기록을 남기시거나 완성 자서전 PDF가 등록되면 자동으로 모바일 책자가 열립니다.`);
+        return cleanSpeechText(`${pg.userName || '어르신'}의 첫 웹북을 시작해 보세요.\n나의 일상 일기장, 추억 사진전시관, 인생 애장품 전시관에 기록을 남기시거나 완성 자서전 PDF가 등록되면 자동으로 모바일 책자가 열립니다.`);
       }
       return cleanSpeechText([pg.title, pg.subtitle, pg.body, pg.message].filter(Boolean).join('.\n'));
     }
