@@ -1233,12 +1233,18 @@
       white-space: nowrap;
     }
 
-    /* 5대 진단 테마 카드 그리드 */
+    /* 4대 비즈니스 쇼케이스 카드 그리드 (2x2 대칭) */
     .diag-cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
-      gap: 20px;
-      margin-top: 10px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 0;
+    }
+    @media (max-width: 768px) {
+      .diag-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
     }
 
     /* 개별 진단 테마 카드 (주제별 엷은 파스텔 틴트 배경 적용) */
@@ -6675,53 +6681,12 @@
           <div class="slb-content">
             <div class="slb-badge">CATEGORY 03 · 🌿 웰다잉을 위한 웰라이프 실행 코칭</div>
             <h3 class="slb-title">여백과결 4대 웰라이프 비즈니스 쇼케이스</h3>
-            <p class="slb-desc">웰다잉을 준비하는 가장 아름다운 방법은 오늘을 가장 품격 있게 살아가는 것입니다. 뷰티·옷장·유품·엔딩파티 4대 영역에서 전문 라이프 코치가 직접 동행합니다.</p>
+            <p class="slb-desc" style="word-break: keep-all;">웰다잉을 준비하는 가장 아름다운 방법은 오늘을 가장 품격 있게 살아가는 것입니다. 뷰티·옷장·유품·엔딩파티 4대 영역에서 전문 라이프 코치가 직접 동행합니다.</p>
           </div>
-        </div>
-        <div class="section-header">
-          <p class="section-tag">Business Showcase & Life Care</p>
-          <h2 class="section-title">여백과결 4대 웰라이프 비즈니스 포털</h2>
-          <p class="section-desc">비즈니스별 상세 안내와 프로모션을 확인하시고, 전문 코치의 1:1 맞춤 라이프케어를 신청해 보세요.</p>
         </div>
 
         <div class="self-test-card" style="margin-top: 0;">
-          <div class="test-header">
-            <div class="test-title-wrap">
-              <h3>🧭 전문 라이프 코칭 비즈니스 안내 & 바로 예약</h3>
-              <p>원하시는 비즈니스를 선택하시면 상세 프로모션과 표준 케어 프로세스(SOP), 1:1 예약 화면이 열립니다.</p>
-            </div>
-            <span class="test-header-badge">✨ 1:1 전담 코치 배정</span>
-          </div>
-
-          <!-- ================= 맞춤 솔루션 진단 콤보 박스 컨트롤 ================= -->
-          <div class="diag-combobox-card" id="diagComboboxCard">
-            <div class="diag-combo-title-row">
-              <span class="diag-combo-badge">🎯 바로 진단 & 안내</span>
-              <h4 class="diag-combo-title">관심 있는 웰라이프 비즈니스를 선택하세요</h4>
-            </div>
-            <p class="diag-combo-desc">
-              아래 <strong>선택 상자</strong>에서 관심 분야를 고르시면, 전문 코칭 솔루션 처방전 및 비즈니스 상세 안내가 즉시 표시됩니다.
-            </p>
-            <div class="diag-combo-action-group">
-              <div class="diag-select-wrap">
-                <select id="diagThemeSelect" class="diag-theme-select" onchange="handleDiagSelectChange(this.value)" aria-label="맞춤 솔루션 진단 주제 선택">
-                  <option value="">-- 안내받으실 비즈니스를 선택하세요 (클릭) --</option>
-                  <option value="beauty">💄 #01 시니어 뷰티 라이프케어 — 특별한 날, 화려한 외출 (180분 SOP)</option>
-                  <option value="wardrobe">👗 #02 일상과 비움의 미학 — 옷장 정리 및 수납 컨설팅</option>
-                  <option value="legacy">📦 #03 기억의 계승 — 오래된 짐 및 유품 정리 아카이빙</option>
-                  <option value="memoir">✍️ #04 디지털 자서전 — 내 인생의 서사 기록 및 서재</option>
-                  <option value="party">💌 #05 아름다운 마침표와 감사 — 생전 엔딩 파티 서사</option>
-                </select>
-                <span class="diag-select-arrow">▼</span>
-              </div>
-              <button type="button" class="diag-combo-submit-btn" onclick="handleDiagComboClick()" aria-label="맞춤 솔루션 진단받기 실행">
-                <span>비즈니스 솔루션 확인하기</span>
-                <span>➔</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 5대 비즈니스 쇼케이스 진단 카드 그리드 (관리자 칼럼 연동 & 5대 테마 일치) -->
+          <!-- 4대 비즈니스 쇼케이스 진단 카드 그리드 (2x2 대칭) -->
           <div class="diag-cards-grid" id="diagCardsGrid">
             
             <!-- 1. 💄 시니어 뷰티 라이프케어 (1호 핵심 프리미엄 사업) -->
@@ -6823,40 +6788,7 @@
               </div>
             </div>
 
-            <!-- 4. ✍️ 디지털 자서전 -->
-            <div class="diag-card diag-theme-memoir" onclick="showTestResult('memoir', this)" id="diagCard_memoir" role="button" tabindex="0">
-              <div>
-                <!-- 이미지 썸네일 -->
-                <div class="diag-card-thumb">
-                  <img src="images/showcase-senior-memoir.jpg" alt="디지털 자서전 내 인생의 서사 기록 및 서재" loading="lazy">
-                  <span class="diag-card-thumb-badge">📖 인생 서사 아카이빙</span>
-                  <span class="diag-card-thumb-tag" style="background: #2563eb;">구술 & 서재 출판</span>
-                </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge">✍️ 디지털 자서전</span>
-                  <span class="diag-num">#04</span>
-                </div>
-                <h4 class="diag-title">내 인생의 서사 기록</h4>
-                <div class="diag-subcopy">
-                  “한 편의 영화 같은 나의 역사책, 소중한 가족과 후대에 전하는 가장 위대한 유산”
-                </div>
-                <p class="diag-desc">
-                  전문 작가와의 1:1 구술 인터뷰와 옛 사진 복원을 통해 세상에 단 하나뿐인 나의 생애사를 품격 있는 디지털 서재와 양장본 책자로 완성합니다.
-                </p>
-              </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('memoir', document.getElementById('diagCard_memoir'));">
-                  <span>🔍 맞춤 솔루션 진단 & 처방</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('memoir');" title="관리자 지정 디지털 자서전 칼럼 및 서재 바로가기">
-                  <span>📚 관련 자서전 칼럼/서재 바로가기</span>
-                  <span class="arrow">➔</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 5. 💌 아름다운 마침표와 감사 -->
+            <!-- 4. 💌 아름다운 마침표와 감사 -->
             <div class="diag-card diag-theme-party" onclick="showTestResult('party', this)" id="diagCard_party" role="button" tabindex="0">
               <div>
                 <!-- 이미지 썸네일 -->
@@ -6867,7 +6799,7 @@
                 </div>
                 <div class="diag-card-top">
                   <span class="diag-badge">💌 아름다운 마침표와 감사</span>
-                  <span class="diag-num">#05</span>
+                  <span class="diag-num">#04</span>
                 </div>
                 <h4 class="diag-title">생전 엔딩 파티를 위한 서사</h4>
                 <div class="diag-subcopy">
@@ -10374,9 +10306,9 @@
       if (resultBox) {
         resultBox.style.display = 'none';
       }
-      const combobox = document.getElementById('diagComboboxCard');
-      if (combobox) {
-        combobox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const scrollTarget = document.getElementById('diagComboboxCard') || document.getElementById('diagCardsGrid') || document.getElementById('test');
+      if (scrollTarget) {
+        scrollTarget.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
 
