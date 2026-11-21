@@ -2276,13 +2276,17 @@
             <span class="subnav-icon">✍️</span>
             <span>1. 출판 프로젝트 &amp; AI윤문</span>
           </button>
+          <button type="button" class="subnav-link" id="sideSub_memoir_webbooks" onclick="selectMemoirFromSidebar('webbooks')">
+            <span class="subnav-icon">📱</span>
+            <span>2. 개인 서재 모바일 웹북 배포</span>
+          </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_published" onclick="selectMemoirFromSidebar('published')">
             <span class="subnav-icon">📚</span>
-            <span>2. 완간 자서전 도서 &amp; PDF</span>
+            <span>3. 완간 자서전 도서 &amp; PDF</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_banner" onclick="selectMemoirFromSidebar('banner')">
             <span class="subnav-icon">📢</span>
-            <span>3. 메인 CTA 배너 설정</span>
+            <span>4. 메인 CTA 배너 설정</span>
           </button>
         </div>
 
@@ -3183,6 +3187,9 @@
               </p>
             </div>
             <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+              <button type="button" onclick="openPersonalWebbookModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1.2px solid #c29b38; box-shadow: 0 4px 12px rgba(21,54,38,0.22);" title="완성된 자서전을 어르신 개인 서재의 모바일 웹북 탭에 바로 등록합니다">
+                <span>📱</span> 개인 서재 모바일 웹북 올리기
+              </button>
               <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
                 <span>📱</span> 코치 글쓰기 앱 열기 ➔
               </a>
@@ -3296,7 +3303,52 @@
           </div>
         </div>
 
-        <!-- 04-2. 완간된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동) -->
+        <!-- 04-2. 📱 개인 서재 모바일 웹북 등록 · 배포 관리 (각 어르신 my-room.html 자동 연동) -->
+        <div class="panel-card" id="personalWebbooksSection" style="margin-top: 24px; border: 1.6px solid rgba(43, 106, 56, 0.3); background: linear-gradient(180deg, rgba(43, 106, 56, 0.03) 0%, var(--bg-card) 120px);">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" style="background: rgba(43, 106, 56, 0.12); color: #1e4d35;">📱</span>
+              <div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #1e4d35; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
+                  개인 서재 실시간 클라우드 연동
+                </div>
+                <h2 class="panel-title" style="margin: 0;">04-2. 개인 서재 모바일 웹북 등록 · 배포 관리</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0; line-height: 1.55;">
+                  완성된 자서전을 어르신별 <strong>개인 서재(<code>my-room.html</code> → 📱 모바일 웹북)</strong>에 직접 올리고 관리합니다.
+                  등록 즉시 클라우드(Firestore)에 저장되어 어르신이 <strong>성함(+전화번호 뒤 4자리)</strong>으로 로그인하거나 <strong>가족 전용 URL</strong>로 접속하면 바로 플립북과 음성 낭독으로 감상하실 수 있습니다.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn-save-setting" onclick="openPersonalWebbookModal()" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #ffffff; border: 1px solid #c29b38; font-weight: 850;">
+                <span>➕</span> 완성 자서전 개인 웹북 올리기
+              </button>
+              <button type="button" class="btn-save-setting" onclick="syncPersonalWebbooksFromCloud(true)" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                <span>☁️</span> 클라우드 동기화
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 155px;">대상 어르신 (매칭 키)</th>
+                  <th>모바일 웹북 도서명 &amp; 부제</th>
+                  <th style="width: 110px; text-align: center;">수록 분량</th>
+                  <th style="width: 125px; text-align: center;">개인 서재 공개</th>
+                  <th style="width: 105px;">배포/수정일</th>
+                  <th style="width: 245px; text-align: center;">개인 웹북 관리 &amp; 링크</th>
+                </tr>
+              </thead>
+              <tbody id="personalWebbooksTableBody">
+                <!-- JS 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 04-3. 완간된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동) -->
         <div class="panel-card" id="publishedMemoirsSection" style="margin-top: 24px;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
@@ -5681,6 +5733,120 @@
     </div>
   </div>
 
+  <!-- ================= 모달 7) 📱 개인 서재 모바일 웹북 등록 · 편집 모달 ================= -->
+  <div class="cms-modal-overlay" id="personalWebbookModal" onclick="closePersonalWebbookModalOnOverlay(event)" style="z-index: 100020;">
+    <div class="coach-modal-card" style="max-width: 820px; width: 95%; max-height: 92vh; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 14px;">
+        <div>
+          <span style="display: inline-block; padding: 2px 10px; border-radius: 999px; background: #1e4d35; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 5px;">
+            개인 서재(my-room.html) 실시간 배포
+          </span>
+          <h3 style="font-family: 'Noto Serif KR', serif; font-size: 1.25rem; font-weight: 850; color: var(--text-main); margin: 0;" id="personalWebbookModalTitle">
+            📱 완성 자서전 → 개인 서재 모바일 웹북 올리기
+          </h3>
+        </div>
+        <button type="button" onclick="closePersonalWebbookModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">✕</button>
+      </div>
+
+      <form id="personalWebbookForm" onsubmit="handlePersonalWebbookSubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <input type="hidden" id="wbEditDocId">
+        <input type="hidden" id="wbEditRecordType" value="personal_webbook">
+
+        <!-- 0. 기존 출판 프로젝트 / 서재 고객 원클릭 불러오기 -->
+        <div style="background: rgba(194, 155, 56, 0.08); border: 1.3px solid rgba(194, 155, 56, 0.35); border-radius: 12px; padding: 12px 14px;">
+          <label style="font-size: 0.82rem; font-weight: 850; color: #8c6610; display: block; margin-bottom: 6px;">
+            ⚡ 기존 출판 프로젝트 또는 서재 신청 고객에서 원클릭 불러오기 (선택)
+          </label>
+          <select id="wbImportSourceSelect" class="setting-input" onchange="importSourceIntoPersonalWebbook(this.value)" style="background: #ffffff;">
+            <option value="">-- 직접 새로 입력하거나, 아래에서 어르신 프로젝트/고객을 선택하세요 --</option>
+          </select>
+        </div>
+
+        <!-- 1. 대상 개인 서재 매칭 정보 -->
+        <div style="background: rgba(43, 106, 56, 0.05); border: 1.3px solid rgba(43, 106, 56, 0.25); border-radius: 12px; padding: 14px 16px;">
+          <div style="font-size: 0.86rem; font-weight: 850; color: #1e4d35; margin-bottom: 10px;">
+            1️⃣ 대상 어르신 개인 서재 지정 (로그인 자동 연동 키)
+          </div>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">대상 어르신 성함 *</label>
+              <input type="text" id="wbOwnerName" class="setting-input" placeholder="예: 홍길동 (어르신 생략 가능)" required>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">전화번호 뒤 4자리 (권장)</label>
+              <input type="text" id="wbOwnerPhone4" class="setting-input" placeholder="예: 5678 (동명이인 구분)" maxlength="13">
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">개인 서재 공개 여부</label>
+              <select id="wbIsPublic" class="setting-input" style="background: #ffffff;">
+                <option value="true">🌐 개인 서재 즉시 노출</option>
+                <option value="false">🔒 비공개 임시 보관</option>
+              </select>
+            </div>
+          </div>
+          <p style="font-size: 0.77rem; color: var(--text-muted); margin: 8px 0 0; line-height: 1.45;">
+            💡 어르신이 <strong>[나의 서재]</strong>에서 성함(+전화번호 뒤 4자리)으로 로그인하면, 이 웹북이 해당 어르신의 <strong>📱 모바일 웹북 탭</strong>에 자동 표시됩니다. (가족 공유 전용 URL도 함께 생성됩니다)
+          </p>
+        </div>
+
+        <!-- 2. 표지 및 맺음말 설정 -->
+        <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px;">
+          <div style="font-size: 0.86rem; font-weight: 850; color: var(--text-main);">
+            2️⃣ 모바일 웹북 표지 &amp; 맺음말
+          </div>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px;">
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">모바일 웹북 제목 *</label>
+              <input type="text" id="wbBookTitle" class="setting-input" placeholder="예: 어머니의 뜰, 눈부신 결" required>
+            </div>
+            <div>
+              <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">지은이 / 엮은이 표기</label>
+              <input type="text" id="wbBookAuthor" class="setting-input" placeholder="예: 지은이: 홍길동 어르신 · 엮은이: 여백과 결">
+            </div>
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">표지 부제 / 한 줄 소개</label>
+            <input type="text" id="wbBookSubtitle" class="setting-input" placeholder="예: 지나온 세월의 결을 다듬어 사랑하는 가족에게 전하는 단 한 권의 인생 회고록">
+          </div>
+          <div>
+            <label style="font-size: 0.8rem; font-weight: 800; color: var(--text-main); display: block; margin-bottom: 4px;">맺음말 (마지막 페이지 가족에게 전하는 인사)</label>
+            <textarea id="wbEndingMessage" class="setting-textarea" rows="2" placeholder="예: 사랑하는 자녀와 손주들아, 힘들 때마다 이 웹북을 펼쳐 할머니의 젊은 날과 응원을 기억해 다오."></textarea>
+          </div>
+        </div>
+
+        <!-- 3. 챕터(장)별 완성 원고 & 복원 사진 빌더 -->
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+            <div>
+              <div style="font-size: 0.88rem; font-weight: 850; color: var(--text-main);">
+                3️⃣ 장(챕터)별 완성 원고 &amp; 옛 복원 사진 구성
+              </div>
+              <div style="font-size: 0.77rem; color: var(--text-muted); margin-top: 2px;">
+                사진 파일은 자동 압축되어 클라우드에 안전하게 저장되며, 본문은 어르신 서재에서 플립북 및 🔊 음성 낭독으로 제공됩니다.
+              </div>
+            </div>
+            <button type="button" onclick="addPersonalWebbookChapterRow()" class="btn-save-setting" style="background: #1e4d35; color: #fff; font-size: 0.8rem; padding: 7px 12px; border: none;">
+              ➕ 새 장(페이지) 추가
+            </button>
+          </div>
+
+          <div id="wbChaptersEditorList" style="display: flex; flex-direction: column; gap: 12px;">
+            <!-- JS 동적 챕터 에디터 카드 -->
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-color);">
+          <button type="button" class="btn-save-setting" onclick="closePersonalWebbookModal()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+            취소
+          </button>
+          <button type="submit" id="btnSubmitPersonalWebbook" class="btn-save-setting" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #ffffff; border: 1px solid #c29b38; font-weight: 850; padding: 10px 20px;">
+            ☁️ 개인 서재 모바일 웹북에 올리기 (저장·배포)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script>
     // =========================================================================
     // 여백과 결 통합 관리자 콘솔 엔진
@@ -6354,9 +6520,11 @@
           fbApp = firebase.app();
         }
         fbDb = firebase.firestore();
+        window.db = fbDb; // 자서전 프로젝트·개인 모바일 웹북 클라우드 동기화 공용 참조
         console.log('[Firebase Admin] 클라우드 DB 연결 성공 (yebaek-bfa2c)');
         setTimeout(() => {
           if (typeof initAdminFirebaseArticleListener === 'function') initAdminFirebaseArticleListener();
+          if (typeof initAdminMemoirListener === 'function') initAdminMemoirListener();
         }, 300);
       }
     } catch (fbErr) {
@@ -13568,7 +13736,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               </select>
             </td>
             <td style="text-align:center;">
-              <div style="display:inline-flex; gap:6px;">
+              <div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">
+                <button class="btn-action-sm" onclick="openPersonalWebbookForClient('${escapeHtml(c.name)}', '${escapeHtml(c.phone || '')}')" style="background:#1e4d35; color:#f6e7c1; font-weight:800;" title="이 어르신의 개인 서재 모바일 웹북에 완성 자서전 등록">📱 웹북</button>
                 <button class="btn-action-sm" onclick="editArchiveClientMemo('${c.id}')" style="background:var(--accent-light); color:var(--accent);">메모</button>
                 <button class="btn-action-sm del" onclick="deleteArchiveClient('${c.id}')">삭제</button>
               </div>
@@ -16369,6 +16538,10 @@ ${coachAppUrl}
       if (subTab === 'projects') {
         targetId = 'memoirProjectsCard';
         activeBtnId = 'sideSub_memoir_projects';
+      } else if (subTab === 'webbooks') {
+        targetId = 'personalWebbooksSection';
+        activeBtnId = 'sideSub_memoir_webbooks';
+        if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
       } else if (subTab === 'published') {
         targetId = 'publishedMemoirsSection';
         activeBtnId = 'sideSub_memoir_published';
@@ -16936,17 +17109,23 @@ ${coachAppUrl}
 
   function saveMemoirProjects(projects) {
     localStorage.setItem('yebaek_memoir_projects', JSON.stringify(projects));
-    if (typeof db !== 'undefined' && db) {
+    var firestoreDb = (typeof window.db !== 'undefined' && window.db) ? window.db : ((typeof fbDb !== 'undefined' && fbDb) ? fbDb : null);
+    if (firestoreDb) {
       projects.forEach(function(p) {
+        if (!p || !p.id) return;
         try {
-          db.collection('memoir_projects').doc(p.id).set(p, { merge: true });
-        } catch(err) {}
+          firestoreDb.collection('memoir_projects').doc(p.id).set(p, { merge: true });
+        } catch(err) {
+          console.warn('[Memoir Firestore Save]', err);
+        }
       });
     }
   }
 
   function renderMemoirDashboard() {
-    var projects = getMemoirProjects();
+    var allRecords = getMemoirProjects();
+    // 단독 등록된 개인 서재 모바일 웹북은 04-2 전용 패널에서 관리하고, 04-1 출판 파이프라인에는 프로젝트만 표시
+    var projects = allRecords.filter(function(p) { return p && p.recordType !== 'personal_webbook'; });
 
     var total = projects.length;
     var cntConsult = 0;
@@ -17286,11 +17465,17 @@ ${coachAppUrl}
           html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족용 디지털 플립북 링크 생성 및 가족 승인 요청">';
           html += '<span>👨‍👩‍👧</span> 가족 승인요청';
           html += '</button>';
+          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="이 어르신의 개인 서재 모바일 웹북에 올리기/수정">';
+          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북';
+          html += '</button>';
         }
         // [4단계] 가족 승인 단계
         else if (p.status === 'family_approved') {
           html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 플립북 링크 복사">';
           html += '<span>📖</span> 플립북 확인';
+          html += '</button>';
+          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="개인 서재 모바일 웹북에 등록·편집">';
+          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북';
           html += '</button>';
           html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 최종 확인 완료 후 양장본 인쇄 발주 단계로 진입">';
           html += '<span>🖨️</span> 인쇄 발주로 넘기기';
@@ -17301,13 +17486,16 @@ ${coachAppUrl}
           html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="신국판 152×225 양장본 인쇄 조판 미리보기 및 PDF">';
           html += '<span>🖨️</span> 양장본 인쇄 조판';
           html += '</button>';
+          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="완성 자서전을 개인 서재 모바일 웹북에 올리기/수정">';
+          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북 올리기';
+          html += '</button>';
           if (p.status === 'printing') {
-            html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 서재에 자동 전시">';
+            html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 개인 서재 모바일 웹북에 자동 전시">';
             html += '✅ 완간 확정';
             html += '</button>';
           } else if (p.status === 'completed') {
-            html += '<a href="my-room.html" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="나의 서재에서 완간본 보기">';
-            html += '<span>📚</span> 완간 서재';
+            html += '<a href="my-room.html?memoir=' + encodeURIComponent(p.id) + '" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="개인 서재 모바일 웹북 열람">';
+            html += '<span>📚</span> 완간 웹북';
             html += '</a>';
           }
         }
@@ -17323,6 +17511,7 @@ ${coachAppUrl}
     });
 
     tbody.innerHTML = html;
+    if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
   }
 
   // =========================================================================
@@ -17954,7 +18143,13 @@ ${coachAppUrl}
 
     p.status = 'completed';
     p.statusLabel = '출판 완간';
-    p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    p.webbookPublished = true;
+    p.isWebbookPublic = true;
+    p.ownerName = normalizeWebbookOwnerName(p.ownerName || p.clientName || '어르신');
+    p.ownerPhoneLast4 = extractWebbookPhoneLast4(p.ownerPhoneLast4 || p.applicantPhone || '');
+    if (!p.bookTitle) p.bookTitle = (p.clientName || '어르신') + '의 여백과 결';
+    p.webbookUpdatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    p.updatedAt = p.webbookUpdatedAt;
     saveMemoirProjects(projects);
 
     // 하단 완간 도서 목록(publishedMemoirs)에 자동 등록
@@ -18787,23 +18982,674 @@ ${coachAppUrl}
     }
   }
 
-  function initAdminMemoirListener() {
-    if (typeof db === 'undefined' || !db) return;
+  function getMemoirFirestoreDb() {
+    if (typeof window.db !== 'undefined' && window.db) return window.db;
+    if (typeof fbDb !== 'undefined' && fbDb) return fbDb;
     try {
-      db.collection('memoir_projects').onSnapshot(function(snapshot) {
+      if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length) {
+        return firebase.firestore();
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function normalizeWebbookOwnerName(raw) {
+    return String(raw || '')
+      .replace(/어르신|님$/g, '')
+      .replace(/\s+/g, '')
+      .trim();
+  }
+
+  function extractWebbookPhoneLast4(raw) {
+    var digits = String(raw || '').replace(/\D/g, '');
+    if (digits.length >= 4) return digits.slice(-4);
+    return digits;
+  }
+
+  function getPersonalWebbookUrl(docId) {
+    var base = window.location.origin + window.location.pathname.replace('admin.html', '');
+    return base + 'my-room.html?memoir=' + encodeURIComponent(docId);
+  }
+
+  // =========================================================================
+  // 📱 개인 서재 모바일 웹북 등록 · 편집 · 클라우드 배포 관리 엔진
+  // =========================================================================
+  var wbEditorChaptersState = [];
+
+  function getPersonalWebbooksList() {
+    var all = getMemoirProjects();
+    return all.filter(function(p) {
+      return p && (p.webbookPublished === true || p.recordType === 'personal_webbook' || p.status === 'completed');
+    });
+  }
+
+  function renderPersonalWebbooksTable() {
+    var tbody = document.getElementById('personalWebbooksTableBody');
+    if (!tbody) return;
+
+    var list = getPersonalWebbooksList();
+    if (!list.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 28px; color:#94a3b8;">아직 개인 서재에 등록된 모바일 웹북이 없습니다. 상단의 <strong>[➕ 완성 자서전 개인 웹북 올리기]</strong> 버튼을 눌러 어르신 개인 서재에 올려보세요.</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = list.map(function(wb) {
+      var ownerClean = wb.ownerName || normalizeWebbookOwnerName(wb.clientName) || '어르신';
+      var phone4 = wb.ownerPhoneLast4 || extractWebbookPhoneLast4(wb.applicantPhone || '');
+      var bookTitle = wb.bookTitle || ((wb.clientName || ownerClean) + '의 여백과 결');
+      var subtitle = wb.bookSubtitle || wb.notes || '어르신의 귀한 생애 기록 모바일 웹북';
+      var chapters = Array.isArray(wb.chapters) ? wb.chapters.filter(function(ch) {
+        return (ch.content && ch.content.trim()) || ch.image || (ch.photos && ch.photos.length);
+      }) : [];
+      var photoCnt = chapters.reduce(function(acc, ch) {
+        var c = ch.image ? 1 : 0;
+        if (ch.photos && ch.photos.length) c = Math.max(c, ch.photos.length);
+        return acc + c;
+      }, 0);
+      var isPub = wb.isWebbookPublic !== false;
+      var updatedDate = wb.webbookUpdatedAt || wb.updatedAt || wb.createdAt || '-';
+      var viewUrl = 'my-room.html?memoir=' + encodeURIComponent(wb.id);
+      var sourceTag = wb.recordType === 'personal_webbook'
+        ? '<span style="display:inline-block; padding:1px 6px; border-radius:4px; background:#ecfdf5; color:#15803d; font-size:0.71rem; font-weight:800;">개인 서재 직접 등록</span>'
+        : '<span style="display:inline-block; padding:1px 6px; border-radius:4px; background:#fef9e7; color:#936f1c; font-size:0.71rem; font-weight:800;">출판 프로젝트 연동</span>';
+
+      return (
+        '<tr>' +
+          '<td>' +
+            '<div style="font-weight:850; color:var(--text-main); font-size:0.93rem;">👵 ' + escapeHtml(ownerClean) + ' 어르신</div>' +
+            '<div style="font-size:0.76rem; color:var(--text-muted); margin-top:3px;">' +
+              (phone4 ? '🔑 뒤 4자리: <strong style="color:#1e4d35;">' + escapeHtml(phone4) + '</strong>' : '🔑 성함 자동 매칭') +
+            '</div>' +
+            '<div style="margin-top:4px;">' + sourceTag + '</div>' +
+          '</td>' +
+          '<td>' +
+            '<div style="font-weight:850; color:var(--text-main); font-size:0.92rem; line-height:1.35;">📖 ' + escapeHtml(bookTitle) + '</div>' +
+            '<div style="font-size:0.78rem; color:var(--text-muted); margin-top:3px; line-height:1.4;">' + escapeHtml(subtitle.length > 65 ? subtitle.slice(0, 65) + '…' : subtitle) + '</div>' +
+            '<div style="font-size:0.71rem; color:#94a3b8; font-family:monospace; margin-top:2px;">ID: ' + escapeHtml(wb.id) + '</div>' +
+          '</td>' +
+          '<td style="text-align:center;">' +
+            '<div style="font-weight:850; color:#1e4d35; font-size:0.86rem;">총 ' + (chapters.length + 3) + '쪽</div>' +
+            '<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">' + chapters.length + '장 · 사진 ' + photoCnt + '장</div>' +
+          '</td>' +
+          '<td style="text-align:center;">' +
+            '<select class="status-select-sm" onchange="togglePersonalWebbookPublic(\'' + wb.id + '\', this.value)" style="background:#fff;">' +
+              '<option value="true" ' + (isPub ? 'selected' : '') + '>🌐 서재 공개</option>' +
+              '<option value="false" ' + (!isPub ? 'selected' : '') + '>🔒 비공개</option>' +
+            '</select>' +
+          '</td>' +
+          '<td style="font-size:0.82rem; color:var(--text-muted);">' + escapeHtml(updatedDate) + '</td>' +
+          '<td style="text-align:center;">' +
+            '<div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">' +
+              '<a href="' + viewUrl + '" target="_blank" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; text-decoration:none; font-weight:800;" title="모바일 웹북 실제 화면 열기">📱 보기</a>' +
+              '<button type="button" class="btn-action-sm" onclick="copyPersonalWebbookShareLink(\'' + wb.id + '\')" style="background:#fef7e6; color:#8c6610; border:1px solid #e6cf8b; font-weight:800;" title="가족 공유 전용 URL 복사">🔗 URL</button>' +
+              '<button type="button" class="btn-action-sm" onclick="openPersonalWebbookModal(\'' + wb.id + '\')" style="background:var(--accent-light); color:var(--accent); font-weight:800;">✏️ 편집</button>' +
+              '<button type="button" class="btn-action-sm del" onclick="removePersonalWebbook(\'' + wb.id + '\')" title="개인 서재 웹북 배포 해제 또는 삭제">🗑️</button>' +
+            '</div>' +
+          '</td>' +
+        '</tr>'
+      );
+    }).join('');
+  }
+
+  function populatePersonalWebbookImportSelect() {
+    var sel = document.getElementById('wbImportSourceSelect');
+    if (!sel) return;
+
+    var html = '<option value="">-- 직접 새로 입력하거나, 아래에서 어르신 프로젝트/서재 고객을 선택하세요 --</option>';
+    var projects = getMemoirProjects().filter(function(p) { return p && p.recordType !== 'personal_webbook'; });
+    if (projects.length) {
+      html += '<optgroup label="📖 04-1. 자서전 출판 프로젝트 (원고·사진 자동 불러오기)">';
+      projects.forEach(function(p) {
+        var label = (p.clientName || '어르신') + ' · ' + (p.packageLabel || '자서전') + ' [' + (p.statusLabel || p.status || '') + ']';
+        html += '<option value="proj:' + escapeHtml(p.id) + '">' + escapeHtml(label) + '</option>';
+      });
+      html += '</optgroup>';
+    }
+
+    if (typeof getArchiveClients === 'function') {
+      var clients = getArchiveClients() || [];
+      if (clients.length) {
+        html += '<optgroup label="🏛️ 06-1. 나의 서재 구축 신청 고객">';
+        clients.forEach(function(c) {
+          var clabel = (c.name || '고객') + ' (' + (c.phone || '-') + ') · ' + (c.category || '서재 구축');
+          html += '<option value="client:' + escapeHtml(c.id) + '">' + escapeHtml(clabel) + '</option>';
+        });
+        html += '</optgroup>';
+      }
+    }
+    sel.innerHTML = html;
+  }
+
+  function buildDefaultWebbookChapters() {
+    return [
+      { id: 1, kicker: 'CHAPTER 01 · 유년과 고향의 기억', title: '제1장. 유년과 고향의 기억', subtitle: '', image: '', caption: '', content: '' },
+      { id: 2, kicker: 'CHAPTER 02 · 청춘의 열정과 도전', title: '제2장. 청춘의 열정과 도전', subtitle: '', image: '', caption: '', content: '' },
+      { id: 3, kicker: 'CHAPTER 03 · 사랑과 가족의 결', title: '제3장. 사랑과 가족의 결', subtitle: '', image: '', caption: '', content: '' }
+    ];
+  }
+
+  function normalizeChaptersForEditor(rawChapters) {
+    if (!Array.isArray(rawChapters) || !rawChapters.length) return buildDefaultWebbookChapters();
+    return rawChapters.map(function(ch, idx) {
+      var firstPhoto = (ch.photos && ch.photos.length > 0) ? ch.photos[0] : null;
+      return {
+        id: ch.id || (idx + 1),
+        kicker: ch.kicker || ('CHAPTER 0' + (idx + 1) + ' · 생애 회고록'),
+        title: ch.title || ('제' + (idx + 1) + '장'),
+        subtitle: ch.subtitle || '',
+        image: ch.image || (firstPhoto ? firstPhoto.src : '') || '',
+        caption: ch.caption || (firstPhoto ? (firstPhoto.caption || '') : '') || '',
+        content: ch.content || ch.transcript || ''
+      };
+    });
+  }
+
+  function syncChapterInputsToState() {
+    var cards = document.querySelectorAll('#wbChaptersEditorList .wb-chapter-editor-card');
+    if (!cards.length) return;
+    cards.forEach(function(card, idx) {
+      if (!wbEditorChaptersState[idx]) return;
+      var kEl = card.querySelector('.wb-ch-kicker');
+      var tEl = card.querySelector('.wb-ch-title');
+      var iEl = card.querySelector('.wb-ch-image');
+      var cEl = card.querySelector('.wb-ch-caption');
+      var bEl = card.querySelector('.wb-ch-content');
+      if (kEl) wbEditorChaptersState[idx].kicker = kEl.value.trim();
+      if (tEl) wbEditorChaptersState[idx].title = tEl.value.trim();
+      if (iEl) wbEditorChaptersState[idx].image = iEl.value.trim();
+      if (cEl) wbEditorChaptersState[idx].caption = cEl.value.trim();
+      if (bEl) wbEditorChaptersState[idx].content = bEl.value;
+    });
+  }
+
+  function renderPersonalWebbookChapterEditors() {
+    var wrap = document.getElementById('wbChaptersEditorList');
+    if (!wrap) return;
+
+    if (!wbEditorChaptersState.length) {
+      wbEditorChaptersState = buildDefaultWebbookChapters();
+    }
+
+    wrap.innerHTML = wbEditorChaptersState.map(function(ch, idx) {
+      var hasImg = !!(ch.image && ch.image.trim());
+      return (
+        '<div class="wb-chapter-editor-card" style="background:#ffffff; border:1.2px solid #cbd5e1; border-radius:12px; padding:12px 14px; display:flex; flex-direction:column; gap:8px;">' +
+          '<div style="display:flex; align-items:center; justify-content:space-between; gap:8px; flex-wrap:wrap; border-bottom:1px dashed #e2e8f0; padding-bottom:6px;">' +
+            '<strong style="font-size:0.86rem; color:#1e4d35;">📄 ' + (idx + 1) + '번째 장 (웹북 ' + (idx + 3) + '쪽)</strong>' +
+            '<div style="display:flex; gap:5px;">' +
+              '<button type="button" onclick="movePersonalWebbookChapter(' + idx + ', -1)" ' + (idx === 0 ? 'disabled' : '') + ' style="padding:3px 7px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; font-size:0.74rem; cursor:pointer;">↑</button>' +
+              '<button type="button" onclick="movePersonalWebbookChapter(' + idx + ', 1)" ' + (idx === wbEditorChaptersState.length - 1 ? 'disabled' : '') + ' style="padding:3px 7px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; font-size:0.74rem; cursor:pointer;">↓</button>' +
+              '<button type="button" onclick="removePersonalWebbookChapterRow(' + idx + ')" style="padding:3px 8px; border-radius:6px; border:1px solid #fecaca; background:#fef2f2; color:#dc2626; font-size:0.74rem; font-weight:750; cursor:pointer;">삭제</button>' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:grid; grid-template-columns:1fr 1.3fr; gap:8px;">' +
+            '<div>' +
+              '<label style="font-size:0.75rem; font-weight:750; color:var(--text-muted); display:block; margin-bottom:2px;">상단 분류 표기 (Kicker)</label>' +
+              '<input type="text" class="setting-input wb-ch-kicker" value="' + escapeHtml(ch.kicker || '') + '" placeholder="예: CHAPTER 0' + (idx + 1) + ' · 유년과 고향" style="font-size:0.82rem; padding:7px 10px;">' +
+            '</div>' +
+            '<div>' +
+              '<label style="font-size:0.75rem; font-weight:750; color:var(--text-muted); display:block; margin-bottom:2px;">장 제목 *</label>' +
+              '<input type="text" class="setting-input wb-ch-title" value="' + escapeHtml(ch.title || '') + '" placeholder="예: 제' + (idx + 1) + '장. 섬진강 모래톱과 어린 날" style="font-size:0.82rem; padding:7px 10px;">' +
+            '</div>' +
+          '</div>' +
+          '<div style="display:grid; grid-template-columns:1.2fr 1fr auto; gap:8px; align-items:end;">' +
+            '<div>' +
+              '<label style="font-size:0.75rem; font-weight:750; color:var(--text-muted); display:block; margin-bottom:2px;">옛 복원 사진 (파일 첨부 또는 이미지 URL)</label>' +
+              '<input type="text" class="setting-input wb-ch-image" value="' + escapeHtml(ch.image || '') + '" placeholder="우측 [사진 첨부] 버튼 또는 이미지 경로" style="font-size:0.8rem; padding:7px 10px;">' +
+            '</div>' +
+            '<div>' +
+              '<label style="font-size:0.75rem; font-weight:750; color:var(--text-muted); display:block; margin-bottom:2px;">사진 설명 (캡션)</label>' +
+              '<input type="text" class="setting-input wb-ch-caption" value="' + escapeHtml(ch.caption || '') + '" placeholder="예: 1968년 가을 가족사진 컬러 복원" style="font-size:0.8rem; padding:7px 10px;">' +
+            '</div>' +
+            '<div>' +
+              '<input type="file" id="wbChPhotoFile_' + idx + '" accept="image/*" style="display:none;" onchange="handlePersonalWebbookPhotoUpload(' + idx + ', event)">' +
+              '<button type="button" onclick="document.getElementById(\'wbChPhotoFile_' + idx + '\').click()" style="padding:7px 11px; border-radius:8px; border:1px solid #c29b38; background:#fef9e7; color:#8c6610; font-size:0.78rem; font-weight:800; cursor:pointer; white-space:nowrap;">🖼️ 사진 첨부</button>' +
+            '</div>' +
+          '</div>' +
+          (hasImg ? (
+            '<div style="display:flex; align-items:center; gap:10px; background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">' +
+              '<img src="' + escapeHtml(ch.image) + '" alt="첨부 사진 미리보기" style="width:54px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #cbd5e1;" onerror="this.style.display=\'none\'">' +
+              '<span style="font-size:0.76rem; color:#15803d; font-weight:750; flex:1;">✅ 사진이 연결되었습니다</span>' +
+              '<button type="button" onclick="clearPersonalWebbookChapterPhoto(' + idx + ')" style="padding:3px 8px; border-radius:6px; border:1px solid #cbd5e1; background:#fff; font-size:0.72rem; cursor:pointer;">사진 제거</button>' +
+            '</div>'
+          ) : '') +
+          '<div>' +
+            '<label style="font-size:0.75rem; font-weight:750; color:var(--text-muted); display:block; margin-bottom:2px;">완성 자서전 본문 (문단 구분 엔터 지원 · 🔊 읽어주기 자동 낭독)</label>' +
+            '<textarea class="setting-textarea wb-ch-content" rows="4" placeholder="완성된 자서전 본문을 입력하거나 복사해 붙여넣으세요..." style="font-size:0.84rem; line-height:1.6;">' + escapeHtml(ch.content || '') + '</textarea>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  function addPersonalWebbookChapterRow() {
+    syncChapterInputsToState();
+    var nextNum = wbEditorChaptersState.length + 1;
+    wbEditorChaptersState.push({
+      id: nextNum,
+      kicker: 'CHAPTER 0' + nextNum + ' · 생애 회고록',
+      title: '제' + nextNum + '장. 소중한 기억',
+      subtitle: '',
+      image: '',
+      caption: '',
+      content: ''
+    });
+    renderPersonalWebbookChapterEditors();
+  }
+
+  function removePersonalWebbookChapterRow(idx) {
+    syncChapterInputsToState();
+    if (wbEditorChaptersState.length <= 1) {
+      alert('최소 1개 이상의 장이 필요합니다.');
+      return;
+    }
+    wbEditorChaptersState.splice(idx, 1);
+    renderPersonalWebbookChapterEditors();
+  }
+
+  function movePersonalWebbookChapter(idx, dir) {
+    syncChapterInputsToState();
+    var target = idx + dir;
+    if (target < 0 || target >= wbEditorChaptersState.length) return;
+    var tmp = wbEditorChaptersState[idx];
+    wbEditorChaptersState[idx] = wbEditorChaptersState[target];
+    wbEditorChaptersState[target] = tmp;
+    renderPersonalWebbookChapterEditors();
+  }
+
+  function clearPersonalWebbookChapterPhoto(idx) {
+    syncChapterInputsToState();
+    if (wbEditorChaptersState[idx]) {
+      wbEditorChaptersState[idx].image = '';
+      renderPersonalWebbookChapterEditors();
+    }
+  }
+
+  // 옛 복원 사진을 Firestore 1MB 한도에 맞게 자동 압축(최대 780px JPEG)
+  function handlePersonalWebbookPhotoUpload(idx, evt) {
+    var file = evt.target && evt.target.files && evt.target.files[0];
+    if (!file) return;
+    syncChapterInputsToState();
+
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var img = new Image();
+      img.onload = function() {
+        try {
+          var maxW = 780;
+          var w = img.width;
+          var h = img.height;
+          if (w > maxW) {
+            h = Math.round(h * (maxW / w));
+            w = maxW;
+          }
+          var canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+          var compressed = canvas.toDataURL('image/jpeg', 0.72);
+          if (wbEditorChaptersState[idx]) {
+            wbEditorChaptersState[idx].image = compressed;
+            if (!wbEditorChaptersState[idx].caption) {
+              wbEditorChaptersState[idx].caption = file.name.replace(/\.[^.]+$/, '');
+            }
+          }
+          renderPersonalWebbookChapterEditors();
+        } catch (err) {
+          console.error('[Webbook Photo Compress]', err);
+          alert('사진 처리 중 오류가 발생했습니다. 다른 이미지 파일을 선택해 주세요.');
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function importSourceIntoPersonalWebbook(val) {
+    if (!val) return;
+    if (val.indexOf('proj:') === 0) {
+      var projId = val.slice(5);
+      var projects = getMemoirProjects();
+      var p = projects.find(function(item) { return item.id === projId; });
+      if (!p) return;
+
+      document.getElementById('wbEditDocId').value = p.id;
+      document.getElementById('wbEditRecordType').value = p.recordType || 'memoir_project';
+      var cleanName = normalizeWebbookOwnerName(p.ownerName || p.clientName || '');
+      document.getElementById('wbOwnerName').value = cleanName;
+      document.getElementById('wbOwnerPhone4').value = p.ownerPhoneLast4 || extractWebbookPhoneLast4(p.applicantPhone || '');
+      document.getElementById('wbBookTitle').value = p.bookTitle || ((cleanName || '어르신') + '의 여백과 결');
+      document.getElementById('wbBookSubtitle').value = p.bookSubtitle || p.notes || '지나온 세월의 결을 다듬어 가족과 후대에 전하는 단 한 권의 인생 회고록';
+      document.getElementById('wbBookAuthor').value = p.bookAuthor || ('지은이: ' + (cleanName || '어르신') + ' 어르신 · 엮은이: 여백과 결 서사 기록팀');
+      document.getElementById('wbEndingMessage').value = p.bookEndingMessage || ((cleanName || '어르신') + ' 어르신의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n가족들과 이 링크를 나누며 따뜻한 추억을 오래도록 함께 기억해 주세요.');
+      document.getElementById('wbIsPublic').value = p.isWebbookPublic === false ? 'false' : 'true';
+      wbEditorChaptersState = normalizeChaptersForEditor(p.chapters);
+      renderPersonalWebbookChapterEditors();
+    } else if (val.indexOf('client:') === 0 && typeof getArchiveClients === 'function') {
+      var cid = val.slice(7);
+      var c = (getArchiveClients() || []).find(function(item) { return item.id === cid; });
+      if (!c) return;
+      var cname = normalizeWebbookOwnerName(c.name || '');
+      document.getElementById('wbOwnerName').value = cname;
+      document.getElementById('wbOwnerPhone4').value = extractWebbookPhoneLast4(c.phone || '');
+      if (!document.getElementById('wbBookTitle').value.trim()) {
+        document.getElementById('wbBookTitle').value = cname + ' 어르신의 여백과 결';
+      }
+      if (!document.getElementById('wbBookAuthor').value.trim()) {
+        document.getElementById('wbBookAuthor').value = '지은이: ' + cname + ' 어르신 · 엮은이: 여백과 결 서사 기록팀';
+      }
+    }
+  }
+
+  function openPersonalWebbookModal(docId, presetOwnerName, presetPhone) {
+    var modal = document.getElementById('personalWebbookModal');
+    if (!modal) return;
+
+    populatePersonalWebbookImportSelect();
+    var titleEl = document.getElementById('personalWebbookModalTitle');
+    var form = document.getElementById('personalWebbookForm');
+    if (form) form.reset();
+
+    var all = getMemoirProjects();
+    var existing = docId ? all.find(function(item) { return item.id === docId; }) : null;
+
+    if (existing) {
+      var cleanName = normalizeWebbookOwnerName(existing.ownerName || existing.clientName || '');
+      if (titleEl) titleEl.textContent = '📱 [' + (cleanName || '어르신') + '] 개인 서재 모바일 웹북 편집 · 배포';
+      document.getElementById('wbEditDocId').value = existing.id;
+      document.getElementById('wbEditRecordType').value = existing.recordType || 'memoir_project';
+      document.getElementById('wbOwnerName').value = cleanName;
+      document.getElementById('wbOwnerPhone4').value = existing.ownerPhoneLast4 || extractWebbookPhoneLast4(existing.applicantPhone || '');
+      document.getElementById('wbIsPublic').value = existing.isWebbookPublic === false ? 'false' : 'true';
+      document.getElementById('wbBookTitle').value = existing.bookTitle || ((cleanName || '어르신') + '의 여백과 결');
+      document.getElementById('wbBookSubtitle').value = existing.bookSubtitle || existing.notes || '지나온 세월의 결을 다듬어 가족과 후대에 전하는 단 한 권의 인생 회고록';
+      document.getElementById('wbBookAuthor').value = existing.bookAuthor || ('지은이: ' + (cleanName || '어르신') + ' 어르신 · 엮은이: 여백과 결 서사 기록팀');
+      document.getElementById('wbEndingMessage').value = existing.bookEndingMessage || ((cleanName || '어르신') + ' 어르신의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n사랑하는 가족과 이 링크를 나누며 따뜻한 추억을 함께 기억해 주세요.');
+      wbEditorChaptersState = normalizeChaptersForEditor(existing.chapters);
+    } else {
+      var presetClean = normalizeWebbookOwnerName(presetOwnerName || '');
+      var presetPhone4 = extractWebbookPhoneLast4(presetPhone || '');
+      if (titleEl) titleEl.textContent = presetClean ? ('📱 [' + presetClean + '] 어르신 개인 서재 모바일 웹북 올리기') : '📱 완성 자서전 → 개인 서재 모바일 웹북 올리기';
+      document.getElementById('wbEditDocId').value = '';
+      document.getElementById('wbEditRecordType').value = 'personal_webbook';
+      document.getElementById('wbOwnerName').value = presetClean;
+      document.getElementById('wbOwnerPhone4').value = presetPhone4;
+      document.getElementById('wbIsPublic').value = 'true';
+      document.getElementById('wbBookTitle').value = presetClean ? (presetClean + ' 어르신의 여백과 결') : '';
+      document.getElementById('wbBookSubtitle').value = '지나온 세월의 결을 다듬어 사랑하는 가족에게 전하는 단 한 권의 인생 회고록';
+      document.getElementById('wbBookAuthor').value = presetClean ? ('지은이: ' + presetClean + ' 어르신 · 엮은이: 여백과 결 서사 기록팀') : '';
+      document.getElementById('wbEndingMessage').value = presetClean
+        ? (presetClean + ' 어르신의 귀한 생애사가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n가족들과 이 링크를 나누며 따뜻한 추억을 오래도록 함께 기억해 주세요.')
+        : '소중한 삶의 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n사랑하는 가족과 함께 오래도록 기억해 주세요.';
+      wbEditorChaptersState = buildDefaultWebbookChapters();
+    }
+
+    renderPersonalWebbookChapterEditors();
+    modal.style.display = 'flex';
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function openPersonalWebbookForClient(clientName, clientPhone) {
+    // 이미 해당 고객의 개인 웹북이 등록돼 있으면 바로 편집, 없으면 신규 등록
+    var clean = normalizeWebbookOwnerName(clientName);
+    var p4 = extractWebbookPhoneLast4(clientPhone);
+    var existing = getPersonalWebbooksList().find(function(wb) {
+      var wn = normalizeWebbookOwnerName(wb.ownerName || wb.clientName);
+      var wp4 = wb.ownerPhoneLast4 || extractWebbookPhoneLast4(wb.applicantPhone || '');
+      return wn === clean && (!p4 || !wp4 || wp4 === p4);
+    });
+    if (existing) {
+      openPersonalWebbookModal(existing.id);
+    } else {
+      openPersonalWebbookModal('', clientName, clientPhone);
+    }
+  }
+
+  function closePersonalWebbookModal() {
+    var modal = document.getElementById('personalWebbookModal');
+    if (modal) {
+      modal.style.display = 'none';
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  function closePersonalWebbookModalOnOverlay(e) {
+    if (e.target && e.target.id === 'personalWebbookModal') closePersonalWebbookModal();
+  }
+
+  async function handlePersonalWebbookSubmit(e) {
+    e.preventDefault();
+    syncChapterInputsToState();
+
+    var ownerRaw = (document.getElementById('wbOwnerName').value || '').trim();
+    var ownerClean = normalizeWebbookOwnerName(ownerRaw);
+    var phone4 = extractWebbookPhoneLast4(document.getElementById('wbOwnerPhone4').value || '');
+    var bookTitle = (document.getElementById('wbBookTitle').value || '').trim();
+    var bookSubtitle = (document.getElementById('wbBookSubtitle').value || '').trim();
+    var bookAuthor = (document.getElementById('wbBookAuthor').value || '').trim();
+    var endingMessage = (document.getElementById('wbEndingMessage').value || '').trim();
+    var isPublic = document.getElementById('wbIsPublic').value !== 'false';
+    var existingId = (document.getElementById('wbEditDocId').value || '').trim();
+    var recordType = (document.getElementById('wbEditRecordType').value || 'personal_webbook').trim();
+
+    if (!ownerClean || !bookTitle) {
+      alert('대상 어르신 성함과 모바일 웹북 제목을 입력해 주세요.');
+      return;
+    }
+
+    var finalChapters = wbEditorChaptersState
+      .map(function(ch, i) {
+        var imgSrc = (ch.image || '').trim();
+        return {
+          id: i + 1,
+          kicker: (ch.kicker || ('CHAPTER 0' + (i + 1) + ' · 생애 회고록')).trim(),
+          title: (ch.title || ('제' + (i + 1) + '장')).trim(),
+          subtitle: (ch.subtitle || '').trim(),
+          image: imgSrc,
+          caption: (ch.caption || '').trim(),
+          photos: imgSrc ? [{ src: imgSrc, caption: (ch.caption || '').trim() }] : [],
+          content: (ch.content || '').trim(),
+          status: (ch.content && ch.content.trim().length > 20) ? 'completed' : 'in_progress'
+        };
+      })
+      .filter(function(ch) { return ch.content || ch.image || ch.title; });
+
+    if (!finalChapters.length) {
+      alert('최소 1개 이상의 장(내용 또는 사진)을 입력해 주세요.');
+      return;
+    }
+
+    var todayStr = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    var allProjects = getMemoirProjects();
+    var docId = existingId || ('wb_' + Date.now());
+    var existingIdx = allProjects.findIndex(function(item) { return item.id === docId; });
+    var baseDoc = existingIdx >= 0 ? Object.assign({}, allProjects[existingIdx]) : {
+      id: docId,
+      recordType: recordType || 'personal_webbook',
+      createdAt: todayStr,
+      status: 'completed',
+      statusLabel: '출판 완간',
+      packageLabel: '여백과 결 명품 자서전'
+    };
+
+    var updatedDoc = Object.assign(baseDoc, {
+      id: docId,
+      clientName: baseDoc.clientName || (ownerClean + ' 어르신'),
+      ownerName: ownerClean,
+      ownerPhoneLast4: phone4,
+      applicantPhone: baseDoc.applicantPhone || (phone4 ? ('010-****-' + phone4) : ''),
+      bookTitle: bookTitle,
+      bookSubtitle: bookSubtitle || '지나온 세월의 결을 다듬어 가족과 후대에 전하는 단 한 권의 인생 회고록',
+      bookAuthor: bookAuthor || ('지은이: ' + ownerClean + ' 어르신 · 엮은이: 여백과 결 서사 기록팀'),
+      bookEndingMessage: endingMessage,
+      chapters: finalChapters,
+      photosCount: finalChapters.filter(function(ch) { return !!ch.image; }).length,
+      webbookPublished: true,
+      isWebbookPublic: isPublic,
+      webbookUpdatedAt: todayStr,
+      updatedAt: todayStr,
+      publishedBy: 'admin'
+    });
+
+    // Firestore 문서 크기(1MB 한도) 사전 체크
+    try {
+      var byteSize = new Blob([JSON.stringify(updatedDoc)]).size;
+      if (byteSize > 930000) {
+        alert('⚠️ 첨부된 사진 용량 합계가 클라우드 한도(약 930KB)를 초과했습니다.\n사진 개수를 조금 줄이거나 외부 이미지 URL을 사용해 주세요. (현재: ' + Math.round(byteSize / 1024) + 'KB)');
+        return;
+      }
+    } catch (szErr) {}
+
+    var submitBtn = document.getElementById('btnSubmitPersonalWebbook');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ 개인 서재 클라우드 발행 중...';
+    }
+
+    if (existingIdx >= 0) {
+      allProjects[existingIdx] = updatedDoc;
+    } else {
+      allProjects.unshift(updatedDoc);
+    }
+    localStorage.setItem('yebaek_memoir_projects', JSON.stringify(allProjects));
+
+    var cloudSaved = false;
+    var firestoreDb = getMemoirFirestoreDb();
+    if (firestoreDb) {
+      try {
+        await firestoreDb.collection('memoir_projects').doc(docId).set(updatedDoc, { merge: true });
+        cloudSaved = true;
+      } catch (fbErr) {
+        console.warn('[Personal Webbook Firestore Save Error]', fbErr);
+      }
+    }
+
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '☁️ 개인 서재 모바일 웹북에 올리기 (저장·배포)';
+    }
+
+    closePersonalWebbookModal();
+    renderMemoirDashboard();
+    renderPersonalWebbooksTable();
+
+    var shareUrl = getPersonalWebbookUrl(docId);
+    try { navigator.clipboard.writeText(shareUrl); } catch (e) {}
+
+    alert(
+      '🎉 [' + ownerClean + ' 어르신] 개인 서재 모바일 웹북 등록이 완료되었습니다!' +
+      (cloudSaved ? '\n☁️ 클라우드(Firestore)에 실시간 저장되어 스마트폰·PC 어디서든 바로 열립니다.' : '\n💾 로컬 서재에 저장되었습니다.') +
+      '\n\n✅ 어르신 접속 방법:\n1) my-room.html에서 성함 [' + ownerClean + ']' + (phone4 ? ' + 뒤 4자리 [' + phone4 + ']' : '') + ' 로그인 → [📱 모바일 웹북] 탭 자동 표시\n2) 가족 공유 전용 URL (클립보드 복사됨):\n' + shareUrl
+    );
+  }
+
+  function togglePersonalWebbookPublic(docId, val) {
+    var all = getMemoirProjects();
+    var target = all.find(function(item) { return item.id === docId; });
+    if (!target) return;
+    target.isWebbookPublic = (val === 'true');
+    target.webbookUpdatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+    saveMemoirProjects(all);
+    renderPersonalWebbooksTable();
+  }
+
+  function copyPersonalWebbookShareLink(docId) {
+    var url = getPersonalWebbookUrl(docId);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(function() {
+        alert('🔗 어르신 개인 모바일 웹북 전용 링크가 복사되었습니다!\n\n가족 단톡방에 붙여넣기 하시면 바로 스마트폰 플립북과 음성 낭독으로 감상하실 수 있습니다:\n' + url);
+      }).catch(function() {
+        prompt('아래 개인 모바일 웹북 링크를 복사해 주세요:', url);
+      });
+    } else {
+      prompt('아래 개인 모바일 웹북 링크를 복사해 주세요:', url);
+    }
+  }
+
+  function removePersonalWebbook(docId) {
+    var all = getMemoirProjects();
+    var target = all.find(function(item) { return item.id === docId; });
+    if (!target) return;
+
+    var ownerClean = target.ownerName || normalizeWebbookOwnerName(target.clientName) || '어르신';
+    if (target.recordType === 'personal_webbook') {
+      if (!confirm('[' + ownerClean + ' 어르신]의 개인 서재 모바일 웹북을 영구 삭제하시겠습니까?')) return;
+      all = all.filter(function(item) { return item.id !== docId; });
+      localStorage.setItem('yebaek_memoir_projects', JSON.stringify(all));
+      var firestoreDb = getMemoirFirestoreDb();
+      if (firestoreDb) {
+        try { firestoreDb.collection('memoir_projects').doc(docId).delete(); } catch (e) {}
+      }
+    } else {
+      if (!confirm('[' + ownerClean + ' 어르신]의 개인 서재 모바일 웹북 배포만 해제하시겠습니까?\n(04-1 출판 프로젝트 원고는 유지됩니다)')) return;
+      target.webbookPublished = false;
+      target.isWebbookPublic = false;
+      saveMemoirProjects(all);
+    }
+    renderMemoirDashboard();
+    renderPersonalWebbooksTable();
+  }
+
+  async function syncPersonalWebbooksFromCloud(showAlert) {
+    var firestoreDb = getMemoirFirestoreDb();
+    if (!firestoreDb) {
+      if (showAlert) alert('클라우드 DB 연결을 확인 중입니다. 잠시 후 다시 시도해 주세요.');
+      return;
+    }
+    try {
+      var snapshot = await firestoreDb.collection('memoir_projects').get();
+      var mergedMap = {};
+      getMemoirProjects().forEach(function(item) {
+        if (item && item.id) mergedMap[item.id] = item;
+      });
+      var remoteCnt = 0;
+      snapshot.forEach(function(doc) {
+        var data = doc.data();
+        if (!data) return;
+        data.id = doc.id;
+        mergedMap[doc.id] = Object.assign({}, mergedMap[doc.id] || {}, data);
+        remoteCnt++;
+      });
+      var mergedList = Object.keys(mergedMap).map(function(k) { return mergedMap[k]; });
+      localStorage.setItem('yebaek_memoir_projects', JSON.stringify(mergedList));
+      renderMemoirDashboard();
+      renderPersonalWebbooksTable();
+      if (showAlert) alert('☁️ 클라우드에서 자서전·개인 모바일 웹북 ' + remoteCnt + '건을 최신 동기화했습니다.');
+    } catch (err) {
+      console.warn('[Personal Webbook Sync]', err);
+      if (showAlert) alert('클라우드 동기화 중 오류가 발생했습니다: ' + (err.message || err));
+    }
+  }
+
+  var _adminMemoirListenerBound = false;
+  function initAdminMemoirListener() {
+    var firestoreDb = getMemoirFirestoreDb();
+    if (!firestoreDb || _adminMemoirListenerBound) return;
+    _adminMemoirListenerBound = true;
+    try {
+      firestoreDb.collection('memoir_projects').onSnapshot(function(snapshot) {
         if (!snapshot || snapshot.empty) return;
-        var remoteProjects = [];
+        var mergedMap = {};
+        getMemoirProjects().forEach(function(localItem) {
+          if (localItem && localItem.id) mergedMap[localItem.id] = localItem;
+        });
         snapshot.forEach(function(doc) {
           var data = doc.data();
+          if (!data) return;
           data.id = doc.id;
-          remoteProjects.push(data);
+          mergedMap[doc.id] = Object.assign({}, mergedMap[doc.id] || {}, data);
         });
-        if (remoteProjects.length > 0) {
-          localStorage.setItem('yebaek_memoir_projects', JSON.stringify(remoteProjects));
+        var mergedList = Object.keys(mergedMap).map(function(k) { return mergedMap[k]; });
+        if (mergedList.length > 0) {
+          localStorage.setItem('yebaek_memoir_projects', JSON.stringify(mergedList));
           var activeTab = document.querySelector('.tab-panel.active');
           if (activeTab && activeTab.id === 'tabMemoirDashboard') {
             renderMemoirDashboard();
           }
+          renderPersonalWebbooksTable();
         }
       }, function(err) {
         console.warn('[Memoir] Firestore 리스너 경고:', err);
@@ -18812,6 +19658,23 @@ ${coachAppUrl}
       console.warn('[Memoir] Firestore 구독 실패:', e);
     }
   }
+
+  window.renderPersonalWebbooksTable = renderPersonalWebbooksTable;
+  window.openPersonalWebbookModal = openPersonalWebbookModal;
+  window.openPersonalWebbookForClient = openPersonalWebbookForClient;
+  window.closePersonalWebbookModal = closePersonalWebbookModal;
+  window.closePersonalWebbookModalOnOverlay = closePersonalWebbookModalOnOverlay;
+  window.importSourceIntoPersonalWebbook = importSourceIntoPersonalWebbook;
+  window.addPersonalWebbookChapterRow = addPersonalWebbookChapterRow;
+  window.removePersonalWebbookChapterRow = removePersonalWebbookChapterRow;
+  window.movePersonalWebbookChapter = movePersonalWebbookChapter;
+  window.clearPersonalWebbookChapterPhoto = clearPersonalWebbookChapterPhoto;
+  window.handlePersonalWebbookPhotoUpload = handlePersonalWebbookPhotoUpload;
+  window.handlePersonalWebbookSubmit = handlePersonalWebbookSubmit;
+  window.togglePersonalWebbookPublic = togglePersonalWebbookPublic;
+  window.copyPersonalWebbookShareLink = copyPersonalWebbookShareLink;
+  window.removePersonalWebbook = removePersonalWebbook;
+  window.syncPersonalWebbooksFromCloud = syncPersonalWebbooksFromCloud;
 
   // 전역 window 바인딩 (HTML 인라인 onclick에서 100% 호출 보장)
   window.getMemoirProjects = getMemoirProjects;

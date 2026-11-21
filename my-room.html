@@ -3668,6 +3668,15 @@
         </div>
       </div>
 
+      <!-- 1-2. 관리자 공식 출판 완성본 개인 서재 연동 안내 & 도서/모드 전환 바 -->
+      <div id="wbPersonalEditionBar" style="display: none; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; background: linear-gradient(135deg, rgba(30, 77, 53, 0.08) 0%, rgba(194, 155, 56, 0.12) 100%); border: 1.5px solid rgba(194, 155, 56, 0.45); border-radius: 16px; padding: 12px 16px; margin-bottom: 18px;">
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px; border-radius: 999px; background: #1e4d35; color: #f6e7c1; font-size: 0.75rem; font-weight: 850;">🏛️ 공식 출판 완성본</span>
+          <span id="wbPersonalEditionText" style="font-size: 0.88rem; font-weight: 750; color: var(--text-main); word-break: keep-all;">관리자홈에서 등록한 완성 자서전이 내 서재 모바일 웹북에 도착했습니다.</span>
+        </div>
+        <div id="wbPersonalEditionControls" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;"></div>
+      </div>
+
       <!-- 2. 스마트폰 스타일 프리미엄 플립북 리더 -->
       <div class="webbook-reader-shell" id="webbookReaderShell">
         <!-- 독서 편의 도구바 -->
@@ -5748,6 +5757,9 @@
 
                 closeLoginModal();
                 updateRoomDisplayMode();
+                if (typeof loadPersonalPublishedWebbooksForUser === 'function') {
+                  loadPersonalPublishedWebbooksForUser(true);
+                }
                 alert(`🎉 환영합니다, ${nickname}님!\n어르신만의 깨끗하고 고유한 독립 서재가 열렸습니다.\n소중한 사진과 글을 직접 꽂아보세요!`);
               },
               fail: function(error) {
@@ -5797,6 +5809,9 @@
 
       closeLoginModal();
       updateRoomDisplayMode();
+      if (typeof loadPersonalPublishedWebbooksForUser === 'function') {
+        loadPersonalPublishedWebbooksForUser(true);
+      }
       alert(`환영합니다! ${name} 어르신의 전용 서재가 열렸습니다.`);
     }
 
@@ -5811,14 +5826,18 @@
       let name = savedName || '';
       let avatar = '🌿';
       let loginType = '';
+      let phone = '';
+      let email = '';
       if (savedUserStr) {
         try {
           const u = JSON.parse(savedUserStr);
           if (u.name || u.nickname) name = u.name || u.nickname;
           if (u.loginType) loginType = u.loginType;
+          if (u.phone) phone = String(u.phone);
+          if (u.email) email = String(u.email);
         } catch(e) {}
       }
-      return { name, avatar, loginType };
+      return { name, avatar, loginType, phone, email };
     }
 
     // URL 파라미터(?mode=sample 또는 ?mode=user) 감지 및 모드 초기화
@@ -5867,9 +5886,11 @@
 
     function switchToSampleRoom() {
       isSampleModeActive = true;
+      activeSharedMemoirProject = null;
       try {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('mode', 'sample');
+        newUrl.searchParams.delete('memoir');
         window.history.replaceState({}, '', newUrl.toString());
       } catch(e) {}
       updateRoomDisplayMode();
@@ -5884,12 +5905,17 @@
         return;
       }
       isSampleModeActive = false;
+      activeSharedMemoirProject = null;
       try {
         const newUrl = new URL(window.location.href);
         newUrl.searchParams.set('mode', 'user');
+        newUrl.searchParams.delete('memoir');
         window.history.replaceState({}, '', newUrl.toString());
       } catch(e) {}
       updateRoomDisplayMode();
+      if (typeof loadPersonalPublishedWebbooksForUser === 'function') {
+        loadPersonalPublishedWebbooksForUser(false);
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -6947,14 +6973,18 @@
 
       if (memoirParam) {
         loadSharedMemoirWebbook(memoirParam);
-      } else if (tabParam === 'webbook' || tabParam === 'tab-webbook' || tabParam === 'flipbook') {
-        switchTab('tab-webbook', false);
-      } else if (tabParam === 'gallery' || tabParam === 'tab-gallery') {
-        switchTab('tab-gallery', false);
-      } else if (tabParam === 'diary' || tabParam === 'tab-diary') {
-        switchTab('tab-diary', false);
       } else {
-        renderMobileWebbook(true);
+        if (tabParam === 'webbook' || tabParam === 'tab-webbook' || tabParam === 'flipbook') {
+          switchTab('tab-webbook', false);
+        } else if (tabParam === 'gallery' || tabParam === 'tab-gallery') {
+          switchTab('tab-gallery', false);
+        } else if (tabParam === 'diary' || tabParam === 'tab-diary') {
+          switchTab('tab-diary', false);
+        } else {
+          renderMobileWebbook(true);
+        }
+        // 🏛️ 로그인 회원의 개인 서재에 관리자가 등록한 완성 자서전 모바일 웹북이 있으면 클라우드에서 자동 로드
+        loadPersonalPublishedWebbooksForUser(false);
       }
     });
 
@@ -6963,10 +6993,116 @@
     // =========================================================================
     let roomFbDb = null;
     let activeSharedMemoirProject = null;
+    let userAssignedWebbooks = [];
+    let selectedAssignedWebbookIdx = 0;
+    let personalWebbookViewMode = 'official'; // 'official': 관리자 등록 완성 자서전, 'custom': 직접 작성 기록
     let webbookPages = [];
     let currentWebbookPageIdx = 0;
     let webbookFontScale = 1.0;
     let isWebbookSpeaking = false;
+
+    function normalizeRoomOwnerName(raw) {
+      return String(raw || '')
+        .replace(/어르신|님$/g, '')
+        .replace(/\s+/g, '')
+        .trim();
+    }
+
+    function extractRoomPhoneLast4(raw) {
+      const digits = String(raw || '').replace(/\D/g, '');
+      return digits.length >= 4 ? digits.slice(-4) : digits;
+    }
+
+    function isWebbookAssignedToUser(doc, user) {
+      if (!doc || !user || !user.name) return false;
+      const isPublished = (doc.webbookPublished === true) || (doc.recordType === 'personal_webbook') || (doc.status === 'completed');
+      if (!isPublished || doc.isWebbookPublic === false) return false;
+
+      const userCleanName = normalizeRoomOwnerName(user.name);
+      const docOwnerName = normalizeRoomOwnerName(doc.ownerName || doc.clientName || '');
+      if (!userCleanName || !docOwnerName || userCleanName !== docOwnerName) return false;
+
+      // 동명이인 구분: 웹북에 전화번호 뒤 4자리가 지정되어 있고 로그인 사용자도 전화번호가 있으면 뒤 4자리까지 일치 확인
+      const docPhone4 = extractRoomPhoneLast4(doc.ownerPhoneLast4 || doc.applicantPhone || '');
+      const userPhone4 = extractRoomPhoneLast4(user.phone || '');
+      if (docPhone4 && userPhone4 && docPhone4 !== userPhone4) {
+        return false;
+      }
+      return true;
+    }
+
+    // 관리자홈에서 현재 로그인 어르신의 개인 서재에 올려둔 완성 자서전 모바일 웹북 자동 조회 (Firestore + 로컬)
+    async function loadPersonalPublishedWebbooksForUser(notifyIfFound = false) {
+      const user = getLoggedInUser();
+      const hasUser = !!(user.name && user.name !== '김순옥');
+      if (!hasUser) {
+        userAssignedWebbooks = [];
+        renderMobileWebbook(true);
+        return;
+      }
+
+      const candidateMap = {};
+      try {
+        const localList = JSON.parse(localStorage.getItem('yebaek_memoir_projects') || '[]');
+        if (Array.isArray(localList)) {
+          localList.forEach(item => {
+            if (item && item.id) candidateMap[item.id] = item;
+          });
+        }
+      } catch (e) {}
+
+      if (roomFbDb) {
+        try {
+          const snapshot = await roomFbDb.collection('memoir_projects').get();
+          snapshot.forEach(doc => {
+            const data = doc.data();
+            if (!data) return;
+            data.id = doc.id;
+            candidateMap[doc.id] = Object.assign({}, candidateMap[doc.id] || {}, data);
+          });
+        } catch (err) {
+          console.warn('[MyRoom Assigned Webbooks Firestore Load]', err);
+        }
+      }
+
+      const matched = Object.keys(candidateMap)
+        .map(k => candidateMap[k])
+        .filter(doc => isWebbookAssignedToUser(doc, user))
+        .sort((a, b) => String(b.webbookUpdatedAt || b.updatedAt || '').localeCompare(String(a.webbookUpdatedAt || a.updatedAt || '')));
+
+      userAssignedWebbooks = matched;
+      if (selectedAssignedWebbookIdx >= matched.length) selectedAssignedWebbookIdx = 0;
+
+      if (matched.length > 0 && !isSampleModeActive && !activeSharedMemoirProject) {
+        personalWebbookViewMode = 'official';
+        currentWebbookPageIdx = 0;
+        renderMobileWebbook(true);
+        if (notifyIfFound) {
+          const firstTitle = matched[0].bookTitle || `${user.name} 어르신의 자서전`;
+          setTimeout(() => {
+            alert(`📚 [${firstTitle}] 완성 자서전이 [📱 모바일 웹북] 서가에 도착해 있습니다!\n상단 [📱 모바일 웹북] 탭에서 바로 책장을 넘기며 음성 낭독으로 감상해 보세요.`);
+          }, 250);
+        }
+      } else {
+        renderMobileWebbook(true);
+      }
+    }
+
+    function selectAssignedPersonalWebbook(idx) {
+      if (idx < 0 || idx >= userAssignedWebbooks.length) return;
+      stopWebbookSpeech(false);
+      selectedAssignedWebbookIdx = idx;
+      personalWebbookViewMode = 'official';
+      currentWebbookPageIdx = 0;
+      renderMobileWebbook(true);
+    }
+
+    function setPersonalWebbookViewMode(mode) {
+      stopWebbookSpeech(false);
+      personalWebbookViewMode = (mode === 'custom') ? 'custom' : 'official';
+      currentWebbookPageIdx = 0;
+      renderMobileWebbook(true);
+    }
 
     function initRoomFirebase() {
       try {
@@ -7015,8 +7151,9 @@
       }
 
       if (found) {
+        found.id = found.id || projId;
         activeSharedMemoirProject = found;
-        const elderName = (found.clientName || '어르신').replace(/\s*어르신$/, '');
+        const elderName = normalizeRoomOwnerName(found.ownerName || found.clientName || '어르신') || '어르신';
         const ownerTitle = document.getElementById('ownerTitle');
         const ownerDesc = document.getElementById('ownerDesc');
         const headerBadge = document.getElementById('headerRoomBadge');
@@ -7045,7 +7182,70 @@
       switchTab('tab-webbook', false);
     }
 
-    // 현재 서재 데이터(공유 프로젝트 / 내 작성 자서전+사진 / 김순옥 샘플)를 한 권의 모바일 웹북 페이지로 편찬
+    // Firestore/로컬 자서전 문서 1권을 플립북 페이지 배열로 변환 (공유 링크 & 관리자 개인 서재 발행 공통)
+    function buildPagesFromMemoirDoc(p) {
+      const pages = [];
+      const ownerClean = normalizeRoomOwnerName(p.ownerName || p.clientName || '어르신') || '어르신';
+      const elderDisplay = p.clientName || `${ownerClean} 어르신`;
+      const bookTitle = p.bookTitle || `${elderDisplay}의 여백과 결`;
+      const bookSubtitle = p.bookSubtitle || p.notes || '지나온 세월의 결을 다듬어 가족과 후대에 전하는 단 한 권의 인생 회고록';
+      const bookAuthor = p.bookAuthor || `지은이: ${elderDisplay} · 엮은이: 여백과 결 서사 기록팀`;
+      const endingMessage = p.bookEndingMessage || `${elderDisplay}의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n가족들과 이 링크를 나누며 따뜻한 추억을 오래도록 함께 기억해 주세요.`;
+
+      const chapters = Array.isArray(p.chapters)
+        ? p.chapters.filter(ch => (ch.content && ch.content.trim()) || ch.image || (ch.photos && ch.photos.length))
+        : [];
+
+      pages.push({
+        type: 'cover',
+        label: '표지',
+        kicker: 'YEBAEK & GEOL · DIGITAL MEMOIR',
+        title: bookTitle,
+        subtitle: bookSubtitle,
+        author: bookAuthor
+      });
+
+      pages.push({
+        type: 'toc',
+        label: '목차',
+        title: '차례 (목차)',
+        items: chapters.map((ch, idx) => ({ title: ch.title || `제${idx + 1}장`, pageIdx: idx + 2 }))
+      });
+
+      chapters.forEach((ch, idx) => {
+        const firstPhoto = (ch.photos && ch.photos.length > 0) ? ch.photos[0] : null;
+        const imgSrc = ch.image || (firstPhoto ? firstPhoto.src : '') || '';
+        const capText = ch.caption || (firstPhoto ? (firstPhoto.caption || '') : '') || ch.subtitle || '';
+        pages.push({
+          type: 'chapter',
+          label: ch.title || `제${idx + 1}장`,
+          kicker: ch.kicker || `CHAPTER 0${idx + 1} · 생애 회고록`,
+          title: ch.title || `제${idx + 1}장`,
+          subtitle: ch.subtitle || '',
+          image: imgSrc,
+          caption: capText,
+          body: ch.content || ''
+        });
+      });
+
+      pages.push({
+        type: 'ending',
+        label: '맺음말 & 공유',
+        elder: elderDisplay,
+        message: endingMessage
+      });
+      return pages;
+    }
+
+    function getActivePersonalOfficialWebbook() {
+      const user = getLoggedInUser();
+      const hasUser = !!(user.name && user.name !== '김순옥');
+      if (!hasUser || isSampleModeActive || activeSharedMemoirProject) return null;
+      if (!userAssignedWebbooks.length || personalWebbookViewMode === 'custom') return null;
+      return userAssignedWebbooks[selectedAssignedWebbookIdx] || userAssignedWebbooks[0] || null;
+    }
+
+    // 현재 서재 데이터(공유 프로젝트 / 관리자 등록 개인 완성본 / 내 작성 자서전+사진 / 김순옥 샘플)를 한 권의 모바일 웹북 페이지로 편찬
     function buildWebbookPages() {
       const pages = [];
       const user = getLoggedInUser();
@@ -7053,51 +7253,16 @@
 
       // Case A: ?memoir={id} 공유 프로젝트가 로드된 경우
       if (activeSharedMemoirProject) {
-        const p = activeSharedMemoirProject;
-        const elder = p.clientName || '어르신';
-        const bookTitle = p.bookTitle || `${elder}의 여백과 결`;
-        const chapters = Array.isArray(p.chapters) ? p.chapters.filter(ch => (ch.content && ch.content.trim()) || (ch.photos && ch.photos.length)) : [];
-
-        pages.push({
-          type: 'cover',
-          label: '표지',
-          kicker: 'YEBAEK & GEOL · DIGITAL MEMOIR',
-          title: bookTitle,
-          subtitle: p.notes || '지나온 세월의 결을 다듬어 가족과 후대에 전하는 단 한 권의 인생 회고록',
-          author: `지은이: ${elder} · 엮은이: 여백과 결 서사 기록팀`
-        });
-
-        pages.push({
-          type: 'toc',
-          label: '목차',
-          title: '차례 (목차)',
-          items: chapters.map((ch, idx) => ({ title: ch.title || `제${idx + 1}장`, pageIdx: idx + 2 }))
-        });
-
-        chapters.forEach((ch, idx) => {
-          const firstPhoto = (ch.photos && ch.photos.length > 0) ? ch.photos[0] : null;
-          pages.push({
-            type: 'chapter',
-            label: ch.title || `제${idx + 1}장`,
-            kicker: `CHAPTER 0${idx + 1} · 생애 회고록`,
-            title: ch.title || `제${idx + 1}장`,
-            subtitle: ch.subtitle || '',
-            image: firstPhoto ? firstPhoto.src : '',
-            caption: firstPhoto ? (firstPhoto.caption || ch.subtitle || '') : '',
-            body: ch.content || ''
-          });
-        });
-
-        pages.push({
-          type: 'ending',
-          label: '맺음말 & 공유',
-          elder: elder,
-          message: `${elder}의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n가족들과 이 링크를 나누며 따뜻한 추억을 오래도록 함께 기억해 주세요.`
-        });
-        return pages;
+        return buildPagesFromMemoirDoc(activeSharedMemoirProject);
       }
 
-      // Case B: 로그인 회원 본인 서재 모드
+      // Case B-1: 로그인 회원 본인 서재에 관리자가 올린 공식 완성 자서전이 있는 경우 (기본 우선 표시)
+      const officialBook = getActivePersonalOfficialWebbook();
+      if (officialBook) {
+        return buildPagesFromMemoirDoc(officialBook);
+      }
+
+      // Case B-2: 로그인 회원 본인 직접 작성 서재 모드
       if (hasUser && !isSampleModeActive) {
         let customList = [];
         try { customList = JSON.parse(localStorage.getItem('reset_custom_memories') || '[]'); } catch(e) {}
@@ -7248,6 +7413,10 @@
       if (activeSharedMemoirProject && activeSharedMemoirProject.id) {
         return `${base}?memoir=${encodeURIComponent(activeSharedMemoirProject.id)}`;
       }
+      const officialBook = getActivePersonalOfficialWebbook();
+      if (officialBook && officialBook.id) {
+        return `${base}?memoir=${encodeURIComponent(officialBook.id)}`;
+      }
       const savedPublishedId = localStorage.getItem('yebaek_my_published_webbook_id');
       const user = getLoggedInUser();
       const hasUser = !!(user.name && user.name !== '김순옥');
@@ -7255,6 +7424,53 @@
         return `${base}?memoir=${encodeURIComponent(savedPublishedId)}`;
       }
       return `${base}?mode=sample&tab=webbook`;
+    }
+
+    function renderPersonalEditionBar() {
+      const bar = document.getElementById('wbPersonalEditionBar');
+      const textEl = document.getElementById('wbPersonalEditionText');
+      const ctrlEl = document.getElementById('wbPersonalEditionControls');
+      if (!bar || !textEl || !ctrlEl) return;
+
+      const user = getLoggedInUser();
+      const hasUser = !!(user.name && user.name !== '김순옥');
+      if (!hasUser || isSampleModeActive || activeSharedMemoirProject || !userAssignedWebbooks.length) {
+        bar.style.display = 'none';
+        return;
+      }
+
+      bar.style.display = 'flex';
+      const activeBook = userAssignedWebbooks[selectedAssignedWebbookIdx] || userAssignedWebbooks[0];
+      const bookTitle = activeBook.bookTitle || `${user.name} 어르신의 자서전`;
+      if (personalWebbookViewMode === 'custom') {
+        textEl.textContent = `${user.name} 어르신이 직접 작성하신 서재 기록으로 보고 계십니다.`;
+      } else {
+        textEl.textContent = `[${bookTitle}] 공식 완성 자서전이 ${user.name} 어르신 개인 서재에 등록되어 있습니다.`;
+      }
+
+      let btnsHtml = '';
+      if (userAssignedWebbooks.length > 1) {
+        userAssignedWebbooks.forEach((bk, idx) => {
+          const isSel = (personalWebbookViewMode !== 'custom' && idx === selectedAssignedWebbookIdx);
+          const shortTitle = (bk.bookTitle || `자서전 ${idx + 1}`).slice(0, 14);
+          btnsHtml += `<button type="button" onclick="selectAssignedPersonalWebbook(${idx})" style="padding: 5px 11px; border-radius: 999px; border: 1.2px solid ${isSel ? '#1e4d35' : 'rgba(30,77,53,0.35)'}; background: ${isSel ? '#1e4d35' : 'var(--paper-card)'}; color: ${isSel ? '#f6e7c1' : '#1e4d35'}; font-size: 0.78rem; font-weight: 800; cursor: pointer; font-family: inherit;">📖 ${escapeHtml(shortTitle)}</button>`;
+        });
+      }
+
+      // 사용자가 직접 쓴 기록도 있으면 모드 전환 버튼 제공
+      let customCount = 0;
+      try {
+        const list = JSON.parse(localStorage.getItem('reset_custom_memories') || '[]');
+        customCount = Array.isArray(list) ? list.length : 0;
+      } catch (e) {}
+
+      if (customCount > 0 || personalWebbookViewMode === 'custom') {
+        const isOfficial = personalWebbookViewMode !== 'custom';
+        btnsHtml += `<button type="button" onclick="setPersonalWebbookViewMode('official')" style="padding: 5px 11px; border-radius: 999px; border: 1.2px solid #1e4d35; background: ${isOfficial ? '#1e4d35' : 'var(--paper-card)'}; color: ${isOfficial ? '#ffffff' : '#1e4d35'}; font-size: 0.78rem; font-weight: 800; cursor: pointer; font-family: inherit;">📖 공식 완성 자서전</button>`;
+        btnsHtml += `<button type="button" onclick="setPersonalWebbookViewMode('custom')" style="padding: 5px 11px; border-radius: 999px; border: 1.2px solid #936f1c; background: ${!isOfficial ? '#936f1c' : 'var(--paper-card)'}; color: ${!isOfficial ? '#ffffff' : '#936f1c'}; font-size: 0.78rem; font-weight: 800; cursor: pointer; font-family: inherit;">✍️ 내 직접 기록 (${customCount})</button>`;
+      }
+
+      ctrlEl.innerHTML = btnsHtml;
     }
 
     function renderMobileWebbook(rebuild = true) {
@@ -7265,6 +7481,8 @@
         }
       }
 
+      renderPersonalEditionBar();
+
       const counterEl = document.getElementById('tabCounterWebbook');
       if (counterEl) counterEl.textContent = `${webbookPages.length}쪽`;
 
@@ -7274,9 +7492,10 @@
 
       const user = getLoggedInUser();
       const hasUser = !!(user.name && user.name !== '김순옥');
+      const officialBook = getActivePersonalOfficialWebbook();
       const publishBtn = document.getElementById('btnPublishWebbookCloud');
       if (publishBtn) {
-        publishBtn.style.display = (hasUser && !isSampleModeActive && !activeSharedMemoirProject) ? 'inline-flex' : 'none';
+        publishBtn.style.display = (hasUser && !isSampleModeActive && !activeSharedMemoirProject && !officialBook) ? 'inline-flex' : 'none';
       }
 
       const tocSelect = document.getElementById('webbookTocSelect');
