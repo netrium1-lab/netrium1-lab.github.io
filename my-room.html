@@ -3301,30 +3301,11 @@
       <div class="shelf-header">
         <div>
           <h2 class="shelf-title">💬 마음의 비움 일기장</h2>
-          <p class="shelf-desc" id="diaryShelfDesc">메인 광장의 '오늘의 비움 한 줄'에 띄웠던 글과 나만의 비밀 비움 노트를 모아두었습니다.</p>
+          <p class="shelf-desc" id="diaryShelfDesc">오늘 내려놓고 싶은 물건이나 감정, 감사한 단상을 오른쪽 입력창에 편하게 적어 보관하세요.</p>
         </div>
-        <button class="btn-share" onclick="openUploadModal('diary')" style="background: var(--accent-gold);">
-          ✍️ 새 비움 일기 쓰기
+        <button type="button" class="btn-guide-example" onclick="toggleSampleDiaryView()">
+          👁️ 김순옥 일기 예시 보기
         </button>
-      </div>
-
-      <!-- 🌿 비움 일기 쓰기 상단 안내 배너 (상시 노출) -->
-      <div class="shelf-guide-banner" id="diaryGuideBanner">
-        <div class="shelf-guide-left">
-          <div class="shelf-guide-icon" style="color: var(--accent-gold); border-color: rgba(197, 155, 39, 0.3);">💬</div>
-          <div class="shelf-guide-content">
-            <h3>오늘 마음의 여백과 일상의 비움을 기록해 보세요</h3>
-            <p>오늘 내려놓고 싶은 물건이나 감정, 감사한 단상을 편안하게 기록해 보세요. 나만의 비밀 보관 또는 메인 광장 공유가 가능합니다.</p>
-          </div>
-        </div>
-        <div class="shelf-guide-actions">
-          <button type="button" class="btn-guide-write" style="background: var(--accent-gold);" onclick="openUploadModal('diary')">
-            ✍️ 새 비움 일기 쓰기
-          </button>
-          <button type="button" class="btn-guide-example" onclick="toggleSampleDiaryView()">
-            👁️ 김순옥 일기 예시 보기
-          </button>
-        </div>
       </div>
 
       <div class="empty-notes-layout">
@@ -3334,15 +3315,15 @@
             <h3 class="user-written-title">
               <span>✍️</span> 내가 기록한 비움 일기 (<span id="userDiaryCount">0</span>편)
             </h3>
-            <span style="font-size: 0.85rem; color: var(--text-sub);">기록된 일기는 언제든 수정하거나 삭제하실 수 있습니다.</span>
+            <span style="font-size: 0.85rem; color: var(--text-sub);">기록된 일기는 언제든 열람하거나 삭제하실 수 있습니다.</span>
           </div>
 
           <!-- 등록된 일기가 없을 때 안내 -->
           <div id="userDiaryEmptyBox" class="shelf-empty-box">
             <div style="font-size: 2.2rem; margin-bottom: 8px;">💬</div>
             <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">아직 작성된 비움 일기가 없습니다</div>
-            <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0 0 14px 0;">
-              오른쪽 입력창이나 상단 버튼을 눌러 오늘 하루 비워낸 생각이나 물건을 적어보세요.
+            <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0;">
+              오른쪽 <strong>[오늘 마음 비워내기]</strong> 입력창에 오늘 하루 비워낸 생각이나 감사를 바로 적어보세요.
             </p>
           </div>
 
@@ -3429,26 +3410,12 @@
           <h2 class="shelf-title">🖼️ 추억 사진전시관</h2>
           <p class="shelf-desc" id="galleryShelfDesc">내가 간직한 소중한 사진들을 올려 전시하고, 그날의 따뜻한 기억과 추억의 글을 남겨 보세요.</p>
         </div>
-        <button class="btn-share" onclick="openUploadModal('gallery')" style="background: var(--accent-green);">
-          📷+✍️ 소중한 사진 &amp; 추억 글 올리기
-        </button>
-      </div>
-
-      <!-- 🌿 추억 사진전시관 상단 안내 배너 (상시 노출) -->
-      <div class="shelf-guide-banner" id="galleryGuideBanner">
-        <div class="shelf-guide-left">
-          <div class="shelf-guide-icon" style="color: var(--accent-green); border-color: rgba(43, 106, 56, 0.3);">🖼️</div>
-          <div class="shelf-guide-content">
-            <h3>소중한 사진과 그날의 추억을 나만의 전시관에 걸어보세요</h3>
-            <p>젊은 날의 기억, 가족 여행, 친구들과의 정겨운 순간 등 스마트폰이나 앨범 속 사진을 올리고 추억의 글을 작성해 가족과 함께 나누세요.</p>
-          </div>
-        </div>
-        <div class="shelf-guide-actions">
-          <button type="button" class="btn-guide-write" style="background: var(--accent-green);" onclick="openUploadModal('gallery')">
-            📷+✍️ 새 추억 사진 올리기
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-share" onclick="openUploadModal('gallery')" style="background: var(--accent-green);">
+            📷+✍️ 소중한 사진 &amp; 추억 글 올리기
           </button>
           <button type="button" class="btn-guide-example" onclick="toggleSampleGalleryView()">
-            👁️ 김순옥 전시 예시 보기
+            👁️ 예시 보기
           </button>
         </div>
       </div>
@@ -3466,12 +3433,9 @@
         <div id="userGalleryEmptyBox" class="shelf-empty-box">
           <div style="font-size: 2.2rem; margin-bottom: 8px;">🖼️</div>
           <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">아직 전시된 추억 사진이 없습니다</div>
-          <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0 0 14px 0;">
-            가지고 계신 소중한 사진 한 장을 골라 그날의 따뜻한 추억의 글을 적어보세요.
+          <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0;">
+            우측 상단의 <strong>[📷+✍️ 소중한 사진 &amp; 추억 글 올리기]</strong> 버튼을 눌러 첫 추억을 전시해 보세요.
           </p>
-          <button type="button" class="btn-guide-write" style="background: var(--accent-green); padding: 10px 18px; font-size: 0.90rem;" onclick="openUploadModal('gallery')">
-            📸+✍️ 첫 추억 사진 올리기
-          </button>
         </div>
 
         <!-- 실제 등록된 사용자 사진 카드 그리드 -->
@@ -3559,26 +3523,12 @@
           <h2 class="shelf-title">✨ 인생 애장품 전시관</h2>
           <p class="shelf-desc" id="keepsakeShelfDesc">평생 아끼고 손때 묻은 소중한 물건의 사진을 올리고, 그 애장품에 담긴 사연과 가족들에게 남기고 싶은 마음을 정갈하게 담아 두세요.</p>
         </div>
-        <button class="btn-share" onclick="openUploadModal('keepsake')" style="background: #8f4726;">
-          🎁+✍️ 내 인생 애장품 올리기
-        </button>
-      </div>
-
-      <!-- 🌿 인생 애장품 전시관 상단 안내 배너 -->
-      <div class="shelf-guide-banner" id="keepsakeGuideBanner">
-        <div class="shelf-guide-left">
-          <div class="shelf-guide-icon" style="color: #8f4726; border-color: rgba(143, 71, 38, 0.3);">✨</div>
-          <div class="shelf-guide-content">
-            <h3>가족에게 물려주고 싶은 소중한 애장품과 마음을 전시해 보세요</h3>
-            <p>반지, 시계, 다기, 손편지, 아끼던 책처럼 세월이 담긴 물건의 사진을 올리고, <strong>① 애장품에 담긴 사연</strong>과 <strong>② 가족에게 전하고 싶은 말</strong>을 함께 남겨 두실 수 있습니다.</p>
-          </div>
-        </div>
-        <div class="shelf-guide-actions">
-          <button type="button" class="btn-guide-write" style="background: #8f4726;" onclick="openUploadModal('keepsake')">
-            🎁+✍️ 새 애장품 전시하기
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <button class="btn-share" onclick="openUploadModal('keepsake')" style="background: #8f4726;">
+            🎁+✍️ 내 인생 애장품 올리기
           </button>
           <button type="button" class="btn-guide-example" onclick="toggleSampleKeepsakeView()">
-            👁️ 김순옥 애장품 예시 보기
+            👁️ 예시 보기
           </button>
         </div>
       </div>
@@ -3596,13 +3546,10 @@
         <div id="userKeepsakeEmptyBox" class="shelf-empty-box">
           <div style="font-size: 2.3rem; margin-bottom: 8px;">✨</div>
           <div style="font-size: 1.05rem; font-weight: 800; color: var(--text-main); margin-bottom: 4px;">아직 전시된 인생 애장품이 없습니다</div>
-          <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0 0 14px 0; line-height: 1.6;">
-            자녀나 손주에게 물려주고 싶은 아끼던 물건의 사진을 찍어 올리고,<br>
-            그 물건에 담긴 사연과 가족에게 남기고 싶은 따뜻한 한마디를 적어보세요.
+          <p style="font-size: 0.88rem; color: var(--text-sub); margin: 0; line-height: 1.6;">
+            우측 상단의 <strong>[🎁+✍️ 내 인생 애장품 올리기]</strong> 버튼을 눌러<br>
+            소중한 물건 사진과 사연, 가족에게 남기고 싶은 따뜻한 마음을 기록해 보세요.
           </p>
-          <button type="button" class="btn-guide-write" style="background: #8f4726; padding: 10px 20px; font-size: 0.90rem;" onclick="openUploadModal('keepsake')">
-            🎁+✍️ 첫 인생 애장품 올려보기
-          </button>
         </div>
 
         <!-- 실제 등록된 사용자 애장품 카드 그리드 -->
