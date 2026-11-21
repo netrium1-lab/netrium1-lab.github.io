@@ -3685,6 +3685,13 @@
             </button>
           </div>
         </div>
+        <div id="wbSpeechStatus" style="display: none; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; background: rgba(43, 106, 56, 0.09); border: 1.4px solid rgba(43, 106, 56, 0.32); color: var(--accent-green); border-radius: 12px; padding: 9px 14px; margin-bottom: 16px; font-size: 0.86rem; font-weight: 750;">
+          <span id="wbSpeechStatusText" style="flex: 1; min-width: 180px; line-height: 1.45; word-break: keep-all;">🔊 음성을 준비하고 있습니다...</span>
+          <div style="display: flex; align-items: center; gap: 6px; flex-shrink: 0;">
+            <button type="button" id="btnWbCycleVoice" onclick="cycleWebbookVoice()" style="display: none; padding: 4px 10px; border-radius: 999px; border: 1px solid rgba(43, 106, 56, 0.45); background: var(--paper-card); color: var(--accent-green); font-size: 0.78rem; font-weight: 800; cursor: pointer; font-family: inherit;">🔄 다른 목소리</button>
+            <button type="button" onclick="stopWebbookSpeech(false)" style="padding: 4px 11px; border-radius: 999px; border: 1px solid var(--accent-green); background: var(--paper-card); color: var(--accent-green); font-size: 0.8rem; font-weight: 800; cursor: pointer; font-family: inherit;">⏹️ 정지</button>
+          </div>
+        </div>
 
         <!-- 스마트폰 프레임 플립북 화면 (좌우 스와이프 및 클릭 지원) -->
         <div class="webbook-phone-frame">
@@ -7407,11 +7414,185 @@
       if (viewport) viewport.style.setProperty('--wb-font-scale', webbookFontScale);
     }
 
-    function stopWebbookSpeech() {
+    // 🔊 고신뢰 한국어 음성 낭독(TTS) 엔진 (무음·15초 끊김·GC·보이스 미로드·무음 스킵 자동 복구)
+    let wbCachedVoices = [];
+    let wbVoicePlan = [];
+    let wbVoicePlanIdx = 0;
+    let wbSpeechQueue = [];
+    let wbSpeechQueueIdx = 0;
+    let wbSpeechSessionId = 0;
+    let wbSpeechWatchdog = null;
+    let wbSpeechNextTimer = null;
+    window._wbCurrentUtterance = null; // Chromium GC 방지용 강참조
+
+    function refreshWebbookVoices() {
       try {
-        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+        if (!('speechSynthesis' in window)) return [];
+        const list = window.speechSynthesis.getVoices() || [];
+        if (list.length > 0) wbCachedVoices = list;
+        return wbCachedVoices;
+      } catch (e) {
+        return [];
+      }
+    }
+
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      refreshWebbookVoices();
+      try {
+        window.speechSynthesis.onvoiceschanged = refreshWebbookVoices;
+      } catch (e) {}
+      window.addEventListener('beforeunload', () => {
+        try { window.speechSynthesis.cancel(); } catch (e) {}
+      });
+    }
+
+    // 기기에서 사용 가능한 모든 한국어 음성을 우선순위대로 중복 없이 구성
+    function buildWebbookVoicePlan() {
+      const voices = refreshWebbookVoices();
+      const koVoices = voices.filter(v => {
+        const lang = (v.lang || '').toLowerCase().replace('_', '-');
+        const name = (v.name || '').toLowerCase();
+        return lang.startsWith('ko')
+          || name.includes('korean')
+          || name.includes('한국')
+          || name.includes('heami')
+          || name.includes('sunhi')
+          || name.includes('injoon')
+          || name.includes('yuna')
+          || name.includes('sora');
+      });
+
+      const plan = [];
+      const addUnique = (v) => {
+        if (!v) return;
+        if (!plan.some(item => item && item.voiceURI === v.voiceURI && item.name === v.name)) {
+          plan.push(v);
+        }
+      };
+
+      const isOnline = (typeof navigator === 'undefined') ? true : (navigator.onLine !== false);
+      const edgeNatural = koVoices.filter(v => !v.localService && /sunhi|injoon|natural/i.test(v.name || ''));
+      const localNative = koVoices.filter(v => v.localService);
+      const googleKo = koVoices.filter(v => !v.localService && /google/i.test(v.name || ''));
+      const otherKo = koVoices.filter(v => !v.localService);
+
+      // Edge의 자연스러운 한국어(SunHi/InJoon)가 있고 온라인이면 브라우저 오디오 경로로 최우선 재생,
+      // 그 외 Chrome/Safari/모바일에서는 기기 내장 로컬 한국어(Heami/Yuna/Android) 최우선 + 온라인 음성 자동 백업
+      if (isOnline && edgeNatural.length > 0) {
+        edgeNatural.forEach(addUnique);
+        localNative.forEach(addUnique);
+        googleKo.forEach(addUnique);
+        otherKo.forEach(addUnique);
+      } else {
+        localNative.forEach(addUnique);
+        edgeNatural.forEach(addUnique);
+        googleKo.forEach(addUnique);
+        otherKo.forEach(addUnique);
+      }
+
+      // 마지막 예비 단계: voice를 지정하지 않고 lang='ko-KR'만 사용 (일부 모바일·안드로이드 브라우저 호환)
+      plan.push(null);
+      return plan;
+    }
+
+    function formatVoiceLabel(voice) {
+      if (!voice) return '기본 한국어';
+      const cleaned = (voice.name || '')
+        .replace(/Microsoft |Desktop|Online \(Natural\) - |Korean \(South Korea\)| - Korean.*$/gi, '')
+        .trim();
+      return (cleaned.split(/\s+/)[0] || '한국어').slice(0, 12);
+    }
+
+    function updateCycleVoiceButton() {
+      const btn = document.getElementById('btnWbCycleVoice');
+      if (!btn) return;
+      const realVoiceCount = wbVoicePlan.filter(Boolean).length;
+      btn.style.display = (isWebbookSpeaking && realVoiceCount >= 2) ? 'inline-block' : 'none';
+    }
+
+    function cleanSpeechText(raw) {
+      if (!raw) return '';
+      return String(raw)
+        .replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, ' ')
+        .replace(/[·•▪■□▶◀→←↓↑★☆✨☀️🌙✓✕]/g, ' ')
+        .replace(/[ \t\r]+/g, ' ')
+        .replace(/\n+/g, '\n')
+        .trim();
+    }
+
+    function getWebbookPageSpeechText(pg) {
+      if (!pg) return '';
+      if (pg.type === 'toc') {
+        const itemLines = (pg.items || []).map((it, idx) => `${idx + 1}번째, ${it.title}`).join('.\n');
+        return cleanSpeechText(`${pg.title || '차례'}.\n${itemLines}`);
+      }
+      if (pg.type === 'cover') {
+        return cleanSpeechText(`${pg.title || ''}.\n${pg.subtitle || ''}.\n${pg.author || ''}`);
+      }
+      if (pg.type === 'ending') {
+        const greeting = pg.elder ? `${pg.elder}의 이야기를 함께해 주셔서 감사합니다.` : '';
+        return cleanSpeechText([greeting, pg.message].filter(Boolean).join('\n'));
+      }
+      if (pg.type === 'empty') {
+        return cleanSpeechText(`${pg.userName || '어르신'}의 첫 웹북을 시작해 보세요.\n디지털 자서전에 글이나 추억 복원관에 사진을 등록하시면 자동으로 모바일 책자가 만들어집니다.`);
+      }
+      return cleanSpeechText([pg.title, pg.subtitle, pg.body, pg.message].filter(Boolean).join('.\n'));
+    }
+
+    // 모든 브라우저(구형 iOS 사파리·카톡 인앱 포함) 호환 안전한 한국어 문장 분할
+    function chunkKoreanSentences(text, maxLen = 110) {
+      if (!text) return [];
+      const matched = text.match(/[^.!?\n]+[.!?]?/g) || [text];
+      const chunks = [];
+      matched.forEach(part => {
+        const clean = part.trim();
+        if (!clean) return;
+        if (clean.length <= maxLen) {
+          chunks.push(clean);
+        } else {
+          const words = clean.split(/\s+/);
+          let buf = '';
+          words.forEach(w => {
+            if ((buf + ' ' + w).trim().length > maxLen && buf) {
+              chunks.push(buf.trim());
+              buf = w;
+            } else {
+              buf = (buf + ' ' + w).trim();
+            }
+          });
+          if (buf) chunks.push(buf.trim());
+        }
+      });
+      return chunks.length ? chunks : [text];
+    }
+
+    function setWebbookSpeechStatus(visible, message) {
+      const box = document.getElementById('wbSpeechStatus');
+      const txt = document.getElementById('wbSpeechStatusText');
+      if (txt && message !== undefined) txt.textContent = message;
+      if (box) box.style.display = visible ? 'flex' : 'none';
+      updateCycleVoiceButton();
+    }
+
+    function stopWebbookSpeech(keepStatusMsg) {
+      wbSpeechSessionId++;
+      if (wbSpeechWatchdog) { clearTimeout(wbSpeechWatchdog); wbSpeechWatchdog = null; }
+      if (wbSpeechNextTimer) { clearTimeout(wbSpeechNextTimer); wbSpeechNextTimer = null; }
+      wbSpeechQueue = [];
+      wbSpeechQueueIdx = 0;
+      window._wbCurrentUtterance = null;
+      try {
+        if ('speechSynthesis' in window) {
+          if (window.speechSynthesis.speaking || window.speechSynthesis.pending || window.speechSynthesis.paused) {
+            window.speechSynthesis.cancel();
+          }
+        }
       } catch(e) {}
       isWebbookSpeaking = false;
+      updateCycleVoiceButton();
+      if (!keepStatusMsg) {
+        setWebbookSpeechStatus(false, '');
+      }
       const btn = document.getElementById('btnWebbookSpeech');
       if (btn) {
         btn.classList.remove('speaking');
@@ -7419,36 +7600,187 @@
       }
     }
 
+    function cycleWebbookVoice() {
+      if (!isWebbookSpeaking || !wbSpeechQueue.length) return;
+      const realVoices = wbVoicePlan.filter(Boolean);
+      if (realVoices.length < 2) return;
+
+      wbVoicePlanIdx = (wbVoicePlanIdx + 1) % realVoices.length;
+      if (wbSpeechWatchdog) { clearTimeout(wbSpeechWatchdog); wbSpeechWatchdog = null; }
+      if (wbSpeechNextTimer) { clearTimeout(wbSpeechNextTimer); wbSpeechNextTimer = null; }
+      wbSpeechSessionId++;
+      const mySession = wbSpeechSessionId;
+
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+      setTimeout(() => speakWebbookChunk(mySession, wbVoicePlanIdx), 110);
+    }
+
+    function advanceVoiceFallback(sessionId, currentPlanIdx, reasonText) {
+      if (sessionId !== wbSpeechSessionId || !isWebbookSpeaking) return;
+      const synth = window.speechSynthesis;
+
+      // 최초 클릭 시점에 voices가 비어 있었다면 새로 갱신
+      if (wbVoicePlan.length <= 1) {
+        const refreshed = buildWebbookVoicePlan();
+        if (refreshed.length > 1) {
+          wbVoicePlan = refreshed;
+          wbVoicePlanIdx = 0;
+          try { synth.cancel(); } catch (e) {}
+          setTimeout(() => speakWebbookChunk(sessionId, 0), 120);
+          return;
+        }
+      }
+
+      const nextPlanIdx = currentPlanIdx + 1;
+      if (nextPlanIdx < wbVoicePlan.length) {
+        wbVoicePlanIdx = nextPlanIdx;
+        try { synth.cancel(); } catch (e) {}
+        setTimeout(() => speakWebbookChunk(sessionId, nextPlanIdx), 120);
+      } else {
+        setWebbookSpeechStatus(
+          true,
+          reasonText || '⚠️ 소리가 들리지 않으면 기기 음량(스피커)·브라우저 음소거 해제 여부를 확인하시고, 크롬·엣지·사파리에서 실행해 주세요.'
+        );
+        stopWebbookSpeech(true);
+      }
+    }
+
+    function speakWebbookChunk(sessionId, planIdx) {
+      if (sessionId !== wbSpeechSessionId || !isWebbookSpeaking) return;
+      if (wbSpeechQueueIdx >= wbSpeechQueue.length) {
+        stopWebbookSpeech(false);
+        return;
+      }
+
+      const synth = window.speechSynthesis;
+      const chunkText = wbSpeechQueue[wbSpeechQueueIdx];
+      const totalChunks = wbSpeechQueue.length;
+      const currentNum = wbSpeechQueueIdx + 1;
+      const safeIdx = Math.min(planIdx, Math.max(0, wbVoicePlan.length - 1));
+      const voice = wbVoicePlan[safeIdx] || null;
+
+      const utter = new SpeechSynthesisUtterance(chunkText);
+      window._wbCurrentUtterance = utter; // Chromium GC 방지 강참조
+      if (voice) {
+        utter.voice = voice;
+        utter.lang = voice.lang || 'ko-KR';
+      } else {
+        utter.lang = 'ko-KR';
+      }
+      utter.rate = 0.94;
+      utter.pitch = 1.0;
+      utter.volume = 1.0;
+
+      let hasStarted = false;
+      const invokedAt = Date.now();
+      let startedAt = invokedAt;
+      const preview = chunkText.length > 32 ? chunkText.slice(0, 32) + '…' : chunkText;
+      const voiceLabel = formatVoiceLabel(voice);
+      setWebbookSpeechStatus(true, `🔊 낭독 중 (${currentNum}/${totalChunks} · ${voiceLabel}) · "${preview}"`);
+
+      // 2.2초 내 발화 시작 안 되면 다음 예비 한국어 음성으로 자동 전환
+      if (wbSpeechWatchdog) clearTimeout(wbSpeechWatchdog);
+      wbSpeechWatchdog = setTimeout(() => {
+        if (sessionId !== wbSpeechSessionId || !isWebbookSpeaking || hasStarted) return;
+        advanceVoiceFallback(
+          sessionId,
+          safeIdx,
+          '⚠️ 음성 엔진 응답이 없습니다. 기기 스피커 음량과 브라우저 음소거 여부를 확인하거나 크롬·엣지·사파리에서 열어 주세요.'
+        );
+      }, 2200);
+
+      utter.onstart = () => {
+        if (sessionId !== wbSpeechSessionId) return;
+        hasStarted = true;
+        startedAt = Date.now();
+        if (wbSpeechWatchdog) { clearTimeout(wbSpeechWatchdog); wbSpeechWatchdog = null; }
+        setWebbookSpeechStatus(true, `🔊 낭독 중 (${currentNum}/${totalChunks} · ${voiceLabel}) · "${preview}"`);
+      };
+
+      utter.onend = () => {
+        if (sessionId !== wbSpeechSessionId || !isWebbookSpeaking) return;
+        if (wbSpeechWatchdog) { clearTimeout(wbSpeechWatchdog); wbSpeechWatchdog = null; }
+
+        // 긴 한국어 문장이 220ms 미만 만에 끝나면 음성이 무음 스킵된 것으로 판단해 다음 음성으로 자동 전환
+        const elapsed = Date.now() - startedAt;
+        if (chunkText.length >= 10 && elapsed < 220 && safeIdx + 1 < wbVoicePlan.length) {
+          advanceVoiceFallback(sessionId, safeIdx);
+          return;
+        }
+
+        wbSpeechQueueIdx++;
+        if (wbSpeechQueueIdx < wbSpeechQueue.length) {
+          wbSpeechNextTimer = setTimeout(() => speakWebbookChunk(sessionId, wbVoicePlanIdx), 130);
+        } else {
+          stopWebbookSpeech(false);
+        }
+      };
+
+      utter.onerror = (ev) => {
+        if (sessionId !== wbSpeechSessionId || !isWebbookSpeaking) return;
+        if (wbSpeechWatchdog) { clearTimeout(wbSpeechWatchdog); wbSpeechWatchdog = null; }
+        const code = (ev && ev.error) ? ev.error : '';
+        if (code === 'canceled' || code === 'interrupted') return;
+        advanceVoiceFallback(
+          sessionId,
+          safeIdx,
+          `⚠️ 이 브라우저에서 음성을 재생할 수 없습니다 (${code || '음성 미지원'}). 크롬·엣지·사파리에서 열어 주세요.`
+        );
+      };
+
+      try {
+        if (synth.paused) synth.resume();
+        synth.speak(utter);
+      } catch (err) {
+        console.error('[Webbook TTS Error]', err);
+        advanceVoiceFallback(
+          sessionId,
+          safeIdx,
+          '⚠️ 음성 재생을 시작하지 못했습니다. 기기 음량 또는 브라우저 설정을 확인해 주세요.'
+        );
+      }
+    }
+
     function toggleWebbookSpeech() {
-      if (!('speechSynthesis' in window)) {
-        alert('현재 브라우저에서는 음성 낭독 기능을 지원하지 않습니다.');
+      if (!('speechSynthesis' in window) || typeof SpeechSynthesisUtterance === 'undefined') {
+        alert('현재 사용 중인 앱 내 브라우저에서는 음성 낭독을 지원하지 않습니다.\n크롬(Chrome), 엣지(Edge) 또는 사파리(Safari) 브라우저에서 열어 주세요.');
         return;
       }
       if (isWebbookSpeaking) {
-        stopWebbookSpeech();
+        stopWebbookSpeech(false);
         return;
       }
+
       const pg = webbookPages[currentWebbookPageIdx];
-      if (!pg) return;
-      const textToRead = [pg.title, pg.subtitle, pg.body, pg.message].filter(Boolean).join('. ');
-      if (!textToRead.trim()) return;
+      const textToRead = getWebbookPageSpeechText(pg);
+      if (!textToRead) {
+        alert('현재 페이지에 읽어드릴 문장이 없습니다.');
+        return;
+      }
 
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(textToRead);
-      utter.lang = 'ko-KR';
-      utter.rate = 0.92;
-      utter.onend = () => stopWebbookSpeech();
-      utter.onerror = () => stopWebbookSpeech();
-
+      const synth = window.speechSynthesis;
+      wbSpeechSessionId++;
+      const mySession = wbSpeechSessionId;
+      wbVoicePlan = buildWebbookVoicePlan();
+      wbVoicePlanIdx = 0;
+      wbSpeechQueue = chunkKoreanSentences(textToRead, 110);
+      wbSpeechQueueIdx = 0;
       isWebbookSpeaking = true;
+
       const btn = document.getElementById('btnWebbookSpeech');
       if (btn) {
         btn.classList.add('speaking');
         btn.innerHTML = '<span>⏹️</span><span>낭독 중지</span>';
       }
-      window.speechSynthesis.speak(utter);
-    }
 
+      // 이전 발화가 남아있을 때만 cancel 후 100ms 대기, 유휴 상태면 클릭 이벤트 안에서 즉시 speak() 호출
+      if (synth.speaking || synth.pending || synth.paused) {
+        try { synth.cancel(); } catch (e) {}
+        setTimeout(() => speakWebbookChunk(mySession, wbVoicePlanIdx), 100);
+      } else {
+        speakWebbookChunk(mySession, wbVoicePlanIdx);
+      }
+    }
     function initWebbookGestures() {
       const vp = document.getElementById('webbookPageViewport');
       if (!vp || vp.dataset.gestureBound) return;
