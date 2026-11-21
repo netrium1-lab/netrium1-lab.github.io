@@ -2788,44 +2788,201 @@
 
     /* -------------------- [독립 카테고리] 디지털 자서전 섹션 (#memoir) -------------------- */
     .memoir-section {
-      background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(240, 246, 252, 0.65) 100%);
+      background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(240, 246, 252, 0.55) 100%);
       position: relative;
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
     }
 
     [data-theme="dark"] .memoir-section {
-      background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(19, 30, 45, 0.6) 100%);
+      background: linear-gradient(180deg, var(--bg-primary) 0%, rgba(19, 30, 45, 0.55) 100%);
+    }
+
+    /* 자서전 영역 2단 구분 내비게이션 필 (① 자서전 설명 vs ② 비즈니스 상품) */
+    .memoir-zone-switcher {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 0 auto 30px;
+    }
+    .memoir-zone-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-size: 0.94rem;
+      font-weight: 800;
+      text-decoration: none;
+      transition: all 0.22s ease;
+      word-break: keep-all;
+    }
+    .memoir-zone-pill.guide-pill {
+      background: #eef5fc;
+      color: #174574;
+      border: 1.6px solid #9ec2ea;
+    }
+    .memoir-zone-pill.guide-pill:hover {
+      background: #1d5fa7;
+      color: #ffffff;
+      border-color: #1d5fa7;
+      transform: translateY(-2px);
+    }
+    .memoir-zone-pill.product-pill {
+      background: linear-gradient(135deg, #1e3d2f 0%, #2a5340 100%);
+      color: #f6df96;
+      border: 1.6px solid #c29b38;
+      box-shadow: 0 4px 14px rgba(30, 61, 47, 0.22);
+    }
+    .memoir-zone-pill.product-pill:hover {
+      background: linear-gradient(135deg, #274f3d 0%, #1c3b2d 100%);
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    [data-theme="dark"] .memoir-zone-pill.guide-pill {
+      background: #172b44;
+      color: #a3ccf8;
+      border-color: #2f5a8c;
+    }
+
+    /* =========================================================================
+       ① 자서전 소개 & 제작 가이드 존 (쿨 블루·화이트 톤 — 설명 영역 명확 구분)
+       ========================================================================= */
+    .memoir-guide-zone {
+      background: var(--bg-card);
+      border: 1.8px solid #cce0f5;
+      border-top: 6px solid #1d5fa7;
+      border-radius: 26px;
+      padding: 36px 34px 40px;
+      box-shadow: 0 12px 34px rgba(23, 69, 116, 0.07);
+      margin-bottom: 34px;
+      scroll-margin-top: 100px;
+    }
+    [data-theme="dark"] .memoir-guide-zone {
+      border-color: #264366;
+      border-top-color: #5ea2eb;
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.35);
+    }
+    @media (max-width: 768px) {
+      .memoir-guide-zone {
+        padding: 24px 18px 28px;
+        border-radius: 20px;
+      }
+    }
+
+    .memoir-zone-banner-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px 24px;
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      border-bottom: 1.5px dashed #cce0f5;
+    }
+    .memoir-zone-banner-head > div {
+      flex: 1 1 520px;
+      min-width: 0;
+    }
+    [data-theme="dark"] .memoir-zone-banner-head {
+      border-bottom-color: #29466b;
+    }
+    .memoir-zone-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      font-weight: 900;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
+    .memoir-zone-badge.blue {
+      background: #e3effc;
+      color: #154578;
+      border: 1px solid #b5d3f5;
+    }
+    [data-theme="dark"] .memoir-zone-badge.blue {
+      background: #18304d;
+      color: #9ec8f7;
+      border-color: #2c5585;
+    }
+    .memoir-zone-heading {
+      font-family: 'Noto Serif KR', Georgia, serif;
+      font-size: 1.62rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin: 0 0 6px 0;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+    .memoir-zone-sub {
+      font-size: 0.96rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+    .memoir-jump-pkg-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: rgba(194, 155, 56, 0.14);
+      color: #8b6610;
+      border: 1.5px solid rgba(194, 155, 56, 0.45);
+      font-size: 0.9rem;
+      font-weight: 850;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .memoir-jump-pkg-btn:hover {
+      background: #c29b38;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+    [data-theme="dark"] .memoir-jump-pkg-btn {
+      color: #f0cf7b;
+      background: rgba(216, 178, 82, 0.14);
     }
 
     .memoir-grid {
       display: grid;
-      grid-template-columns: 1fr 1.15fr;
-      gap: 36px;
+      grid-template-columns: 0.95fr 1.15fr;
+      gap: 28px;
       align-items: stretch;
-      margin-top: 20px;
+      margin-top: 0;
     }
 
-    @media (max-width: 992px) {
+    @media (max-width: 960px) {
       .memoir-grid {
         grid-template-columns: 1fr;
-        gap: 30px;
+        gap: 24px;
       }
     }
 
     /* 좌측: 책 아카이브 쇼케이스 카드 */
     .memoir-book-showcase {
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-color);
-      border-radius: 24px;
-      padding: 36px 30px;
-      box-shadow: var(--shadow-lg);
+      background: #f5f9fe;
+      border: 1.5px solid #d5e5f7;
+      border-radius: 22px;
+      padding: 28px 24px;
+      box-shadow: 0 8px 24px rgba(23, 69, 116, 0.06);
       position: relative;
       overflow: hidden;
-      border-top: 5px solid #3b74b0;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      gap: 18px;
+    }
+    [data-theme="dark"] .memoir-book-showcase {
+      background: #141f2d;
+      border-color: #253d5c;
     }
 
     .memoir-book-badge {
@@ -2834,11 +2991,11 @@
       gap: 6px;
       background: #d9e8fa;
       color: #174574;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 850;
       padding: 6px 14px;
       border-radius: 999px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       width: fit-content;
     }
 
@@ -2848,14 +3005,13 @@
     }
 
     .memoir-book-mockup {
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      background: linear-gradient(145deg, #1c2a3f 0%, #0f172a 100%);
       color: #fff;
       border-radius: 16px;
-      padding: 30px 26px;
+      padding: 28px 24px;
       position: relative;
-      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.28);
-      border-left: 10px solid #c5a059;
-      margin-bottom: 20px;
+      box-shadow: 0 16px 34px rgba(15, 23, 42, 0.28);
+      border-left: 11px solid #c5a059;
     }
 
     .memoir-book-mockup::after {
@@ -2866,13 +3022,13 @@
       right: 0;
       bottom: 0;
       border-radius: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.14);
       pointer-events: none;
     }
 
     .memoir-mockup-tag {
-      font-size: 0.76rem;
-      color: #c5a059;
+      font-size: 0.74rem;
+      color: #e4c173;
       letter-spacing: 2px;
       font-weight: 800;
       text-transform: uppercase;
@@ -2880,236 +3036,263 @@
     }
 
     .memoir-mockup-title {
-      font-family: var(--font-serif, 'MaruBuri', serif);
+      font-family: 'Noto Serif KR', 'MaruBuri', serif;
       font-size: 1.55rem;
       font-weight: 900;
       color: #fff;
       line-height: 1.35;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .memoir-mockup-sub {
-      font-size: 0.94rem;
-      color: #94a3b8;
+      font-size: 0.9rem;
+      color: #a9bad0;
       margin-bottom: 18px;
     }
 
     .memoir-toc-box {
-      background: rgba(255, 255, 255, 0.06);
-      border-radius: 10px;
-      padding: 14px 18px;
-      border: 1px dashed rgba(255, 255, 255, 0.16);
-      font-size: 0.88rem;
-      color: #cbd5e1;
-      line-height: 1.75;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      padding: 16px 18px;
+      border: 1px dashed rgba(228, 193, 115, 0.34);
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      line-height: 1.65;
+      word-break: keep-all;
     }
 
     .memoir-toc-box li {
       list-style: none;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 8px;
+      word-break: keep-all;
+    }
+    .memoir-toc-box li span {
+      color: #e4c173;
+      font-weight: 900;
+      flex-shrink: 0;
     }
 
     .memoir-audio-feature {
       display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--bg-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 14px 18px;
+      align-items: flex-start;
+      gap: 13px;
+      background: var(--bg-card);
+      border: 1.5px solid #cce0f5;
+      border-radius: 15px;
+      padding: 16px 18px;
       font-size: 0.94rem;
       font-weight: 700;
       color: var(--text-primary);
+      word-break: keep-all;
+      line-height: 1.55;
+    }
+    [data-theme="dark"] .memoir-audio-feature {
+      border-color: #28466b;
     }
 
-    /* 우측: 4단계 프로세스 & 특징 리스트 */
+    /* 우측: 4단계 프로세스 & 특징 리스트 (더 선명하고 명확한 STEP 흐름) */
     .memoir-features-wrap {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      justify-content: center;
+      gap: 14px;
+      justify-content: space-between;
     }
 
     .memoir-step-card {
-      background: var(--bg-card);
+      background: var(--bg-primary);
       border: 1.5px solid var(--border-color);
-      border-radius: 18px;
-      padding: 20px 22px;
+      border-left: 4.5px solid #1d5fa7;
+      border-radius: 16px;
+      padding: 18px 20px;
       display: flex;
-      gap: 16px;
+      gap: 15px;
       align-items: flex-start;
-      transition: all 0.28s ease;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      transition: all 0.25s ease;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.025);
     }
 
     .memoir-step-card:hover {
-      transform: translateX(6px);
-      border-color: #3b74b0;
-      box-shadow: 0 8px 24px rgba(59, 116, 176, 0.12);
+      transform: translateX(4px);
+      border-color: #1d5fa7;
+      box-shadow: 0 8px 22px rgba(29, 95, 167, 0.12);
     }
 
     .memoir-step-num {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: #f0f6fc;
-      color: #174574;
-      font-size: 1.05rem;
+      min-width: 58px;
+      height: 36px;
+      padding: 0 10px;
+      border-radius: 10px;
+      background: #1d5fa7;
+      color: #ffffff;
+      font-size: 0.82rem;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      border: 1px solid #cce0f5;
+      letter-spacing: 0.3px;
+      margin-top: 2px;
     }
 
     [data-theme="dark"] .memoir-step-num {
-      background: #1a3453;
-      color: #9bc5f5;
-      border-color: #284d79;
+      background: #2867ad;
+      color: #ffffff;
     }
 
     .memoir-step-content h4 {
-      font-size: 1.12rem;
-      font-weight: 800;
+      font-size: 1.1rem;
+      font-weight: 850;
       color: var(--text-primary);
       margin-bottom: 5px;
       display: flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .memoir-step-content p {
-      font-size: 0.95rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
+      gap: 7px;
+      line-height: 1.35;
       word-break: keep-all;
     }
 
-    /* 하단 특별 혜택 및 CTA 배너 */
-    .memoir-cta-banner {
-      margin-top: 36px;
-      background: var(--bg-card);
-      border: 2px solid var(--accent);
-      border-radius: 20px;
-      padding: 28px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 20px;
-      box-shadow: 0 12px 32px rgba(179, 139, 89, 0.14);
-    }
-
-    .memoir-cta-info h4 {
-      font-size: 1.25rem;
-      font-weight: 850;
-      color: var(--text-primary);
-      margin-bottom: 6px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .memoir-cta-info p {
-      font-size: 0.96rem;
+    .memoir-step-content p {
+      font-size: 0.94rem;
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.62;
+      word-break: keep-all;
     }
 
-    .memoir-cta-btns {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    /* ==========================================================
-       [신설] 디지털 자서전 5대 테마 로드맵 & 3대 맞춤 출판 패키지 스타일
-       ========================================================== */
+    /* 5대 테마 & 20대 구술 로드맵 (좁은 5열 깨짐 해결 → 시원한 3+2 대형 가독성 레이아웃!) */
     .memoir-roadmap-container {
-      margin-top: 56px;
-      margin-bottom: 56px;
-      background: var(--bg-card);
-      border: 1.5px solid var(--border-color);
+      margin-top: 32px;
+      margin-bottom: 0;
+      background: #f8fafd;
+      border: 1.5px solid #d5e4f5;
       border-radius: 20px;
-      padding: 36px 32px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+      padding: 32px 26px 28px;
+    }
+    [data-theme="dark"] .memoir-roadmap-container {
+      background: #151e29;
+      border-color: #243a54;
+    }
+    @media (max-width: 768px) {
+      .memoir-roadmap-container {
+        padding: 22px 16px;
+      }
     }
     .memoir-roadmap-header {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 26px;
     }
     .memoir-roadmap-tag {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 5px 14px;
-      background: rgba(194, 155, 56, 0.12);
-      color: #936f1c;
+      background: #e3effc;
+      color: #174574;
+      border: 1px solid #b7d4f5;
       border-radius: 999px;
-      font-size: 0.84rem;
-      font-weight: 800;
+      font-size: 0.82rem;
+      font-weight: 850;
       margin-bottom: 10px;
     }
+    [data-theme="dark"] .memoir-roadmap-tag {
+      background: #1a3453;
+      color: #9bc5f5;
+      border-color: #2d5585;
+    }
     .memoir-roadmap-title {
-      font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.55rem;
-      font-weight: 800;
+      font-family: 'Noto Serif KR', 'MaruBuri', serif;
+      font-size: 1.48rem;
+      font-weight: 850;
       color: var(--text-primary);
       margin-bottom: 8px;
+      word-break: keep-all;
     }
     .memoir-roadmap-desc {
-      font-size: 0.95rem;
+      font-size: 0.96rem;
       color: var(--text-secondary);
-      line-height: 1.6;
+      line-height: 1.65;
+      word-break: keep-all;
     }
+
+    /* 6컬럼 그리드로 상단 3장(각 2칸) + 하단 2장(각 3칸) 완벽 채움! 한글 줄바꿈 없이 큼직하게 */
     .memoir-chapters-grid {
       display: grid;
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 16px;
     }
-    @media (max-width: 1100px) {
+    .memoir-chapters-grid .memoir-chapter-card:nth-child(1),
+    .memoir-chapters-grid .memoir-chapter-card:nth-child(2),
+    .memoir-chapters-grid .memoir-chapter-card:nth-child(3) {
+      grid-column: span 2;
+    }
+    .memoir-chapters-grid .memoir-chapter-card:nth-child(4),
+    .memoir-chapters-grid .memoir-chapter-card:nth-child(5) {
+      grid-column: span 3;
+    }
+    @media (max-width: 960px) {
       .memoir-chapters-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .memoir-chapters-grid .memoir-chapter-card:nth-child(n) {
+        grid-column: span 1;
+      }
+      .memoir-chapters-grid .memoir-chapter-card:nth-child(5) {
+        grid-column: 1 / -1;
       }
     }
     @media (max-width: 640px) {
       .memoir-chapters-grid {
         grid-template-columns: 1fr;
       }
+      .memoir-chapters-grid .memoir-chapter-card:nth-child(n) {
+        grid-column: span 1;
+      }
     }
+
     .memoir-chapter-card {
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
-      padding: 20px 16px;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-top: 4px solid #3b74b0;
+      border-radius: 16px;
+      padding: 20px 20px 22px;
       display: flex;
       flex-direction: column;
       transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
       position: relative;
+      box-shadow: 0 3px 12px rgba(23, 69, 116, 0.04);
     }
     .memoir-chapter-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(30, 61, 47, 0.08);
-      border-color: #c29b38;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(29, 95, 167, 0.11);
+      border-color: #1d5fa7;
     }
     .memoir-chapter-num {
       display: inline-block;
-      font-size: 0.76rem;
+      width: fit-content;
+      font-size: 0.74rem;
       font-weight: 900;
-      color: #c29b38;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+      color: #174574;
+      background: #e6f0fb;
+      padding: 3px 10px;
+      border-radius: 999px;
+      letter-spacing: 0.8px;
+      margin-bottom: 10px;
+    }
+    [data-theme="dark"] .memoir-chapter-num {
+      background: #1a3453;
+      color: #9bc5f5;
     }
     .memoir-chapter-title {
-      font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.05rem;
-      font-weight: 800;
+      font-family: 'Noto Serif KR', 'MaruBuri', serif;
+      font-size: 1.12rem;
+      font-weight: 850;
       color: var(--text-primary);
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px dashed var(--border-color);
       line-height: 1.35;
+      word-break: keep-all;
     }
     .memoir-questions-list {
       list-style: none;
@@ -3117,104 +3300,295 @@
       margin: 0;
       display: flex;
       flex-direction: column;
-      gap: 7px;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      line-height: 1.45;
+      gap: 9px;
+      font-size: 0.93rem;
+      color: var(--text-primary);
+      line-height: 1.5;
+      word-break: keep-all;
     }
     .memoir-questions-list li {
       display: flex;
       align-items: flex-start;
-      gap: 6px;
+      gap: 8px;
+      word-break: keep-all;
     }
     .memoir-questions-list li span.q-bullet {
-      color: #c29b38;
-      font-weight: 800;
-      line-height: 1.2;
+      color: #1d5fa7;
+      font-weight: 900;
+      line-height: 1.45;
+      flex-shrink: 0;
+      min-width: 28px;
+    }
+    [data-theme="dark"] .memoir-questions-list li span.q-bullet {
+      color: #7eb6f2;
     }
 
-    /* 3대 출판 패키지 */
+    /* ① 설명 영역과 ② 비즈니스 상품 박스를 명확히 가르는 전환 디바이더 */
+    .memoir-zone-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin: 12px 0 28px;
+    }
+    .memoir-zone-divider::before,
+    .memoir-zone-divider::after {
+      content: "";
+      flex: 1;
+      height: 1.5px;
+      background: linear-gradient(90deg, transparent, rgba(194, 155, 56, 0.55), transparent);
+    }
+    .memoir-zone-divider-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #fdf8ec 0%, #f7ebd0 100%);
+      border: 1.5px solid #d4b054;
+      color: #7c5909;
+      font-size: 0.86rem;
+      font-weight: 900;
+      white-space: nowrap;
+      box-shadow: 0 3px 10px rgba(194, 155, 56, 0.16);
+    }
+    [data-theme="dark"] .memoir-zone-divider-pill {
+      background: #2b2314;
+      border-color: #9e7d2b;
+      color: #f0cf7b;
+    }
+
+    /* =========================================================================
+       ② 비즈니스 상품 안내 전용 박스 (딥 포레스트 & 샴페인 골드 프리미엄 상품관)
+       ========================================================================= */
+    .memoir-product-box {
+      background: linear-gradient(180deg, #fffdf8 0%, #f9f4e8 100%);
+      border: 2.2px solid #c9a446;
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 18px 46px rgba(30, 61, 47, 0.12), 0 4px 16px rgba(194, 155, 56, 0.14);
+      scroll-margin-top: 100px;
+    }
+    [data-theme="dark"] .memoir-product-box {
+      background: linear-gradient(180deg, #211f1a 0%, #1a1915 100%);
+      border-color: #a68532;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+    }
+
+    /* 상품 박스 상단 딥 포레스트 & 골드 전용 타이틀 헤더바 */
+    .memoir-product-box-head {
+      background: linear-gradient(135deg, #1b3629 0%, #244736 60%, #172e23 100%);
+      color: #ffffff;
+      padding: 32px 34px 28px;
+      text-align: center;
+      border-bottom: 3px solid #c9a446;
+      position: relative;
+    }
+    .memoir-product-box-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 16px;
+      border-radius: 999px;
+      background: rgba(212, 175, 55, 0.18);
+      border: 1px solid rgba(235, 200, 96, 0.55);
+      color: #f6dc8b;
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+    .memoir-product-box-title {
+      font-family: 'Noto Serif KR', 'MaruBuri', serif;
+      font-size: 1.78rem;
+      font-weight: 850;
+      color: #ffffff;
+      margin: 0 0 8px 0;
+      line-height: 1.35;
+      word-break: keep-all;
+    }
+    .memoir-product-box-desc {
+      font-size: 0.98rem;
+      color: rgba(245, 242, 235, 0.88);
+      margin: 0 auto;
+      max-width: 640px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+    .memoir-product-box-body {
+      padding: 36px 30px 34px;
+    }
+    @media (max-width: 768px) {
+      .memoir-product-box { border-radius: 22px; }
+      .memoir-product-box-head { padding: 24px 18px 22px; }
+      .memoir-product-box-title { font-size: 1.42rem; }
+      .memoir-product-box-body { padding: 24px 16px 24px; }
+    }
+
+    /* 3대 출판 패키지 (뱃지 겹침·한글 줄바꿈 완전 해결 & 3색 등급 구분 강화) */
     .memoir-packages-container {
-      margin-top: 48px;
-      margin-bottom: 48px;
+      margin-top: 0;
+      margin-bottom: 0;
     }
     .memoir-packages-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
       align-items: stretch;
+      padding-top: 18px;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 960px) {
       .memoir-packages-grid {
         grid-template-columns: 1fr;
         max-width: 520px;
         margin: 0 auto;
+        gap: 30px;
       }
     }
     .memoir-pkg-card {
       background: var(--bg-card);
-      border: 1.8px solid var(--border-color);
+      border: 1.8px solid #e2d8c5;
+      border-top: 5px solid #4f705b;
       border-radius: 20px;
-      padding: 32px 26px;
+      padding: 34px 22px 26px;
       display: flex;
       flex-direction: column;
       position: relative;
+      overflow: visible;
       transition: all 0.25s ease;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+      box-shadow: 0 6px 22px rgba(30, 61, 47, 0.06);
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    [data-theme="dark"] .memoir-pkg-card {
+      border-color: #3d382e;
     }
     .memoir-pkg-card:hover {
       transform: translateY(-5px);
-      box-shadow: 0 14px 35px rgba(30, 61, 47, 0.1);
+      box-shadow: 0 16px 36px rgba(30, 61, 47, 0.13);
+    }
+    .memoir-pkg-card.pkg-basic {
+      border-top-color: #4f705b;
     }
     .memoir-pkg-card.highlight {
       border-color: #c29b38;
-      background: linear-gradient(180deg, rgba(194, 155, 56, 0.04) 0%, var(--bg-card) 100%);
-      box-shadow: 0 10px 32px rgba(194, 155, 56, 0.15);
+      border-top: 6px solid #c29b38;
+      padding-top: 40px;
+      background: linear-gradient(180deg, rgba(194, 155, 56, 0.08) 0%, var(--bg-card) 38%);
+      box-shadow: 0 14px 34px rgba(194, 155, 56, 0.2);
+    }
+    [data-theme="dark"] .memoir-pkg-card.highlight {
+      background: linear-gradient(180deg, rgba(216, 178, 82, 0.12) 0%, var(--bg-card) 42%);
+    }
+    .memoir-pkg-card.pkg-heritage {
+      border-top-color: #1e3d2f;
+      background: linear-gradient(180deg, rgba(30, 61, 47, 0.04) 0%, var(--bg-card) 36%);
+    }
+    [data-theme="dark"] .memoir-pkg-card.pkg-heritage {
+      border-top-color: #6ea88b;
+      background: linear-gradient(180deg, rgba(110, 168, 139, 0.1) 0%, var(--bg-card) 36%);
     }
     .memoir-pkg-badge-best {
       position: absolute;
-      top: -13px;
+      top: -17px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(135deg, #d4af37, #aa7c11);
-      color: #fff;
+      background: linear-gradient(135deg, #d4af37 0%, #a57710 100%);
+      color: #ffffff;
       font-size: 0.78rem;
-      font-weight: 900;
-      padding: 4px 16px;
+      font-weight: 850;
+      padding: 6px 16px;
       border-radius: 999px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 10px rgba(170, 124, 17, 0.35);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      line-height: 1.25;
+      box-shadow: 0 5px 14px rgba(165, 119, 16, 0.38);
+      border: 2px solid var(--bg-card);
+      z-index: 4;
     }
+    .memoir-pkg-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+    }
+    .memoir-pkg-pill.sage { background: rgba(79, 112, 91, 0.12); color: #355842; border: 1px solid rgba(79, 112, 91, 0.28); }
+    .memoir-pkg-pill.gold { background: rgba(194, 155, 56, 0.15); color: #8f6910; border: 1px solid rgba(194, 155, 56, 0.38); }
+    .memoir-pkg-pill.navy { background: rgba(30, 61, 47, 0.12); color: #1e3d2f; border: 1px solid rgba(30, 61, 47, 0.28); }
+    [data-theme="dark"] .memoir-pkg-pill.sage { color: #a3cfb3; background: rgba(163, 207, 179, 0.14); }
+    [data-theme="dark"] .memoir-pkg-pill.gold { color: #f0cf7b; background: rgba(240, 207, 123, 0.15); }
+    [data-theme="dark"] .memoir-pkg-pill.navy { color: #96d1b4; background: rgba(150, 209, 180, 0.14); }
+
     .memoir-pkg-header {
       text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px dashed var(--border-color);
-      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1.5px dashed var(--border-color);
+      margin-bottom: 18px;
     }
     .memoir-pkg-tier {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #c29b38;
+      font-size: 0.78rem;
+      font-weight: 850;
+      color: #b58d26;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
+    .memoir-pkg-card.pkg-basic .memoir-pkg-tier { color: #4f705b; }
+    .memoir-pkg-card.pkg-heritage .memoir-pkg-tier { color: #1e3d2f; }
+    [data-theme="dark"] .memoir-pkg-card.pkg-basic .memoir-pkg-tier { color: #9ec5ab; }
+    [data-theme="dark"] .memoir-pkg-card.pkg-heritage .memoir-pkg-tier { color: #8fd1b1; }
+
     .memoir-pkg-name {
-      font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.45rem;
+      font-family: 'Noto Serif KR', 'MaruBuri', serif;
+      font-size: 1.48rem;
       font-weight: 850;
       color: var(--text-primary);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      line-height: 1.3;
     }
     .memoir-pkg-desc {
-      font-size: 0.88rem;
+      font-size: 0.91rem;
       color: var(--text-secondary);
-      line-height: 1.45;
+      line-height: 1.52;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin: 0 auto 14px;
     }
+    .memoir-pkg-summary-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+    }
+    .memoir-pkg-summary-chips span {
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .memoir-pkg-card.highlight .memoir-pkg-summary-chips span {
+      background: rgba(194, 155, 56, 0.12);
+      border-color: rgba(194, 155, 56, 0.35);
+      color: #7c5909;
+    }
+    [data-theme="dark"] .memoir-pkg-card.highlight .memoir-pkg-summary-chips span {
+      color: #f3d589;
+    }
+
     .memoir-pkg-specs {
       list-style: none;
       padding: 0;
-      margin: 0 0 28px 0;
+      margin: 0 0 24px 0;
       display: flex;
       flex-direction: column;
       gap: 12px;
@@ -3223,15 +3597,18 @@
     .memoir-pkg-specs li {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      font-size: 0.9rem;
+      gap: 9px;
+      font-size: 0.91rem;
       color: var(--text-primary);
-      line-height: 1.45;
+      line-height: 1.52;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     .memoir-pkg-specs li span.icon {
       font-size: 1.05rem;
-      line-height: 1.2;
+      line-height: 1.3;
       flex-shrink: 0;
+      margin-top: 1px;
     }
     .memoir-pkg-specs li strong {
       color: var(--text-primary);
@@ -3239,18 +3616,21 @@
     }
     .memoir-pkg-btn {
       width: 100%;
-      padding: 14px 20px;
+      padding: 14px 16px;
       border-radius: 12px;
-      font-size: 0.98rem;
+      font-size: 0.94rem;
       font-weight: 850;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
+      gap: 7px;
+      transition: all 0.22s ease;
       text-decoration: none;
       border: none;
+      white-space: nowrap;
+      font-family: inherit;
+      letter-spacing: -0.2px;
     }
     .memoir-pkg-btn.primary {
       background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%);
@@ -3264,20 +3644,79 @@
     .memoir-pkg-btn.gold {
       background: linear-gradient(135deg, #c29b38 0%, #9a7820 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(194, 155, 56, 0.35);
+      box-shadow: 0 5px 16px rgba(194, 155, 56, 0.36);
     }
     .memoir-pkg-btn.gold:hover {
       background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
       transform: translateY(-2px);
     }
     .memoir-pkg-btn.outline {
-      background: transparent;
-      border: 1.6px solid var(--border-color);
-      color: var(--text-primary);
+      background: var(--bg-primary);
+      border: 1.8px solid #4f705b;
+      color: #2b4a36;
+    }
+    [data-theme="dark"] .memoir-pkg-btn.outline {
+      border-color: #82b093;
+      color: #c2e5ce;
     }
     .memoir-pkg-btn.outline:hover {
       border-color: #1e3d2f;
-      background: rgba(30, 61, 47, 0.05);
+      background: #4f705b;
+      color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    /* 상품 박스 하단 특별 혜택 및 무료 상담 CTA 배너 */
+    .memoir-cta-banner {
+      margin-top: 28px;
+      background: var(--bg-card);
+      border: 1.8px solid #c9a446;
+      border-left: 6px solid #1e3d2f;
+      border-radius: 18px;
+      padding: 24px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 18px;
+      box-shadow: 0 8px 24px rgba(30, 61, 47, 0.08);
+    }
+    .memoir-cta-info {
+      flex: 1 1 380px;
+      min-width: 0;
+    }
+    .memoir-cta-info h4 {
+      font-size: 1.18rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      line-height: 1.4;
+      word-break: keep-all;
+    }
+    .memoir-cta-info p {
+      font-size: 0.94rem;
+      color: var(--text-secondary);
+      line-height: 1.62;
+      word-break: keep-all;
+    }
+    .memoir-cta-btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      flex-shrink: 0;
+    }
+    .memoir-cta-btns .btn {
+      white-space: nowrap;
+      justify-content: center;
+    }
+    @media (max-width: 768px) {
+      .memoir-cta-banner { padding: 20px 16px; }
+      .memoir-cta-btns { width: 100%; }
+      .memoir-cta-btns .btn { flex: 1 1 auto; }
     }
 
     /* -------------------- 공통 섹션 스타일 -------------------- */
@@ -7264,272 +7703,324 @@
     <!-- 4. [신설 독립 카테고리] 내 인생의 서사 기록, 디지털 자서전 -->
     <section id="memoir" class="memoir-section">
       <div class="container">
-        <!-- [신설] 카테고리 04 시각적 랜드마크 이미지 배너 -->
+        <!-- 카테고리 04 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
           <div class="slb-img-wrap">
             <img src="images/showcase-senior-memoir.jpg" alt="내 인생의 서사, 디지털 자서전 - 인생 회고록을 읽는 어르신" class="slb-img" loading="lazy">
           </div>
           <div class="slb-content">
-            <div class="slb-badge">CATEGORY 04 · ✍️ 생애사 인터뷰 & 양장본</div>
+            <div class="slb-badge">CATEGORY 04 · ✍️ 생애사 인터뷰 &amp; 양장본</div>
             <h3 class="slb-title">내 인생의 서사, 디지털 자서전</h3>
-            <p class="slb-desc">찾아가는 1:1 구술 채록과 옛 사진 복원으로 삶의 궤적을 명작 회고록과 육성 오디오북, 최고급 양장본으로 기록합니다.</p>
+            <p class="slb-desc" style="word-break: keep-all;">찾아가는 1:1 구술 채록과 옛 사진 복원으로 삶의 궤적을 명작 회고록과 육성 오디오북, 최고급 양장본으로 기록합니다.</p>
           </div>
         </div>
-        <div class="section-header">
-          <p class="section-tag">Digital Memoir & Life Archive</p>
-          <h2 class="section-title">내 인생의 서사 기록, 디지털 자서전</h2>
-          <p class="section-desc">
-            치열하게 살아온 삶의 궤적을 디지털 자서전으로 남겨 영원히 기억되게 합니다.<br>
-            잊혀가는 기억과 빛바랜 사진, 발자취를 엮어 한 편의 영화 같은 아카이브로 구축하고, 세상에 단 하나뿐인 나의 역사책을 완성하세요.
-          </p>
+
+        <!-- ① 자서전 설명 영역 ↔ ② 비즈니스 상품 영역 빠른 이동 필 -->
+        <div class="memoir-zone-switcher" aria-label="자서전 영역 바로가기">
+          <a href="#memoirGuideZone" class="memoir-zone-pill guide-pill">
+            <span>① 📖</span>
+            <span>자서전 소개 · 4단계 제작 &amp; 5대 로드맵</span>
+          </a>
+          <a href="#memoirProductZone" class="memoir-zone-pill product-pill">
+            <span>② 🎁</span>
+            <span>비즈니스 상품 · 3대 맞춤 출판 패키지 ↓</span>
+          </a>
         </div>
 
-        <div class="memoir-grid">
-          <!-- 좌측: 품격 있는 가죽 양장본 자서전 쇼케이스 -->
-          <div class="memoir-book-showcase">
+        <!-- =====================================================================
+             [1번 영역] ① 자서전 소개 & 제작 가이드 존 (쿨 블루·화이트 설명 박스)
+             ===================================================================== -->
+        <div class="memoir-guide-zone" id="memoirGuideZone">
+          <div class="memoir-zone-banner-head">
             <div>
-              <div class="memoir-book-badge">
-                <span>📖</span> 여백 프리미엄 라이프 북
-              </div>
-              <div class="memoir-book-mockup">
-                <div class="memoir-mockup-tag">THE ARCHIVE OF MY LIFE</div>
-                <h3 class="memoir-mockup-title">나의 결, 나의 이야기</h3>
-                <p class="memoir-mockup-sub">지은이: 당신의 삶 · 엮은이: 여백 서사 기록팀</p>
-                <div class="memoir-toc-box">
-                  <div style="font-weight: 800; color: #f1f5f9; margin-bottom: 8px; font-size: 0.9rem;">📌 수록 목차 미리보기</div>
-                  <ul style="padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px;">
-                    <li><span>•</span> 제1장. 맨손으로 일군 청춘의 새벽과 도전</li>
-                    <li><span>•</span> 제2장. 치열했던 삶의 땀방울, 그리고 소중한 가족</li>
-                    <li><span>•</span> 제3장. 인생의 후반전, 비움으로 찾은 여백의 미학</li>
-                    <li><span>•</span> 제4장. 사랑하는 후손들에게 남기는 마지막 유산</li>
-                  </ul>
-                </div>
-              </div>
+              <span class="memoir-zone-badge blue">📖 PART 01 · 자서전 소개 &amp; 제작 과정 안내</span>
+              <h2 class="memoir-zone-heading">어떻게 한 권의 명작 자서전이 완성되나요?</h2>
+              <p class="memoir-zone-sub">글쓰기가 막막하셔도 편안한 1:1 대화만으로 4단계 제작 과정과 20대 핵심 질문을 따라 세상에 단 하나뿐인 나의 역사책을 완성합니다.</p>
             </div>
+            <a href="#memoirProductZone" class="memoir-jump-pkg-btn">
+              <span>🎁 출판 상품 패키지 바로 보기</span>
+              <span>↓</span>
+            </a>
+          </div>
 
-            <!-- 육성 오디오북 아카이빙 안내 -->
-            <div class="memoir-audio-feature">
-              <span style="font-size: 1.5rem; line-height: 1;">🎙️</span>
+          <div class="memoir-grid">
+            <!-- 좌측: 품격 있는 가죽 양장본 자서전 쇼케이스 -->
+            <div class="memoir-book-showcase">
               <div>
-                <div style="color: var(--text-primary); font-weight: 800;">육성 오디오북 영구 보존 지원</div>
-                <div style="font-size: 0.84rem; color: var(--text-secondary); font-weight: 500;">
-                  나의 목소리로 직접 낭독한 음성을 QR코드로 책에 수록하여 자녀들이 언제든 들을 수 있습니다.
+                <div class="memoir-book-badge">
+                  <span>📖</span> 여백 프리미엄 라이프 북
+                </div>
+                <div class="memoir-book-mockup">
+                  <div class="memoir-mockup-tag">THE ARCHIVE OF MY LIFE</div>
+                  <h3 class="memoir-mockup-title">나의 결, 나의 이야기</h3>
+                  <p class="memoir-mockup-sub">지은이: 당신의 삶 · 엮은이: 여백 서사 기록팀</p>
+                  <div class="memoir-toc-box">
+                    <div style="font-weight: 800; color: #f8fafc; margin-bottom: 10px; font-size: 0.92rem;">📌 수록 목차 미리보기</div>
+                    <ul style="padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px;">
+                      <li><span>•</span> 제1장. 맨손으로 일군 청춘의 새벽과 도전</li>
+                      <li><span>•</span> 제2장. 치열했던 삶의 땀방울, 그리고 소중한 가족</li>
+                      <li><span>•</span> 제3장. 인생의 후반전, 비움으로 찾은 여백의 미학</li>
+                      <li><span>•</span> 제4장. 사랑하는 후손들에게 남기는 마지막 유산</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 육성 오디오북 아카이빙 안내 -->
+              <div class="memoir-audio-feature">
+                <span style="font-size: 1.55rem; line-height: 1; flex-shrink: 0;">🎙️</span>
+                <div>
+                  <div style="color: var(--text-primary); font-weight: 850; margin-bottom: 3px;">육성 오디오북 영구 보존 지원</div>
+                  <div style="font-size: 0.86rem; color: var(--text-secondary); font-weight: 500; line-height: 1.55;">
+                    나의 목소리로 직접 낭독한 음성을 QR코드로 책에 수록하여 자녀들이 언제든 들을 수 있습니다.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 우측: 4단계 제작 프로세스 & 핵심 특징 -->
+            <div class="memoir-features-wrap">
+              <!-- Step 1 -->
+              <div class="memoir-step-card">
+                <div class="memoir-step-num">STEP 01</div>
+                <div class="memoir-step-content">
+                  <h4>🎙️ 찾아가는 1:1 구술 인터뷰</h4>
+                  <p>
+                    글쓰기가 막막하셔도 괜찮습니다. 전문 구술 작가가 자택을 방문하여 따뜻한 차 한잔과 함께 편안한 대화로 삶의 지혜와 잊지 못할 비화를 자연스럽게 채록합니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 2 -->
+              <div class="memoir-step-card">
+                <div class="memoir-step-num">STEP 02</div>
+                <div class="memoir-step-content">
+                  <h4>🎞️ 옛 사진 고화질 디지털 복원 &amp; 아카이빙</h4>
+                  <p>
+                    장롱 서랍 속 빛바래고 훼손된 옛 흑백 사진, 상장, 가족 앨범을 최신 디지털 스캐닝과 색상 복원 기술을 통해 선명하고 감동적인 고화질 화보로 되살립니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 3 -->
+              <div class="memoir-step-card">
+                <div class="memoir-step-num">STEP 03</div>
+                <div class="memoir-step-content">
+                  <h4>✍️ 전문 작가진의 문학적 집필 &amp; 가족 감수</h4>
+                  <p>
+                    단순한 나열식 기록이 아닌, 읽는 이의 마음을 울리는 한 편의 문학 작품처럼 문맥과 감동을 살려 집필합니다. 초고 완성 후 가족들과 함께 꼼꼼히 퇴고합니다.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Step 4 -->
+              <div class="memoir-step-card">
+                <div class="memoir-step-num">STEP 04</div>
+                <div class="memoir-step-content">
+                  <h4>📖 모바일 웹북 아카이브 &amp; 고급 가죽 양장본</h4>
+                  <p>
+                    스마트폰으로 가족 누구나 열어볼 수 있는 전용 디지털 링크와 함께, 가문의 대를 이어 물려줄 품격 있는 최고급 하드커버 양장본 도서로 소장합니다.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- 우측: 4단계 제작 프로세스 & 핵심 특징 -->
-          <div class="memoir-features-wrap">
-            <!-- Step 1 -->
-            <div class="memoir-step-card">
-              <div class="memoir-step-num">01</div>
-              <div class="memoir-step-content">
-                <h4>🎙️ 찾아가는 1:1 구술 인터뷰</h4>
-                <p>
-                  글쓰기가 막막하셔도 괜찮습니다. 전문 구술 작가가 자택을 방문하여 따뜻한 차 한잔과 함께 편안한 대화로 삶의 지혜와 잊지 못할 비화를 자연스럽게 채록합니다.
-                </p>
+          <!-- 5대 테마 & 20대 핵심 구술 질문 로드맵 (시원한 3+2 대형 가독성 레이아웃) -->
+          <div class="memoir-roadmap-container">
+            <div class="memoir-roadmap-header">
+              <div class="memoir-roadmap-tag">
+                <span>🧭</span> THE 5 CHAPTER ROADMAP
               </div>
+              <h3 class="memoir-roadmap-title">삶의 궤적을 엮는 5대 테마 &amp; 20대 구술 로드맵</h3>
+              <p class="memoir-roadmap-desc">
+                어디서부터 이야기를 시작해야 할지 막막하셔도 걱정 없습니다.<br>
+                전문 구술 코치가 준비된 20개 인생 핵심 질문으로 어르신의 소중한 기억을 자연스럽게 이끌어냅니다.
+              </p>
             </div>
 
-            <!-- Step 2 -->
-            <div class="memoir-step-card">
-              <div class="memoir-step-num">02</div>
-              <div class="memoir-step-content">
-                <h4>🎞️ 옛 사진 고화질 디지털 복원 & 아카이빙</h4>
-                <p>
-                  장롱 서랍 속 빛바래고 훼손된 옛 흑백 사진, 상장, 가족 앨범을 최신 디지털 스캐닝과 색상 복원 기술을 통해 선명하고 감동적인 고화질 화보로 되살립니다.
-                </p>
+            <div class="memoir-chapters-grid">
+              <!-- Chapter 1 -->
+              <div class="memoir-chapter-card">
+                <span class="memoir-chapter-num">CHAPTER 01</span>
+                <h4 class="memoir-chapter-title">🌱 유년과 고향의 기억</h4>
+                <ul class="memoir-questions-list">
+                  <li><span class="q-bullet">Q1.</span><span>고향 마을의 사계절 풍경과 첫 기억</span></li>
+                  <li><span class="q-bullet">Q2.</span><span>어머니의 밥상과 아버지의 훈계</span></li>
+                  <li><span class="q-bullet">Q3.</span><span>골목길 단짝들과 학창 시절 비화</span></li>
+                  <li><span class="q-bullet">Q4.</span><span>가슴에 품었던 어린 날의 꿈과 동경</span></li>
+                </ul>
               </div>
-            </div>
 
-            <!-- Step 3 -->
-            <div class="memoir-step-card">
-              <div class="memoir-step-num">03</div>
-              <div class="memoir-step-content">
-                <h4>✍️ 전문 작가진의 문학적 집필 & 가족 감수</h4>
-                <p>
-                  단순한 나열식 기록이 아닌, 읽는 이의 마음을 울리는 한 편의 문학 작품처럼 문맥과 감동을 살려 집필합니다. 초고 완성 후 가족들과 함께 꼼꼼히 퇴고합니다.
-                </p>
+              <!-- Chapter 2 -->
+              <div class="memoir-chapter-card">
+                <span class="memoir-chapter-num">CHAPTER 02</span>
+                <h4 class="memoir-chapter-title">🔥 청춘의 열정과 도전</h4>
+                <ul class="memoir-questions-list">
+                  <li><span class="q-bullet">Q5.</span><span>맨손으로 상경해 맞은 첫 일터의 새벽</span></li>
+                  <li><span class="q-bullet">Q6.</span><span>격랑의 시대 속 밤낮없이 흘린 땀방울</span></li>
+                  <li><span class="q-bullet">Q7.</span><span>잊을 수 없는 동료들과 청춘의 낭만</span></li>
+                  <li><span class="q-bullet">Q8.</span><span>내 인생의 방향을 바꾼 결정적 순간</span></li>
+                </ul>
               </div>
-            </div>
 
-            <!-- Step 4 -->
-            <div class="memoir-step-card">
-              <div class="memoir-step-num">04</div>
-              <div class="memoir-step-content">
-                <h4>📖 모바일 웹북 아카이브 & 고급 가죽 양장본</h4>
-                <p>
-                  스마트폰으로 가족 누구나 열어볼 수 있는 전용 디지털 링크와 함께, 가문의 대를 이어 물려줄 품격 있는 최고급 하드커버 양장본 도서로 소장합니다.
-                </p>
+              <!-- Chapter 3 -->
+              <div class="memoir-chapter-card">
+                <span class="memoir-chapter-num">CHAPTER 03</span>
+                <h4 class="memoir-chapter-title">🏡 사랑과 가족의 결</h4>
+                <ul class="memoir-questions-list">
+                  <li><span class="q-bullet">Q9.</span><span>평생의 반려자를 처음 마주한 날</span></li>
+                  <li><span class="q-bullet">Q10.</span><span>첫 아이가 태어났을 때의 벅찬 감동</span></li>
+                  <li><span class="q-bullet">Q11.</span><span>팍팍한 살림 속에서도 지켜낸 가족애</span></li>
+                  <li><span class="q-bullet">Q12.</span><span>우리 가족만의 보금자리를 일군 날</span></li>
+                </ul>
+              </div>
+
+              <!-- Chapter 4 -->
+              <div class="memoir-chapter-card">
+                <span class="memoir-chapter-num">CHAPTER 04</span>
+                <h4 class="memoir-chapter-title">🌊 시련을 넘은 삶의 지혜</h4>
+                <ul class="memoir-questions-list">
+                  <li><span class="q-bullet">Q13.</span><span>생애 가장 캄캄했던 시련과 고비</span></li>
+                  <li><span class="q-bullet">Q14.</span><span>주저앉고 싶을 때 나를 세운 신념</span></li>
+                  <li><span class="q-bullet">Q15.</span><span>위기를 버티게 해 준 고마운 은인들</span></li>
+                  <li><span class="q-bullet">Q16.</span><span>세월이 지나서야 깨달은 용서와 감사</span></li>
+                </ul>
+              </div>
+
+              <!-- Chapter 5 -->
+              <div class="memoir-chapter-card">
+                <span class="memoir-chapter-num">CHAPTER 05</span>
+                <h4 class="memoir-chapter-title">🌳 후손에게 전하는 유산</h4>
+                <ul class="memoir-questions-list">
+                  <li><span class="q-bullet">Q17.</span><span>자녀와 손주들에게 꼭 남기고픈 당부</span></li>
+                  <li><span class="q-bullet">Q18.</span><span>인생의 여정에서 건져 올린 삶의 철학</span></li>
+                  <li><span class="q-bullet">Q19.</span><span>남은 생애 동안 이루고픈 소망</span></li>
+                  <li><span class="q-bullet">Q20.</span><span>영원히 기억될 나의 이름 석 자</span></li>
+                </ul>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- [신설] 5대 테마 & 20대 핵심 구술 질문 로드맵 -->
-        <div class="memoir-roadmap-container">
-          <div class="memoir-roadmap-header">
-            <div class="memoir-roadmap-tag">
-              <span>🧭</span> THE 5 CHAPTER ROADMAP
-            </div>
-            <h3 class="memoir-roadmap-title">삶의 궤적을 엮는 5대 테마 &amp; 20대 구술 로드맵</h3>
-            <p class="memoir-roadmap-desc">
-              어디서부터 이야기를 시작해야 할지 막막하셔도 걱정 없습니다.<br>
-              전문 구술 코치가 준비된 20개 인생 핵심 질문으로 어르신의 소중한 기억을 자연스럽게 이끌어냅니다.
-            </p>
-          </div>
-
-          <div class="memoir-chapters-grid">
-            <!-- Chapter 1 -->
-            <div class="memoir-chapter-card">
-              <span class="memoir-chapter-num">CHAPTER 01</span>
-              <h4 class="memoir-chapter-title">🌱 유년과 고향의 기억</h4>
-              <ul class="memoir-questions-list">
-                <li><span class="q-bullet">Q1.</span> 고향 마을의 사계절 풍경과 첫 기억</li>
-                <li><span class="q-bullet">Q2.</span> 어머니의 밥상과 아버지의 훈계</li>
-                <li><span class="q-bullet">Q3.</span> 골목길 단짝들과 학창 시절 비화</li>
-                <li><span class="q-bullet">Q4.</span> 가슴에 품었던 어린 날의 꿈과 동경</li>
-              </ul>
-            </div>
-
-            <!-- Chapter 2 -->
-            <div class="memoir-chapter-card">
-              <span class="memoir-chapter-num">CHAPTER 02</span>
-              <h4 class="memoir-chapter-title">🔥 청춘의 열정과 도전</h4>
-              <ul class="memoir-questions-list">
-                <li><span class="q-bullet">Q5.</span> 맨손으로 상경해 맞은 첫 일터의 새벽</li>
-                <li><span class="q-bullet">Q6.</span> 격랑의 시대 속 밤낮없이 흘린 땀방울</li>
-                <li><span class="q-bullet">Q7.</span> 잊을 수 없는 동료들과 청춘의 낭만</li>
-                <li><span class="q-bullet">Q8.</span> 내 인생의 방향을 바꾼 결정적 순간</li>
-              </ul>
-            </div>
-
-            <!-- Chapter 3 -->
-            <div class="memoir-chapter-card">
-              <span class="memoir-chapter-num">CHAPTER 03</span>
-              <h4 class="memoir-chapter-title">🏡 사랑과 가족의 결</h4>
-              <ul class="memoir-questions-list">
-                <li><span class="q-bullet">Q9.</span> 평생의 반려자를 처음 마주한 날</li>
-                <li><span class="q-bullet">Q10.</span> 첫 아이가 태어났을 때의 벅찬 감동</li>
-                <li><span class="q-bullet">Q11.</span> 팍팍한 살림 속에서도 지켜낸 가족애</li>
-                <li><span class="q-bullet">Q12.</span> 우리 가족만의 보금자리를 일군 날</li>
-              </ul>
-            </div>
-
-            <!-- Chapter 4 -->
-            <div class="memoir-chapter-card">
-              <span class="memoir-chapter-num">CHAPTER 04</span>
-              <h4 class="memoir-chapter-title">🌊 시련을 넘은 삶의 지혜</h4>
-              <ul class="memoir-questions-list">
-                <li><span class="q-bullet">Q13.</span> 생애 가장 캄캄했던 시련과 고비</li>
-                <li><span class="q-bullet">Q14.</span> 주저앉고 싶을 때 나를 세운 신념</li>
-                <li><span class="q-bullet">Q15.</span> 위기를 버티게 해 준 고마운 은인들</li>
-                <li><span class="q-bullet">Q16.</span> 세월이 지나서야 깨달은 용서와 감사</li>
-              </ul>
-            </div>
-
-            <!-- Chapter 5 -->
-            <div class="memoir-chapter-card">
-              <span class="memoir-chapter-num">CHAPTER 05</span>
-              <h4 class="memoir-chapter-title">🌳 후손에게 전하는 유산</h4>
-              <ul class="memoir-questions-list">
-                <li><span class="q-bullet">Q17.</span> 자녀와 손주들에게 꼭 남기고픈 당부</li>
-                <li><span class="q-bullet">Q18.</span> 인생의 여정에서 건져 올린 삶의 철학</li>
-                <li><span class="q-bullet">Q19.</span> 남은 생애 동안 이루고픈 소망</li>
-                <li><span class="q-bullet">Q20.</span> 영원히 기억될 나의 이름 석 자</li>
-              </ul>
-            </div>
-          </div>
+        <!-- ① 설명 영역 → ② 비즈니스 상품 영역 명확 전환 디바이더 -->
+        <div class="memoir-zone-divider" aria-hidden="true">
+          <span class="memoir-zone-divider-pill">🎁 여기서부터는 맞춤 출판 비즈니스 상품 안내입니다 ↓</span>
         </div>
 
-        <!-- [신설] 맞춤 출판 3대 패키지 -->
-        <div class="memoir-packages-container">
-          <div class="section-header" style="margin-bottom: 36px;">
-            <p class="section-tag">CUSTOM PUBLISHING PACKAGES</p>
-            <h3 class="section-title" style="font-size: 1.65rem;">여백과 결 명품 자서전 3대 맞춤 패키지</h3>
-            <p class="section-desc">가족의 상황과 기록 목적에 맞춰 최적의 구성으로 품격 있게 출판합니다.</p>
+        <!-- =====================================================================
+             [2번 영역] ② 비즈니스 상품 안내 전용 박스 (딥 포레스트 & 골드 상품관)
+             ===================================================================== -->
+        <div class="memoir-product-box" id="memoirProductZone">
+          <div class="memoir-product-box-head">
+            <div class="memoir-product-box-kicker">🎁 PART 02 · BUSINESS PRODUCT · 맞춤 출판 상품 안내</div>
+            <h3 class="memoir-product-box-title">여백과 결 명품 자서전 3대 맞춤 패키지</h3>
+            <p class="memoir-product-box-desc">가족의 상황과 기록 목적에 맞춰 최적의 상품을 선택하시고, 1:1 무료 방문 상담을 바로 신청해 보세요.</p>
           </div>
 
-          <div class="memoir-packages-grid">
-            <!-- 패키지 1: 감사 헌정본 -->
-            <div class="memoir-pkg-card">
-              <div class="memoir-pkg-header">
-                <div class="memoir-pkg-tier">COMPACT TRIBUTE</div>
-                <h4 class="memoir-pkg-name">감사 헌정본</h4>
-                <p class="memoir-pkg-desc">부모님의 칠순·팔순을 기념하는 실속형 양장 회고록</p>
+          <div class="memoir-product-box-body">
+            <div class="memoir-packages-container">
+              <div class="memoir-packages-grid">
+                <!-- 패키지 1: 감사 헌정본 -->
+                <div class="memoir-pkg-card pkg-basic">
+                  <div class="memoir-pkg-header">
+                    <span class="memoir-pkg-pill sage">🌿 실속 효도 선물 추천</span>
+                    <div class="memoir-pkg-tier">COMPACT TRIBUTE</div>
+                    <h4 class="memoir-pkg-name">감사 헌정본</h4>
+                    <p class="memoir-pkg-desc">부모님의 칠순·팔순을 기념하는 실속형 양장 회고록</p>
+                    <div class="memoir-pkg-summary-chips">
+                      <span>구술 2회</span>
+                      <span>양장본 3권</span>
+                      <span>사진 15장</span>
+                    </div>
+                  </div>
+                  <ul class="memoir-pkg-specs">
+                    <li><span class="icon">🎙️</span><span><strong>구술 채록 2회</strong> (전문 코치 자택 방문, 총 3시간)</span></li>
+                    <li><span class="icon">📖</span><span><strong>고급 양장본 3권</strong> (80페이지 내외 하드커버)</span></li>
+                    <li><span class="icon">🎞️</span><span><strong>옛 사진 15장</strong> 고화질 스캔 &amp; 정밀 색상 복원</span></li>
+                    <li><span class="icon">✍️</span><span>여백 감성 문체 윤문 및 가족 검수 1회</span></li>
+                    <li><span class="icon">📱</span><span>가족 공유용 <strong>모바일 전용 웹북 URL</strong> 제공</span></li>
+                  </ul>
+                  <button type="button" onclick="openMemoirPackageModal('basic')" class="memoir-pkg-btn outline">
+                    <span>감사 헌정본 상담 신청</span>
+                    <span>→</span>
+                  </button>
+                </div>
+
+                <!-- 패키지 2: 인생 마스터피스 (베스트) -->
+                <div class="memoir-pkg-card highlight">
+                  <div class="memoir-pkg-badge-best">★ BEST · 가장 인기 있는 시그니처</div>
+                  <div class="memoir-pkg-header">
+                    <span class="memoir-pkg-pill gold">👑 전 생애 대표작</span>
+                    <div class="memoir-pkg-tier">LIFE MASTERPIECE</div>
+                    <h4 class="memoir-pkg-name">인생 마스터피스</h4>
+                    <p class="memoir-pkg-desc">삶의 전 생애를 한 편의 명작 소설처럼 엮어내는 대표작</p>
+                    <div class="memoir-pkg-summary-chips">
+                      <span>구술 4회</span>
+                      <span>양장본 5권</span>
+                      <span>육성 오디오북</span>
+                    </div>
+                  </div>
+                  <ul class="memoir-pkg-specs">
+                    <li><span class="icon">🎙️</span><span><strong>심층 구술 4회</strong> (생애 5대 테마 집중 채록, 총 6시간)</span></li>
+                    <li><span class="icon">📖</span><span><strong>최고급 양장본 5권</strong> (신국판 160페이지 올컬러)</span></li>
+                    <li><span class="icon">🎞️</span><span><strong>옛 사진 30장</strong> AI 정밀 복원 &amp; 화보급 배치</span></li>
+                    <li><span class="icon">🔊</span><span>책 속에 인쇄되는 <strong>육성 오디오북 QR 코드</strong> 수록</span></li>
+                    <li><span class="icon">✍️</span><span>전문 작가진 5단계 심층 윤문 &amp; 자녀 헌정 서문</span></li>
+                    <li><span class="icon">📱</span><span>영구 보존 디지털 아카이브 &amp; 플립북 뷰어</span></li>
+                  </ul>
+                  <button type="button" onclick="openMemoirPackageModal('masterpiece')" class="memoir-pkg-btn gold">
+                    <span>✨ 인생 마스터피스 상담 신청</span>
+                    <span>→</span>
+                  </button>
+                </div>
+
+                <!-- 패키지 3: 명문 가문 평전 -->
+                <div class="memoir-pkg-card pkg-heritage">
+                  <div class="memoir-pkg-header">
+                    <span class="memoir-pkg-pill navy">🏛️ VIP 가문 헌정</span>
+                    <div class="memoir-pkg-tier">HERITAGE PRESTIGE</div>
+                    <h4 class="memoir-pkg-name">명문 가문 평전</h4>
+                    <p class="memoir-pkg-desc">대를 이어 전할 가문의 역사와 가훈, 헤리티지 평전</p>
+                    <div class="memoir-pkg-summary-chips">
+                      <span>VIP 구술 8회</span>
+                      <span>가죽양장 10권</span>
+                      <span>영상+전시관</span>
+                    </div>
+                  </div>
+                  <ul class="memoir-pkg-specs">
+                    <li><span class="icon">🎙️</span><span><strong>VIP 심층 구술 8회</strong> (가계도 &amp; 명문 가문사 집중 편찬)</span></li>
+                    <li><span class="icon">📖</span><span><strong>수제 가죽 양장본 10권</strong> (240페이지 하이엔드 조판)</span></li>
+                    <li><span class="icon">🎞️</span><span>옛 사진 및 훈장/유품 <strong>60장 무제한 디지털 복원</strong></span></li>
+                    <li><span class="icon">🎬</span><span><strong>구술 다큐멘터리 영상 클립</strong> &amp; 전문 성우 오디오북</span></li>
+                    <li><span class="icon">🏛️</span><span>가문 헌정 출판기념회 기획 및 오프라인 배포 지원</span></li>
+                    <li><span class="icon">🌐</span><span>가문 전용 영구 프리미엄 온라인 전시관 구축</span></li>
+                  </ul>
+                  <button type="button" onclick="openMemoirPackageModal('heritage')" class="memoir-pkg-btn primary">
+                    <span>명문 가문 평전 상담 신청</span>
+                    <span>→</span>
+                  </button>
+                </div>
               </div>
-              <ul class="memoir-pkg-specs">
-                <li><span class="icon">🎙️</span><span><strong>구술 채록 2회</strong> (전문 코치 자택 방문, 총 3시간)</span></li>
-                <li><span class="icon">📖</span><span><strong>고급 양장본 3권</strong> (80페이지 내외 하드커버)</span></li>
-                <li><span class="icon">🎞️</span><span><strong>옛 사진 15장</strong> 고화질 스캔 &amp; 정밀 색상 복원</span></li>
-                <li><span class="icon">✍️</span><span>여백 감성 문체 윤문 및 가족 검수 1회</span></li>
-                <li><span class="icon">📱</span><span>가족 공유용 <strong>모바일 전용 웹북 URL</strong> 제공</span></li>
-              </ul>
-              <button type="button" onclick="openMemoirPackageModal('basic')" class="memoir-pkg-btn outline">
-                <span>감사 헌정본 상담 신청</span>
-                <span>→</span>
-              </button>
             </div>
 
-            <!-- 패키지 2: 인생 마스터피스 (베스트) -->
-            <div class="memoir-pkg-card highlight">
-              <div class="memoir-pkg-badge-best">BEST · 가장 인기 있는 시그니처</div>
-              <div class="memoir-pkg-header">
-                <div class="memoir-pkg-tier">LIFE MASTERPIECE</div>
-                <h4 class="memoir-pkg-name">인생 마스터피스</h4>
-                <p class="memoir-pkg-desc">삶의 전 생애를 한 편의 명작 소설처럼 엮어내는 대표작</p>
+            <!-- 하단 무료 워크북 증정 & 1:1 상담 신청 CTA 배너 -->
+            <div class="memoir-cta-banner" id="memoirCtaBanner">
+              <div class="memoir-cta-info">
+                <h4 id="memoirBannerTitle">✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정</h4>
+                <p id="memoirBannerDesc">
+                  인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.
+                </p>
               </div>
-              <ul class="memoir-pkg-specs">
-                <li><span class="icon">🎙️</span><span><strong>심층 구술 4회</strong> (생애 5대 테마 집중 채록, 총 6시간)</span></li>
-                <li><span class="icon">📖</span><span><strong>최고급 양장본 5권</strong> (신국판 160페이지 올컬러)</span></li>
-                <li><span class="icon">🎞️</span><span><strong>옛 사진 30장</strong> AI 정밀 복원 &amp; 화보급 배치</span></li>
-                <li><span class="icon">🔊</span><span>책 속에 인쇄되는 <strong>육성 오디오북 QR 코드</strong> 수록</span></li>
-                <li><span class="icon">✍️</span><span>전문 작가진 5단계 심층 윤문 &amp; 자녀 헌정 서문</span></li>
-                <li><span class="icon">📱</span><span>영구 보존 디지털 아카이브 &amp; 플립북 뷰어</span></li>
-              </ul>
-              <button type="button" onclick="openMemoirPackageModal('masterpiece')" class="memoir-pkg-btn gold">
-                <span>✨ 인생 마스터피스 상담 신청</span>
-                <span>→</span>
-              </button>
-            </div>
-
-            <!-- 패키지 3: 명문 가문 평전 -->
-            <div class="memoir-pkg-card">
-              <div class="memoir-pkg-header">
-                <div class="memoir-pkg-tier">HERITAGE PRESTIGE</div>
-                <h4 class="memoir-pkg-name">명문 가문 평전</h4>
-                <p class="memoir-pkg-desc">대를 이어 전할 가문의 역사와 가훈, 헤리티지 평전</p>
+              <div class="memoir-cta-btns" id="memoirCtaBtns">
+                <button type="button" id="memoirBannerConsultBtn" onclick="openMemoirConsultModal()" class="btn btn-primary" style="padding: 13px 24px; font-size: 0.96rem; font-weight: 800;">
+                  ✨ 자서전 제작 1:1 무료 상담 신청
+                </button>
+                <button type="button" id="memoirBannerSampleBtn" onclick="handleMemoirSampleClick()" class="btn btn-secondary" style="padding: 13px 20px; font-size: 0.94rem; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+                  📖 자서전 예시 둘러보기
+                </button>
               </div>
-              <ul class="memoir-pkg-specs">
-                <li><span class="icon">🎙️</span><span><strong>VIP 심층 구술 8회</strong> (가계도 &amp; 명문 가문사 집중 편찬)</span></li>
-                <li><span class="icon">📖</span><span><strong>수제 가죽 양장본 10권</strong> (240페이지 하이엔드 조판)</span></li>
-                <li><span class="icon">🎞️</span><span>옛 사진 및 훈장/유품 <strong>60장 무제한 디지털 복원</strong></span></li>
-                <li><span class="icon">🎬</span><span><strong>구술 다큐멘터리 영상 클립</strong> &amp; 전문 성우 오디오북</span></li>
-                <li><span class="icon">🏛️</span><span>가문 헌정 출판기념회 기획 및 오프라인 배포 지원</span></li>
-                <li><span class="icon">🌐</span><span>가문 전용 영구 프리미엄 온라인 전시관 구축</span></li>
-              </ul>
-              <button type="button" onclick="openMemoirPackageModal('heritage')" class="memoir-pkg-btn primary">
-                <span>명문 가문 평전 상담 신청</span>
-                <span>→</span>
-              </button>
             </div>
-          </div>
-        </div>
-        <div class="memoir-cta-banner" id="memoirCtaBanner">
-          <div class="memoir-cta-info">
-            <h4 id="memoirBannerTitle">✨ 지금 신청 시 '30일 인생 서사 워크북' 무료 증정</h4>
-            <p id="memoirBannerDesc">
-              인생을 돌아보는 첫걸음, 사전 무료 상담을 신청하시는 모든 분께 1:1 방문 상담과 함께 정가 35,000원 상당의 자서전 워크북을 자택으로 무료 배송해 드립니다.
-            </p>
-          </div>
-          <div class="memoir-cta-btns" id="memoirCtaBtns">
-            <button type="button" id="memoirBannerConsultBtn" onclick="openMemoirConsultModal()" class="btn btn-primary" style="padding: 13px 26px; font-size: 1rem; font-weight: 800;">
-              ✨ 자서전 제작 1:1 무료 상담 신청
-            </button>
-            <button type="button" id="memoirBannerSampleBtn" onclick="handleMemoirSampleClick()" class="btn btn-secondary" style="padding: 13px 22px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
-              📖 자서전 예시 둘러보기
-            </button>
           </div>
         </div>
       </div>
