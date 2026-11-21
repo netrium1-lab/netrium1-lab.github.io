@@ -115,7 +115,7 @@
       --shadow-lg: 0 14px 28px rgba(45, 40, 30, 0.08);
       --transition: all 0.3s ease;
       --radius: 16px;
-      --max-width: 1080px;
+      --max-width: 1160px;
     }
 
     /* 다크 모드 (차분한 서재 느낌의 딥 차콜) */
@@ -153,7 +153,13 @@
       color: var(--text-primary);
       line-height: 1.8;
       letter-spacing: -0.3px;
+      word-break: keep-all;
+      overflow-wrap: break-word;
       transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    section {
+      scroll-margin-top: 116px;
     }
 
     a {
@@ -2984,39 +2990,54 @@
 
     /* 하단 특별 혜택 및 CTA 배너 */
     .memoir-cta-banner {
-      margin-top: 36px;
-      background: var(--bg-card);
+      margin-top: 40px;
+      background: linear-gradient(135deg, var(--bg-card) 0%, rgba(194, 155, 56, 0.06) 100%);
       border: 2px solid var(--accent);
-      border-radius: 20px;
-      padding: 28px 30px;
+      border-radius: 22px;
+      padding: 30px 32px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 20px;
-      box-shadow: 0 12px 32px rgba(179, 139, 89, 0.14);
+      gap: 22px;
+      box-shadow: 0 12px 32px rgba(94, 107, 82, 0.12);
+    }
+
+    .memoir-cta-info {
+      flex: 1 1 420px;
+      min-width: 0;
     }
 
     .memoir-cta-info h4 {
-      font-size: 1.25rem;
+      font-size: 1.24rem;
       font-weight: 850;
       color: var(--text-primary);
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
+      line-height: 1.4;
+      word-break: keep-all;
     }
 
     .memoir-cta-info p {
       font-size: 0.96rem;
       color: var(--text-secondary);
-      line-height: 1.5;
+      line-height: 1.65;
+      word-break: keep-all;
     }
 
     .memoir-cta-btns {
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .memoir-cta-btns .btn {
+      white-space: nowrap;
+      justify-content: center;
     }
 
     /* ==========================================================
@@ -3127,105 +3148,202 @@
       line-height: 1.2;
     }
 
-    /* 3대 출판 패키지 */
+    /* 3대 출판 패키지 (시인성·구분력 강화 & 뱃지 겹침/한글 줄바꿈 완전 해결) */
     .memoir-packages-container {
-      margin-top: 48px;
-      margin-bottom: 48px;
+      margin-top: 52px;
+      margin-bottom: 52px;
     }
     .memoir-packages-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 24px;
       align-items: stretch;
+      padding-top: 22px; /* BEST 플로팅 뱃지 여유 공간 확보 */
     }
-    @media (max-width: 900px) {
+    @media (max-width: 980px) {
       .memoir-packages-grid {
         grid-template-columns: 1fr;
-        max-width: 520px;
+        max-width: 540px;
         margin: 0 auto;
+        gap: 32px;
       }
     }
     .memoir-pkg-card {
       background: var(--bg-card);
       border: 1.8px solid var(--border-color);
-      border-radius: 20px;
-      padding: 32px 26px;
+      border-top: 5px solid #5e6b52;
+      border-radius: 22px;
+      padding: 36px 26px 28px;
       display: flex;
       flex-direction: column;
       position: relative;
-      transition: all 0.25s ease;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.03);
+      overflow: visible;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 6px 22px rgba(35, 34, 32, 0.04);
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     .memoir-pkg-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 14px 35px rgba(30, 61, 47, 0.1);
+      transform: translateY(-6px);
+      box-shadow: 0 16px 38px rgba(30, 61, 47, 0.11);
     }
+    /* 패키지 1: 감사 헌정본 (세이지 그린 테마) */
+    .memoir-pkg-card.pkg-basic {
+      border-top-color: #4f705b;
+    }
+    /* 패키지 2: 인생 마스터피스 (리치 샴페인 골드 테마) */
     .memoir-pkg-card.highlight {
       border-color: #c29b38;
-      background: linear-gradient(180deg, rgba(194, 155, 56, 0.04) 0%, var(--bg-card) 100%);
-      box-shadow: 0 10px 32px rgba(194, 155, 56, 0.15);
+      border-top: 6px solid #c29b38;
+      padding-top: 42px;
+      background: linear-gradient(180deg, rgba(194, 155, 56, 0.08) 0%, var(--bg-card) 38%);
+      box-shadow: 0 14px 36px rgba(194, 155, 56, 0.18);
+    }
+    [data-theme="dark"] .memoir-pkg-card.highlight {
+      background: linear-gradient(180deg, rgba(216, 178, 82, 0.12) 0%, var(--bg-card) 42%);
+    }
+    /* 패키지 3: 명문 가문 평전 (딥 포레스트 네이비 테마) */
+    .memoir-pkg-card.pkg-heritage {
+      border-top-color: #1e3d2f;
+      background: linear-gradient(180deg, rgba(30, 61, 47, 0.04) 0%, var(--bg-card) 35%);
+    }
+    [data-theme="dark"] .memoir-pkg-card.pkg-heritage {
+      border-top-color: #6ea88b;
+      background: linear-gradient(180deg, rgba(110, 168, 139, 0.1) 0%, var(--bg-card) 35%);
     }
     .memoir-pkg-badge-best {
       position: absolute;
-      top: -13px;
+      top: -17px;
       left: 50%;
       transform: translateX(-50%);
-      background: linear-gradient(135deg, #d4af37, #aa7c11);
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 900;
-      padding: 4px 16px;
+      background: linear-gradient(135deg, #d4af37 0%, #a57710 100%);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: 850;
+      padding: 6px 18px;
       border-radius: 999px;
-      letter-spacing: 0.5px;
-      box-shadow: 0 4px 10px rgba(170, 124, 17, 0.35);
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+      line-height: 1.25;
+      box-shadow: 0 5px 14px rgba(165, 119, 16, 0.38);
+      border: 2px solid var(--bg-card);
+      z-index: 4;
     }
+    .memoir-pkg-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      white-space: nowrap;
+    }
+    .memoir-pkg-pill.sage {
+      background: rgba(79, 112, 91, 0.12);
+      color: #355842;
+      border: 1px solid rgba(79, 112, 91, 0.28);
+    }
+    .memoir-pkg-pill.gold {
+      background: rgba(194, 155, 56, 0.15);
+      color: #8f6910;
+      border: 1px solid rgba(194, 155, 56, 0.38);
+    }
+    .memoir-pkg-pill.navy {
+      background: rgba(30, 61, 47, 0.12);
+      color: #1e3d2f;
+      border: 1px solid rgba(30, 61, 47, 0.28);
+    }
+    [data-theme="dark"] .memoir-pkg-pill.sage { color: #a3cfb3; background: rgba(163, 207, 179, 0.14); }
+    [data-theme="dark"] .memoir-pkg-pill.gold { color: #f0cf7b; background: rgba(240, 207, 123, 0.15); }
+    [data-theme="dark"] .memoir-pkg-pill.navy { color: #96d1b4; background: rgba(150, 209, 180, 0.14); }
+
     .memoir-pkg-header {
       text-align: center;
-      padding-bottom: 20px;
-      border-bottom: 1px dashed var(--border-color);
-      margin-bottom: 20px;
+      padding-bottom: 18px;
+      border-bottom: 1.5px dashed var(--border-color);
+      margin-bottom: 18px;
     }
     .memoir-pkg-tier {
-      font-size: 0.82rem;
-      font-weight: 800;
-      color: #c29b38;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-    .memoir-pkg-name {
-      font-family: 'MaruBuri', 'Noto Serif KR', serif;
-      font-size: 1.45rem;
+      font-size: 0.78rem;
       font-weight: 850;
-      color: var(--text-primary);
+      color: #b58d26;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
       margin-bottom: 6px;
     }
-    .memoir-pkg-desc {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      line-height: 1.45;
+    .memoir-pkg-card.pkg-basic .memoir-pkg-tier { color: #4f705b; }
+    .memoir-pkg-card.pkg-heritage .memoir-pkg-tier { color: #1e3d2f; }
+    [data-theme="dark"] .memoir-pkg-card.pkg-basic .memoir-pkg-tier { color: #9ec5ab; }
+    [data-theme="dark"] .memoir-pkg-card.pkg-heritage .memoir-pkg-tier { color: #8fd1b1; }
+
+    .memoir-pkg-name {
+      font-family: 'MaruBuri', 'Noto Serif KR', serif;
+      font-size: 1.55rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.3;
     }
+    .memoir-pkg-desc {
+      font-size: 0.93rem;
+      color: var(--text-secondary);
+      line-height: 1.55;
+      word-break: keep-all;
+      text-wrap: balance;
+      margin: 0 auto 14px;
+    }
+    .memoir-pkg-summary-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+    }
+    .memoir-pkg-summary-chips span {
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 8px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+    .memoir-pkg-card.highlight .memoir-pkg-summary-chips span {
+      background: rgba(194, 155, 56, 0.12);
+      border-color: rgba(194, 155, 56, 0.35);
+      color: #7c5909;
+    }
+    [data-theme="dark"] .memoir-pkg-card.highlight .memoir-pkg-summary-chips span {
+      color: #f3d589;
+    }
+
     .memoir-pkg-specs {
       list-style: none;
       padding: 0;
-      margin: 0 0 28px 0;
+      margin: 0 0 26px 0;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 13px;
       flex-grow: 1;
     }
     .memoir-pkg-specs li {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      font-size: 0.9rem;
+      font-size: 0.94rem;
       color: var(--text-primary);
-      line-height: 1.45;
+      line-height: 1.55;
+      word-break: keep-all;
+      overflow-wrap: break-word;
     }
     .memoir-pkg-specs li span.icon {
-      font-size: 1.05rem;
-      line-height: 1.2;
+      font-size: 1.08rem;
+      line-height: 1.35;
       flex-shrink: 0;
+      margin-top: 1px;
     }
     .memoir-pkg-specs li strong {
       color: var(--text-primary);
@@ -3233,18 +3351,21 @@
     }
     .memoir-pkg-btn {
       width: 100%;
-      padding: 14px 20px;
-      border-radius: 12px;
-      font-size: 0.98rem;
+      padding: 15px 18px;
+      border-radius: 13px;
+      font-size: 0.96rem;
       font-weight: 850;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.22s ease;
       text-decoration: none;
       border: none;
+      white-space: nowrap;
+      font-family: inherit;
+      letter-spacing: -0.2px;
     }
     .memoir-pkg-btn.primary {
       background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%);
@@ -3258,20 +3379,26 @@
     .memoir-pkg-btn.gold {
       background: linear-gradient(135deg, #c29b38 0%, #9a7820 100%);
       color: #fff;
-      box-shadow: 0 4px 14px rgba(194, 155, 56, 0.35);
+      box-shadow: 0 5px 16px rgba(194, 155, 56, 0.36);
     }
     .memoir-pkg-btn.gold:hover {
       background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%);
       transform: translateY(-2px);
     }
     .memoir-pkg-btn.outline {
-      background: transparent;
-      border: 1.6px solid var(--border-color);
-      color: var(--text-primary);
+      background: var(--bg-primary);
+      border: 1.8px solid #4f705b;
+      color: #2b4a36;
+    }
+    [data-theme="dark"] .memoir-pkg-btn.outline {
+      border-color: #82b093;
+      color: #c2e5ce;
     }
     .memoir-pkg-btn.outline:hover {
       border-color: #1e3d2f;
-      background: rgba(30, 61, 47, 0.05);
+      background: #4f705b;
+      color: #ffffff;
+      transform: translateY(-2px);
     }
 
     /* -------------------- 공통 섹션 스타일 -------------------- */
@@ -6183,12 +6310,864 @@
       background: transparent !important;
       box-shadow: none !important;
     }
+
+    /* =========================================================================
+       ✨ [2026 메인 UX/UI 대개편] 고객 시인성 극대화 & 5대 비즈니스 명확 구분 디자인
+       ========================================================================= */
+
+    /* 1. 상단 2단 품격 헤더 (고객 메뉴와 운영·파트너 메뉴 완벽 분리) */
+    .top-utility-bar {
+      background: #253024;
+      color: rgba(250, 248, 245, 0.92);
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    [data-theme="dark"] .top-utility-bar {
+      background: #12110f;
+      border-bottom-color: rgba(255, 255, 255, 0.07);
+    }
+    .top-utility-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 6px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .top-utility-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-weight: 600;
+      letter-spacing: -0.2px;
+    }
+    .top-utility-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #f4d987 !important;
+      font-weight: 800;
+      padding: 2px 10px;
+      border-radius: 999px;
+      background: rgba(244, 217, 135, 0.14);
+      border: 1px solid rgba(244, 217, 135, 0.32);
+      transition: all 0.2s ease;
+    }
+    .top-utility-phone:hover {
+      background: rgba(244, 217, 135, 0.25);
+      color: #ffffff !important;
+    }
+    .top-utility-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .top-util-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: rgba(250, 248, 245, 0.88);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .top-util-link:hover {
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+    }
+    .top-util-link.util-admin {
+      color: #f4d987;
+      border-color: rgba(244, 217, 135, 0.35);
+      background: rgba(194, 155, 56, 0.14);
+    }
+    .top-util-link.util-admin:hover {
+      background: #c29b38;
+      color: #191816;
+    }
+
+    /* 고객 전용 메인 네비게이션바 간결화 */
+    .nav-container {
+      height: 74px;
+      max-width: 1280px;
+    }
+    .nav-menu {
+      gap: 22px;
+    }
+    .nav-link {
+      font-size: 1.02rem;
+      font-weight: 750;
+      padding: 8px 4px;
+    }
+    .nav-link.nav-biz-link {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px !important;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #ffffff !important;
+      font-weight: 850;
+      box-shadow: 0 3px 10px rgba(94, 107, 82, 0.26);
+    }
+    .nav-link.nav-biz-link:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      color: #ffffff !important;
+    }
+    .nav-link.nav-biz-link::after {
+      display: none !important;
+    }
+    .nav-actions {
+      gap: 10px;
+    }
+    .nav-room-compact {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 14px;
+      border-radius: 999px;
+      background: rgba(194, 155, 56, 0.14);
+      color: #8c6610;
+      border: 1.6px solid var(--accent-gold);
+      font-size: 0.92rem;
+      font-weight: 800;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    [data-theme="dark"] .nav-room-compact {
+      color: var(--accent-gold);
+      background: rgba(216, 178, 82, 0.16);
+    }
+    .nav-room-compact:hover {
+      background: var(--accent-gold);
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 1180px) and (min-width: 993px) {
+      .nav-menu { gap: 13px; }
+      .nav-link { font-size: 0.94rem; }
+      .nav-link.nav-biz-link { padding: 6px 12px !important; font-size: 0.9rem; }
+      .nav-room-compact { padding: 6px 11px; font-size: 0.86rem; }
+      .nav-login-btn { padding: 6px 12px; font-size: 0.88rem; }
+    }
+    @media (max-width: 992px) {
+      .nav-room-compact { display: none !important; }
+      .top-utility-label { display: none; }
+      .top-utility-inner { padding: 5px 14px; justify-content: space-between; }
+      .top-util-link.util-coach-hide-sm { display: none; }
+    }
+    @media (max-width: 600px) {
+      .top-utility-bar { font-size: 0.74rem; }
+      .top-utility-inner { padding: 5px 12px; gap: 6px; }
+      .top-utility-phone { padding: 2px 8px; font-size: 0.74rem; }
+      .top-util-link { padding: 2px 8px; font-size: 0.72rem; }
+    }
+
+    /* 2. 히어로 대문 & 첫 화면 5대 비즈니스 컬러 허브 */
+    .hero-outer-band {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(94, 107, 82, 0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 85% 20%, rgba(194, 155, 56, 0.08) 0%, transparent 60%),
+        var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+    }
+    [data-theme="dark"] .hero-outer-band {
+      background:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(147, 165, 132, 0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 85% 20%, rgba(216, 178, 82, 0.07) 0%, transparent 60%),
+        var(--bg-primary);
+    }
+    .hero {
+      padding: 56px 0 64px;
+      max-width: 100%;
+      margin: 0 auto;
+      text-align: center;
+    }
+    .hero-copy-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .hero-title {
+      font-family: 'Noto Serif KR', Georgia, serif;
+      font-size: 2.7rem;
+      line-height: 1.38;
+      margin-bottom: 18px;
+    }
+    .hero-desc {
+      font-size: 1.12rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      max-width: 680px;
+      margin: 0 auto 28px;
+    }
+    .hero-primary-ctas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 44px;
+    }
+    .hero-primary-ctas .btn {
+      padding: 14px 26px;
+      font-size: 1rem;
+      font-weight: 800;
+      border-radius: 14px;
+      white-space: nowrap;
+    }
+    .hero-btn-sample {
+      background: rgba(194, 155, 56, 0.13);
+      color: #8c6610;
+      border: 1.6px solid rgba(194, 155, 56, 0.5);
+    }
+    [data-theme="dark"] .hero-btn-sample {
+      color: #ebd082;
+      background: rgba(216, 178, 82, 0.14);
+    }
+    .hero-btn-sample:hover {
+      background: var(--accent-gold);
+      color: #ffffff;
+      border-color: var(--accent-gold);
+      transform: translateY(-2px);
+    }
+
+    /* 첫 화면 5대 핵심 비즈니스 퀵 내비게이션 허브 */
+    .hero-biz-hub {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-radius: 26px;
+      padding: 30px 26px 26px;
+      box-shadow: 0 12px 34px rgba(45, 40, 30, 0.06);
+      text-align: left;
+    }
+    .hero-biz-hub-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1.5px dashed var(--border-color);
+    }
+    .hero-biz-hub-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 850;
+      color: var(--accent);
+      background: var(--accent-light);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 6px;
+    }
+    .hero-biz-hub-title {
+      font-family: 'Noto Serif KR', Georgia, serif;
+      font-size: 1.38rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin: 0;
+      letter-spacing: -0.4px;
+    }
+    .hero-biz-hub-sub {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .hero-5biz-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 1080px) {
+      .hero-5biz-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (max-width: 680px) {
+      .hero-5biz-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+      }
+      .hero-5biz-grid .hero-5biz-card:first-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    .hero-5biz-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px 16px 16px;
+      border-radius: 18px;
+      border: 1.8px solid var(--border-color);
+      border-top-width: 5px;
+      background: var(--bg-primary);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: left;
+      font-family: inherit;
+    }
+    .hero-5biz-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.09);
+    }
+    .hero-5biz-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+    .hero-5biz-num {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 3px 9px;
+      border-radius: 999px;
+      color: #ffffff;
+      letter-spacing: 0.4px;
+    }
+    .hero-5biz-icon {
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+    .hero-5biz-name {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .hero-5biz-desc {
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      flex-grow: 1;
+    }
+    .hero-5biz-go {
+      font-size: 0.8rem;
+      font-weight: 850;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .hero-5biz-card:hover .hero-5biz-go {
+      transform: translateX(3px);
+      transition: transform 0.2s ease;
+    }
+
+    /* 5대 비즈니스 고유 시그니처 컬러 테마 */
+    .hbiz-beauty { border-color: #f3c2cf; border-top-color: #c2284f; background: #fff7f9; }
+    .hbiz-beauty:hover { border-color: #c2284f; background: #ffedf1; }
+    .hbiz-beauty .hero-5biz-num { background: #c2284f; }
+    .hbiz-beauty .hero-5biz-name, .hbiz-beauty .hero-5biz-go { color: #a31b3e; }
+
+    .hbiz-wardrobe { border-color: #bfe4cd; border-top-color: #1e7a48; background: #f4fbf6; }
+    .hbiz-wardrobe:hover { border-color: #1e7a48; background: #e8f7ed; }
+    .hbiz-wardrobe .hero-5biz-num { background: #1e7a48; }
+    .hbiz-wardrobe .hero-5biz-name, .hbiz-wardrobe .hero-5biz-go { color: #165e36; }
+
+    .hbiz-legacy { border-color: #ecd3b7; border-top-color: #b36319; background: #fdf8f2; }
+    .hbiz-legacy:hover { border-color: #b36319; background: #f8ede0; }
+    .hbiz-legacy .hero-5biz-num { background: #b36319; }
+    .hbiz-legacy .hero-5biz-name, .hbiz-legacy .hero-5biz-go { color: #8c4a0d; }
+
+    .hbiz-memoir { border-color: #bfd9f4; border-top-color: #1d5fa7; background: #f3f8fe; }
+    .hbiz-memoir:hover { border-color: #1d5fa7; background: #e6f1fc; }
+    .hbiz-memoir .hero-5biz-num { background: #1d5fa7; }
+    .hbiz-memoir .hero-5biz-name, .hbiz-memoir .hero-5biz-go { color: #144983; }
+
+    .hbiz-party { border-color: #dfc3ee; border-top-color: #7b3b96; background: #faf4fd; }
+    .hbiz-party:hover { border-color: #7b3b96; background: #f2e5f9; }
+    .hbiz-party .hero-5biz-num { background: #7b3b96; }
+    .hbiz-party .hero-5biz-name, .hbiz-party .hero-5biz-go { color: #5f2877; }
+
+    [data-theme="dark"] .hbiz-beauty { background: #29161b; border-color: #5b2635; border-top-color: #f06589; }
+    [data-theme="dark"] .hbiz-beauty .hero-5biz-name, [data-theme="dark"] .hbiz-beauty .hero-5biz-go { color: #ff9cb5; }
+    [data-theme="dark"] .hbiz-wardrobe { background: #14241b; border-color: #244f36; border-top-color: #46c27b; }
+    [data-theme="dark"] .hbiz-wardrobe .hero-5biz-name, [data-theme="dark"] .hbiz-wardrobe .hero-5biz-go { color: #8fe3b0; }
+    [data-theme="dark"] .hbiz-legacy { background: #291c11; border-color: #593b1f; border-top-color: #e89b4f; }
+    [data-theme="dark"] .hbiz-legacy .hero-5biz-name, [data-theme="dark"] .hbiz-legacy .hero-5biz-go { color: #f6c08a; }
+    [data-theme="dark"] .hbiz-memoir { background: #121f2f; border-color: #234369; border-top-color: #5ea2eb; }
+    [data-theme="dark"] .hbiz-memoir .hero-5biz-name, [data-theme="dark"] .hbiz-memoir .hero-5biz-go { color: #9bc8f7; }
+    [data-theme="dark"] .hbiz-party { background: #24152b; border-color: #4d255c; border-top-color: #c27be0; }
+    [data-theme="dark"] .hbiz-party .hero-5biz-name, [data-theme="dark"] .hbiz-party .hero-5biz-go { color: #e2aaf7; }
+
+    /* 함께 이용하는 부가/커뮤니티/아카데미 4대 바로가기 스트립 (비즈니스와 명확 분리) */
+    .hero-extra-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 900px) {
+      .hero-extra-strip {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+    .hero-extra-link {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .hero-extra-link:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+      transform: translateY(-2px);
+    }
+    .hero-extra-emoji {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+    .hero-extra-text {
+      min-width: 0;
+    }
+    .hero-extra-title {
+      font-size: 0.92rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+    .hero-extra-sub {
+      font-size: 0.77rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    /* 3. 섹션 통합 인트로 배너 (중복 헤더 제거 & PART별 확실한 경계 구분) */
+    .section-intro-banner {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-color);
+      border-left: 6px solid var(--accent);
+      border-radius: 22px;
+      overflow: hidden;
+      margin-bottom: 34px;
+      box-shadow: 0 6px 22px rgba(45, 40, 30, 0.05);
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      align-items: stretch;
+    }
+    .section-intro-banner.part-biz { border-left-color: #c2284f; }
+    .section-intro-banner.part-memoir { border-left-color: #1d5fa7; }
+    .section-intro-banner.part-mag { border-left-color: #4f705b; }
+    .section-intro-banner.part-lounge { border-left-color: #9e6b3b; }
+    .section-intro-banner.part-academy { border-left-color: #296299; }
+    .section-intro-banner.part-archive { border-left-color: #c29b38; }
+
+    @media (max-width: 860px) {
+      .section-intro-banner {
+        grid-template-columns: 1fr;
+        border-left-width: 1.5px;
+        border-top: 5px solid var(--accent);
+        margin-bottom: 26px;
+        border-radius: 18px;
+      }
+      .section-intro-banner.part-biz { border-top-color: #c2284f; }
+      .section-intro-banner.part-memoir { border-top-color: #1d5fa7; }
+      .section-intro-banner.part-mag { border-top-color: #4f705b; }
+      .section-intro-banner.part-lounge { border-top-color: #9e6b3b; }
+      .section-intro-banner.part-academy { border-top-color: #296299; }
+      .section-intro-banner.part-archive { border-top-color: #c29b38; }
+    }
+    .sib-media {
+      position: relative;
+      min-height: 205px;
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+    @media (max-width: 860px) {
+      .sib-media {
+        height: 170px;
+        min-height: 170px;
+      }
+    }
+    .sib-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .sib-part-chip {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(20, 22, 20, 0.84);
+      color: #ffffff;
+      font-size: 0.76rem;
+      font-weight: 900;
+      padding: 5px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.8px;
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+    }
+    .sib-body {
+      padding: 26px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    @media (max-width: 860px) {
+      .sib-body {
+        padding: 20px 18px;
+      }
+    }
+    .sib-text {
+      flex: 1 1 340px;
+    }
+    .sib-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.8rem;
+      font-weight: 850;
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+    .part-biz .sib-kicker { background: rgba(194, 40, 79, 0.11); color: #b82248; }
+    .part-memoir .sib-kicker { background: rgba(29, 95, 167, 0.11); color: #195392; }
+    .part-lounge .sib-kicker { background: rgba(158, 107, 59, 0.13); color: #8c5928; }
+    .part-academy .sib-kicker { background: rgba(41, 98, 153, 0.12); color: #1e5a8f; }
+    .part-archive .sib-kicker { background: rgba(194, 155, 56, 0.15); color: #8e6910; }
+    [data-theme="dark"] .part-biz .sib-kicker { color: #ff9cb5; }
+    [data-theme="dark"] .part-memoir .sib-kicker { color: #9bc8f7; }
+    [data-theme="dark"] .part-lounge .sib-kicker { color: #f1bf8b; }
+    [data-theme="dark"] .part-academy .sib-kicker { color: #8ec1f2; }
+    [data-theme="dark"] .part-archive .sib-kicker { color: #f0d07c; }
+
+    .sib-title {
+      font-family: 'Noto Serif KR', Georgia, serif;
+      font-size: 1.72rem;
+      font-weight: 850;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      line-height: 1.32;
+      letter-spacing: -0.5px;
+    }
+    @media (max-width: 768px) {
+      .sib-title { font-size: 1.38rem; }
+    }
+    .sib-desc {
+      font-size: 0.98rem;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin: 0;
+    }
+    .sib-action {
+      flex-shrink: 0;
+    }
+
+    /* 4. PART 01: 5대 비즈니스 필터 탭바 & 1+2x2 시그니처 컬러 카드 대개편 */
+    .biz-filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+      padding: 14px 16px;
+      background: var(--bg-secondary);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+    }
+    .biz-filter-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 15px;
+      border-radius: 999px;
+      border: 1.6px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .biz-filter-btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+    .biz-filter-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      box-shadow: 0 4px 12px rgba(94, 107, 82, 0.28);
+    }
+    .biz-filter-btn[data-biz="beauty"].active { background: #c2284f; border-color: #c2284f; box-shadow: 0 4px 12px rgba(194, 40, 79, 0.3); }
+    .biz-filter-btn[data-biz="wardrobe"].active { background: #1e7a48; border-color: #1e7a48; box-shadow: 0 4px 12px rgba(30, 122, 72, 0.3); }
+    .biz-filter-btn[data-biz="legacy"].active { background: #b36319; border-color: #b36319; box-shadow: 0 4px 12px rgba(179, 99, 25, 0.3); }
+    .biz-filter-btn[data-biz="memoir"].active { background: #1d5fa7; border-color: #1d5fa7; box-shadow: 0 4px 12px rgba(29, 95, 167, 0.3); }
+    .biz-filter-btn[data-biz="party"].active { background: #7b3b96; border-color: #7b3b96; box-shadow: 0 4px 12px rgba(123, 59, 150, 0.3); }
+
+    /* 완벽한 1 (풀와이드 피처드) + 2x2 대칭 그리드 */
+    .diag-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin-top: 8px;
+    }
+    @media (max-width: 860px) {
+      .diag-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+    }
+
+    .diag-card {
+      border-width: 1.8px;
+      border-top-width: 6px !important;
+      padding: 26px 26px 24px;
+    }
+    .diag-theme-beauty { border-top-color: #c2284f !important; }
+    .diag-theme-wardrobe { border-top-color: #1e7a48 !important; }
+    .diag-theme-legacy { border-top-color: #b36319 !important; }
+    .diag-theme-memoir { border-top-color: #1d5fa7 !important; }
+    .diag-theme-party { border-top-color: #7b3b96 !important; }
+
+    /* 1호 프리미엄 비즈니스: 데스크톱 풀와이드 가로형 피처드 카드 */
+    .diag-card.diag-featured-card,
+    .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+    .diag-card.diag-featured-card .diag-card-media-col,
+    .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) .diag-card-media-col {
+      display: flex;
+      flex-direction: column;
+    }
+    .diag-card.diag-featured-card .diag-card-thumb,
+    .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) .diag-card-thumb {
+      height: 100%;
+      min-height: 270px;
+      margin-bottom: 0;
+    }
+    .diag-card.diag-featured-card .diag-card-content-col,
+    .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) .diag-card-content-col {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    @media (max-width: 900px) {
+      .diag-card.diag-featured-card,
+      .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+      .diag-card.diag-featured-card .diag-card-thumb,
+      .diag-cards-grid.is-filtered .diag-card:not(.biz-hidden) .diag-card-thumb {
+        height: 215px;
+        min-height: 215px;
+        margin-bottom: 18px;
+      }
+    }
+
+    .diag-card.biz-hidden {
+      display: none !important;
+    }
+
+    /* 비즈니스 번호 강조 필 */
+    .diag-num {
+      font-family: 'Pretendard', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 900;
+      padding: 4px 11px;
+      border-radius: 999px;
+      opacity: 1;
+      letter-spacing: 0.5px;
+      color: #ffffff;
+    }
+    .diag-theme-beauty .diag-num { background: #c2284f; }
+    .diag-theme-wardrobe .diag-num { background: #1e7a48; }
+    .diag-theme-legacy .diag-num { background: #b36319; }
+    .diag-theme-memoir .diag-num { background: #1d5fa7; }
+    .diag-theme-party .diag-num { background: #7b3b96; }
+
+    /* 한눈에 파악하는 비즈니스 3대 핵심 체크포인트 */
+    .diag-highlights {
+      list-style: none;
+      padding: 12px 14px;
+      margin: 0 0 18px 0;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    [data-theme="dark"] .diag-highlights {
+      background: rgba(0, 0, 0, 0.25);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .diag-highlights li {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      line-height: 1.45;
+    }
+    .diag-highlights li::before {
+      content: "✓";
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .diag-theme-beauty .diag-highlights li::before { color: #c2284f; }
+    .diag-theme-wardrobe .diag-highlights li::before { color: #1e7a48; }
+    .diag-theme-legacy .diag-highlights li::before { color: #b36319; }
+    .diag-theme-memoir .diag-highlights li::before { color: #1d5fa7; }
+    .diag-theme-party .diag-highlights li::before { color: #7b3b96; }
+
+    /* 각 비즈니스 메인 CTA 버튼도 고유 컬러로 완벽 구분 */
+    .diag-theme-wardrobe .diag-action-guide-btn {
+      background: linear-gradient(135deg, #238650 0%, #176238 100%);
+      box-shadow: 0 4px 12px rgba(30, 122, 72, 0.28);
+    }
+    .diag-theme-wardrobe .diag-action-guide-btn:hover { background: linear-gradient(135deg, #2a9b5d 0%, #1a7342 100%); }
+
+    .diag-theme-legacy .diag-action-guide-btn {
+      background: linear-gradient(135deg, #c17025 0%, #995212 100%);
+      box-shadow: 0 4px 12px rgba(179, 99, 25, 0.28);
+    }
+    .diag-theme-legacy .diag-action-guide-btn:hover { background: linear-gradient(135deg, #d27d2e 0%, #ab5d16 100%); }
+
+    .diag-theme-memoir .diag-action-guide-btn {
+      background: linear-gradient(135deg, #256ec0 0%, #174e8c 100%);
+      box-shadow: 0 4px 12px rgba(29, 95, 167, 0.28);
+    }
+    .diag-theme-memoir .diag-action-guide-btn:hover { background: linear-gradient(135deg, #2d7ed8 0%, #1c5ba2 100%); }
+
+    .diag-theme-party .diag-action-guide-btn {
+      background: linear-gradient(135deg, #8b46a8 0%, #682c82 100%);
+      box-shadow: 0 4px 12px rgba(123, 59, 150, 0.28);
+    }
+    .diag-theme-party .diag-action-guide-btn:hover { background: linear-gradient(135deg, #9d53bc 0%, #773494 100%); }
+
+    .diag-card.biz-pulse-highlight {
+      animation: bizCardPulse 1.1s ease;
+    }
+    @keyframes bizCardPulse {
+      0% { box-shadow: 0 0 0 0 rgba(194, 155, 56, 0.55); transform: scale(1); }
+      45% { box-shadow: 0 0 0 12px rgba(194, 155, 56, 0); transform: scale(1.012); }
+      100% { box-shadow: 0 0 0 0 rgba(194, 155, 56, 0); transform: scale(1); }
+    }
+
+    /* 데스크톱 섹션 구분 명확화 */
+    html, body {
+      overflow-x: clip;
+    }
+    main > section {
+      position: relative;
+      border-top: 1px solid var(--border-color);
+    }
+    @media (max-width: 768px) {
+      .nav-container { padding: 0 14px; }
+      .hero { padding: 30px 0 38px; }
+      .hero-badge {
+        font-size: 0.84rem;
+        padding: 6px 14px;
+        margin-bottom: 16px;
+        max-width: 100%;
+        line-height: 1.4;
+      }
+      .hero-title { font-size: 1.82rem; }
+      .hero-desc { font-size: 0.98rem; margin-bottom: 20px; }
+      .hero-primary-ctas { gap: 9px; margin-bottom: 30px; }
+      .hero-primary-ctas .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 13px 18px;
+        font-size: 0.95rem;
+      }
+      .hero-biz-hub { padding: 20px 14px; border-radius: 20px; }
+      .hero-biz-hub-title { font-size: 1.14rem; }
+      .hero-5biz-card { padding: 15px 13px 14px; }
+      .hero-5biz-name { font-size: 0.98rem; }
+      .hero-5biz-desc { font-size: 0.8rem; }
+      .biz-filter-bar { padding: 10px 12px; gap: 7px; }
+      .biz-filter-btn { padding: 7px 12px; font-size: 0.84rem; }
+      .self-test-card { padding: 24px 16px; }
+      .memoir-cta-banner { padding: 22px 18px; }
+      .memoir-cta-btns { width: 100%; }
+      .memoir-cta-btns .btn { flex: 1 1 auto; }
+    }
   </style>
 </head>
 <body>
 
-  <!-- 상단 네비게이션 헤더 -->
+  <!-- 상단 2단 품격 네비게이션 헤더 (고객 메뉴와 운영·파트너 메뉴 완벽 분리) -->
   <header>
+    <!-- 1단: 초슬림 유틸리티 바 (직통 상담 전화 & 운영/코치 전용 바로가기) -->
+    <div class="top-utility-bar">
+      <div class="top-utility-inner">
+        <div class="top-utility-left">
+          <span class="top-utility-label">🌿 인생 후반전 라이프 리셋 &amp; 디지털 자서전</span>
+          <a href="tel:01096135913" id="topBarPhoneLink" class="top-utility-phone" title="터치하시면 전담 코치와 전화 상담이 연결됩니다">
+            <span>📞</span>
+            <span>전담 상담 010-9613-5913</span>
+          </a>
+        </div>
+        <div class="top-utility-right">
+          <a href="coach.html" target="_blank" class="top-util-link util-coach-hide-sm" title="현장 코치 전용 파트너 앱 (업무수행 & 정산)">
+            <span>📱</span>
+            <span>현장 코치앱</span>
+          </a>
+          <a href="coach-memoir.html" target="_blank" class="top-util-link util-coach-hide-sm" title="자서전 전담 코치 글쓰기 앱">
+            <span>✍️</span>
+            <span>자서전 코치앱</span>
+          </a>
+          <a href="admin.html" onclick="goToAdminHome(event)" class="top-util-link util-admin" title="전체 사이트 운영 관리자 홈">
+            <span>⚙️</span>
+            <span>관리자홈</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2단: 고객 전용 메인 네비게이션 바 -->
     <div class="container nav-container">
       <a href="#home" class="logo-area" aria-label="여백과 결 홈으로 이동">
         <!-- 품격 있는 여백과 결 전용 엠블럼 심볼 -->
@@ -6221,56 +7200,35 @@
             <span class="logo-title">여백과 결</span>
             <span class="logo-badge">리셋 아카이브</span>
           </div>
-          <span class="logo-sub">YEBAEK & GEOL · RESET ARCHIVE</span>
+          <span class="logo-sub">YEBAEK &amp; GEOL · RESET ARCHIVE</span>
         </div>
       </a>
 
-      <!-- 우측 그룹: 카테고리 메뉴 + 나의 아카이브 옆 로그인 버튼 -->
+      <!-- 우측 그룹: 고객 핵심 6대 메뉴 + 나의 서재 / 로그인 -->
       <div class="nav-right-group">
-        <!-- 실버 친화적 크고 굵은 카테고리 메뉴 (7개) -->
         <ul class="nav-menu">
-          <li><a href="#home" class="nav-link active">홈</a></li>
-          <li><a href="#magazine" class="nav-link">여백의 서재</a></li>
-          <li><a href="#lounge" class="nav-link">비움 한 줄</a></li>
+          <li><a href="#home" class="nav-link active" data-nav="home">홈</a></li>
           <li>
-            <a href="#test" class="nav-highlight-btn nav-test-pill" title="1분 무료 인생 리셋 자가진단 바로가기">
-              <span>🎯</span>
-              <span>1분 자가진단</span>
-              <span class="nav-pulse-badge" title="지금 진단 가능"></span>
+            <a href="#test" class="nav-link nav-biz-link" data-nav="test" title="여백과 결 5대 핵심 비즈니스 & 1분 맞춤 진단">
+              <span>🧭</span>
+              <span>5대 비즈니스</span>
+              <span class="nav-pulse-badge" title="맞춤 진단 가능"></span>
             </a>
           </li>
-          <li>
-            <a href="#memoir" class="nav-highlight-btn nav-memoir-pill" title="내 인생의 서사 기록, 디지털 자서전">
-              <span>✍️</span>
-              <span>디지털 자서전</span>
-            </a>
-          </li>
-          <li>
-            <a href="academy.html" class="nav-highlight-btn nav-academy-pill" title="시니어 라이프 리셋 코치 양성 아카데미">
-              <span>🎓</span>
-              <span>코치 아카데미</span>
-            </a>
-          </li>
-          <li>
-            <a href="javascript:void(0)" class="nav-highlight-btn nav-room-pill" title="어르신 전용 프라이빗 온라인룸 입장 (로그인)" onclick="openLoginModal(event); return false;">
-              <span>🏛️</span>
-              <span>나의 고유한 서재</span>
-            </a>
-          </li>
+          <li><a href="#memoir" class="nav-link" data-nav="memoir">디지털 자서전</a></li>
+          <li><a href="#magazine" class="nav-link" data-nav="magazine">여백의 서재</a></li>
+          <li><a href="#lounge" class="nav-link" data-nav="lounge">비움 한 줄</a></li>
+          <li><a href="academy.html" class="nav-link" title="시니어 라이프 리셋 코치 양성 아카데미">코치 아카데미</a></li>
         </ul>
 
-        <!-- 상단 관리자 홈 버튼, 독립 로그인 버튼 및 테마 토글 -->
+        <!-- 나의 서재, 로그인, 화면 모드, 모바일 메뉴 -->
         <div class="nav-actions">
-          <a href="coach.html" target="_blank" class="nav-admin-btn" title="현장 코치 전용 파트너 앱 (업무수행 & 정산)" style="display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: 999px; background: rgba(5, 150, 105, 0.12); color: #059669; font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(5, 150, 105, 0.35); text-decoration: none; transition: all 0.2s ease;">
-            <span>📱</span>
-            <span>코치앱</span>
-          </a>
-          <a href="admin.html" onclick="goToAdminHome(event)" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
-            <span>⚙️</span>
-            <span>관리자홈</span>
+          <a href="javascript:void(0)" class="nav-room-compact" title="어르신 전용 프라이빗 온라인룸 입장 (로그인)" onclick="openLoginModal(event); return false;">
+            <span>🏛️</span>
+            <span>나의 서재</span>
           </a>
           <button class="nav-login-btn" onclick="openLoginModal(event)" aria-label="로그인">
-            <span style="font-size: 1.15rem; line-height: 1;">👤</span>
+            <span style="font-size: 1.05rem; line-height: 1;">👤</span>
             <span>로그인</span>
           </button>
           <!-- 화면 모드 전환 -->
@@ -6278,19 +7236,19 @@
           <!-- 모바일 햄버거 메뉴 버튼 -->
           <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴 열기" onclick="toggleMobileDrawer()">☰</button>
         </div>
+      </div>
     </div>
 
-    <!-- 모바일 전용 가로 스크롤 스티키 카테고리 탭바 -->
+    <!-- 모바일 전용 가로 스크롤 스티키 카테고리 탭바 (새 섹션 순서 동기화) -->
     <nav class="mobile-category-bar" id="mobileCategoryBar" aria-label="모바일 카테고리 탭">
       <a href="#home" class="mobile-cat-item active" data-target="home" onclick="handleMobileTabClick('home', event)"><span>🏠</span> <span>홈</span></a>
+      <a href="#test" class="mobile-cat-item" data-target="test" onclick="handleMobileTabClick('test', event)"><span>🧭</span> <span>5대 비즈니스</span></a>
+      <a href="#memoir" class="mobile-cat-item" data-target="memoir" onclick="handleMobileTabClick('memoir', event)"><span>✍️</span> <span>자서전</span></a>
       <a href="#magazine" class="mobile-cat-item" data-target="magazine" onclick="handleMobileTabClick('magazine', event)"><span>📖</span> <span>여백서재</span></a>
       <a href="#lounge" class="mobile-cat-item" data-target="lounge" onclick="handleMobileTabClick('lounge', event)"><span>💬</span> <span>비움한줄</span></a>
-      <a href="#test" class="mobile-cat-item" data-target="test" onclick="handleMobileTabClick('test', event)"><span>🎯</span> <span>자가진단</span></a>
-      <a href="#memoir" class="mobile-cat-item" data-target="memoir" onclick="handleMobileTabClick('memoir', event)"><span>✍️</span> <span>자서전</span></a>
       <a href="academy.html" class="mobile-cat-item" data-target="programs" title="코치 아카데미"><span>🎓</span> <span>아카데미</span></a>
       <a href="my-room.html?mode=sample" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 800;" title="김순옥 어르신 완성 서재 체험"><span>👵</span> <span>샘플서재</span></a>
       <a href="javascript:void(0)" onclick="openLoginModal(event)" class="mobile-cat-item" data-target="archive"><span>🏛️</span> <span>나의서재</span></a>
-      <a href="admin.html" onclick="goToAdminHome(event)" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈"><span>⚙️</span> <span>관리자</span></a>
     </nav>
   </header>
 
@@ -6313,6 +7271,20 @@
           </div>
           <span class="drawer-arrow">›</span>
         </a>
+        <a href="#test" class="drawer-nav-item drawer-item-highlight" onclick="closeMobileDrawer()">
+          <div class="drawer-item-left">
+            <span class="drawer-icon">🧭</span>
+            <span>5대 핵심 비즈니스 &amp; 진단</span>
+          </div>
+          <span class="drawer-badge badge-accent">5대사업</span>
+        </a>
+        <a href="#memoir" class="drawer-nav-item drawer-item-memoir" onclick="closeMobileDrawer()">
+          <div class="drawer-item-left">
+            <span class="drawer-icon">✍️</span>
+            <span>디지털 자서전</span>
+          </div>
+          <span class="drawer-badge badge-memoir">자서전</span>
+        </a>
         <a href="#magazine" class="drawer-nav-item" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
             <span class="drawer-icon">📖</span>
@@ -6326,20 +7298,6 @@
             <span>오늘의 비움 한 줄</span>
           </div>
           <span class="drawer-arrow">›</span>
-        </a>
-        <a href="#test" class="drawer-nav-item drawer-item-highlight" onclick="closeMobileDrawer()">
-          <div class="drawer-item-left">
-            <span class="drawer-icon">🎯</span>
-            <span>1분 자가진단</span>
-          </div>
-          <span class="drawer-badge badge-accent">무료진단</span>
-        </a>
-        <a href="#memoir" class="drawer-nav-item drawer-item-memoir" onclick="closeMobileDrawer()">
-          <div class="drawer-item-left">
-            <span class="drawer-icon">✍️</span>
-            <span>디지털 자서전</span>
-          </div>
-          <span class="drawer-badge badge-memoir">자서전</span>
         </a>
         <a href="academy.html" class="drawer-nav-item drawer-item-academy">
           <div class="drawer-item-left">
@@ -6362,21 +7320,22 @@
           </div>
           <span class="drawer-badge badge-room">온라인룸</span>
         </a>
-        <a href="coach.html" target="_blank" class="drawer-nav-item" style="background: rgba(5, 150, 105, 0.1); border: 1.5px solid rgba(5, 150, 105, 0.35); margin-top: 6px;">
+        <div style="font-size: 0.72rem; font-weight: 800; color: var(--text-muted); padding: 10px 4px 2px; border-top: 1px dashed var(--border-color); margin-top: 8px; letter-spacing: 0.5px;">코치 · 운영자 전용</div>
+        <a href="coach.html" target="_blank" class="drawer-nav-item" style="background: rgba(5, 150, 105, 0.1); border: 1.5px solid rgba(5, 150, 105, 0.35);">
           <div class="drawer-item-left">
             <span class="drawer-icon">📱</span>
             <span style="color: #059669; font-weight: 850;">현장 코칭 파트너 앱</span>
           </div>
           <span class="drawer-badge" style="background: #059669; color: #fff;">COACH</span>
         </a>
-        <a href="coach-memoir.html" target="_blank" class="drawer-nav-item" style="background: rgba(194, 155, 56, 0.1); border: 1.5px solid rgba(194, 155, 56, 0.35); margin-top: 6px;">
+        <a href="coach-memoir.html" target="_blank" class="drawer-nav-item" style="background: rgba(194, 155, 56, 0.1); border: 1.5px solid rgba(194, 155, 56, 0.35);">
           <div class="drawer-item-left">
             <span class="drawer-icon">✍️</span>
             <span style="color: #936f1c; font-weight: 850;">자서전 코치 글쓰기 앱</span>
           </div>
           <span class="drawer-badge" style="background: #c29b38; color: #fff;">MEMOIR</span>
         </a>
-        <a href="admin.html" onclick="closeMobileDrawer(); goToAdminHome(event);" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35); margin-top: 6px;">
+        <a href="admin.html" onclick="closeMobileDrawer(); goToAdminHome(event);" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35);">
           <div class="drawer-item-left">
             <span class="drawer-icon">⚙️</span>
             <span style="color: var(--accent-gold); font-weight: 850;">통합 관리자 홈</span>
@@ -6464,245 +7423,202 @@
   </div>
 
   <main>
-    <!-- 1. 메인 히어로 대문 -->
-    <div class="container" id="home">
-      <section class="hero">
-        <div class="hero-badge">🌿 인생 후반전 라이프 리셋 플랫폼</div>
-        <h1 class="hero-title">
-          지나온 세월의 <span class="highlight">결</span>을 다듬고,<br>
-          남은 인생의 <span class="highlight">여백</span>을 내 손으로 그리다
-        </h1>
-        <p class="hero-desc">
-          치열하게 앞만 보며 달려온 전반전을 뒤로하고,<br>
-          내 몸의 건강과 소중한 서사를 우아하게 정리하여 가장 눈부신 두 번째 황금기를 맞이하세요.<br>
-          전담 코칭스태프와 함께 온라인과 오프라인에서 당신만의 라이프 아카이브를 완성합니다.
-        </p>
-
-        <!-- 🚀 [메인 대문 전면 개편] 6대 핵심 카테고리 비주얼 쇼케이스 덱 -->
-        <div class="hero-category-showcase">
-          <div class="cat-showcase-header">
-            <span class="cat-showcase-tag">🌿 6대 핵심 서비스 둘러보기</span>
-            <h2 class="cat-showcase-headline">원하시는 여백과 결의 카테고리를 선택하세요</h2>
+    <!-- 1. 메인 히어로 대문 & 첫 화면 5대 비즈니스 컬러 허브 -->
+    <div class="hero-outer-band" id="home">
+      <div class="container">
+        <section class="hero" style="border-top: none;">
+          <div class="hero-copy-wrap">
+            <div class="hero-badge">🌿 인생 후반전 라이프 리셋 &amp; 디지털 자서전 플랫폼</div>
+            <h1 class="hero-title">
+              지나온 세월의 <span class="highlight">결</span>을 다듬고,<br>
+              남은 인생의 <span class="highlight">여백</span>을 내 손으로 그리다
+            </h1>
+            <p class="hero-desc">
+              치열하게 살아온 전반전을 우아하게 정돈하고, 가장 눈부신 두 번째 황금기를 설계합니다.<br>
+              전담 라이프 코치가 댁으로 직접 찾아가 <strong>5대 맞춤 웰라이프 비즈니스</strong>를 동행합니다.
+            </p>
+            <div class="hero-primary-ctas">
+              <a href="#test" class="btn btn-primary">
+                <span>🧭</span> 5대 비즈니스 한눈에 보기 ➔
+              </a>
+              <button type="button" onclick="openSeniorConsultModal('통합 라이프 리셋 상담', '홈페이지 상단 1:1 무료 방문 상담 신청')" class="btn btn-secondary">
+                <span>📞</span> 1:1 무료 방문 상담 신청
+              </button>
+              <a href="my-room.html?mode=sample" class="btn hero-btn-sample">
+                <span>👵</span> 완성 서재 샘플 체험
+              </a>
+            </div>
           </div>
 
-          <div class="cat-showcase-grid">
-            <!-- 01. 여백서재 -->
-            <a href="#magazine" class="cat-showcase-card" title="01 여백의 서재 - 칼럼 & 게시판">
-              <div class="cat-showcase-thumb">
-                <img src="images/showcase-books-organizing.jpg" alt="여백의 서재 - 오래된 짐과 책 정리" loading="lazy">
-                <span class="cat-showcase-num">01</span>
+          <!-- 🚀 첫 화면에서 5대 핵심 비즈니스를 고유 컬러로 즉시 구분하는 허브 보드 -->
+          <div class="hero-biz-hub">
+            <div class="hero-biz-hub-head">
+              <div>
+                <span class="hero-biz-hub-kicker">✨ CORE 5 BUSINESS · 5대 핵심 비즈니스</span>
+                <h2 class="hero-biz-hub-title">원하시는 비즈니스를 눌러 바로 상세 안내를 확인하세요</h2>
               </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge green">인생 칼럼 & 지혜</span>
-                <div class="cat-showcase-title">
-                  <span>여백의 서재</span>
-                  <span class="cat-showcase-arrow">→</span>
-                </div>
-                <p class="cat-showcase-desc">오래된 책과 짐을 정돈하며 삶을 갈무리하는 깊이 있는 지혜 칼럼</p>
-              </div>
-            </a>
+              <span class="hero-biz-hub-sub">각 영역별 고유 컬러로 한눈에 구분 · 전담 코치 1:1 방문 케어</span>
+            </div>
 
-            <!-- 02. 비움한줄 -->
-            <a href="#lounge" class="cat-showcase-card" title="02 오늘의 비움 한 줄 라운지">
-              <div class="cat-showcase-thumb">
-                <img src="images/showcase-senior-writing.jpg" alt="비움 한 줄 라운지 - 한 줄 글을 적는 어르신" loading="lazy">
-                <span class="cat-showcase-num">02</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge tea">마음 쉼터 & 공감</span>
-                <div class="cat-showcase-title">
-                  <span>비움 한 줄 라운지</span>
-                  <span class="cat-showcase-arrow">→</span>
+            <!-- 5대 핵심 비즈니스 5색 퀵 카드 -->
+            <div class="hero-5biz-grid">
+              <button type="button" class="hero-5biz-card hbiz-beauty" onclick="jumpToBusiness('beauty')">
+                <div>
+                  <div class="hero-5biz-top">
+                    <span class="hero-5biz-num">01 · 대표</span>
+                    <span class="hero-5biz-icon">💄</span>
+                  </div>
+                  <div class="hero-5biz-name">시니어 뷰티 케어</div>
+                  <p class="hero-5biz-desc">특별한 날 화려한 외출 · 180분 방문 피부·메이크업·코디</p>
                 </div>
-                <p class="cat-showcase-desc">마음과 일상의 짐을 가볍게 덜어놓고 따뜻한 위로를 나누는 공간</p>
-              </div>
-            </a>
+                <span class="hero-5biz-go">자세히 보기 →</span>
+              </button>
 
-            <!-- 03. 자가진단 -->
-            <a href="#test" class="cat-showcase-card" title="03 1분 여백 자가진단">
-              <div class="cat-showcase-thumb">
-                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80" alt="1분 여백 자가진단" loading="lazy">
-                <span class="cat-showcase-num">03</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge orange">1분 무료 체크</span>
-                <div class="cat-showcase-title">
-                  <span>1분 여백 자가진단</span>
-                  <span class="cat-showcase-arrow">→</span>
+              <button type="button" class="hero-5biz-card hbiz-wardrobe" onclick="jumpToBusiness('wardrobe')">
+                <div>
+                  <div class="hero-5biz-top">
+                    <span class="hero-5biz-num">02</span>
+                    <span class="hero-5biz-icon">👗</span>
+                  </div>
+                  <div class="hero-5biz-name">옷장 정리 &amp; 수납</div>
+                  <p class="hero-5biz-desc">일상복·외출복 황금 구분과 손이 편한 동선 맞춤 수납</p>
                 </div>
-                <p class="cat-showcase-desc">뷰티·정리·유품·엔딩 5대 테마 중 내게 가장 필요한 맞춤 솔루션</p>
-              </div>
-            </a>
+                <span class="hero-5biz-go">자세히 보기 →</span>
+              </button>
 
-            <!-- 04. 자서전 -->
-            <a href="#memoir" class="cat-showcase-card" title="04 내 인생의 서사, 디지털 자서전">
-              <div class="cat-showcase-thumb">
-                <img src="images/showcase-senior-memoir.jpg" alt="디지털 자서전 - 인생 회고록을 읽는 어르신" loading="lazy">
-                <span class="cat-showcase-num">04</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge rose">생애사 회고록 & 양장본</span>
-                <div class="cat-showcase-title">
-                  <span>디지털 자서전 제작</span>
-                  <span class="cat-showcase-arrow">→</span>
+              <button type="button" class="hero-5biz-card hbiz-legacy" onclick="jumpToBusiness('legacy')">
+                <div>
+                  <div class="hero-5biz-top">
+                    <span class="hero-5biz-num">03</span>
+                    <span class="hero-5biz-icon">📦</span>
+                  </div>
+                  <div class="hero-5biz-name">짐·유품 생전 정리</div>
+                  <p class="hero-5biz-desc">수십 년 짐의 우아한 비움과 후대에 전할 소중한 유산 분류</p>
                 </div>
-                <p class="cat-showcase-desc">1:1 찾아가는 구술 인터뷰와 옛 사진 복원으로 엮는 가문의 명작</p>
-              </div>
-            </a>
+                <span class="hero-5biz-go">자세히 보기 →</span>
+              </button>
 
-            <!-- 05. 코치 아카데미 -->
-            <a href="academy.html" class="cat-showcase-card" title="05 라이프 리셋 코치 아카데미">
-              <div class="cat-showcase-thumb">
-                <img src="images/coach-academy-banner.jpg" alt="라이프 리셋 코치 아카데미" loading="lazy">
-                <span class="cat-showcase-num">05</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge blue">전문 코치 양성과정</span>
-                <div class="cat-showcase-title">
-                  <span>코치 아카데미</span>
-                  <span class="cat-showcase-arrow">→</span>
+              <button type="button" class="hero-5biz-card hbiz-memoir" onclick="jumpToBusiness('memoir')">
+                <div>
+                  <div class="hero-5biz-top">
+                    <span class="hero-5biz-num">04</span>
+                    <span class="hero-5biz-icon">✍️</span>
+                  </div>
+                  <div class="hero-5biz-name">디지털 자서전 출판</div>
+                  <p class="hero-5biz-desc">1:1 구술 인터뷰·옛 사진 복원·가죽 양장본 &amp; 오디오북</p>
                 </div>
-                <p class="cat-showcase-desc">일본 4대 선진 자격 도입, 인생 2막 가장 보람찬 전문 커리어</p>
-              </div>
-            </a>
+                <span class="hero-5biz-go">자세히 보기 →</span>
+              </button>
 
-            <!-- 06. 나의 보물 서재 -->
-            <a href="my-room.html?mode=sample" class="cat-showcase-card" title="06 나의 고유한 보물 서재 (김순옥 어르신 완성 서재 체험)">
-              <div class="cat-showcase-thumb">
-                <img src="images/showcase-senior-happy-book.jpg" alt="나의 고유한 서재 - 자서전을 안고 행복해하는 어르신" loading="lazy">
-                <span class="cat-showcase-num">06</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge gold">프라이빗 온라인룸</span>
-                <div class="cat-showcase-title">
-                  <span>나의 고유한 서재</span>
-                  <span class="cat-showcase-arrow">→</span>
+              <button type="button" class="hero-5biz-card hbiz-party" onclick="jumpToBusiness('party')">
+                <div>
+                  <div class="hero-5biz-top">
+                    <span class="hero-5biz-num">05</span>
+                    <span class="hero-5biz-icon">💌</span>
+                  </div>
+                  <div class="hero-5biz-name">생전 엔딩 파티</div>
+                  <p class="hero-5biz-desc">고마운 분들을 초대해 감사를 전하는 품격 있는 인생 축제</p>
                 </div>
-                <p class="cat-showcase-desc">김순옥 어르신의 자서전과 추억 복원관이 담긴 완성 서재 둘러보기</p>
-              </div>
-            </a>
+                <span class="hero-5biz-go">자세히 보기 →</span>
+              </button>
+            </div>
+
+            <!-- 함께 이용하는 콘텐츠 · 아카데미 · 개인 서재 4대 바로가기 (비즈니스와 명확 분리) -->
+            <div class="hero-extra-strip">
+              <a href="#magazine" class="hero-extra-link">
+                <div class="hero-extra-emoji">📖</div>
+                <div class="hero-extra-text">
+                  <div class="hero-extra-title">여백의 서재</div>
+                  <div class="hero-extra-sub">웰라이프·종활 지혜 칼럼</div>
+                </div>
+              </a>
+              <a href="#lounge" class="hero-extra-link">
+                <div class="hero-extra-emoji">☕</div>
+                <div class="hero-extra-text">
+                  <div class="hero-extra-title">오늘의 비움 한 줄</div>
+                  <div class="hero-extra-sub">익명 마음 쉼터 &amp; 응원</div>
+                </div>
+              </a>
+              <a href="academy.html" class="hero-extra-link">
+                <div class="hero-extra-emoji">🎓</div>
+                <div class="hero-extra-text">
+                  <div class="hero-extra-title">코치 양성 아카데미</div>
+                  <div class="hero-extra-sub">인생 2막 전문 자격과정</div>
+                </div>
+              </a>
+              <a href="my-room.html?mode=sample" class="hero-extra-link">
+                <div class="hero-extra-emoji">🏛️</div>
+                <div class="hero-extra-text">
+                  <div class="hero-extra-title">나의 고유한 서재</div>
+                  <div class="hero-extra-sub">김순옥 어르신 완성 샘플</div>
+                </div>
+              </a>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </div>
 
-    <!-- 2. [1단계] 인사이트 매거진: 여백의 서재 (칼럼 & 게시판) -->
-    <section id="magazine" style="background-color: var(--bg-secondary);">
-      <div class="container">
-        <!-- [신설] 카테고리 01 시각적 랜드마크 이미지 배너 -->
-        <div class="section-landmark-banner">
-          <div class="slb-img-wrap">
-            <img src="images/showcase-books-organizing.jpg" alt="여백의 서재 - 오래된 짐과 책 정리" class="slb-img" loading="lazy">
-          </div>
-          <div class="slb-content">
-            <div class="slb-badge">CATEGORY 01 · 📚 인생 칼럼 & 지혜</div>
-            <h3 class="slb-title">여백의 서재 (인사이트 매거진)</h3>
-            <p class="slb-desc">오래된 책과 짐을 정돈하며 선진 웰라이프·종활 문화와 삶을 갈무리하는 깊이 있는 지혜 칼럼을 전합니다.</p>
-          </div>
-        </div>
-        <div class="mag-header-row">
-          <div class="section-header" style="margin-bottom: 0; text-align: left;">
-            <p class="section-tag">Insights Magazine & Board</p>
-            <h2 class="section-title">여백의 서재</h2>
-            <p class="section-desc">일본의 선진 웰라이프·종활 문화와 삶을 우아하게 갈무리하는 깊이 있는 지혜를 전합니다.</p>
-          </div>
-          <div class="mag-header-controls">
-            <button class="btn-mag-action" onclick="openBoardModal()" title="전체 게시글 목록을 열람합니다">
-              <span>📋</span> 전체 글 목록 보기
-            </button>
-          </div>
-        </div>
-
-        <!-- 메인 전면에 선택된 게시글만 노출되는 그리드 -->
-        <div class="magazine-grid" id="magazineGrid">
-          <!-- JS에서 isFeatured === true 인 글들로 동적 렌더링 -->
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. [2단계] 참여 라운지 (오늘의 비움 한 줄 - 따뜻한 커뮤니티 형성) -->
-    <section id="lounge">
-      <div class="container">
-        <!-- [신설] 카테고리 02 시각적 랜드마크 이미지 배너 -->
-        <div class="section-landmark-banner">
-          <div class="slb-img-wrap">
-            <img src="images/showcase-senior-writing.jpg" alt="오늘의 비움 한 줄 라운지 - 한 줄 글을 적는 어르신" class="slb-img" loading="lazy">
-          </div>
-          <div class="slb-content">
-            <div class="slb-badge">CATEGORY 02 · ☕ 어르신 마음 쉼터</div>
-            <h3 class="slb-title">오늘의 비움 한 줄 라운지</h3>
-            <p class="slb-desc">마음과 일상의 무거운 짐을 가볍게 덜어놓는 익명 쉼터입니다. 동년배 회원들의 따뜻한 공감과 응원이 함께합니다.</p>
-          </div>
-        </div>
-        <div class="section-header">
-          <p class="section-tag">Community Lounge</p>
-          <h2 class="section-title">오늘의 비움 한 줄</h2>
-          <p class="section-desc">
-            오늘 당신의 마음과 일상에서 가볍게 내려놓은 짐 하나는 무엇인가요?<br>
-            익명으로 편안하게 적어보세요. 다른 회원들의 따뜻한 응원이 기다립니다.
-          </p>
-        </div>
-        <div class="lounge-wrap">
-          <!-- 비움 입력 폼 -->
-          <div class="unburden-form">
-            <input type="text" id="unburdenInput" class="unburden-input" placeholder="예: 10년 동안 입지 않던 정장을 오늘 비웠습니다. / 남의 시선에 대한 걱정을 내려놓습니다." />
-            <button class="btn btn-primary" onclick="addUnburden()">가볍게 비워내기</button>
-          </div>
-
-          <!-- 피드 목록 (JS에서 동적 렌더링: 대표 추천글 우선 + 최대 4개 노출) -->
-          <div class="unburden-feed" id="unburdenFeed">
-            <!-- JS 동적 렌더링 -->
-          </div>
-
-          <!-- 더보기 버튼 (4개 초과 시 노출) -->
-          <div style="text-align: center; margin-top: 24px;" id="unburdenMoreWrap">
-            <button class="btn btn-secondary" id="btnToggleUnburdenMore" onclick="toggleUnburdenMore()" style="padding: 10px 24px; font-size: 0.94rem; font-weight: 700; border-radius: 999px;">
-              🌿 더 많은 비움 이야기 보기
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. [3단계] 여백과결 4대 웰라이프 비즈니스 쇼케이스 & 1:1 라이프케어 안내 -->
+    <!-- =========================================================================
+         PART 01. 여백과 결 5대 핵심 웰라이프 비즈니스 쇼케이스 & 1분 맞춤 진단
+         ========================================================================= -->
     <section id="test" style="background-color: var(--bg-secondary);">
       <div class="container">
-        <!-- [신설] 카테고리 03 시각적 랜드마크 이미지 배너 -->
-        <div class="section-landmark-banner">
-          <div class="slb-img-wrap">
-            <img src="images/care-beauty-hero.jpg" alt="여백과결 4대 웰라이프 비즈니스 쇼케이스" class="slb-img" loading="lazy">
+        <!-- PART 01 통합 섹션 인트로 배너 -->
+        <div class="section-intro-banner part-biz">
+          <div class="sib-media">
+            <img src="images/care-beauty-hero.jpg" alt="여백과 결 5대 핵심 웰라이프 비즈니스 쇼케이스" loading="lazy">
+            <span class="sib-part-chip">PART 01 · 5대 비즈니스</span>
           </div>
-          <div class="slb-content">
-            <div class="slb-badge">CATEGORY 03 · 🌿 웰다잉을 위한 웰라이프 실행 코칭</div>
-            <h3 class="slb-title">여백과결 4대 웰라이프 비즈니스 쇼케이스</h3>
-            <p class="slb-desc">웰다잉을 준비하는 가장 아름다운 방법은 오늘을 가장 품격 있게 살아가는 것입니다. 뷰티·옷장·유품·엔딩파티 4대 영역에서 전문 라이프 코치가 직접 동행합니다.</p>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">🌿 5 CORE WELL-LIFE BUSINESS · 1:1 전담 코치 방문</div>
+              <h2 class="sib-title">여백과 결 5대 핵심 웰라이프 비즈니스</h2>
+              <p class="sib-desc">
+                뷰티·옷장·유품·자서전·엔딩파티까지 — 다섯 가지 전문 영역을 각 비즈니스별 고유 컬러로 한눈에 비교하고, 내게 꼭 맞는 1:1 맞춤 처방을 즉시 확인하세요.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="section-header">
-          <p class="section-tag">Business Showcase & Life Care</p>
-          <h2 class="section-title">여백과결 4대 웰라이프 비즈니스 포털</h2>
-          <p class="section-desc">비즈니스별 상세 안내와 프로모션을 확인하시고, 전문 코치의 1:1 맞춤 라이프케어를 신청해 보세요.</p>
         </div>
 
         <div class="self-test-card" style="margin-top: 0;">
           <div class="test-header">
             <div class="test-title-wrap">
-              <h3>🧭 전문 라이프 코칭 비즈니스 안내 & 바로 예약</h3>
-              <p>원하시는 비즈니스를 선택하시면 상세 프로모션과 표준 케어 프로세스(SOP), 1:1 예약 화면이 열립니다.</p>
+              <h3>🧭 5대 비즈니스별 한눈에 비교 &amp; 1분 맞춤 처방</h3>
+              <p>아래 <strong>비즈니스 탭</strong>을 누르면 원하는 분야만 집중해서 보실 수 있으며, 카드를 누르면 1:1 맞춤 솔루션 처방전이 바로 열립니다.</p>
             </div>
             <span class="test-header-badge">✨ 1:1 전담 코치 배정</span>
+          </div>
+
+          <!-- 5대 비즈니스 고유 컬러 빠른 필터 탭바 (각 비즈니스 즉시 구분) -->
+          <div class="biz-filter-bar" id="bizFilterBar" role="tablist" aria-label="5대 비즈니스 영역 필터">
+            <button type="button" class="biz-filter-btn active" data-biz="all" onclick="filterBusinessShowcase('all')">
+              <span>✨ 전체 5대 비즈니스</span>
+            </button>
+            <button type="button" class="biz-filter-btn" data-biz="beauty" onclick="filterBusinessShowcase('beauty')">
+              <span>01 · 💄 시니어 뷰티</span>
+            </button>
+            <button type="button" class="biz-filter-btn" data-biz="wardrobe" onclick="filterBusinessShowcase('wardrobe')">
+              <span>02 · 👗 옷장·수납</span>
+            </button>
+            <button type="button" class="biz-filter-btn" data-biz="legacy" onclick="filterBusinessShowcase('legacy')">
+              <span>03 · 📦 짐·유품 정리</span>
+            </button>
+            <button type="button" class="biz-filter-btn" data-biz="memoir" onclick="filterBusinessShowcase('memoir')">
+              <span>04 · ✍️ 디지털 자서전</span>
+            </button>
+            <button type="button" class="biz-filter-btn" data-biz="party" onclick="filterBusinessShowcase('party')">
+              <span>05 · 💌 생전 엔딩 파티</span>
+            </button>
           </div>
 
           <!-- ================= 맞춤 솔루션 진단 콤보 박스 컨트롤 ================= -->
           <div class="diag-combobox-card" id="diagComboboxCard">
             <div class="diag-combo-title-row">
-              <span class="diag-combo-badge">🎯 바로 진단 & 안내</span>
-              <h4 class="diag-combo-title">관심 있는 웰라이프 비즈니스를 선택하세요</h4>
+              <span class="diag-combo-badge">🎯 1분 바로 진단</span>
+              <h4 class="diag-combo-title">관심 있는 비즈니스를 선택해 맞춤 처방전을 바로 받아보세요</h4>
             </div>
-            <p class="diag-combo-desc">
-              아래 <strong>선택 상자</strong>에서 관심 분야를 고르시면, 전문 코칭 솔루션 처방전 및 비즈니스 상세 안내가 즉시 표시됩니다.
-            </p>
-            <div class="diag-combo-action-group">
+            <div class="diag-combo-action-group" style="margin-top: 10px;">
               <div class="diag-select-wrap">
                 <select id="diagThemeSelect" class="diag-theme-select" onchange="handleDiagSelectChange(this.value)" aria-label="맞춤 솔루션 진단 주제 선택">
                   <option value="">-- 안내받으실 비즈니스를 선택하세요 (클릭) --</option>
@@ -6715,177 +7631,202 @@
                 <span class="diag-select-arrow">▼</span>
               </div>
               <button type="button" class="diag-combo-submit-btn" onclick="handleDiagComboClick()" aria-label="맞춤 솔루션 진단받기 실행">
-                <span>비즈니스 솔루션 확인하기</span>
+                <span>맞춤 솔루션 확인하기</span>
                 <span>➔</span>
               </button>
             </div>
           </div>
 
-          <!-- 5대 비즈니스 쇼케이스 진단 카드 그리드 (관리자 칼럼 연동 & 5대 테마 일치) -->
+          <!-- 5대 비즈니스 쇼케이스 카드 그리드 (1호 풀와이드 피처드 + 2~5호 완벽한 2×2 대칭) -->
           <div class="diag-cards-grid" id="diagCardsGrid">
             
-            <!-- 1. 💄 시니어 뷰티 라이프케어 (1호 핵심 프리미엄 사업) -->
-            <div class="diag-card diag-theme-beauty" onclick="showTestResult('beauty', this)" id="diagCard_beauty" role="button" tabindex="0" style="border: 2px solid #d1516e; box-shadow: 0 8px 24px rgba(209, 81, 110, 0.12);">
-              <div>
-                <!-- 이미지 썸네일 -->
+            <!-- 1. 💄 시니어 뷰티 라이프케어 (1호 핵심 프리미엄 사업 - 풀와이드 피처드) -->
+            <div class="diag-card diag-theme-beauty diag-featured-card" data-biz-type="beauty" onclick="showTestResult('beauty', this)" id="diagCard_beauty" role="button" tabindex="0">
+              <div class="diag-card-media-col">
                 <div class="diag-card-thumb">
                   <img src="images/care-beauty-hero.jpg" alt="시니어 뷰티 라이프케어 특별한 날 화려한 외출" loading="lazy">
-                  <span class="diag-card-thumb-badge">✨ 1호 프리미엄 비즈니스</span>
-                  <span class="diag-card-thumb-tag" style="background: #b83354;">180분 SOP 밀착케어</span>
+                  <span class="diag-card-thumb-badge">✨ 1호 시그니처 비즈니스</span>
+                  <span class="diag-card-thumb-tag" style="background: #c2284f;">180분 SOP 밀착케어</span>
                 </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge" style="background: #fee7ec; color: #b83354; border: 1.5px solid #f8c8d2;">💄 시니어 뷰티 라이프케어</span>
-                  <span class="diag-num">#01</span>
-                </div>
-                <h4 class="diag-title" style="color: #b83354;">특별한 날, 화려한 외출</h4>
-                <div class="diag-subcopy" style="border-left-color: #d1516e;">
-                  “거울을 보며 가장 나답고 찬란했던 '리즈 시절'의 아름다움을 되찾는 시간”
-                </div>
-                <p class="diag-desc">
-                  전문 뷰티 라이프 코치가 댁으로 방문하여 <strong>피부 진단·딥보습 에스테틱·타임슬립 메이크업·옷장 코디</strong>는 물론 <strong>주거 안전 낙상 점검</strong>과 <strong>엔딩 노트</strong>까지 180분간 품격 있게 완성합니다.
-                </p>
               </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-promo-btn" onclick="event.stopPropagation(); openBeautyCareModal();" aria-label="180분 시니어 뷰티 스페셜 프로모션 안내 열기">
-                  <span>✨ 180분 스페셜 프로모션 & 안내받기</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('beauty');" title="관리자 지정 웰니스 & 뷰티 칼럼 바로가기">
-                  <span>📚 관련 웰니스 & 뷰티 칼럼 읽기</span>
-                  <span class="arrow">➔</span>
-                </button>
+              <div class="diag-card-content-col">
+                <div>
+                  <div class="diag-card-top">
+                    <span class="diag-badge" style="background: #fee7ec; color: #b82248; border: 1.5px solid #f5b9c8;">💄 시니어 뷰티 라이프케어</span>
+                    <span class="diag-num">BUSINESS 01</span>
+                  </div>
+                  <h4 class="diag-title" style="color: #a31b3e;">특별한 날, 화려한 외출</h4>
+                  <div class="diag-subcopy" style="border-left-color: #c2284f;">
+                    “거울을 보며 가장 나답고 찬란했던 '리즈 시절'의 아름다움을 되찾는 180분”
+                  </div>
+                  <ul class="diag-highlights">
+                    <li>전문 뷰티 코치 자택 방문 · 피부 딥보습 에스테틱 &amp; 타임슬립 메이크업</li>
+                    <li>체형과 품격에 맞는 외출복 코디네이션 및 빛나는 프로필 사진 기록</li>
+                    <li>주거 안전 낙상 점검과 따뜻한 엔딩 노트 상담까지 원스톱 완성</li>
+                  </ul>
+                </div>
+                <div class="diag-card-actions">
+                  <button type="button" class="diag-promo-btn" style="margin-top: 0;" onclick="event.stopPropagation(); openBeautyCareModal();" aria-label="180분 시니어 뷰티 스페셜 프로모션 안내 열기">
+                    <span>✨ 180분 스페셜 프로모션 &amp; 상세 안내받기</span>
+                    <span>➔</span>
+                  </button>
+                  <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('beauty');" title="관리자 지정 웰니스 & 뷰티 칼럼 바로가기">
+                    <span>📚 관련 웰니스 &amp; 뷰티 칼럼 읽기</span>
+                    <span class="arrow">➔</span>
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 2. 👗 일상과 비움의 미학 -->
-            <div class="diag-card diag-theme-wardrobe" onclick="showTestResult('wardrobe', this)" id="diagCard_wardrobe" role="button" tabindex="0">
-              <div>
-                <!-- 이미지 썸네일 -->
+            <div class="diag-card diag-theme-wardrobe" data-biz-type="wardrobe" onclick="showTestResult('wardrobe', this)" id="diagCard_wardrobe" role="button" tabindex="0">
+              <div class="diag-card-media-col">
                 <div class="diag-card-thumb">
                   <img src="images/showcase-books-organizing.jpg" alt="일상과 비움의 미학 옷장 정리 및 수납" loading="lazy">
-                  <span class="diag-card-thumb-badge">🌿 공간 리셋 & 수납</span>
-                  <span class="diag-card-thumb-tag" style="background: #2b7a4b;">동선 맞춤 수납</span>
+                  <span class="diag-card-thumb-badge">🌿 공간 리셋 &amp; 수납</span>
+                  <span class="diag-card-thumb-tag" style="background: #1e7a48;">동선 맞춤 수납</span>
                 </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge">👗 일상과 비움의 미학</span>
-                  <span class="diag-num">#02</span>
-                </div>
-                <h4 class="diag-title">옷장 정리 및 수납 컨설팅</h4>
-                <div class="diag-subcopy">
-                  “삶의 흔적을 정돈하고 비우는 일, 일상복과 외출복의 아름다운 구분”
-                </div>
-                <p class="diag-desc">
-                  수많은 세월이 담긴 옷장을 열어 현재의 나에게 꼭 맞는 옷을 추려내고, 손이 닿기 쉬운 인체공학적 수납과 미니멀 정돈으로 공간과 마음에 쾌적한 '여백'을 선물합니다.
-                </p>
               </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('wardrobe', document.getElementById('diagCard_wardrobe'));">
-                  <span>🔍 맞춤 솔루션 진단 & 처방</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('wardrobe');" title="관리자 지정 옷장 정리 칼럼 바로가기">
-                  <span>📚 관련 옷장 정리 칼럼 읽기</span>
-                  <span class="arrow">➔</span>
-                </button>
+              <div class="diag-card-content-col">
+                <div>
+                  <div class="diag-card-top">
+                    <span class="diag-badge">👗 일상과 비움의 미학</span>
+                    <span class="diag-num">BUSINESS 02</span>
+                  </div>
+                  <h4 class="diag-title">옷장 정리 및 수납 컨설팅</h4>
+                  <div class="diag-subcopy">
+                    “삶의 흔적을 정돈하고 비우는 일, 일상복과 외출복의 아름다운 구분”
+                  </div>
+                  <ul class="diag-highlights">
+                    <li>현재 라이프스타일에 꼭 맞는 일상복·외출복 황금 비율 선별</li>
+                    <li>어르신 손이 닿기 쉬운 인체공학적 동선 수납 &amp; 큰 글씨 라벨링</li>
+                    <li>남은 의류 안심 기부·업사이클링 및 깔끔한 비움 대행</li>
+                  </ul>
+                </div>
+                <div class="diag-card-actions">
+                  <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('wardrobe', document.getElementById('diagCard_wardrobe'));">
+                    <span>🔍 옷장 정리 맞춤 진단 &amp; 처방 보기</span>
+                    <span>➔</span>
+                  </button>
+                  <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('wardrobe');" title="관리자 지정 옷장 정리 칼럼 바로가기">
+                    <span>📚 관련 옷장 정리 칼럼 읽기</span>
+                    <span class="arrow">➔</span>
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 3. 📦 기억의 계승 -->
-            <div class="diag-card diag-theme-legacy" onclick="showTestResult('legacy', this)" id="diagCard_legacy" role="button" tabindex="0">
-              <div>
-                <!-- 이미지 썸네일 -->
+            <div class="diag-card diag-theme-legacy" data-biz-type="legacy" onclick="showTestResult('legacy', this)" id="diagCard_legacy" role="button" tabindex="0">
+              <div class="diag-card-media-col">
                 <div class="diag-card-thumb">
                   <img src="images/showcase-senior-happy-book.jpg" alt="기억의 계승 오래된 짐 및 유품 정리" loading="lazy">
-                  <span class="diag-card-thumb-badge">📦 생전 정리 & 승계</span>
-                  <span class="diag-card-thumb-tag" style="background: #9a6528;">유품 아카이빙</span>
+                  <span class="diag-card-thumb-badge">📦 생전 정리 &amp; 승계</span>
+                  <span class="diag-card-thumb-tag" style="background: #b36319;">유품 아카이빙</span>
                 </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge">📦 기억의 계승</span>
-                  <span class="diag-num">#03</span>
-                </div>
-                <h4 class="diag-title">오래된 짐 및 유품 정리</h4>
-                <div class="diag-subcopy">
-                  “수십 년간 쌓인 짐을 비우고, 의미 있는 흔적은 유품으로 정돈하여 후대에 전한다.”
-                </div>
-                <p class="diag-desc">
-                  손때 든 물건들을 우아하게 처분하고, 후손들에게 물려줄 소중한 유산과 추억을 안전하게 분류하여 가치 있게 남길 수 있도록 안심 동행합니다.
-                </p>
               </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('legacy', document.getElementById('diagCard_legacy'));">
-                  <span>🔍 맞춤 솔루션 진단 & 처방</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('legacy');" title="관리자 지정 유품 정리 칼럼 바로가기">
-                  <span>📚 관련 유품 정리 칼럼 읽기</span>
-                  <span class="arrow">➔</span>
-                </button>
+              <div class="diag-card-content-col">
+                <div>
+                  <div class="diag-card-top">
+                    <span class="diag-badge">📦 기억의 계승</span>
+                    <span class="diag-num">BUSINESS 03</span>
+                  </div>
+                  <h4 class="diag-title">오래된 짐 및 유품 정리</h4>
+                  <div class="diag-subcopy">
+                    “수십 년간 쌓인 짐을 비우고, 의미 있는 흔적은 유품으로 정돈하여 후대에 전합니다”
+                  </div>
+                  <ul class="diag-highlights">
+                    <li>후손에게 전할 가보·기념품 선별 및 품격 있는 전용 보관함 분류</li>
+                    <li>처분할 물건과 보존할 물건을 전문가와 함께 존중하며 안심 정돈</li>
+                    <li>물건에 담긴 소중한 사연을 기록해 자녀에게 전하는 가족 메모리얼</li>
+                  </ul>
+                </div>
+                <div class="diag-card-actions">
+                  <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('legacy', document.getElementById('diagCard_legacy'));">
+                    <span>🔍 유품·생전정리 맞춤 진단 &amp; 처방</span>
+                    <span>➔</span>
+                  </button>
+                  <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('legacy');" title="관리자 지정 유품 정리 칼럼 바로가기">
+                    <span>📚 관련 유품 정리 칼럼 읽기</span>
+                    <span class="arrow">➔</span>
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 4. ✍️ 디지털 자서전 -->
-            <div class="diag-card diag-theme-memoir" onclick="showTestResult('memoir', this)" id="diagCard_memoir" role="button" tabindex="0">
-              <div>
-                <!-- 이미지 썸네일 -->
+            <div class="diag-card diag-theme-memoir" data-biz-type="memoir" onclick="showTestResult('memoir', this)" id="diagCard_memoir" role="button" tabindex="0">
+              <div class="diag-card-media-col">
                 <div class="diag-card-thumb">
                   <img src="images/showcase-senior-memoir.jpg" alt="디지털 자서전 내 인생의 서사 기록 및 서재" loading="lazy">
                   <span class="diag-card-thumb-badge">📖 인생 서사 아카이빙</span>
-                  <span class="diag-card-thumb-tag" style="background: #2563eb;">구술 & 서재 출판</span>
+                  <span class="diag-card-thumb-tag" style="background: #1d5fa7;">구술 &amp; 서재 출판</span>
                 </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge">✍️ 디지털 자서전</span>
-                  <span class="diag-num">#04</span>
-                </div>
-                <h4 class="diag-title">내 인생의 서사 기록</h4>
-                <div class="diag-subcopy">
-                  “한 편의 영화 같은 나의 역사책, 소중한 가족과 후대에 전하는 가장 위대한 유산”
-                </div>
-                <p class="diag-desc">
-                  전문 작가와의 1:1 구술 인터뷰와 옛 사진 복원을 통해 세상에 단 하나뿐인 나의 생애사를 품격 있는 디지털 서재와 양장본 책자로 완성합니다.
-                </p>
               </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('memoir', document.getElementById('diagCard_memoir'));">
-                  <span>🔍 맞춤 솔루션 진단 & 처방</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('memoir');" title="관리자 지정 디지털 자서전 칼럼 및 서재 바로가기">
-                  <span>📚 관련 자서전 칼럼/서재 바로가기</span>
-                  <span class="arrow">➔</span>
-                </button>
+              <div class="diag-card-content-col">
+                <div>
+                  <div class="diag-card-top">
+                    <span class="diag-badge">✍️ 디지털 자서전</span>
+                    <span class="diag-num">BUSINESS 04</span>
+                  </div>
+                  <h4 class="diag-title">내 인생의 서사 기록</h4>
+                  <div class="diag-subcopy">
+                    “한 편의 영화 같은 나의 역사책, 소중한 가족과 후대에 전하는 가장 위대한 유산”
+                  </div>
+                  <ul class="diag-highlights">
+                    <li>전문 작가 자택 방문 1:1 구술 인터뷰 및 5대 테마 생애사 집필</li>
+                    <li>장롱 속 빛바랜 옛 흑백사진 AI 고화질 색상 복원 &amp; 화보 편집</li>
+                    <li>최고급 하드커버 양장본 출판 + 육성 오디오북 QR &amp; 모바일 웹북</li>
+                  </ul>
+                </div>
+                <div class="diag-card-actions">
+                  <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); document.getElementById('memoir').scrollIntoView({behavior:'smooth'});">
+                    <span>📖 자서전 상세 &amp; 3대 맞춤 패키지 보기</span>
+                    <span>➔</span>
+                  </button>
+                  <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('memoir');" title="관리자 지정 디지털 자서전 칼럼 및 서재 바로가기">
+                    <span>📚 관련 자서전 칼럼/서재 바로가기</span>
+                    <span class="arrow">➔</span>
+                  </button>
+                </div>
               </div>
             </div>
 
             <!-- 5. 💌 아름다운 마침표와 감사 -->
-            <div class="diag-card diag-theme-party" onclick="showTestResult('party', this)" id="diagCard_party" role="button" tabindex="0">
-              <div>
-                <!-- 이미지 썸네일 -->
+            <div class="diag-card diag-theme-party" data-biz-type="party" onclick="showTestResult('party', this)" id="diagCard_party" role="button" tabindex="0">
+              <div class="diag-card-media-col">
                 <div class="diag-card-thumb">
                   <img src="images/living-funeral-party-1.jpg" alt="아름다운 마침표와 감사 생전 엔딩 파티" loading="lazy">
                   <span class="diag-card-thumb-badge">🥂 인생 감사 축제</span>
-                  <span class="diag-card-thumb-tag" style="background: #7a3594;">생전 엔딩 파티</span>
+                  <span class="diag-card-thumb-tag" style="background: #7b3b96;">생전 엔딩 파티</span>
                 </div>
-                <div class="diag-card-top">
-                  <span class="diag-badge">💌 아름다운 마침표와 감사</span>
-                  <span class="diag-num">#05</span>
-                </div>
-                <h4 class="diag-title">생전 엔딩 파티를 위한 서사</h4>
-                <div class="diag-subcopy">
-                  “고마운 사람들을 초대해 감사를 전하는 생전 엔딩 파티, 그 감동적인 여정을 함께 준비합니다.”
-                </div>
-                <p class="diag-desc">
-                  삶의 마지막을 스스로 디자인하며, 감사를 표해야 할 이들과 보고 싶은 이들의 명단을 정리하고 진심 어린 감사 편지와 따뜻한 파티를 기획합니다.
-                </p>
               </div>
-              <div class="diag-card-actions">
-                <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('party', document.getElementById('diagCard_party'));">
-                  <span>🔍 맞춤 솔루션 진단 & 처방</span>
-                  <span>➔</span>
-                </button>
-                <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('party');" title="관리자 지정 생전 엔딩 파티 칼럼 바로가기">
-                  <span>📚 관련 엔딩 파티 칼럼 읽기</span>
-                  <span class="arrow">➔</span>
-                </button>
+              <div class="diag-card-content-col">
+                <div>
+                  <div class="diag-card-top">
+                    <span class="diag-badge">💌 아름다운 마침표와 감사</span>
+                    <span class="diag-num">BUSINESS 05</span>
+                  </div>
+                  <h4 class="diag-title">생전 엔딩 파티를 위한 서사</h4>
+                  <div class="diag-subcopy">
+                    “고마운 사람들을 초대해 감사를 전하는 생전 엔딩 파티, 감동적인 여정을 함께 준비합니다”
+                  </div>
+                  <ul class="diag-highlights">
+                    <li>꼭 전하고 싶었던 사랑과 감사를 담은 진심의 감사 편지 디렉팅</li>
+                    <li>초대장·음악·회고 영상·다과까지 품격 있는 인생 감사 파티 총괄 기획</li>
+                    <li>나의 뜻을 명쾌하게 정리하는 사전 엔딩 노트 &amp; 웰다잉 설계 지원</li>
+                  </ul>
+                </div>
+                <div class="diag-card-actions">
+                  <button type="button" class="diag-action-guide-btn" onclick="event.stopPropagation(); showTestResult('party', document.getElementById('diagCard_party'));">
+                    <span>🔍 생전 엔딩 파티 맞춤 진단 &amp; 처방</span>
+                    <span>➔</span>
+                  </button>
+                  <button type="button" class="diag-col-link-btn" onclick="event.stopPropagation(); navigateToDiagColumnLink('party');" title="관리자 지정 생전 엔딩 파티 칼럼 바로가기">
+                    <span>📚 관련 엔딩 파티 칼럼 읽기</span>
+                    <span class="arrow">➔</span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -6912,7 +7853,7 @@
                 📚 관련 여백 칼럼 읽기
               </button>
               <button onclick="resetTestSelection()" style="background: none; border: none; color: var(--text-muted); font-size: 0.86rem; cursor: pointer; padding: 8px 12px; text-decoration: underline;">
-                🔄 다른 주제 다시 선택하기
+                🔄 전체 5대 비즈니스 다시 보기
               </button>
             </div>
           </div>
@@ -7329,27 +8270,31 @@
       </div>
     </div>
 
-    <!-- 4. [신설 독립 카테고리] 내 인생의 서사 기록, 디지털 자서전 -->
+    <!-- =========================================================================
+         PART 02. 내 인생의 서사 기록, 디지털 자서전 (대표 시그니처 출판관)
+         ========================================================================= -->
     <section id="memoir" class="memoir-section">
       <div class="container">
-        <!-- [신설] 카테고리 04 시각적 랜드마크 이미지 배너 -->
-        <div class="section-landmark-banner">
-          <div class="slb-img-wrap">
-            <img src="images/showcase-senior-memoir.jpg" alt="내 인생의 서사, 디지털 자서전 - 인생 회고록을 읽는 어르신" class="slb-img" loading="lazy">
+        <!-- PART 02 통합 섹션 인트로 배너 -->
+        <div class="section-intro-banner part-memoir">
+          <div class="sib-media">
+            <img src="images/showcase-senior-memoir.jpg" alt="내 인생의 서사, 디지털 자서전 - 인생 회고록을 읽는 어르신" loading="lazy">
+            <span class="sib-part-chip">PART 02 · 디지털 자서전</span>
           </div>
-          <div class="slb-content">
-            <div class="slb-badge">CATEGORY 04 · ✍️ 생애사 인터뷰 & 양장본</div>
-            <h3 class="slb-title">내 인생의 서사, 디지털 자서전</h3>
-            <p class="slb-desc">찾아가는 1:1 구술 채록과 옛 사진 복원으로 삶의 궤적을 명작 회고록과 육성 오디오북, 최고급 양장본으로 기록합니다.</p>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">✍️ DIGITAL MEMOIR &amp; LIFE ARCHIVE · 생애사 출판관</div>
+              <h2 class="sib-title">내 인생의 서사 기록, 디지털 자서전</h2>
+              <p class="sib-desc">
+                찾아가는 1:1 구술 인터뷰와 빛바랜 옛 사진 AI 복원으로 삶의 궤적을 한 편의 명작 회고록과 육성 오디오북, 최고급 가죽 양장본으로 영구 기록합니다.
+              </p>
+            </div>
+            <div class="sib-action">
+              <button type="button" onclick="openMemoirConsultModal()" class="btn btn-primary" style="background: #1d5fa7; box-shadow: 0 4px 14px rgba(29, 95, 167, 0.28); padding: 12px 20px; font-size: 0.94rem; white-space: nowrap;">
+                ✨ 자서전 무료 상담
+              </button>
+            </div>
           </div>
-        </div>
-        <div class="section-header">
-          <p class="section-tag">Digital Memoir & Life Archive</p>
-          <h2 class="section-title">내 인생의 서사 기록, 디지털 자서전</h2>
-          <p class="section-desc">
-            치열하게 살아온 삶의 궤적을 디지털 자서전으로 남겨 영원히 기억되게 합니다.<br>
-            잊혀가는 기억과 빛바랜 사진, 발자취를 엮어 한 편의 영화 같은 아카이브로 구축하고, 세상에 단 하나뿐인 나의 역사책을 완성하세요.
-          </p>
         </div>
 
         <div class="memoir-grid">
@@ -7511,21 +8456,27 @@
           </div>
         </div>
 
-        <!-- [신설] 맞춤 출판 3대 패키지 -->
-        <div class="memoir-packages-container">
-          <div class="section-header" style="margin-bottom: 36px;">
+        <!-- [개선] 맞춤 출판 3대 패키지 (뱃지 겹침·한글 줄바꿈 완전 해결 & 3색 등급 구분 강화) -->
+        <div class="memoir-packages-container" id="memoirPackages" style="scroll-margin-top: 120px;">
+          <div class="section-header" style="margin-bottom: 30px;">
             <p class="section-tag">CUSTOM PUBLISHING PACKAGES</p>
-            <h3 class="section-title" style="font-size: 1.65rem;">여백과 결 명품 자서전 3대 맞춤 패키지</h3>
+            <h3 class="section-title" style="font-size: 1.72rem;">여백과 결 명품 자서전 3대 맞춤 패키지</h3>
             <p class="section-desc">가족의 상황과 기록 목적에 맞춰 최적의 구성으로 품격 있게 출판합니다.</p>
           </div>
 
           <div class="memoir-packages-grid">
             <!-- 패키지 1: 감사 헌정본 -->
-            <div class="memoir-pkg-card">
+            <div class="memoir-pkg-card pkg-basic">
               <div class="memoir-pkg-header">
+                <span class="memoir-pkg-pill sage">🌿 실속 효도 선물 추천</span>
                 <div class="memoir-pkg-tier">COMPACT TRIBUTE</div>
                 <h4 class="memoir-pkg-name">감사 헌정본</h4>
                 <p class="memoir-pkg-desc">부모님의 칠순·팔순을 기념하는 실속형 양장 회고록</p>
+                <div class="memoir-pkg-summary-chips">
+                  <span>구술 2회</span>
+                  <span>양장본 3권</span>
+                  <span>사진 15장 복원</span>
+                </div>
               </div>
               <ul class="memoir-pkg-specs">
                 <li><span class="icon">🎙️</span><span><strong>구술 채록 2회</strong> (전문 코치 자택 방문, 총 3시간)</span></li>
@@ -7542,11 +8493,17 @@
 
             <!-- 패키지 2: 인생 마스터피스 (베스트) -->
             <div class="memoir-pkg-card highlight">
-              <div class="memoir-pkg-badge-best">BEST · 가장 인기 있는 시그니처</div>
+              <div class="memoir-pkg-badge-best">★ BEST · 가장 인기 있는 시그니처</div>
               <div class="memoir-pkg-header">
+                <span class="memoir-pkg-pill gold">👑 전 생애 대표작</span>
                 <div class="memoir-pkg-tier">LIFE MASTERPIECE</div>
                 <h4 class="memoir-pkg-name">인생 마스터피스</h4>
                 <p class="memoir-pkg-desc">삶의 전 생애를 한 편의 명작 소설처럼 엮어내는 대표작</p>
+                <div class="memoir-pkg-summary-chips">
+                  <span>구술 4회</span>
+                  <span>양장본 5권</span>
+                  <span>육성 오디오북</span>
+                </div>
               </div>
               <ul class="memoir-pkg-specs">
                 <li><span class="icon">🎙️</span><span><strong>심층 구술 4회</strong> (생애 5대 테마 집중 채록, 총 6시간)</span></li>
@@ -7563,11 +8520,17 @@
             </div>
 
             <!-- 패키지 3: 명문 가문 평전 -->
-            <div class="memoir-pkg-card">
+            <div class="memoir-pkg-card pkg-heritage">
               <div class="memoir-pkg-header">
+                <span class="memoir-pkg-pill navy">🏛️ VIP 가문 헌정</span>
                 <div class="memoir-pkg-tier">HERITAGE PRESTIGE</div>
                 <h4 class="memoir-pkg-name">명문 가문 평전</h4>
                 <p class="memoir-pkg-desc">대를 이어 전할 가문의 역사와 가훈, 헤리티지 평전</p>
+                <div class="memoir-pkg-summary-chips">
+                  <span>VIP 구술 8회</span>
+                  <span>가죽양장 10권</span>
+                  <span>다큐영상+전시관</span>
+                </div>
               </div>
               <ul class="memoir-pkg-specs">
                 <li><span class="icon">🎙️</span><span><strong>VIP 심층 구술 8회</strong> (가계도 &amp; 명문 가문사 집중 편찬)</span></li>
@@ -7592,10 +8555,10 @@
             </p>
           </div>
           <div class="memoir-cta-btns" id="memoirCtaBtns">
-            <button type="button" id="memoirBannerConsultBtn" onclick="openMemoirConsultModal()" class="btn btn-primary" style="padding: 13px 26px; font-size: 1rem; font-weight: 800;">
+            <button type="button" id="memoirBannerConsultBtn" onclick="openMemoirConsultModal()" class="btn btn-primary" style="padding: 13px 24px; font-size: 0.96rem; font-weight: 800;">
               ✨ 자서전 제작 1:1 무료 상담 신청
             </button>
-            <button type="button" id="memoirBannerSampleBtn" onclick="handleMemoirSampleClick()" class="btn btn-secondary" style="padding: 13px 22px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
+            <button type="button" id="memoirBannerSampleBtn" onclick="handleMemoirSampleClick()" class="btn btn-secondary" style="padding: 13px 20px; font-size: 0.94rem; display: inline-flex; align-items: center; gap: 6px; cursor: pointer;">
               📖 자서전 예시 둘러보기
             </button>
           </div>
@@ -7603,20 +8566,106 @@
       </div>
     </section>
 
-    <!-- 6. [코칭스태프 양성 아카데미] 클릭 시 아카데미로 이동하는 프리미엄 홍보카드 이미지 -->
-    <section id="programs" style="background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 80px 0;">
+    <!-- =========================================================================
+         PART 03. 여백의 서재 (인사이트 매거진 & 지혜 칼럼)
+         ========================================================================= -->
+    <section id="magazine" style="background-color: var(--bg-secondary);">
       <div class="container">
-        <!-- 모바일 전용 카테고리 랜드마크 배너 -->
-        <div class="mobile-section-badge">
-          <span class="msb-num">CATEGORY 05</span>
-          <span class="msb-title">🎓 라이프 리셋 코치 아카데미</span>
+        <div class="section-intro-banner part-mag">
+          <div class="sib-media">
+            <img src="images/showcase-books-organizing.jpg" alt="여백의 서재 - 오래된 짐과 책 정리" loading="lazy">
+            <span class="sib-part-chip">PART 03 · 여백의 서재</span>
+          </div>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">📚 INSIGHTS MAGAZINE &amp; BOARD · 인생 칼럼 &amp; 지혜</div>
+              <h2 class="sib-title">여백의 서재 (인사이트 매거진)</h2>
+              <p class="sib-desc">
+                선진 웰라이프·종활 문화와 오래된 책과 짐을 정돈하며 삶을 우아하게 갈무리하는 깊이 있는 지혜 칼럼을 전합니다.
+              </p>
+            </div>
+            <div class="sib-action">
+              <button class="btn-mag-action" onclick="openBoardModal()" title="전체 게시글 목록을 열람합니다" style="padding: 11px 20px; font-size: 0.94rem;">
+                <span>📋</span> 전체 글 목록 보기
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="section-header" style="margin-bottom: 36px;">
-          <p class="section-tag" style="color: var(--accent-gold); letter-spacing: 2px;">Coach Academy & Partnership</p>
-          <h2 class="section-title">우아한 라이프 리셋 코칭 아카데미</h2>
-          <p class="section-desc">
-            타인의 삶에 여백과 결을 찾아주는 일, 당신의 인생 2막 가장 품격 있는 전문 커리어가 됩니다.
-          </p>
+
+        <!-- 메인 전면에 선택된 게시글만 노출되는 그리드 -->
+        <div class="magazine-grid" id="magazineGrid">
+          <!-- JS에서 isFeatured === true 인 글들로 동적 렌더링 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PART 04. 오늘의 비움 한 줄 라운지 (따뜻한 익명 공감 커뮤니티)
+         ========================================================================= -->
+    <section id="lounge">
+      <div class="container">
+        <div class="section-intro-banner part-lounge">
+          <div class="sib-media">
+            <img src="images/showcase-senior-writing.jpg" alt="오늘의 비움 한 줄 라운지 - 한 줄 글을 적는 어르신" loading="lazy">
+            <span class="sib-part-chip">PART 04 · 비움 라운지</span>
+          </div>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">☕ COMMUNITY LOUNGE · 어르신 마음 쉼터</div>
+              <h2 class="sib-title">오늘의 비움 한 줄 라운지</h2>
+              <p class="sib-desc">
+                오늘 마음과 일상에서 가볍게 내려놓은 짐 하나는 무엇인가요? 익명으로 편안하게 남겨보시면 동년배 회원들의 따뜻한 응원이 함께합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="lounge-wrap">
+          <!-- 비움 입력 폼 -->
+          <div class="unburden-form">
+            <input type="text" id="unburdenInput" class="unburden-input" placeholder="예: 10년 동안 입지 않던 정장을 오늘 비웠습니다. / 남의 시선에 대한 걱정을 내려놓습니다." />
+            <button class="btn btn-primary" onclick="addUnburden()">가볍게 비워내기</button>
+          </div>
+
+          <!-- 피드 목록 (JS에서 동적 렌더링: 대표 추천글 우선 + 최대 4개 노출) -->
+          <div class="unburden-feed" id="unburdenFeed">
+            <!-- JS 동적 렌더링 -->
+          </div>
+
+          <!-- 더보기 버튼 (4개 초과 시 노출) -->
+          <div style="text-align: center; margin-top: 24px;" id="unburdenMoreWrap">
+            <button class="btn btn-secondary" id="btnToggleUnburdenMore" onclick="toggleUnburdenMore()" style="padding: 10px 24px; font-size: 0.94rem; font-weight: 700; border-radius: 999px;">
+              🌿 더 많은 비움 이야기 보기
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================================================
+         PART 05. 우아한 라이프 리셋 코칭 아카데미
+         ========================================================================= -->
+    <section id="programs" style="background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); padding: 80px 0;">
+      <div class="container">
+        <div class="section-intro-banner part-academy">
+          <div class="sib-media">
+            <img src="images/coach-academy-banner.jpg" alt="우아한 라이프 리셋 코칭 아카데미" loading="lazy">
+            <span class="sib-part-chip">PART 05 · 코치 아카데미</span>
+          </div>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">🎓 COACH ACADEMY &amp; PARTNERSHIP · 전문 코치 양성</div>
+              <h2 class="sib-title">우아한 라이프 리셋 코칭 아카데미</h2>
+              <p class="sib-desc">
+                타인의 삶에 여백과 결을 찾아주는 일, 당신의 인생 2막 가장 품격 있고 보람찬 전문 커리어가 됩니다.
+              </p>
+            </div>
+            <div class="sib-action">
+              <a href="academy.html" class="btn btn-primary" style="background: #245b8e; box-shadow: 0 4px 14px rgba(36, 91, 142, 0.28); padding: 12px 20px; font-size: 0.94rem; white-space: nowrap;">
+                🎓 아카데미 바로가기 ➔
+              </a>
+            </div>
+          </div>
         </div>
 
         <!-- 클릭 시 아카데미(academy.html)로 바로 이동하는 프리미엄 홍보 카드 이미지 -->
@@ -7649,13 +8698,13 @@
               <!-- 4대 트랙 태그 칩 -->
               <div class="academy-promo-features">
                 <span class="academy-promo-tag">💄 뷰티 웰니스 코치</span>
-                <span class="academy-promo-tag">👗 공간 & 비움 코디네이터</span>
-                <span class="academy-promo-tag">📦 생전정리 & 엔딩 플래너</span>
+                <span class="academy-promo-tag">👗 공간 &amp; 비움 코디네이터</span>
+                <span class="academy-promo-tag">📦 생전정리 &amp; 엔딩 플래너</span>
                 <span class="academy-promo-tag">✍️ 디지털 자서전 에디터</span>
               </div>
 
               <div class="academy-promo-btn">
-                <span>👉</span> 코칭 아카데미 상세 커리큘럼 & 입학 신청 바로가기 ➔
+                <span>👉</span> 코칭 아카데미 상세 커리큘럼 &amp; 입학 신청 바로가기 ➔
               </div>
             </div>
           </div>
@@ -7663,24 +8712,25 @@
       </div>
     </section>
 
-    <!-- 7. [6단계] 나의 아카이브 안내 (개인 고유한 서재 온라인룸) -->
+    <!-- =========================================================================
+         PART 06. 나의 고유한 보물 서재 (프라이빗 온라인룸)
+         ========================================================================= -->
     <section id="archive" style="background-color: var(--bg-secondary); padding: 80px 0;">
       <div class="container">
-        <!-- [신설] 카테고리 06 시각적 랜드마크 이미지 배너 -->
-        <div class="section-landmark-banner">
-          <div class="slb-img-wrap">
-            <img src="images/showcase-senior-happy-book.jpg" alt="나의 고유한 보물 서재 - 자서전을 안고 행복해하는 어르신" class="slb-img" loading="lazy">
+        <div class="section-intro-banner part-archive">
+          <div class="sib-media">
+            <img src="images/showcase-senior-happy-book.jpg" alt="나의 고유한 보물 서재 - 자서전을 안고 행복해하는 어르신" loading="lazy">
+            <span class="sib-part-chip">PART 06 · 나의 보물 서재</span>
           </div>
-          <div class="slb-content">
-            <div class="slb-badge gold">CATEGORY 06 · 🏛️ 프라이빗 온라인룸</div>
-            <h3 class="slb-title">나의 고유한 보물 서재</h3>
-            <p class="slb-desc">오직 나와 가족만을 위해 열리는 독립된 인생 보관소입니다. 디지털 자서전, 추억 사진관, 비움 일기를 영구 보관하세요.</p>
+          <div class="sib-body">
+            <div class="sib-text">
+              <div class="sib-kicker">🏛️ PRIVATE ONLINE ROOM · 프라이빗 인생 보관소</div>
+              <h2 class="sib-title">나의 고유한 보물 서재 <span style="font-size: 1.15rem; font-weight: 700; color: var(--accent-gold);">(온라인룸)</span></h2>
+              <p class="sib-desc">
+                오직 나와 나의 가족만을 위해 열리는 독립된 인생 보관소입니다. 디지털 자서전, 복원 추억 사진관, 비움 일기, 엔딩 금고를 품격 있게 보관하세요.
+              </p>
+            </div>
           </div>
-        </div>
-        <div class="section-header">
-          <p class="section-tag">Private Online Room & Sacred Shelf</p>
-          <h2 class="section-title">나의 고유한 서재 <span style="font-size: 1.3rem; font-weight: 600; color: var(--accent-gold);">(온라인룸)</span></h2>
-          <p class="section-desc">오픈된 광장을 벗어나, 오직 나와 나의 가족만을 위해 열리는 독립된 프라이빗 인생 보관소입니다.</p>
         </div>
 
         <!-- 대형 프리미엄 서재 안내 쇼케이스 카드 -->
@@ -7774,10 +8824,10 @@
         <div class="footer-links">
           <h5>카테고리</h5>
           <ul>
-            <li><a href="#magazine">여백의 서재</a></li>
-            <li><a href="#lounge">오늘의 비움 한 줄</a></li>
-            <li><a href="#test">🎯 1분 자가진단</a></li>
-            <li><a href="#memoir">디지털 자서전</a></li>
+            <li><a href="#test">🧭 5대 핵심 비즈니스 &amp; 자가진단</a></li>
+            <li><a href="#memoir">✍️ 디지털 자서전</a></li>
+            <li><a href="#magazine">📖 여백의 서재</a></li>
+            <li><a href="#lounge">☕ 오늘의 비움 한 줄</a></li>
             <li><a href="academy.html" style="color: var(--accent-gold); font-weight: 700;">🎓 코치 양성 아카데미</a></li>
             <li><a href="javascript:void(0)" onclick="openLoginModal(event); return false;" style="color: var(--accent-gold); font-weight: 700;">🏛️ 나의 고유한 서재</a></li>
           </ul>
@@ -9298,11 +10348,54 @@
     };
 
     let selectedDiagType = null;
+    let activeBizFilter = 'all';
+
+    // 5대 비즈니스 고유 컬러 필터 탭 제어 (전체 보기 / 특정 비즈니스 1개 집중 보기)
+    function filterBusinessShowcase(bizType, skipResult) {
+      activeBizFilter = bizType || 'all';
+      const grid = document.getElementById('diagCardsGrid');
+      const cards = document.querySelectorAll('#diagCardsGrid .diag-card');
+      const filterBtns = document.querySelectorAll('#bizFilterBar .biz-filter-btn');
+
+      filterBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.getAttribute('data-biz') === activeBizFilter);
+      });
+
+      if (activeBizFilter === 'all') {
+        if (grid) grid.classList.remove('is-filtered');
+        cards.forEach(c => c.classList.remove('biz-hidden'));
+      } else {
+        if (grid) grid.classList.add('is-filtered');
+        cards.forEach(c => {
+          const isMatch = c.getAttribute('data-biz-type') === activeBizFilter;
+          c.classList.toggle('biz-hidden', !isMatch);
+        });
+        if (!skipResult) {
+          showTestResult(activeBizFilter);
+        }
+      }
+    }
+
+    // 히어로 5대 비즈니스 퀵 카드 클릭 시 해당 비즈니스로 부드럽게 이동 & 포커스
+    function jumpToBusiness(bizType) {
+      filterBusinessShowcase(bizType, false);
+      const targetCard = document.getElementById(`diagCard_${bizType}`) || document.getElementById('test');
+      if (targetCard) {
+        const y = targetCard.getBoundingClientRect().top + window.pageYOffset - 130;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+        targetCard.classList.remove('biz-pulse-highlight');
+        void targetCard.offsetWidth;
+        targetCard.classList.add('biz-pulse-highlight');
+      }
+    }
 
     // 콤보 박스 선택 변경 시 바로 진단 실행
     function handleDiagSelectChange(type) {
-      if (!type) return;
-      showTestResult(type);
+      if (!type) {
+        filterBusinessShowcase('all', true);
+        return;
+      }
+      filterBusinessShowcase(type, false);
     }
 
     // 콤보 박스 옆 [맞춤 솔루션 진단받기] 버튼 클릭 시
@@ -10155,6 +11248,13 @@
         footerLink.textContent = phone;
       }
 
+      // 2-1) 상단 유틸리티 바의 직통전화 링크
+      const topBarLink = document.getElementById('topBarPhoneLink');
+      if (topBarLink) {
+        topBarLink.href = 'tel:' + cleanDigits;
+        topBarLink.innerHTML = `<span>📞</span><span>전담 상담 ${phone}</span>`;
+      }
+
       // 3) 관리자 입력 필드가 존재할 때 동기화
       const adminInput = document.getElementById('adminConsultPhoneInput');
       if (adminInput && document.activeElement !== adminInput) {
@@ -10364,9 +11464,10 @@
       renderAdminMemoirTable();
     }
 
-    // 다른 주제 다시 선택하기
+    // 다른 주제 다시 선택하기 (전체 5대 비즈니스 복원)
     function resetTestSelection() {
       selectedDiagType = null;
+      filterBusinessShowcase('all', true);
       const select = document.getElementById('diagThemeSelect');
       if (select) select.value = '';
       document.querySelectorAll('.diag-card').forEach(c => c.classList.remove('selected'));
@@ -10374,9 +11475,9 @@
       if (resultBox) {
         resultBox.style.display = 'none';
       }
-      const combobox = document.getElementById('diagComboboxCard');
-      if (combobox) {
-        combobox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const filterBar = document.getElementById('bizFilterBar') || document.getElementById('diagComboboxCard');
+      if (filterBar) {
+        filterBar.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     }
 
@@ -10696,26 +11797,25 @@
       });
     }
 
-    // 모바일 스크롤에 따른 상단 카테고리 탭 자동 하이라이트 (ScrollSpy)
+    // 데스크톱·모바일 스크롤에 따른 상단 내비게이션 자동 하이라이트 (ScrollSpy)
     function initMobileScrollSpy() {
       const sectionTargets = [
-        { id: 'home', el: document.querySelector('.hero') },
-        { id: 'magazine', el: document.getElementById('magazine') },
-        { id: 'lounge', el: document.getElementById('lounge') },
+        { id: 'home', el: document.getElementById('home') || document.querySelector('.hero') },
         { id: 'test', el: document.getElementById('test') },
         { id: 'memoir', el: document.getElementById('memoir') },
+        { id: 'magazine', el: document.getElementById('magazine') },
+        { id: 'lounge', el: document.getElementById('lounge') },
         { id: 'programs', el: document.getElementById('programs') },
         { id: 'archive', el: document.getElementById('archive') }
       ];
 
       let isThrottled = false;
       window.addEventListener('scroll', function() {
-        if (window.innerWidth > 768) return;
         if (isThrottled) return;
         isThrottled = true;
         setTimeout(() => { isThrottled = false; }, 80);
 
-        const scrollPos = window.scrollY + 130;
+        const scrollPos = window.scrollY + 150;
         let activeId = 'home';
 
         for (let i = 0; i < sectionTargets.length; i++) {
@@ -10728,17 +11828,25 @@
           }
         }
 
-        const tabs = document.querySelectorAll('.mobile-cat-item');
-        tabs.forEach(tab => {
-          if (tab.getAttribute('data-target') === activeId) {
-            if (!tab.classList.contains('active')) {
-              tab.classList.add('active');
-              tab.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' });
-            }
-          } else {
-            tab.classList.remove('active');
-          }
+        // 데스크톱 GNB 링크 활성 표시 동기화
+        const navLinks = document.querySelectorAll('.nav-menu .nav-link[data-nav]');
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('data-nav') === activeId);
         });
+
+        if (window.innerWidth <= 768) {
+          const tabs = document.querySelectorAll('.mobile-cat-item');
+          tabs.forEach(tab => {
+            if (tab.getAttribute('data-target') === activeId) {
+              if (!tab.classList.contains('active')) {
+                tab.classList.add('active');
+                tab.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' });
+              }
+            } else {
+              tab.classList.remove('active');
+            }
+          });
+        }
       }, { passive: true });
     }
 
