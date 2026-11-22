@@ -16,8 +16,8 @@
     cohortLabel: '2026년 1기 창립 파운더스',
     capacityNote: '과정별 소수정예 선착순 15명 마감',
     scheduleSummary: '각 과정 4주 단일 정규과정 · 주 1회 4시간 (총 16시간 이론+현장실습)',
-    showRevenuePublic: true,
-    revenueDisclaimer: '※ 표기된 활동비 및 예상 수익은 본사 표준 배분 단가 기준 예시이며, 활동 지역·월 수행 횟수·패키지 옵션에 따라 달라질 수 있습니다.',
+    showRevenuePublic: false,
+    revenueDisclaimer: '※ 교육 일정 및 정원은 기수별 운영 사정에 따라 조정될 수 있습니다.',
     nextOpeningDate: '매월 첫째 주 개강 (평일반 / 주말 집중반 선택)',
     updatedAt: '',
     courses: [
@@ -153,7 +153,7 @@
         shortName: '디지털 자서전 · 평전',
         title: '디지털 자서전 · VIP 평전 코치',
         subtitle: '20문항 구술 인터뷰 채록 · AI 5단계 감성 윤문 · 모바일 웹북 & 양장본 출판',
-        badge: '4주 단일 정규과정 · 최고 수익 핵심',
+        badge: '4주 단일 정규과정 · 시그니처 과정',
         accentColor: '#a84432',
         softBg: '#fdf3f0',
         image: 'images/showcase-senior-memoir.jpg',
@@ -163,12 +163,12 @@
         salePrice: 450000,
         coachFeePerCase: 450000,
         coachFeeUnit: '프로젝트당',
-        coachFeeNote: '구술 방문 회당 15만 원 + 5챕터 검수·완간 인센티브 합산 기준 (VIP 평전 별도 상향)',
+        coachFeeNote: '구술 방문 및 5챕터 검수·완간 프로젝트 기준',
         recommendedMonthlyCount: 2,
         status: '모집중',
         toolBadge: '✍️ AI 자서전 코치앱 (coach-memoir.html) 무상 제공',
-        summary: '글쓰기 경험이 없어도 전용 AI 집필 앱으로 어르신의 구술 음성을 5대 챕터 명품 에세이로 완성하고, 300DPI QR 오디오북·모바일 웹북·신국판 양장본 출판까지 이끄는 최고 수익 과정입니다.',
-        deliverable: '본사 04 디지털 자서전 프로젝트 전담 배정 · 구술 완료 및 완간 단계별 정산',
+        summary: '글쓰기 경험이 없어도 전용 AI 집필 앱으로 어르신의 구술 음성을 5대 챕터 명품 에세이로 완성하고, 300DPI QR 오디오북·모바일 웹북·신국판 양장본 출판까지 이끄는 시그니처 과정입니다.',
+        deliverable: '본사 04 디지털 자서전 프로젝트 전담 배정 · 구술 완료 및 완간 단계별 검수',
         weeks: [
           { week: '1주차', title: '생애 구술 인터뷰 20문항 & 공감 경청법', desc: '어르신의 기억을 자연스럽게 열어주는 시대별 질문 설계 및 고음질 핀마이크 녹음 실습' },
           { week: '2주차', title: 'AI 5단계 감성 윤문 코치앱 실전 활용', desc: 'coach-memoir.html 음성 텍스트 변환 → AI 문체 다듬기 → 원문 대조 검수 훈련' },
@@ -298,5 +298,324 @@
     resetDefault: resetDefault,
     calcDiscountPercent: calcDiscountPercent,
     calcPaybackCount: calcPaybackCount
+  };
+
+  // ================= 📸 아카데미 현장 진행사례 · 사진 갤러리 단일 원천 데이터 엔진 =================
+  const CASES_STORAGE_KEY = 'yebaek_academy_cases_v1';
+  const CASES_COLLECTION = 'academy_cases';
+  let _memoryCasesRaw = null;
+
+  const DEFAULT_ACADEMY_CASES = [
+    {
+      id: 'case_sample_beauty',
+      courseId: 'track_beauty',
+      title: '서울 강남구 70대 어르신 180분 뷰티 리셋 & 외출 스냅',
+      location: '서울 강남구',
+      coachName: '여백과 결 공인 코치팀',
+      date: '2026.11',
+      summary: '오랜만에 손녀 결혼식에 참석하시는 어르신 댁에 방문해 저자극 보습 마사지, 자연스러운 혈색 메이크업, 스카프 스타일링과 기념 인물 사진까지 180분 표준 SOP로 정성껏 진행했습니다.',
+      photos: ['images/care-beauty-hero.jpg'],
+      published: true,
+      isSample: true,
+      createdAt: 1795000005000,
+      updatedAt: '2026-11-22'
+    },
+    {
+      id: 'case_sample_wardrobe',
+      courseId: 'track_wardrobe',
+      title: '경기 분당 30년 쌓인 계절 옷장 비움 & 안전 동선 재설계',
+      location: '경기 성남시 분당구',
+      coachName: '여백과 결 공인 코치팀',
+      date: '2026.11',
+      summary: '어르신의 애착 옷을 억지로 버리지 않고 공감 대화로 선별한 뒤, 자주 입으시는 계절 외출복을 허리 높이 골든존에 한눈에 보이도록 재배치해 낙상 위험 없는 쾌적한 일상을 완성했습니다.',
+      photos: ['images/showcase-books-organizing.jpg'],
+      published: true,
+      isSample: true,
+      createdAt: 1795000004000,
+      updatedAt: '2026-11-22'
+    },
+    {
+      id: 'case_sample_legacy',
+      courseId: 'track_legacy',
+      title: '평생 모은 가족 앨범 · 훈장 · 손편지 600DPI 디지털 아카이빙',
+      location: '서울 서초구',
+      coachName: '여백과 결 공인 코치팀',
+      date: '2026.10',
+      summary: '바래가는 흑백 사진과 표창장, 가족 손편지를 손상 없이 분류·스캔하여 자녀 세대도 스마트폰으로 언제든 열어볼 수 있는 온라인 보물 서재로 정갈하게 갈무리했습니다.',
+      photos: ['images/showcase-senior-happy-book.jpg'],
+      published: true,
+      isSample: true,
+      createdAt: 1795000003000,
+      updatedAt: '2026-11-22'
+    },
+    {
+      id: 'case_sample_party',
+      courseId: 'track_party',
+      title: '팔순 기념 살아있는 감사 축제 · 가족 헌정 생전 엔딩 파티',
+      location: '서울 송파구',
+      coachName: '여백과 결 공인 코치팀',
+      date: '2026.10',
+      summary: '직계 가족 14명이 모인 소규모 프라이빗 라운지에서 어르신의 인생 하이라이트 영상 상영, 자녀 감사 편지 낭독, 축하 꽃다발 헌정식을 따뜻하고 품격 있게 디렉팅했습니다.',
+      photos: ['images/living-funeral-party-1.jpg'],
+      published: true,
+      isSample: true,
+      createdAt: 1795000002000,
+      updatedAt: '2026-11-22'
+    },
+    {
+      id: 'case_sample_memoir',
+      courseId: 'track_memoir',
+      title: '3회 구술 인터뷰로 완성한 5챕터 디지털 자서전 & 양장본 출판',
+      location: '인천 연수구',
+      coachName: '여백과 결 공인 코치팀',
+      date: '2026.10',
+      summary: '전용 AI 자서전 코치앱으로 어르신의 생애 이야기를 20문항 구술 채록해 5대 챕터 에세이로 엮어내고, 어르신 육성 프롤로그 QR이 담긴 신국판 양장본과 가족 공유 모바일 웹북을 헌정했습니다.',
+      photos: ['images/showcase-senior-memoir.jpg'],
+      published: true,
+      isSample: true,
+      createdAt: 1795000001000,
+      updatedAt: '2026-11-22'
+    }
+  ];
+
+  const DEFAULT_CASE_IDS = DEFAULT_ACADEMY_CASES.map(function (c) { return c.id; });
+
+  function readRawCaseOverrides() {
+    if (Array.isArray(_memoryCasesRaw)) return deepClone(_memoryCasesRaw);
+    try {
+      const raw = localStorage.getItem(CASES_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          _memoryCasesRaw = parsed;
+          return deepClone(parsed);
+        }
+      }
+    } catch (e) {
+      console.warn('[YebaekAcademyCases] local parse warn:', e);
+    }
+    return [];
+  }
+
+  function writeRawCaseOverrides(list) {
+    _memoryCasesRaw = deepClone(list);
+    try {
+      localStorage.setItem(CASES_STORAGE_KEY, JSON.stringify(_memoryCasesRaw));
+    } catch (e) {
+      console.warn('[YebaekAcademyCases] localStorage quota warn (keeping in memory + Firestore):', e);
+    }
+  }
+
+  function mergeCasesFromOverrides(overrides) {
+    const map = {};
+    DEFAULT_ACADEMY_CASES.forEach(function (d) {
+      map[d.id] = deepClone(d);
+    });
+    (overrides || []).forEach(function (item) {
+      if (!item || !item.id) return;
+      if (item.deleted) {
+        delete map[item.id];
+      } else {
+        const prev = map[item.id] || {};
+        const photos = Array.isArray(item.photos)
+          ? item.photos.filter(Boolean)
+          : (item.photo ? [item.photo] : (prev.photos || []));
+        map[item.id] = Object.assign({}, prev, item, {
+          photos: photos,
+          published: item.published !== false,
+          createdAt: Number(item.createdAt) || Number(prev.createdAt) || Date.now()
+        });
+      }
+    });
+    return Object.keys(map)
+      .map(function (k) { return map[k]; })
+      .sort(function (a, b) { return (Number(b.createdAt) || 0) - (Number(a.createdAt) || 0); });
+  }
+
+  function getCases(includeUnpublished) {
+    const merged = mergeCasesFromOverrides(readRawCaseOverrides());
+    if (includeUnpublished) return merged;
+    return merged.filter(function (c) { return c.published !== false; });
+  }
+
+  async function saveCase(caseInput, fbDb) {
+    const now = Date.now();
+    const id = (caseInput && caseInput.id) ? String(caseInput.id) : ('case_' + now);
+    const photos = Array.isArray(caseInput.photos) ? caseInput.photos.filter(Boolean).slice(0, 3) : [];
+    const payload = {
+      id: id,
+      courseId: caseInput.courseId || 'track_beauty',
+      title: String(caseInput.title || '').trim(),
+      location: String(caseInput.location || '').trim(),
+      coachName: String(caseInput.coachName || '').trim(),
+      date: String(caseInput.date || '').trim() || new Date().toISOString().slice(0, 7).replace('-', '.'),
+      summary: String(caseInput.summary || '').trim(),
+      photos: photos,
+      published: caseInput.published !== false,
+      deleted: false,
+      createdAt: Number(caseInput.createdAt) || now,
+      updatedAt: new Date().toISOString().slice(0, 16).replace('T', ' ')
+    };
+
+    const overrides = readRawCaseOverrides().filter(function (x) { return x && x.id !== id; });
+    overrides.unshift(payload);
+    writeRawCaseOverrides(overrides);
+
+    let cloudSaved = false;
+    const db = fbDb || (typeof global.db !== 'undefined' ? global.db : null);
+    if (db) {
+      try {
+        await db.collection(CASES_COLLECTION).doc(id).set(payload, { merge: true });
+        cloudSaved = true;
+      } catch (err) {
+        console.warn('[YebaekAcademyCases] Firestore save warn:', err);
+      }
+    }
+    return { item: payload, cloudSaved: cloudSaved };
+  }
+
+  async function deleteCase(caseId, fbDb) {
+    if (!caseId) return { cloudSaved: false };
+    const isDefault = DEFAULT_CASE_IDS.indexOf(caseId) !== -1;
+    let overrides = readRawCaseOverrides().filter(function (x) { return x && x.id !== caseId; });
+    if (isDefault) {
+      overrides.push({
+        id: caseId,
+        deleted: true,
+        updatedAt: new Date().toISOString().slice(0, 16).replace('T', ' ')
+      });
+    }
+    writeRawCaseOverrides(overrides);
+
+    let cloudSaved = false;
+    const db = fbDb || (typeof global.db !== 'undefined' ? global.db : null);
+    if (db) {
+      try {
+        if (isDefault) {
+          await db.collection(CASES_COLLECTION).doc(caseId).set({
+            id: caseId,
+            deleted: true,
+            updatedAt: new Date().toISOString().slice(0, 16).replace('T', ' ')
+          });
+        } else {
+          await db.collection(CASES_COLLECTION).doc(caseId).delete();
+        }
+        cloudSaved = true;
+      } catch (err) {
+        console.warn('[YebaekAcademyCases] Firestore delete warn:', err);
+      }
+    }
+    return { cloudSaved: cloudSaved };
+  }
+
+  async function toggleCasePublish(caseId, nextPublished, fbDb) {
+    const all = getCases(true);
+    const target = all.find(function (c) { return c.id === caseId; });
+    if (!target) return { cloudSaved: false };
+    target.published = !!nextPublished;
+    return saveCase(target, fbDb);
+  }
+
+  async function resetDefaultCases(fbDb) {
+    // 삭제했던 기본 샘플 사례만 복원하고, 관리자가 새로 올린 사례는 보존
+    const overrides = readRawCaseOverrides().filter(function (x) {
+      return x && DEFAULT_CASE_IDS.indexOf(x.id) === -1;
+    });
+    writeRawCaseOverrides(overrides);
+
+    const db = fbDb || (typeof global.db !== 'undefined' ? global.db : null);
+    if (db) {
+      for (let i = 0; i < DEFAULT_CASE_IDS.length; i++) {
+        try {
+          await db.collection(CASES_COLLECTION).doc(DEFAULT_CASE_IDS[i]).delete();
+        } catch (e) {}
+      }
+    }
+    return getCases(true);
+  }
+
+  function loadFromCloud(fbDb, onUpdate) {
+    const db = fbDb || (typeof global.db !== 'undefined' ? global.db : null);
+    if (!db) return null;
+    try {
+      return db.collection(CASES_COLLECTION).onSnapshot(
+        function (snapshot) {
+          if (!snapshot) return;
+          const cloudOverrides = [];
+          snapshot.forEach(function (doc) {
+            const d = doc.data();
+            if (d) {
+              cloudOverrides.push(Object.assign({ id: doc.id }, d));
+            }
+          });
+          // 클라우드가 비어 있어도 로컬 기본값 유지, 클라우드에 문서가 있으면 클라우드 기준 반영
+          if (cloudOverrides.length > 0 || !snapshot.metadata || !snapshot.metadata.fromCache) {
+            writeRawCaseOverrides(cloudOverrides);
+          }
+          if (typeof onUpdate === 'function') {
+            onUpdate(getCases(false), getCases(true));
+          }
+        },
+        function (err) {
+          console.warn('[YebaekAcademyCases] Cloud sync warn:', err);
+        }
+      );
+    } catch (e) {
+      console.warn('[YebaekAcademyCases] Cloud listener warn:', e);
+      return null;
+    }
+  }
+
+  function compressImage(file, maxWidth, quality) {
+    const maxW = maxWidth || 1080;
+    const q = quality || 0.78;
+    return new Promise(function (resolve, reject) {
+      const reader = new FileReader();
+      reader.onload = function (ev) {
+        const img = new Image();
+        img.onload = function () {
+          let w = img.width;
+          let h = img.height;
+          if (w > maxW) {
+            h = Math.round((h * maxW) / w);
+            w = maxW;
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, w, h);
+          ctx.drawImage(img, 0, 0, w, h);
+
+          let outQuality = q;
+          let dataUrl = canvas.toDataURL('image/jpeg', outQuality);
+          // 1장당 220KB 이하가 되도록 자동 품질 미세 조정 (Firestore 3장 합산 1MB 제한 안전 보장)
+          while (dataUrl.length > 290000 && outQuality > 0.45) {
+            outQuality -= 0.1;
+            dataUrl = canvas.toDataURL('image/jpeg', outQuality);
+          }
+          const kb = Math.round((dataUrl.length * 3) / 4 / 1024);
+          resolve({ dataUrl: dataUrl, width: w, height: h, kb: kb });
+        };
+        img.onerror = function () { reject(new Error('이미지를 불러올 수 없습니다.')); };
+        img.src = ev.target.result;
+      };
+      reader.onerror = function () { reject(new Error('파일을 읽을 수 없습니다.')); };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  global.YebaekAcademyCases = {
+    STORAGE_KEY: CASES_STORAGE_KEY,
+    COLLECTION: CASES_COLLECTION,
+    DEFAULT_CASES: DEFAULT_ACADEMY_CASES,
+    getCases: getCases,
+    saveCase: saveCase,
+    deleteCase: deleteCase,
+    toggleCasePublish: toggleCasePublish,
+    resetDefaultCases: resetDefaultCases,
+    loadFromCloud: loadFromCloud,
+    compressImage: compressImage
   };
 })(window);

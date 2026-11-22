@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>여백과 결 코칭 아카데미 | 4+1 시니어 라이프 비즈니스 전문 코치 양성</title>
-  <meta name="description" content="영업은 본사가, 케어와 수익은 코치가. 4대 핵심 웰라이프 비즈니스와 AI 디지털 자서전을 수행하는 4주 단일 정규과정. 수료 후 본사 공인 코치 등재 시 고객 오더를 배분받아 수익을 창출하세요.">
+  <meta name="description" content="영업은 본사가, 케어와 품격은 코치가. 4대 핵심 웰라이프 비즈니스와 AI 디지털 자서전을 수행하는 4주 단일 정규과정. 수료 후 본사 공인 코치 등재 시 전국 1:1 방문 현장 활동을 시작하세요.">
 
   <!-- Open Graph & SNS -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="여백과 결 코칭 아카데미">
   <meta property="og:title" content="여백과 결 코칭 아카데미 | 4+1 시니어 비즈니스 전문 코치 양성">
-  <meta property="og:description" content="각 과정 4주 단일 정규과정 · 수료 즉시 본사 고객 배정 및 활동비 투명 정산. 지금 예상 월 수익을 확인하고 1기 창립 코치에 지원하세요.">
+  <meta property="og:description" content="각 과정 4주 단일 정규과정 · 수료 즉시 본사 공인 코치 등재 및 고객 매칭. 현장 진행사례와 4주 커리큘럼을 확인하고 1기 창립 코치에 지원하세요.">
   <meta property="og:image" content="https://yebaekarchive.kr/images/coach-academy-banner.jpg">
   <meta property="og:url" content="https://yebaekarchive.kr/academy.html">
 
@@ -40,10 +40,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
 
-  <!-- Firebase SDK (실시간 수강료·예상수익 클라우드 반영 + 모바일 수강신청 실시간 접수) -->
+  <!-- Firebase SDK (실시간 수강료·커리큘럼·진행사례 클라우드 반영 + 모바일 수강신청 실시간 접수) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="academy-courses-data.js?v=20261122"></script>
+  <script src="academy-courses-data.js?v=20261122b"></script>
 
   <style>
     :root {
@@ -170,16 +170,86 @@
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 26px;
+      gap: 7px;
+      flex-wrap: nowrap;
     }
     .nav-link {
-      font-size: 0.9rem;
-      font-weight: 650;
-      color: var(--ink-sub);
-      transition: color 0.18s;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 0.81rem;
+      font-weight: 800;
+      color: var(--cat-pill-color, var(--ink-sub));
+      background: var(--bg-surface);
+      border: 1.2px solid var(--border);
+      transition: all 0.18s ease;
       white-space: nowrap;
     }
-    .nav-link:hover { color: var(--brand); }
+    .nav-link .nav-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.68rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--cat-pill-color, var(--brand));
+      color: #ffffff;
+      letter-spacing: 0.3px;
+    }
+    .nav-link:hover {
+      border-color: var(--cat-pill-color, var(--brand));
+      background: color-mix(in srgb, var(--cat-pill-color, var(--brand)) 10%, var(--bg-surface));
+      transform: translateY(-1px);
+    }
+    .nav-pill-01 { --cat-pill-color: #235a3f; }
+    .nav-pill-02 { --cat-pill-color: #9a5d29; }
+    .nav-pill-03 { --cat-pill-color: #2d6a4f; }
+    .nav-pill-04 { --cat-pill-color: #a84432; }
+    .nav-pill-05 { --cat-pill-color: #a87b18; }
+    .nav-pill-06 { --cat-pill-color: #245b8e; }
+    .nav-pill-07 { --cat-pill-color: #173c2c; }
+
+    /* 모바일·태블릿 전용 상단 스크롤 카테고리 바 (메인 index.html 스타일) */
+    .mobile-cat-strip {
+      display: none;
+      background: rgba(250, 249, 245, 0.96);
+      border-top: 1px solid var(--border);
+      padding: 8px 14px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      gap: 7px;
+      align-items: center;
+    }
+    .mobile-cat-strip::-webkit-scrollbar { display: none; }
+    [data-theme="dark"] .mobile-cat-strip {
+      background: rgba(13, 21, 18, 0.96);
+    }
+    .mobile-cat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1.2px solid var(--border);
+      background: var(--bg-surface);
+      color: var(--ink-main);
+      font-size: 0.76rem;
+      font-weight: 800;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .mobile-cat-chip .mc-num {
+      font-size: 0.66rem;
+      font-weight: 900;
+      padding: 1px 6px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--cat-pill-color, #235a3f);
+    }
     .header-actions {
       display: flex;
       align-items: center;
@@ -434,10 +504,84 @@
       font-weight: 700;
     }
 
-    /* ================= Section Common ================= */
+    /* ================= Section Common & 메인(index.html) 동일 카테고리 구분 시스템 ================= */
     .section { padding: 88px 0; }
     .section-soft { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
     .section-white { background: var(--bg-surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+
+    section.cat-section {
+      --cat-color: #235a3f;
+      position: relative;
+      overflow: visible !important;
+      border-top: 3.5px solid var(--cat-color) !important;
+      border-bottom: none;
+      box-shadow: inset 0 18px 30px -22px rgba(0, 0, 0, 0.14);
+      padding-top: 86px !important;
+      padding-bottom: 86px !important;
+      scroll-margin-top: 84px;
+    }
+
+    /* 카테고리 경계선 중앙에 걸터앉는 책갈피 챕터 리본 (index.html과 동일 시그니처) */
+    .cat-chapter-ribbon {
+      position: absolute;
+      top: -21px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 22px;
+      border-radius: 999px;
+      background: var(--cat-color);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 850;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      border: 3px solid var(--bg-page);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    }
+    .cat-chapter-ribbon .cat-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+    }
+
+    /* 아카데미 8대 카테고리 고유 배경 톤 & 시그니처 포인트 컬러 */
+    .cat-theme-01 { --cat-color: #235a3f; background: #ebf3ec !important; }
+    .cat-theme-02 { --cat-color: #9a5d29; background: #fdf9f2 !important; }
+    .cat-theme-03 { --cat-color: #2d6a4f; background: #edf5ef !important; }
+    .cat-theme-04 { --cat-color: #a84432; background: #fbf1ed !important; }
+    .cat-theme-05 { --cat-color: #a87b18; background: #f6eedb !important; }
+    .cat-theme-06 { --cat-color: #245b8e; background: #ebf1f8 !important; }
+    .cat-theme-07 { --cat-color: #173c2c; background: #eef4f0 !important; }
+    .cat-theme-08 { --cat-color: #6b5b47; background: #f7f3eb !important; }
+
+    [data-theme="dark"] .cat-theme-01 { --cat-color: #5ea882; background: #14211a !important; }
+    [data-theme="dark"] .cat-theme-02 { --cat-color: #d69356; background: #211b15 !important; }
+    [data-theme="dark"] .cat-theme-03 { --cat-color: #6cc297; background: #14221b !important; }
+    [data-theme="dark"] .cat-theme-04 { --cat-color: #e07b69; background: #241917 !important; }
+    [data-theme="dark"] .cat-theme-05 { --cat-color: #d8b252; background: #221d14 !important; }
+    [data-theme="dark"] .cat-theme-06 { --cat-color: #6aa7e0; background: #141e28 !important; }
+    [data-theme="dark"] .cat-theme-07 { --cat-color: #5ec291; background: #122019 !important; }
+    [data-theme="dark"] .cat-theme-08 { --cat-color: #b5a38d; background: #1d1a16 !important; }
+
+    .cat-section .section-kicker {
+      color: var(--cat-color);
+      background: color-mix(in srgb, var(--cat-color) 11%, transparent);
+      border: 1px solid color-mix(in srgb, var(--cat-color) 28%, transparent);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+
     .section-head {
       max-width: 740px;
       margin: 0 auto 48px;
@@ -810,165 +954,256 @@
     }
     .btn-biz-syllabus:hover { border-color: var(--brand); color: var(--brand); }
 
-    /* ================= 5. Interactive Monthly Income Simulator ================= */
-    .simulator-shell {
-      background: linear-gradient(135deg, #0d2118 0%, #153326 60%, #10261d 100%);
-      border-radius: 28px;
-      padding: 44px 40px;
-      color: #ffffff;
-      border: 1.5px solid rgba(227, 193, 108, 0.38);
-      box-shadow: var(--shadow-lg);
-      position: relative;
-      overflow: hidden;
-    }
-    .simulator-shell::before {
-      content: '';
-      position: absolute;
-      top: -120px;
-      right: -120px;
-      width: 340px;
-      height: 340px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(227, 193, 108, 0.16) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .sim-header {
+    /* ================= 5. 📸 현장 진행사례 · 사진 포트폴리오 갤러리 ================= */
+    .cases-filter-bar {
       display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      flex-wrap: wrap;
-      gap: 18px;
-      margin-bottom: 30px;
-      position: relative;
-    }
-    .sim-header h2 {
-      font-family: var(--serif);
-      font-size: clamp(1.55rem, 3vw, 2.15rem);
-      font-weight: 700;
-      color: #ffffff;
-      margin-top: 6px;
-    }
-    .sim-presets {
-      display: flex;
+      justify-content: center;
       gap: 8px;
       flex-wrap: wrap;
+      margin-bottom: 32px;
     }
-    .sim-preset-btn {
-      padding: 8px 15px;
+    .cases-filter-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 16px;
       border-radius: 999px;
-      border: 1px solid rgba(227, 193, 108, 0.42);
-      background: rgba(255, 255, 255, 0.08);
-      color: #f6e4b4;
-      font-size: 0.82rem;
+      border: 1.3px solid var(--border-strong);
+      background: var(--bg-surface);
+      color: var(--ink-sub);
+      font-size: 0.85rem;
       font-weight: 800;
       cursor: pointer;
-      transition: all 0.18s;
+      transition: all 0.18s ease;
     }
-    .sim-preset-btn.active, .sim-preset-btn:hover {
-      background: #d6b25e;
-      color: #10261d;
-      border-color: #d6b25e;
+    .cases-filter-pill:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+      transform: translateY(-1px);
     }
-    .sim-grid {
+    .cases-filter-pill.active {
+      background: linear-gradient(135deg, #10261d 0%, #1e4d35 100%);
+      color: #f6e4b4;
+      border-color: rgba(201, 162, 75, 0.65);
+      box-shadow: 0 6px 18px rgba(16, 38, 29, 0.22);
+    }
+    .cases-filter-count {
+      font-size: 0.72rem;
+      font-weight: 900;
+      padding: 1px 7px;
+      border-radius: 999px;
+      background: rgba(16, 38, 29, 0.08);
+      color: inherit;
+    }
+    .cases-filter-pill.active .cases-filter-count {
+      background: rgba(255, 255, 255, 0.18);
+      color: #f6e4b4;
+    }
+
+    .cases-grid {
       display: grid;
-      grid-template-columns: 1.25fr 0.75fr;
-      gap: 28px;
-      align-items: start;
-      position: relative;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 22px;
     }
-    .sim-sliders-list {
+    .case-card {
+      background: var(--bg-surface);
+      border: 1.3px solid var(--border);
+      border-radius: 22px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease, border-color 0.24s ease;
     }
-    .sim-row {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 16px;
-      padding: 14px 18px;
+    .case-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
     }
-    .sim-row-top {
+    .case-photo-wrap {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      background: #14281f;
+      overflow: hidden;
+    }
+    .case-photo-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .case-card:hover .case-photo-wrap img {
+      transform: scale(1.05);
+    }
+    .case-photo-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(16, 38, 29, 0.22) 0%, transparent 45%, rgba(16, 38, 29, 0.52) 100%);
+      pointer-events: none;
+    }
+    .case-course-badge {
+      position: absolute;
+      top: 13px;
+      left: 13px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.94);
+      color: #14281f;
+      font-size: 0.74rem;
+      font-weight: 850;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+    }
+    .case-photo-count {
+      position: absolute;
+      top: 13px;
+      right: 13px;
+      padding: 4px 9px;
+      border-radius: 999px;
+      background: rgba(16, 38, 29, 0.82);
+      color: #f6e4b4;
+      font-size: 0.72rem;
+      font-weight: 850;
+      backdrop-filter: blur(6px);
+    }
+    .case-card-body {
+      padding: 20px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      gap: 9px;
+    }
+    .case-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 0.76rem;
+      font-weight: 750;
+      color: var(--ink-muted);
+    }
+    .case-title {
+      font-family: var(--serif);
+      font-size: 1.08rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--ink-main);
+      letter-spacing: -0.015em;
+    }
+    .case-summary {
+      font-size: 0.86rem;
+      color: var(--ink-sub);
+      line-height: 1.65;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      flex: 1;
+    }
+    .case-card-foot {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 9px;
-      flex-wrap: wrap;
-    }
-    .sim-row-name {
-      font-size: 0.92rem;
+      padding-top: 10px;
+      margin-top: 4px;
+      border-top: 1px dashed var(--border);
+      font-size: 0.78rem;
       font-weight: 800;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: 7px;
+      color: var(--brand);
     }
-    .sim-row-unit {
-      font-size: 0.76rem;
-      color: rgba(246, 228, 180, 0.82);
+    .cases-empty-box {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 52px 24px;
+      background: var(--bg-surface);
+      border: 1.5px dashed var(--border-strong);
+      border-radius: 22px;
+      color: var(--ink-muted);
+      font-size: 0.94rem;
       font-weight: 700;
     }
-    .sim-row-val {
-      font-size: 0.92rem;
-      font-weight: 900;
-      color: #f6e09e;
-    }
-    .sim-range {
-      width: 100%;
-      accent-color: #e3c16c;
-      height: 6px;
-      cursor: pointer;
-    }
-    .sim-result-card {
-      background: rgba(255, 255, 255, 0.98);
-      color: #141a17;
-      border-radius: 22px;
-      padding: 28px 24px;
-      box-shadow: 0 20px 44px rgba(0, 0, 0, 0.28);
-      border: 1.5px solid #e3c16c;
-    }
-    .sim-res-kicker {
-      font-size: 0.76rem;
-      font-weight: 850;
-      color: #8c6610;
-      background: #fbf5e6;
-      display: inline-block;
-      padding: 4px 10px;
-      border-radius: 999px;
-      margin-bottom: 10px;
-    }
-    .sim-res-month {
-      font-size: 2.2rem;
-      font-weight: 900;
-      color: #10261d;
-      letter-spacing: -0.03em;
-      line-height: 1.15;
-    }
-    .sim-res-month small { font-size: 1rem; font-weight: 800; color: #47524c; }
-    .sim-res-divider {
-      height: 1px;
-      background: #e6e0d3;
-      margin: 16px 0;
-    }
-    .sim-res-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-      font-size: 0.86rem;
-      margin-bottom: 20px;
-    }
-    .sim-res-line {
-      display: flex;
-      justify-content: space-between;
+
+    /* 진행사례 상세 보기 라이트박스 모달 */
+    .case-modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(10, 20, 15, 0.78);
+      backdrop-filter: blur(8px);
       align-items: center;
-      color: #47524c;
+      justify-content: center;
+      padding: 20px;
     }
-    .sim-res-line strong { color: #10261d; font-weight: 850; }
-    .sim-disclaimer {
-      margin-top: 18px;
-      font-size: 0.76rem;
-      color: rgba(255, 255, 255, 0.68);
-      line-height: 1.55;
+    .case-modal-backdrop.open { display: flex; }
+    .case-modal-box {
+      width: 100%;
+      max-width: 780px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--bg-surface);
+      border-radius: 24px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 28px 68px rgba(0, 0, 0, 0.42);
+      position: relative;
+    }
+    .case-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      z-index: 5;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(16, 38, 29, 0.82);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .case-modal-main-img {
+      width: 100%;
+      max-height: 440px;
+      object-fit: cover;
+      background: #10261d;
+    }
+    .case-modal-thumbs {
+      display: flex;
+      gap: 8px;
+      padding: 12px 24px 0;
+      flex-wrap: wrap;
+    }
+    .case-modal-thumb {
+      width: 76px;
+      height: 54px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.72;
+      transition: all 0.16s;
+    }
+    .case-modal-thumb.active, .case-modal-thumb:hover {
+      border-color: var(--gold);
+      opacity: 1;
+    }
+    .case-modal-body {
+      padding: 22px 26px 26px;
+    }
+    .case-modal-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
     }
 
     /* ================= 6. Tabbed 4-Week Curriculum Explorer ================= */
@@ -1360,8 +1595,13 @@
     }
 
     /* Responsive */
+    @media (max-width: 1120px) {
+      .nav-links { display: none; }
+      .mobile-cat-strip { display: flex; }
+      .cases-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
     @media (max-width: 1024px) {
-      .hero-grid, .sim-grid, .curr-panel-grid, .apply-wrap {
+      .hero-grid, .curr-panel-grid, .apply-wrap {
         grid-template-columns: 1fr;
       }
       .biz-course-card, .biz-course-card.reverse {
@@ -1371,7 +1611,18 @@
       .biz-media { min-height: 250px; }
       .vision-grid, .platform-grid { grid-template-columns: 1fr; }
       .flow-steps, .benefits-grid { grid-template-columns: repeat(2, 1fr); }
-      .nav-links { display: none; }
+    }
+    @media (max-width: 768px) {
+      section.cat-section {
+        padding-top: 66px !important;
+        padding-bottom: 62px !important;
+        scroll-margin-top: 112px;
+      }
+      .cat-chapter-ribbon {
+        top: -18px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+      }
     }
     @media (max-width: 640px) {
       .section { padding: 62px 0; }
@@ -1379,7 +1630,7 @@
       .hero-metrics { grid-template-columns: 1fr; }
       .biz-body { padding: 22px 20px; }
       .biz-economics-grid { grid-template-columns: 1fr; }
-      .simulator-shell { padding: 28px 20px; }
+      .cases-grid { grid-template-columns: 1fr; }
       .flow-steps, .benefits-grid, .form-grid-2 { grid-template-columns: 1fr; }
       .apply-wrap { padding: 26px 20px; }
       .brand-sub, .btn-primary-nav { display: none; }
@@ -1396,15 +1647,16 @@
       <a href="index.html" class="brand-logo">
         <span class="brand-mark">🌿</span>
         <span>여백과 결 아카데미</span>
-        <span class="brand-sub">4+1 수익형 코치 양성</span>
+        <span class="brand-sub">4+1 전문 코치 양성</span>
       </a>
 
-      <nav class="nav-links" aria-label="아카데미 주요 메뉴">
-        <a href="#businesses" class="nav-link">4+1 수익 비즈니스</a>
-        <a href="#simulator" class="nav-link" id="navLinkSimulator">예상 수익 계산</a>
-        <a href="#curriculum" class="nav-link">4주 커리큘럼</a>
-        <a href="#platform" class="nav-link">전용 코치앱</a>
-        <a href="#faq" class="nav-link">FAQ</a>
+      <nav class="nav-links" aria-label="아카데미 주요 카테고리">
+        <a href="#why" class="nav-link nav-pill-01"><span class="nav-num">01</span>아카데미 소개</a>
+        <a href="#businesses" class="nav-link nav-pill-02"><span class="nav-num">02</span>4+1 정규과정</a>
+        <a href="#cases" class="nav-link nav-pill-03"><span class="nav-num">03</span>진행사례</a>
+        <a href="#curriculum" class="nav-link nav-pill-04"><span class="nav-num">04</span>4주 커리큘럼</a>
+        <a href="#platform" class="nav-link nav-pill-05"><span class="nav-num">05</span>전용 코치앱</a>
+        <a href="#benefits" class="nav-link nav-pill-06"><span class="nav-num">06</span>1기 특전</a>
       </nav>
 
       <div class="header-actions">
@@ -1412,6 +1664,18 @@
         <a href="#apply" class="btn-primary-nav">🎓 1기 수강신청</a>
         <button type="button" id="themeToggle" class="btn-theme" onclick="toggleTheme()" aria-label="테마 전환">🌙</button>
       </div>
+    </div>
+
+    <!-- 모바일·태블릿 전용 카테고리 퀵 점프 바 -->
+    <div class="mobile-cat-strip" aria-label="카테고리 빠른 이동">
+      <a href="#why" class="mobile-cat-chip" style="--cat-pill-color:#235a3f;"><span class="mc-num">01</span>소개</a>
+      <a href="#businesses" class="mobile-cat-chip" style="--cat-pill-color:#9a5d29;"><span class="mc-num">02</span>4+1 과정</a>
+      <a href="#cases" class="mobile-cat-chip" style="--cat-pill-color:#2d6a4f;"><span class="mc-num">03</span>진행사례</a>
+      <a href="#curriculum" class="mobile-cat-chip" style="--cat-pill-color:#a84432;"><span class="mc-num">04</span>4주 커리큘럼</a>
+      <a href="#platform" class="mobile-cat-chip" style="--cat-pill-color:#a87b18;"><span class="mc-num">05</span>코치앱</a>
+      <a href="#benefits" class="mobile-cat-chip" style="--cat-pill-color:#245b8e;"><span class="mc-num">06</span>1기 특전</a>
+      <a href="#apply" class="mobile-cat-chip" style="--cat-pill-color:#173c2c;"><span class="mc-num">07</span>수강신청</a>
+      <a href="#faq" class="mobile-cat-chip" style="--cat-pill-color:#6b5b47;"><span class="mc-num">08</span>FAQ</a>
     </div>
   </header>
 
@@ -1422,16 +1686,16 @@
         <div class="eyebrow-pill" id="heroCohortPill">🌸 2026년 1기 창립 파운더스 · 각 과정 4주 단일 정규과정</div>
         <h1 class="hero-title">
           영업은 본사가,<br>
-          <span class="accent">케어와 수익은 코치가.</span>
+          <span class="accent">케어와 품격은 코치가.</span>
         </h1>
         <p class="hero-lead">
           자격증만 발급하고 끝나는 교육이 아닙니다.<br>
-          <strong>4대 시니어 웰라이프 비즈니스와 AI 디지털 자서전</strong>을 4주 만에 마스터하고, 수료 후 <strong>본사 공인 코치 등재 즉시 고객 오더를 배분</strong>받아 실질적 수익을 창출하세요.
+          <strong>4대 시니어 웰라이프 비즈니스와 AI 디지털 자서전</strong>을 4주 만에 마스터하고, 수료 후 <strong>본사 공인 코치 등재 즉시 전국 1:1 방문 현장</strong>에 파견되어 전문 커리어를 시작하세요.
         </p>
 
         <div class="hero-cta-row">
           <a href="#apply" class="btn-hero-primary">🎓 4주 정규과정 수강·상담 신청 ↓</a>
-          <a href="#businesses" class="btn-hero-secondary">4+1 수익 비즈니스 둘러보기</a>
+          <a href="#cases" class="btn-hero-secondary">📸 실제 현장 진행사례 보기</a>
         </div>
 
         <div class="hero-metrics">
@@ -1444,8 +1708,8 @@
             <div class="hero-metric-lbl">주 1회 4시간 이론+실습</div>
           </div>
           <div class="hero-metric-item">
-            <div class="hero-metric-val">100% 본사 배분</div>
-            <div class="hero-metric-lbl">등재 코치 우선 매칭·송금</div>
+            <div class="hero-metric-val">100% 본사 매칭</div>
+            <div class="hero-metric-lbl">등재 코치 우선 파견·지원</div>
           </div>
         </div>
       </div>
@@ -1467,7 +1731,7 @@
               <span>➔</span>
               <span>③ 카톡 배정</span>
               <span>➔</span>
-              <span>④ 완료 정산</span>
+              <span>④ 현장 완료</span>
             </div>
           </div>
         </div>
@@ -1475,12 +1739,16 @@
     </div>
   </section>
 
-  <!-- ================= 3. Ecosystem Vision Strip (Mangohada Business Style) ================= -->
-  <section class="section section-soft" style="padding: 68px 0;">
+  <!-- ================= CATEGORY 01. 아카데미 핵심 경쟁력 ================= -->
+  <section id="why" class="section cat-section cat-theme-01">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">01</span>
+      <span>🌿 아카데미 소개 · 핵심 시스템</span>
+    </div>
     <div class="container">
       <div class="section-head" style="margin-bottom: 36px;">
-        <span class="section-kicker">WHY YEBAEK ACADEMY</span>
-        <h2 class="section-title">왜 수료생들이 <strong>첫 달부터 수익을 낼 수 있을까요?</strong></h2>
+        <span class="section-kicker">CATEGORY 01 · WHY YEBAEK ACADEMY</span>
+        <h2 class="section-title">왜 수료생들이 <strong>현장에 바로 안착할 수 있을까요?</strong></h2>
         <p class="section-desc">초고령사회 1,000만 시니어 시장에 최적화된 본사 고객 유입 엔진과 코치 전용 IT 플랫폼을 그대로 제공합니다.</p>
       </div>
 
@@ -1493,25 +1761,29 @@
         <div class="vision-card">
           <div class="vision-num"><span>PILLAR 02</span><span class="vision-icon">🏅</span></div>
           <h3>등재 코치 독점 배정 원칙</h3>
-          <p>아카데미 4주 정규과정을 마치고 본사 <strong>공인 코칭스태프 명단</strong>에 등재된 코치에게만 4대 웰라이프 및 디지털 자서전 오더 배정 권한이 부여됩니다.</p>
+          <p>아카데미 4주 정규과정을 마치고 본사 <strong>공인 코칭스태프 명단</strong>에 등재된 코치에게만 4대 웰라이프 및 디지털 자서전 고객 배정 권한이 부여됩니다.</p>
         </div>
         <div class="vision-card">
-          <div class="vision-num"><span>PILLAR 03</span><span class="vision-icon">💰</span></div>
-          <h3>현장완료 검수 후 투명한 정산</h3>
-          <p>전용 코치앱으로 도착·사진·완료 보고를 제출하면 본사 통합관제 검수 후 약정된 활동비가 투명하게 입금되고 카톡 입금 알림이 발송됩니다.</p>
+          <div class="vision-num"><span>PILLAR 03</span><span class="vision-icon">📱</span></div>
+          <h3>전용 앱 검수 &amp; 투명한 정산</h3>
+          <p>전용 코치앱으로 도착·사진·완료 보고를 제출하면 본사 통합관제 검수 후 약정된 활동비가 투명하게 정산되고 카카오톡 안내가 발송됩니다.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= 4. ★ 4+1 주요 비즈니스 & 4주 정규과정 쇼케이스 (관리자 실시간 연동) ================= -->
-  <section id="businesses" class="section">
+  <!-- ================= CATEGORY 02. ★ 4+1 주요 비즈니스 & 4주 정규과정 (관리자 실시간 연동) ================= -->
+  <section id="businesses" class="section cat-section cat-theme-02">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">02</span>
+      <span>🎓 4+1 핵심 비즈니스 · 4주 정규과정</span>
+    </div>
     <div class="container">
       <div class="section-head">
-        <span class="section-kicker">MAJOR BUSINESS &amp; 4-WEEK COURSES</span>
-        <h2 class="section-title">4대 핵심 웰라이프 + 디지털 자서전<br><strong>5대 수익형 4주 단일 정규과정</strong></h2>
+        <span class="section-kicker">CATEGORY 02 · 4-WEEK COURSES</span>
+        <h2 class="section-title">4대 핵심 웰라이프 + 디지털 자서전<br><strong>5대 전문 코치 4주 단일 정규과정</strong></h2>
         <p class="section-desc" id="bizScheduleSummary">
-          각 비즈니스는 독립된 4주 단일 정규과정으로 운영됩니다. 원하는 분야를 선택해 수료하고 즉시 현장 활동 수익을 만들어 보세요.
+          각 비즈니스는 독립된 4주 단일 정규과정으로 운영됩니다. 원하는 분야를 선택해 수료하고 본사 공인 코치로 현장 활동을 시작해 보세요.
         </p>
       </div>
 
@@ -1520,77 +1792,49 @@
         <!-- JS 동적 렌더링 -->
       </div>
 
-      <!-- 망고하다 스타일 5대 비즈니스 대형 교차 카드 -->
+      <!-- 5대 비즈니스 대형 교차 카드 -->
       <div class="business-showcase-stack" id="businessShowcaseStack">
-        <!-- JS 동적 렌더링 (admin.html 6-3 설정과 실시간 동기화) -->
+        <!-- JS 동적 렌더링 (admin.html 6-3·6-4 설정과 실시간 동기화) -->
       </div>
     </div>
   </section>
 
-  <!-- ================= 5. ★ 인터랙티브 월 예상 수익 시뮬레이터 ================= -->
-  <section id="simulator" class="section section-soft" style="padding: 76px 0;">
+  <!-- ================= CATEGORY 03. ★ 현장 진행사례 & 활동 갤러리 (관리자 6-5 실시간 연동) ================= -->
+  <section id="cases" class="section cat-section cat-theme-03">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">03</span>
+      <span>📸 현장 진행사례 · 활동 갤러리</span>
+    </div>
     <div class="container">
-      <div class="simulator-shell">
-        <div class="sim-header">
-          <div>
-            <span class="section-kicker" style="color: #e3c16c; margin-bottom: 4px;">INTERACTIVE REVENUE SIMULATOR</span>
-            <h2>수료 후 나의 <strong>월 예상 코치 수익</strong> 계산해보기</h2>
-            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.78); margin-top: 6px;">
-              아래 슬라이더로 매월 수행하고 싶은 비즈니스 건수를 움직여 보세요. 본사 현재 표준 배분 단가로 즉시 계산됩니다.
-            </p>
-          </div>
-          <div class="sim-presets">
-            <button type="button" class="sim-preset-btn" onclick="applySimPreset('part', this)">🌱 가벼운 부업 (주 1~2회)</button>
-            <button type="button" class="sim-preset-btn active" onclick="applySimPreset('standard', this)">🌿 표준 활동 (주 3회)</button>
-            <button type="button" class="sim-preset-btn" onclick="applySimPreset('master', this)">👑 전업 마스터 (주 4~5회)</button>
-          </div>
-        </div>
-
-        <div class="sim-grid">
-          <div class="sim-sliders-list" id="simSlidersList">
-            <!-- JS 동적 렌더링 -->
-          </div>
-
-          <div class="sim-result-card">
-            <span class="sim-res-kicker">💰 본사 표준 단가 기준 시뮬레이션</span>
-            <div style="font-size: 0.84rem; color: #47524c; font-weight: 700;">예상 월 코치 활동 수익</div>
-            <div class="sim-res-month num" id="simMonthlyTotal">0<small>원 / 월</small></div>
-
-            <div class="sim-res-divider"></div>
-
-            <div class="sim-res-meta">
-              <div class="sim-res-line">
-                <span>월 총 수행 건수</span>
-                <strong class="num" id="simTotalCases">0건</strong>
-              </div>
-              <div class="sim-res-line">
-                <span>연간 환산 예상 수익</span>
-                <strong class="num" id="simYearlyTotal">0원</strong>
-              </div>
-              <div class="sim-res-line">
-                <span>평균 1개 과정 수강료 회수</span>
-                <strong style="color: #047857;" id="simPaybackText">약 2~3회 활동 시 회수</strong>
-              </div>
-            </div>
-
-            <a href="#apply" class="btn-submit-form" style="display: block; text-align: center; padding: 14px 18px; font-size: 0.94rem;">
-              🎓 이 수익 모델로 1기 수강 상담받기 ↓
-            </a>
-          </div>
-        </div>
-
-        <p class="sim-disclaimer" id="simDisclaimerText">
-          ※ 표기된 활동비 및 예상 수익은 본사 표준 배분 단가 기준 예시이며, 활동 지역·월 수행 횟수·패키지 옵션에 따라 달라질 수 있습니다.
+      <div class="section-head" style="margin-bottom: 30px;">
+        <span class="section-kicker">CATEGORY 03 · REAL FIELD CASES</span>
+        <h2 class="section-title">여백과 결 공인 코치들의<br><strong>실제 현장 진행사례</strong></h2>
+        <p class="section-desc">
+          4주 과정을 수료한 공인 코치들이 전국 어르신 댁과 현장에서 만들어가는 따뜻한 변화와 기록을 사진으로 직접 확인해 보세요.
         </p>
       </div>
+
+      <!-- 과정별 진행사례 필터 -->
+      <div class="cases-filter-bar" id="casesFilterBar">
+        <!-- JS 동적 렌더링 -->
+      </div>
+
+      <!-- 진행사례 사진 카드 그리드 -->
+      <div class="cases-grid" id="academyCasesGrid">
+        <!-- JS 동적 렌더링 (admin.html 6-5에서 올린 사진 실시간 반영) -->
+      </div>
     </div>
   </section>
 
-  <!-- ================= 6. ★ 탭형 5대 과정 4주 커리큘럼 탐색기 ================= -->
-  <section id="curriculum" class="section section-white">
+  <!-- ================= CATEGORY 04. ★ 탭형 5대 과정 4주 커리큘럼 탐색기 ================= -->
+  <section id="curriculum" class="section cat-section cat-theme-04">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">04</span>
+      <span>📚 과정별 4주 집중 커리큘럼</span>
+    </div>
     <div class="container">
       <div class="section-head">
-        <span class="section-kicker">4-WEEK SYLLABUS</span>
+        <span class="section-kicker">CATEGORY 04 · 4-WEEK SYLLABUS</span>
         <h2 class="section-title">과정별 <strong>4주 집중 커리큘럼</strong> 상세 보기</h2>
         <p class="section-desc">이론만 나열하지 않습니다. 1주차 공감 화법부터 4주차 실제 코치앱 현장 실습·수료 인증까지 실무 그대로 훈련합니다.</p>
       </div>
@@ -1605,11 +1849,15 @@
     </div>
   </section>
 
-  <!-- ================= 7. 코치 전용 IT 플랫폼 & 4단계 배분 로드맵 ================= -->
-  <section id="platform" class="section">
+  <!-- ================= CATEGORY 05. 코치 전용 IT 플랫폼 & 4단계 로드맵 ================= -->
+  <section id="platform" class="section cat-section cat-theme-05">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">05</span>
+      <span>📱 전용 코치 IT 플랫폼 · 로드맵</span>
+    </div>
     <div class="container">
       <div class="section-head">
-        <span class="section-kicker">EXCLUSIVE COACH PLATFORM</span>
+        <span class="section-kicker">CATEGORY 05 · EXCLUSIVE COACH PLATFORM</span>
         <h2 class="section-title">수료생에게 무상 제공되는 <strong>전용 코치 IT 플랫폼</strong></h2>
         <p class="section-desc">글쓰기나 IT가 처음이어도 걱정하지 마세요. 여백과 결이 자체 구축한 전용 앱과 AI 윤문 엔진이 현장 업무를 완벽하게 지원합니다.</p>
       </div>
@@ -1617,8 +1865,8 @@
       <div class="platform-grid">
         <div class="platform-card">
           <span class="platform-chip">📱 현장 파트너 앱 · coach.html</span>
-          <h3>원터치 배정 수신 &amp; 정산 확인</h3>
-          <p>본사에서 고객이 배정되면 카카오톡으로 현장 링크가 도착합니다. 도착 스탬프, 비포·에프터 사진, 현장 완료 보고부터 입금 정산 내역까지 스마트폰 하나로 끝냅니다.</p>
+          <h3>원터치 배정 수신 &amp; 완료 보고</h3>
+          <p>본사에서 고객이 배정되면 카카오톡으로 현장 링크가 도착합니다. 도착 스탬프, 비포·에프터 사진, 현장 완료 보고부터 정산 내역 확인까지 스마트폰 하나로 끝냅니다.</p>
         </div>
         <div class="platform-card">
           <span class="platform-chip">✍️ AI 자서전 앱 · coach-memoir.html</span>
@@ -1650,18 +1898,22 @@
         </div>
         <div class="flow-step">
           <span class="flow-step-num">04</span>
-          <h4>본사 오더 배분 · 수익 창출</h4>
+          <h4>본사 매칭 · 현장 활동</h4>
           <p>지역·전문 분야에 맞춰 고객을 배정받고, 현장 완료 검수 후 활동비를 투명하게 정산받습니다.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ================= 8. 1기 창립 파운더스 4대 특전 ================= -->
-  <section id="benefits" class="section section-soft" style="padding: 72px 0;">
+  <!-- ================= CATEGORY 06. 1기 창립 파운더스 4대 특전 ================= -->
+  <section id="benefits" class="section cat-section cat-theme-06">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">06</span>
+      <span>🏅 1기 창립 파운더스 4대 특전</span>
+    </div>
     <div class="container">
       <div class="section-head" style="margin-bottom: 36px;">
-        <span class="section-kicker">FOUNDERS BENEFITS</span>
+        <span class="section-kicker">CATEGORY 06 · FOUNDERS BENEFITS</span>
         <h2 class="section-title">1기 창립 수강생만의 <strong>4대 독점 특전</strong></h2>
         <p class="section-desc" id="foundersCapacityDesc">과정별 소수정예 선착순 15명 마감 · 매월 첫째 주 개강</p>
       </div>
@@ -1680,7 +1932,7 @@
         <div class="benefit-card">
           <div class="benefit-icon">🏛️</div>
           <h3>지역 지부장 &amp; 강사 승급</h3>
-          <p>우수 활동 코치는 지역 거점 지부장 위촉 및 차기 기수 실습 강사로 승급하여 추가 수익을 창출합니다.</p>
+          <p>우수 활동 코치는 지역 거점 지부장 위촉 및 차기 기수 실습 강사로 승급하여 커리어를 확장할 수 있습니다.</p>
         </div>
         <div class="benefit-card">
           <div class="benefit-icon">💖</div>
@@ -1691,19 +1943,23 @@
     </div>
   </section>
 
-  <!-- ================= 9. 1:1 수강·입학 상담 신청 폼 ================= -->
-  <section id="apply" class="section">
+  <!-- ================= CATEGORY 07. 1:1 수강·입학 상담 신청 폼 ================= -->
+  <section id="apply" class="section cat-section cat-theme-07">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">07</span>
+      <span>✍️ 1:1 수강 · 입학 상담 신청</span>
+    </div>
     <div class="container">
       <div class="apply-wrap">
         <div class="apply-left">
-          <span class="section-kicker">ADMISSION &amp; CONSULTATION</span>
+          <span class="section-kicker">CATEGORY 07 · ADMISSION</span>
           <h2>4주 정규과정<br><strong>1:1 수강 · 입학 상담 신청</strong></h2>
           <p>
             신청서를 남겨주시면 본사 통합 상담팀에서 24시간 내에 연락드려<br>
-            <strong>교육 일정, 수강 혜택, 지역별 고객 배분 현황</strong>을 친절히 안내해 드립니다.
+            <strong>교육 일정, 수강 혜택, 지역별 활동 안내</strong>를 친절히 도와드립니다.
           </p>
 
-          <!-- 선택된 과정의 실시간 가격·수익 미리보기 -->
+          <!-- 선택된 과정의 실시간 수강료 미리보기 -->
           <div class="apply-course-preview" id="applySelectedCourseBox">
             <!-- JS 동적 업데이트 -->
           </div>
@@ -1765,11 +2021,15 @@
     </div>
   </section>
 
-  <!-- ================= 10. FAQ ================= -->
-  <section id="faq" class="section section-soft" style="padding: 72px 0;">
+  <!-- ================= CATEGORY 08. FAQ ================= -->
+  <section id="faq" class="section cat-section cat-theme-08">
+    <div class="cat-chapter-ribbon" aria-hidden="true">
+      <span class="cat-num">08</span>
+      <span>❓ 자주 묻는 질문 (FAQ)</span>
+    </div>
     <div class="container">
       <div class="section-head" style="margin-bottom: 36px;">
-        <span class="section-kicker">FAQ</span>
+        <span class="section-kicker">CATEGORY 08 · FAQ</span>
         <h2 class="section-title">자주 묻는 질문</h2>
       </div>
 
@@ -1803,11 +2063,11 @@
         </div>
         <div class="faq-item">
           <button type="button" class="faq-q" onclick="toggleFaq(this)">
-            <span>Q. 현장 활동비는 언제, 어떻게 정산되나요?</span>
+            <span>Q. 현장 활동 완료 후 검수와 정산은 어떻게 진행되나요?</span>
             <span class="arrow">▼</span>
           </button>
           <div class="faq-a">
-            전용 코치 현장앱(coach.html)에서 방문 도착 스탬프, 현장 사진 및 완료 보고를 제출하시면 본사 통합 관제센터에서 업무카드를 검수한 뒤 코치님 계좌로 투명하게 송금하고 카카오톡 입금 안내를 보내드립니다.
+            전용 코치 현장앱(coach.html)에서 방문 도착 스탬프, 현장 사진 및 완료 보고를 제출하시면 본사 통합 관제센터에서 업무카드를 검수한 뒤 코치님 계좌로 투명하게 송금하고 카카오톡 안내를 보내드립니다.
           </div>
         </div>
         <div class="faq-item">
@@ -1822,6 +2082,21 @@
       </div>
     </div>
   </section>
+
+  <!-- ================= 📸 현장 진행사례 상세 보기 라이트박스 모달 ================= -->
+  <div id="caseDetailModal" class="case-modal-backdrop" onclick="if(event.target === this) closeCaseDetailModal()" role="dialog" aria-modal="true" aria-labelledby="caseModalTitle">
+    <div class="case-modal-box">
+      <button type="button" class="case-modal-close" onclick="closeCaseDetailModal()" aria-label="닫기">✕</button>
+      <img id="caseModalMainImg" class="case-modal-main-img" src="" alt="진행사례 현장 사진">
+      <div id="caseModalThumbs" class="case-modal-thumbs"></div>
+      <div class="case-modal-body">
+        <div id="caseModalMeta" class="case-meta-row" style="margin-bottom: 10px;"></div>
+        <h3 id="caseModalTitle" style="font-family: var(--serif); font-size: 1.38rem; font-weight: 700; color: var(--ink-main); line-height: 1.38; margin-bottom: 12px;"></h3>
+        <p id="caseModalSummary" style="font-size: 0.94rem; color: var(--ink-sub); line-height: 1.78; white-space: pre-line;"></p>
+        <div id="caseModalActions" class="case-modal-actions"></div>
+      </div>
+    </div>
+  </div>
 
   <!-- ================= Footer ================= -->
   <footer class="site-footer">
@@ -1931,56 +2206,35 @@
       if (item) item.classList.toggle('open');
     }
 
-    // ================= 3. 상태 & 전체 동적 렌더링 (관리자 6-3 설정과 100% 실시간 동기화) =================
+    // ================= 3. 상태 & 전체 동적 렌더링 (관리자 6-3·6-4·6-5 설정과 100% 실시간 동기화) =================
     let currentAcademyConfig = window.YebaekAcademyConfig.getConfig();
+    let currentAcademyCases = window.YebaekAcademyCases ? window.YebaekAcademyCases.getCases(false) : [];
     let activeCurriculumId = currentAcademyConfig.courses[0] ? currentAcademyConfig.courses[0].id : 'track_beauty';
-    let simCounts = {};
-
-    function initDefaultSimCounts(preset) {
-      const courses = currentAcademyConfig.courses || [];
-      const presetMap = {
-        part:     { track_beauty: 2, track_wardrobe: 2, track_legacy: 1, track_party: 0, track_memoir: 1 },
-        standard: { track_beauty: 4, track_wardrobe: 3, track_legacy: 2, track_party: 1, track_memoir: 1 },
-        master:   { track_beauty: 5, track_wardrobe: 4, track_legacy: 3, track_party: 2, track_memoir: 2 }
-      };
-      const chosen = presetMap[preset] || presetMap.standard;
-      courses.forEach(function (c) {
-        simCounts[c.id] = (chosen[c.id] != null) ? chosen[c.id] : (c.recommendedMonthlyCount || 2);
-      });
-    }
+    let activeCaseFilter = 'all';
 
     function renderAllAcademyViews() {
       const cfg = currentAcademyConfig;
-      const showRev = cfg.showRevenuePublic !== false;
 
       // 상단·안내 문구 반영
       const heroPill = document.getElementById('heroCohortPill');
       if (heroPill) heroPill.textContent = '🌸 ' + (cfg.cohortLabel || '2026년 1기 창립 파운더스') + ' · 각 과정 4주 단일 정규과정';
       const bizSched = document.getElementById('bizScheduleSummary');
-      if (bizSched) bizSched.textContent = (cfg.scheduleSummary || '각 과정 4주 단일 정규과정') + '. 원하는 분야를 선택해 수료하고 즉시 본사 고객 오더를 배정받으세요.';
+      if (bizSched) bizSched.textContent = (cfg.scheduleSummary || '각 과정 4주 단일 정규과정') + '. 원하는 분야를 선택해 수료하고 본사 공인 코치로 현장 활동을 시작해 보세요.';
       const capDesc = document.getElementById('foundersCapacityDesc');
       if (capDesc) capDesc.textContent = (cfg.capacityNote || '') + ' · ' + (cfg.nextOpeningDate || '');
       const applyOpen = document.getElementById('applyOpeningText');
       if (applyOpen) applyOpen.textContent = cfg.nextOpeningDate || '매월 첫째 주 개강 (평일반 / 주말 집중반)';
       const applyCap = document.getElementById('applyCapacityText');
       if (applyCap) applyCap.textContent = cfg.capacityNote || '과정별 소수정예 선착순 15명 마감';
-      const discEl = document.getElementById('simDisclaimerText');
-      if (discEl) discEl.textContent = cfg.revenueDisclaimer || '';
 
-      // 예상수익 공개 여부에 따라 시뮬레이터 섹션 표시/숨김
-      const simSection = document.getElementById('simulator');
-      const simNav = document.getElementById('navLinkSimulator');
-      if (simSection) simSection.style.display = showRev ? 'block' : 'none';
-      if (simNav) simNav.style.display = showRev ? 'inline-block' : 'none';
-
-      renderBusinessShowcase(cfg, showRev);
-      if (showRev) renderSimulator(cfg);
-      renderCurriculumSection(cfg, showRev);
+      renderBusinessShowcase(cfg);
+      renderCasesSection(cfg);
+      renderCurriculumSection(cfg);
       renderApplyCourseSelect(cfg);
     }
 
-    // 3-1. 망고하다 스타일 4+1 비즈니스 & 4주 정규과정 쇼케이스 렌더링
-    function renderBusinessShowcase(cfg, showRev) {
+    // 3-1. 4+1 주요 비즈니스 & 4주 정규과정 쇼케이스 렌더링 (수강료 중심 깔끔한 구성)
+    function renderBusinessShowcase(cfg) {
       const quickNav = document.getElementById('courseQuickNav');
       const stack = document.getElementById('businessShowcaseStack');
       if (!stack) return;
@@ -1996,25 +2250,9 @@
 
       stack.innerHTML = cfg.courses.map(function (c, idx) {
         const disc = window.YebaekAcademyConfig.calcDiscountPercent(c.regularPrice, c.salePrice);
-        const payback = window.YebaekAcademyConfig.calcPaybackCount(c.salePrice, c.coachFeePerCase);
-        const estMonth = (Number(c.coachFeePerCase) || 0) * (Number(c.recommendedMonthlyCount) || 2);
         const isClosed = c.status === '모집마감';
         const statusCls = c.status === '마감임박' ? 'urgent' : (isClosed ? 'closed' : '');
         const statusIcon = c.status === '마감임박' ? '🔥 ' : (isClosed ? '🔒 ' : '🟢 ');
-
-        const revenueBoxHtml = showRev ? (
-          '<div class="econ-box revenue">' +
-            '<div class="econ-lbl">' +
-              '<span>💰 수료 후 코치 예상수익 (' + escapeHtml(c.coachFeeUnit || '회당') + ')</span>' +
-              (payback > 0 ? '<span class="econ-payback-tag">약 ' + payback + '회 활동 시 회수</span>' : '') +
-            '</div>' +
-            '<div class="econ-price-row">' +
-              '<span class="econ-main num">' + Number(c.coachFeePerCase || 0).toLocaleString() + '원</span>' +
-              '<span style="font-size:0.78rem; font-weight:800; color:#047857;">(월 ' + (c.recommendedMonthlyCount || 2) + '회 시 약 ' + estMonth.toLocaleString() + '원)</span>' +
-            '</div>' +
-            '<div class="econ-sub">' + escapeHtml(c.coachFeeNote || '') + '</div>' +
-          '</div>'
-        ) : '';
 
         return (
           '<article class="biz-course-card ' + (idx % 2 === 1 ? 'reverse' : '') + '" id="card_' + escapeHtml(c.id) + '">' +
@@ -2038,22 +2276,22 @@
                 '<p class="biz-summary">' + escapeHtml(c.summary || '') + '</p>' +
                 '<div class="biz-deliverable">📌 <strong>본사 배정 업무:</strong> ' + escapeHtml(c.deliverable || '') + '</div>' +
               '</div>' +
-              '<div class="biz-economics-grid ' + (showRev ? '' : 'single') + '">' +
+              '<div class="biz-economics-grid single">' +
                 '<div class="econ-box">' +
                   '<div class="econ-lbl">' +
                     '<span>🎓 4주 단일 정규과정 수강료</span>' +
-                    (disc > 0 ? '<span class="econ-discount-tag">' + disc + '% 특가</span>' : '') +
+                    (disc > 0 ? '<span class="econ-discount-tag">' + disc + '% 1기 특가</span>' : '') +
                   '</div>' +
                   '<div class="econ-price-row">' +
                     (disc > 0 ? '<span class="econ-old num">' + Number(c.regularPrice || 0).toLocaleString() + '원</span>' : '') +
                     '<span class="econ-main num">' + Number(c.salePrice || 0).toLocaleString() + '원</span>' +
                   '</div>' +
-                  '<div class="econ-sub">교재·워크북·공인 라이선스 발급비 전액 포함</div>' +
+                  '<div class="econ-sub">교재·워크북·공인 라이선스 발급 및 전용 코치앱 이용 전액 포함</div>' +
                 '</div>' +
-                revenueBoxHtml +
               '</div>' +
               '<div class="biz-action-row">' +
-                '<button type="button" class="btn-biz-syllabus" onclick="openCourseCurriculum(\'' + c.id + '\')">📋 4주 커리큘럼 보기</button>' +
+                '<button type="button" class="btn-biz-syllabus" onclick="openCourseCurriculum(\'' + c.id + '\')">📋 4주 커리큘럼</button>' +
+                '<button type="button" class="btn-biz-syllabus" onclick="jumpToCourseCases(\'' + c.id + '\')">📸 진행사례</button>' +
                 '<button type="button" class="btn-biz-apply" ' + (isClosed ? 'disabled' : 'onclick="selectCourseAndApply(\'' + c.id + '\')"') + '>' +
                   (isClosed ? '🔒 현재 기수 모집 마감' : '🎓 이 4주 과정 신청하기 ➔') +
                 '</button>' +
@@ -2069,84 +2307,171 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
-    // 3-2. 인터랙티브 월 예상 수익 시뮬레이터
-    function renderSimulator(cfg) {
-      const listEl = document.getElementById('simSlidersList');
-      if (!listEl) return;
+    function jumpToCourseCases(courseId) {
+      activeCaseFilter = courseId || 'all';
+      renderCasesSection(currentAcademyConfig);
+      const sec = document.getElementById('cases');
+      if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
-      listEl.innerHTML = cfg.courses.map(function (c) {
-        const cnt = simCounts[c.id] != null ? simCounts[c.id] : 0;
-        const subTotal = cnt * (Number(c.coachFeePerCase) || 0);
+    // 3-2. 📸 현장 진행사례 갤러리 & 상세 라이트박스 (admin.html 6-5 실시간 연동)
+    function renderCasesSection(cfg) {
+      const filterBar = document.getElementById('casesFilterBar');
+      const grid = document.getElementById('academyCasesGrid');
+      if (!grid) return;
+
+      const courses = (cfg && cfg.courses) ? cfg.courses : [];
+      const courseMap = {};
+      courses.forEach(function (c) { courseMap[c.id] = c; });
+
+      const allCases = Array.isArray(currentAcademyCases) ? currentAcademyCases : [];
+      const filtered = activeCaseFilter === 'all'
+        ? allCases
+        : allCases.filter(function (item) { return item.courseId === activeCaseFilter; });
+
+      if (filterBar) {
+        const pills = [
+          '<button type="button" class="cases-filter-pill ' + (activeCaseFilter === 'all' ? 'active' : '') + '" onclick="filterAcademyCases(\'all\')">' +
+            '<span>✨ 전체 진행사례</span>' +
+            '<span class="cases-filter-count">' + allCases.length + '</span>' +
+          '</button>'
+        ];
+        courses.forEach(function (c) {
+          const cnt = allCases.filter(function (item) { return item.courseId === c.id; }).length;
+          pills.push(
+            '<button type="button" class="cases-filter-pill ' + (activeCaseFilter === c.id ? 'active' : '') + '" onclick="filterAcademyCases(\'' + c.id + '\')">' +
+              '<span>' + escapeHtml(c.icon) + ' ' + escapeHtml(c.shortName) + '</span>' +
+              '<span class="cases-filter-count">' + cnt + '</span>' +
+            '</button>'
+          );
+        });
+        filterBar.innerHTML = pills.join('');
+      }
+
+      if (filtered.length === 0) {
+        grid.innerHTML =
+          '<div class="cases-empty-box">' +
+            '<div style="font-size: 2rem; margin-bottom: 10px;">📸</div>' +
+            '<div>선택하신 분야의 현장 진행사례가 곧 업데이트될 예정입니다.</div>' +
+            (activeCaseFilter !== 'all'
+              ? '<button type="button" class="cases-filter-pill active" style="margin-top: 14px;" onclick="filterAcademyCases(\'all\')">전체 진행사례 보기</button>'
+              : '') +
+          '</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(function (item) {
+        const course = courseMap[item.courseId] || courses[0] || { icon: '🌿', shortName: '현장 활동', accentColor: '#1e4d35', image: 'images/coach-academy-banner.jpg' };
+        const photos = Array.isArray(item.photos) && item.photos.length > 0 ? item.photos : [course.image || 'images/coach-academy-banner.jpg'];
+        const cover = photos[0];
+        const metaParts = [];
+        if (item.location) metaParts.push('📍 ' + escapeHtml(item.location));
+        if (item.coachName) metaParts.push('👤 ' + escapeHtml(item.coachName));
+        if (item.date) metaParts.push('📅 ' + escapeHtml(item.date));
+
         return (
-          '<div class="sim-row">' +
-            '<div class="sim-row-top">' +
-              '<div class="sim-row-name">' +
-                '<span>' + escapeHtml(c.icon) + ' ' + escapeHtml(c.shortName) + '</span>' +
-                '<span class="sim-row-unit">(' + escapeHtml(c.coachFeeUnit || '회당') + ' ' + Number(c.coachFeePerCase || 0).toLocaleString() + '원)</span>' +
-              '</div>' +
-              '<div class="sim-row-val num" id="simVal_' + c.id + '">월 ' + cnt + '건 · ' + subTotal.toLocaleString() + '원</div>' +
+          '<article class="case-card" onclick="openCaseDetailModal(\'' + escapeHtml(item.id) + '\')">' +
+            '<div class="case-photo-wrap">' +
+              '<img src="' + escapeHtml(cover) + '" alt="' + escapeHtml(item.title) + '" loading="lazy">' +
+              '<div class="case-photo-gradient"></div>' +
+              '<span class="case-course-badge" style="color:' + escapeHtml(course.accentColor || '#1e4d35') + ';">' +
+                escapeHtml(course.icon || '🌿') + ' ' + escapeHtml(course.shortName || '현장 사례') +
+              '</span>' +
+              (photos.length > 1 ? '<span class="case-photo-count">📷 ' + photos.length + '장</span>' : '') +
             '</div>' +
-            '<input type="range" class="sim-range" min="0" max="10" step="1" value="' + cnt + '" oninput="handleSimSlide(\'' + c.id + '\', this.value)" aria-label="' + escapeHtml(c.shortName) + ' 월 활동 횟수">' +
-          '</div>'
+            '<div class="case-card-body">' +
+              (metaParts.length > 0 ? '<div class="case-meta-row">' + metaParts.join(' · ') + '</div>' : '') +
+              '<h3 class="case-title">' + escapeHtml(item.title || '현장 진행사례') + '</h3>' +
+              '<p class="case-summary">' + escapeHtml(item.summary || '') + '</p>' +
+              '<div class="case-card-foot">' +
+                '<span>현장 사진 &amp; 스토리 보기</span>' +
+                '<span>자세히 →</span>' +
+              '</div>' +
+            '</div>' +
+          '</article>'
         );
       }).join('');
-
-      recalcSimulatorTotals();
     }
 
-    function handleSimSlide(courseId, val) {
-      simCounts[courseId] = parseInt(val, 10) || 0;
-      const c = currentAcademyConfig.courses.find(function (x) { return x.id === courseId; });
-      if (c) {
-        const sub = simCounts[courseId] * (Number(c.coachFeePerCase) || 0);
-        const valEl = document.getElementById('simVal_' + courseId);
-        if (valEl) valEl.textContent = '월 ' + simCounts[courseId] + '건 · ' + sub.toLocaleString() + '원';
+    function filterAcademyCases(courseId) {
+      activeCaseFilter = courseId || 'all';
+      renderCasesSection(currentAcademyConfig);
+    }
+
+    function openCaseDetailModal(caseId) {
+      const item = (currentAcademyCases || []).find(function (c) { return c.id === caseId; });
+      if (!item) return;
+      const courses = (currentAcademyConfig && currentAcademyConfig.courses) ? currentAcademyConfig.courses : [];
+      const course = courses.find(function (c) { return c.id === item.courseId; }) || courses[0] || { id: 'track_beauty', icon: '🌿', title: '4주 정규과정', image: 'images/coach-academy-banner.jpg' };
+      const photos = Array.isArray(item.photos) && item.photos.length > 0 ? item.photos : [course.image || 'images/coach-academy-banner.jpg'];
+
+      const mainImg = document.getElementById('caseModalMainImg');
+      const thumbsEl = document.getElementById('caseModalThumbs');
+      const metaEl = document.getElementById('caseModalMeta');
+      const titleEl = document.getElementById('caseModalTitle');
+      const summaryEl = document.getElementById('caseModalSummary');
+      const actionsEl = document.getElementById('caseModalActions');
+
+      if (mainImg) {
+        mainImg.src = photos[0];
+        mainImg.alt = item.title || '현장 진행사례 사진';
       }
-      document.querySelectorAll('.sim-preset-btn').forEach(function (b) { b.classList.remove('active'); });
-      recalcSimulatorTotals();
-    }
-
-    function applySimPreset(presetName, btn) {
-      initDefaultSimCounts(presetName);
-      document.querySelectorAll('.sim-preset-btn').forEach(function (b) { b.classList.remove('active'); });
-      if (btn) btn.classList.add('active');
-      renderSimulator(currentAcademyConfig);
-    }
-
-    function recalcSimulatorTotals() {
-      let monthly = 0;
-      let totalCases = 0;
-      let avgSalePrice = 0;
-      const courses = currentAcademyConfig.courses || [];
-      courses.forEach(function (c) {
-        const cnt = simCounts[c.id] || 0;
-        totalCases += cnt;
-        monthly += cnt * (Number(c.coachFeePerCase) || 0);
-        avgSalePrice += Number(c.salePrice) || 350000;
-      });
-      if (courses.length > 0) avgSalePrice = Math.round(avgSalePrice / courses.length);
-
-      const elMon = document.getElementById('simMonthlyTotal');
-      const elCases = document.getElementById('simTotalCases');
-      const elYear = document.getElementById('simYearlyTotal');
-      const elPay = document.getElementById('simPaybackText');
-      if (elMon) elMon.innerHTML = monthly.toLocaleString() + '<small>원 / 월</small>';
-      if (elCases) elCases.textContent = totalCases + '건 / 월';
-      if (elYear) elYear.textContent = (monthly * 12).toLocaleString() + '원';
-      if (elPay) {
-        if (monthly <= 0) {
-          elPay.textContent = '슬라이더를 움직여 확인하세요';
-        } else if (monthly >= avgSalePrice) {
-          elPay.textContent = '활동 첫 달 내 수강료 회수 가능';
+      if (thumbsEl) {
+        if (photos.length > 1) {
+          thumbsEl.style.display = 'flex';
+          thumbsEl.innerHTML = photos.map(function (src, i) {
+            return '<img src="' + escapeHtml(src) + '" alt="현장 사진 ' + (i + 1) + '" class="case-modal-thumb ' + (i === 0 ? 'active' : '') + '" onclick="switchCaseModalPhoto(this, ' + i + ')" data-src="' + escapeHtml(src) + '">';
+          }).join('');
         } else {
-          const months = Math.ceil(avgSalePrice / monthly);
-          elPay.textContent = '약 ' + months + '개월 내 수강료 회수';
+          thumbsEl.style.display = 'none';
+          thumbsEl.innerHTML = '';
         }
       }
+      if (metaEl) {
+        const tags = [
+          '<span style="background: var(--brand-light); color: var(--brand); padding: 3px 10px; border-radius: 999px; font-weight: 850;">' + escapeHtml(course.icon) + ' ' + escapeHtml(course.title) + '</span>'
+        ];
+        if (item.location) tags.push('<span>📍 ' + escapeHtml(item.location) + '</span>');
+        if (item.coachName) tags.push('<span>👤 ' + escapeHtml(item.coachName) + '</span>');
+        if (item.date) tags.push('<span>📅 ' + escapeHtml(item.date) + '</span>');
+        metaEl.innerHTML = tags.join('');
+      }
+      if (titleEl) titleEl.textContent = item.title || '현장 진행사례';
+      if (summaryEl) summaryEl.textContent = item.summary || '';
+      if (actionsEl) {
+        actionsEl.innerHTML =
+          '<button type="button" class="btn-biz-syllabus" onclick="closeCaseDetailModal(); openCourseCurriculum(\'' + escapeHtml(course.id) + '\')">📋 이 과정 4주 커리큘럼 보기</button>' +
+          '<button type="button" class="btn-biz-apply" onclick="closeCaseDetailModal(); selectCourseAndApply(\'' + escapeHtml(course.id) + '\')">🎓 이 4주 과정 신청하기 ➔</button>';
+      }
+
+      const modal = document.getElementById('caseDetailModal');
+      if (modal) modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
 
+    function switchCaseModalPhoto(thumbEl) {
+      const mainImg = document.getElementById('caseModalMainImg');
+      if (mainImg && thumbEl) {
+        mainImg.src = thumbEl.getAttribute('data-src') || thumbEl.src;
+      }
+      document.querySelectorAll('#caseModalThumbs .case-modal-thumb').forEach(function (el) {
+        el.classList.remove('active');
+      });
+      if (thumbEl) thumbEl.classList.add('active');
+    }
+
+    function closeCaseDetailModal() {
+      const modal = document.getElementById('caseDetailModal');
+      if (modal) modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape') closeCaseDetailModal();
+    });
+
     // 3-3. 탭형 4주 커리큘럼 탐색기
-    function renderCurriculumSection(cfg, showRev) {
+    function renderCurriculumSection(cfg) {
       const tabsBar = document.getElementById('curriculumTabsBar');
       const body = document.getElementById('curriculumPanelBody');
       if (!tabsBar || !body) return;
@@ -2163,7 +2488,6 @@
       }).join('');
 
       const disc = window.YebaekAcademyConfig.calcDiscountPercent(selected.regularPrice, selected.salePrice);
-      const payback = window.YebaekAcademyConfig.calcPaybackCount(selected.salePrice, selected.coachFeePerCase);
       const weeksHtml = (selected.weeks || []).map(function (w) {
         return (
           '<div class="week-card">' +
@@ -2191,9 +2515,6 @@
               (disc > 0 ? '<span class="econ-old num">' + Number(selected.regularPrice || 0).toLocaleString() + '원</span>' : '') +
               '<span style="font-size:1.55rem; font-weight:900; color:var(--ink-main);" class="num">' + Number(selected.salePrice || 0).toLocaleString() + '원</span>' +
             '</div>' +
-            (showRev
-              ? '<div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--border); font-size:0.82rem; font-weight:800; color:var(--brand);">💰 수료 후 예상 활동비: ' + escapeHtml(selected.coachFeeUnit || '회당') + ' ' + Number(selected.coachFeePerCase || 0).toLocaleString() + '원' + (payback > 0 ? ' (약 ' + payback + '회 활동 시 회수)' : '') + '</div>'
-              : '') +
           '</div>' +
           '<ul class="curr-check-list">' +
             '<li>4주 집중 이론 + 현장 실무 워크숍 (총 16시간)</li>' +
@@ -2207,12 +2528,12 @@
 
     function switchCurriculumTab(courseId) {
       activeCurriculumId = courseId;
-      renderCurriculumSection(currentAcademyConfig, currentAcademyConfig.showRevenuePublic !== false);
+      renderCurriculumSection(currentAcademyConfig);
     }
 
     function openCourseCurriculum(courseId) {
       activeCurriculumId = courseId;
-      renderCurriculumSection(currentAcademyConfig, currentAcademyConfig.showRevenuePublic !== false);
+      renderCurriculumSection(currentAcademyConfig);
       const sec = document.getElementById('curriculum');
       if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
@@ -2241,7 +2562,6 @@
       if (!sel || !box) return;
       const c = currentAcademyConfig.courses.find(function (x) { return x.id === sel.value; }) || currentAcademyConfig.courses[0];
       if (!c) return;
-      const showRev = currentAcademyConfig.showRevenuePublic !== false;
       const disc = window.YebaekAcademyConfig.calcDiscountPercent(c.regularPrice, c.salePrice);
 
       box.innerHTML =
@@ -2249,7 +2569,7 @@
         '<div style="font-size:1.04rem; font-weight:850; color:var(--ink-main); margin-bottom:6px;">' + escapeHtml(c.icon) + ' ' + escapeHtml(c.title) + '</div>' +
         '<div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:0.86rem;">' +
           '<span>1기 특가 수강료: <strong class="num" style="color:var(--ink-main); font-size:1rem;">' + Number(c.salePrice || 0).toLocaleString() + '원</strong>' + (disc > 0 ? ' <span class="econ-discount-tag">' + disc + '% 할인</span>' : '') + '</span>' +
-          (showRev ? '<span style="color:var(--brand); font-weight:850;">💰 예상수익: ' + escapeHtml(c.coachFeeUnit || '회당') + ' ' + Number(c.coachFeePerCase || 0).toLocaleString() + '원</span>' : '') +
+          '<span style="color:var(--brand); font-weight:800;">⏱️ ' + escapeHtml(c.duration || '4주 정규과정') + '</span>' +
         '</div>';
     }
 
@@ -2352,10 +2672,8 @@
       updateApplySelectedCourseBox();
     }
 
-    // ================= 5. 초기 부팅 & 클라우드 실시간 가격·수익 구독 =================
+    // ================= 5. 초기 부팅 & 클라우드 실시간 수강료·커리큘럼·진행사례 구독 =================
     document.addEventListener('DOMContentLoaded', function () {
-      initDefaultSimCounts('standard');
-
       // URL 쿼리(?course=track_beauty 등)로 특정 과정 진입 시 해당 4주 커리큘럼 및 신청 드롭다운 자동 선택
       try {
         const params = new URLSearchParams(window.location.search);
@@ -2378,11 +2696,19 @@
         }
       } catch (e) {}
 
-      // admin.html 6-3·6-4에서 수정한 수강료·예상수익·커리큘럼을 클라우드에서 실시간 수신하여 즉시 반영
+      // admin.html 6-3·6-4에서 수정한 수강료·커리큘럼 클라우드 실시간 수신
       if (academyFbDb && window.YebaekAcademyConfig) {
         window.YebaekAcademyConfig.loadFromCloud(academyFbDb, function (remoteCfg) {
           currentAcademyConfig = remoteCfg;
           renderAllAcademyViews();
+        });
+      }
+
+      // admin.html 6-5에서 올린 현장 진행사례·사진 클라우드 실시간 수신
+      if (academyFbDb && window.YebaekAcademyCases) {
+        window.YebaekAcademyCases.loadFromCloud(academyFbDb, function (publicCases) {
+          currentAcademyCases = publicCases;
+          renderCasesSection(currentAcademyConfig);
         });
       }
     });

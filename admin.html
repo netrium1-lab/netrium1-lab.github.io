@@ -24,7 +24,7 @@
   <!-- 📷 300 DPI 인쇄용 순수 벡터(SVG) QR 생성기 & 여백과 결 공용 미디어 모듈 -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="heritage-media.js"></script>
-  <script src="academy-courses-data.js?v=20261122"></script>
+  <script src="academy-courses-data.js?v=20261122b"></script>
   <style>
     :root {
       --bg-body: #f1f5f9;
@@ -2468,11 +2468,15 @@
           </button>
           <button type="button" class="subnav-link" id="sideSub_coach_pricing" onclick="selectCoachSubFromSidebar('pricing')">
             <span class="subnav-icon">💰</span>
-            <span>6-3. 과정 수강료 · 예상수익</span>
+            <span>6-3. 과정 수강료 · 모집 관리</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_coach_curriculum" onclick="selectCoachSubFromSidebar('curriculum')">
             <span class="subnav-icon">📚</span>
             <span>6-4. 4주 커리큘럼 관리</span>
+          </button>
+          <button type="button" class="subnav-link" id="sideSub_coach_cases" onclick="selectCoachSubFromSidebar('cases')">
+            <span class="subnav-icon">📸</span>
+            <span>6-5. 진행사례 · 사진 관리</span>
           </button>
         </div>
 
@@ -2730,8 +2734,9 @@
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료 관리 ➔</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치 명단</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pricing')">💰 가격·수익</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pricing')">💰 수강료</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('curriculum')">📚 커리큘럼</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('cases')">📸 진행사례</button>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
             </div>
@@ -3851,7 +3856,7 @@
         </div>
         </div>
 
-        <!-- 💰 6-3. 5대 비즈니스 4주 정규과정 수강료 · 코치 예상수익 실시간 관리 (academy.html 클라우드 직결) -->
+        <!-- 💰 6-3. 5대 비즈니스 4주 정규과정 수강료 · 모집 관리 (academy.html 클라우드 직결) -->
         <div id="coachSubPanel_pricing" style="display: none;">
           <div class="panel-card" id="academyPricingConfigSection" style="margin-top: 0; border-top: 4px solid #b88e2f;">
             <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
@@ -3859,16 +3864,16 @@
                 <span class="panel-icon" style="background: #fef9e7; color: #9a6d12; font-size: 1.5rem;">💰</span>
                 <div>
                   <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                    <h2 class="panel-title" style="margin: 0;">6-3. 과정별 수강료 · 코치 예상수익 설정</h2>
+                    <h2 class="panel-title" style="margin: 0;">6-3. 과정별 수강료 · 모집 관리</h2>
                     <span class="badge" style="background: #fef9e7; color: #9a6d12; border: 1px solid #ead496; font-size: 0.74rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">academy.html 실시간 클라우드 반영</span>
                   </div>
                   <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
-                    4대 웰라이프 + 디지털 자서전 <strong>5개 4주 단일 정규과정</strong>의 정상가·특가·건당 코치 예상수익·모집 상태를 수정하면 <strong>아카데미 사이트(PC·모바일)와 월 수익 시뮬레이터</strong>에 즉시 반영됩니다.
+                    4대 웰라이프 + 디지털 자서전 <strong>5개 4주 단일 정규과정</strong>의 정상가·1기 특가·모집 상태와 기수 안내 문구를 수정하면 <strong>아카데미 사이트(PC·모바일)</strong>에 즉시 반영됩니다.
                   </p>
                 </div>
               </div>
               <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
-                <a href="academy.html" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
+                <a href="academy.html#businesses" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
                   <span>🎓</span> 아카데미 라이브 확인 ↗
                 </a>
                 <button type="button" class="btn-save-setting" onclick="resetAcademyCoursePricingSettings()" style="background: #ffffff; color: var(--text-main); border: 1.2px solid var(--border-color); font-weight: 750;">
@@ -3880,14 +3885,10 @@
               </div>
             </div>
 
-            <!-- 공통 모집 배너 & 예상수익 공개 설정 -->
+            <!-- 공통 모집 배너 설정 -->
             <div style="background: #faf9f5; border: 1.3px solid #e5dfd0; border-radius: 14px; padding: 14px 16px; margin: 16px 0;">
               <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
-                <strong style="font-size: 0.88rem; color: #14281f;">📢 아카데미 공통 모집 문구 &amp; 예상수익 공개 옵션</strong>
-                <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 850; color: #1e4d35; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 5px 12px; border-radius: 999px; cursor: pointer;">
-                  <input type="checkbox" id="cfgAcadShowRevenue" checked style="width: 15px; height: 15px; accent-color: #1e4d35;">
-                  <span>💰 사이트에 코치 예상수익 &amp; 수익 시뮬레이터 공개</span>
-                </label>
+                <strong style="font-size: 0.88rem; color: #14281f;">📢 아카데미 공통 모집 기수 · 개강 일정 안내</strong>
               </div>
               <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
                 <div>
@@ -3903,13 +3904,9 @@
                   <input type="text" id="cfgAcadOpeningDate" class="setting-input" placeholder="예: 매월 첫째 주 개강 (평일반 / 주말반)" style="background:#fff; font-size:0.84rem;">
                 </div>
               </div>
-              <div style="margin-top: 10px;">
-                <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">예상 수익 하단 고지 문구 (법적 안내)</label>
-                <input type="text" id="cfgAcadDisclaimer" class="setting-input" style="background:#fff; font-size:0.82rem;">
-              </div>
             </div>
 
-            <!-- 5대 비즈니스 4주 정규과정 개별 가격 · 수익 편집 리스트 -->
+            <!-- 5대 비즈니스 4주 정규과정 개별 수강료 편집 리스트 -->
             <div id="academyCoursePricingList" style="display: flex; flex-direction: column; gap: 12px;">
               <!-- JS 동적 렌더링 -->
             </div>
@@ -3917,7 +3914,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
               <span id="academyPricingLastSaved" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;"></span>
               <button type="button" class="btn-save-setting" onclick="saveAcademyCoursePricingSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; padding: 10px 22px; cursor: pointer;">
-                <span>💾</span> 5대 과정 수강료 · 예상수익 저장 및 즉시 반영
+                <span>💾</span> 5대 과정 수강료 · 모집 상태 저장 및 즉시 반영
               </button>
             </div>
           </div>
@@ -3967,6 +3964,126 @@
               <button type="button" class="btn-save-setting" onclick="saveAcademyCurriculumSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; padding: 10px 22px; cursor: pointer;">
                 <span>💾</span> 커리큘럼 저장 &amp; 아카데미 사이트 즉시 반영
               </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 📸 6-5. 현장 진행사례 · 사진 갤러리 관리 (academy.html #cases 실시간 클라우드 직결) -->
+        <div id="coachSubPanel_cases" style="display: none;">
+          <div class="panel-card" id="academyCasesSection" style="margin-top: 0; border-top: 4px solid #2d6a4f;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon" style="background: #eaf5ee; color: #2d6a4f; font-size: 1.5rem;">📸</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h2 class="panel-title" style="margin: 0;">6-5. 현장 진행사례 · 사진 관리</h2>
+                    <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.74rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">academy.html 실시간 클라우드 반영</span>
+                  </div>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                    5대 비즈니스별 <strong>실제 현장 사진(최대 3장 · 자동 압축)과 진행 스토리</strong>를 등록하면 아카데미 사이트 <strong>03. 현장 진행사례</strong>에 즉시 게시됩니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <a href="academy.html#cases" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
+                  <span>📸</span> 진행사례 라이브 보기 ↗
+                </a>
+                <button type="button" class="btn-save-setting" onclick="resetAdminAcademyDefaultCases()" style="background: #ffffff; color: var(--text-main); border: 1.2px solid var(--border-color); font-weight: 750;">
+                  <span>🔄</span> 기본 샘플 복원
+                </button>
+                <button type="button" class="btn-save-setting" onclick="resetAdminCaseForm(true)" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; cursor: pointer;">
+                  <span>➕</span> 새 진행사례 작성
+                </button>
+              </div>
+            </div>
+
+            <!-- 신규 등록 / 수정 폼 카드 -->
+            <div id="adminCaseEditorCard" style="background: #faf9f5; border: 1.5px solid #dfd8c7; border-radius: 16px; padding: 18px 20px; margin: 16px 0 22px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px dashed #d6cfc0;">
+                <strong id="adminCaseFormTitle" style="font-size: 0.96rem; color: #14281f;">➕ 새 현장 진행사례 등록</strong>
+                <span style="font-size: 0.76rem; color: #64748b; font-weight: 700;">사진은 자동 리사이즈·압축되어 스마트폰·PC 모두 빠르게 표시됩니다</span>
+              </div>
+              <input type="hidden" id="caseEditId" value="">
+
+              <div style="display: grid; grid-template-columns: 1fr 1.6fr; gap: 12px; margin-bottom: 12px;">
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">해당 과정 분류 *</label>
+                  <select id="caseEditCourseId" class="setting-input" style="background: #fff; font-weight: 800; font-size: 0.85rem;">
+                    <!-- JS 동적 채움 -->
+                  </select>
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">진행사례 제목 *</label>
+                  <input type="text" id="caseEditTitle" class="setting-input" placeholder="예: 서울 강남구 70대 어르신 180분 뷰티 리셋 &amp; 외출 스냅" style="background: #fff; font-weight: 800; font-size: 0.86rem;">
+                </div>
+              </div>
+
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin-bottom: 12px;">
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">📍 진행 지역</label>
+                  <input type="text" id="caseEditLocation" class="setting-input" placeholder="예: 서울 강남구" style="background: #fff; font-size: 0.84rem;">
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">👤 담당 코치</label>
+                  <input type="text" id="caseEditCoachName" class="setting-input" placeholder="예: 김서연 공인코치" style="background: #fff; font-size: 0.84rem;">
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">📅 진행 연월</label>
+                  <input type="text" id="caseEditDate" class="setting-input" placeholder="예: 2026.11" style="background: #fff; font-size: 0.84rem;">
+                </div>
+              </div>
+
+              <div style="margin-bottom: 14px;">
+                <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">📝 현장 진행 내용 · 활동 스토리 *</label>
+                <textarea id="caseEditSummary" class="setting-textarea" rows="3" placeholder="어르신 댁에서 어떤 과정으로 진행되었고 어떤 따뜻한 변화가 있었는지 기록해 주세요." style="background: #fff; font-size: 0.85rem;"></textarea>
+              </div>
+
+              <!-- 📸 현장 사진 업로드 (최대 3장) -->
+              <div style="margin-bottom: 14px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-wrap: wrap; gap: 6px;">
+                  <label style="font-size: 0.78rem; font-weight: 850; color: #14281f;">📸 현장 사진 첨부 (최대 3장 · 첫 번째 사진이 대표 썸네일)</label>
+                  <span id="casePhotoUploadStatus" style="font-size: 0.75rem; font-weight: 800; color: #047857;"></span>
+                </div>
+                <div id="casePhotoDropzone"
+                  onclick="document.getElementById('casePhotoFileInput').click()"
+                  ondragover="event.preventDefault(); this.style.borderColor='#1e4d35'; this.style.background='#eef6f1';"
+                  ondragleave="this.style.borderColor='#cbd5e1'; this.style.background='#ffffff';"
+                  ondrop="handleAdminCasePhotoDrop(event)"
+                  style="border: 2px dashed #cbd5e1; border-radius: 14px; background: #ffffff; padding: 18px 14px; text-align: center; cursor: pointer; transition: all 0.18s;">
+                  <input type="file" id="casePhotoFileInput" accept="image/*" multiple style="display: none;" onchange="handleAdminCasePhotoUpload(this.files); this.value='';">
+                  <div style="font-size: 1.5rem; margin-bottom: 4px;">🖼️</div>
+                  <div style="font-size: 0.86rem; font-weight: 850; color: #14281f;">클릭하거나 사진을 여기로 끌어다 놓으세요</div>
+                  <div style="font-size: 0.75rem; color: #64748b; margin-top: 3px;">JPG · PNG · WEBP 지원 · 최대 3장 (자동 고화질 경량 압축 후 클라우드 저장)</div>
+                </div>
+                <div id="casePhotoPreviewGrid" style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 12px;">
+                  <!-- 업로드된 사진 미리보기 -->
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding-top: 12px; border-top: 1px solid #e5dfd0;">
+                <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 0.83rem; font-weight: 850; color: #14281f; cursor: pointer;">
+                  <input type="checkbox" id="caseEditPublished" checked style="width: 16px; height: 16px; accent-color: #1e4d35;">
+                  <span>🌐 아카데미 사이트에 즉시 공개</span>
+                </label>
+                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                  <button type="button" onclick="resetAdminCaseForm(false)" style="padding: 9px 16px; border-radius: 10px; border: 1.2px solid #cbd5e1; background: #ffffff; color: #475569; font-size: 0.83rem; font-weight: 800; cursor: pointer;">
+                    초기화
+                  </button>
+                  <button type="button" id="btnSaveAdminCase" onclick="saveAdminAcademyCase()" style="padding: 10px 22px; border-radius: 10px; border: 1px solid #c9a24b; background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; font-size: 0.86rem; font-weight: 850; cursor: pointer;">
+                    💾 진행사례 저장 &amp; 사이트 즉시 반영
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 등록된 진행사례 필터 & 목록 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+              <strong style="font-size: 0.96rem; color: #0f172a;">🗂️ 등록된 현장 진행사례 목록 <span id="adminAcademyCasesCount" style="color: #2d6a4f;">(0건)</span></strong>
+              <div id="adminAcademyCasesFilterBar" style="display: flex; gap: 6px; flex-wrap: wrap;"></div>
+            </div>
+
+            <div id="adminAcademyCasesList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 14px;">
+              <!-- JS 동적 렌더링 -->
             </div>
           </div>
         </div>
@@ -6497,15 +6614,16 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum') ? subKey : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum' || subKey === 'cases') ? subKey : 'academy';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
 
       var map = {
         academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강생 · 수료 관리' },
         pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코치 명단 (배정 풀)' },
-        pricing: { panel: 'coachSubPanel_pricing', btn: 'sideSub_coach_pricing', label: '<span>💰</span> 06. 코치 아카데미 · 6-3 과정 수강료 · 예상수익 설정' },
-        curriculum: { panel: 'coachSubPanel_curriculum', btn: 'sideSub_coach_curriculum', label: '<span>📚</span> 06. 코치 아카데미 · 6-4 4주 커리큘럼 관리' }
+        pricing: { panel: 'coachSubPanel_pricing', btn: 'sideSub_coach_pricing', label: '<span>💰</span> 06. 코치 아카데미 · 6-3 과정 수강료 · 모집 관리' },
+        curriculum: { panel: 'coachSubPanel_curriculum', btn: 'sideSub_coach_curriculum', label: '<span>📚</span> 06. 코치 아카데미 · 6-4 4주 커리큘럼 관리' },
+        cases: { panel: 'coachSubPanel_cases', btn: 'sideSub_coach_cases', label: '<span>📸</span> 06. 코치 아카데미 · 6-5 현장 진행사례 · 사진 관리' }
       };
 
       Object.keys(map).forEach(function(k) {
@@ -6524,6 +6642,7 @@
       if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
       if (currentCoachSubTab === 'pricing' && typeof renderAcademyCoursePricingEditor === 'function') renderAcademyCoursePricingEditor();
       if (currentCoachSubTab === 'curriculum' && typeof renderAcademyCurriculumEditor === 'function') renderAcademyCurriculumEditor();
+      if (currentCoachSubTab === 'cases' && typeof renderAdminAcademyCasesManager === 'function') renderAdminAcademyCasesManager();
 
       var mainEl = document.querySelector('.admin-main');
       if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6536,7 +6655,7 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum') ? subKey : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum' || subKey === 'cases') ? subKey : 'academy';
       switchTab('tabCoachControl');
       switchCoachSubTab(currentCoachSubTab);
     }
@@ -14317,19 +14436,28 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     }
     window.deleteAcademyRequest = deleteAcademyRequest;
 
-    // ================= 5-2. 💰 6-3 과정 수강료 · 예상수익 실시간 관리 엔진 =================
+    // ================= 5-2. 💰 6-3 과정 수강료 · 모집 관리 실시간 엔진 =================
     let _adminAcademyCloudBound = false;
     function initAdminAcademyCloudSync() {
       if (_adminAcademyCloudBound || typeof fbDb === 'undefined' || !fbDb) return;
       _adminAcademyCloudBound = true;
 
-      // 1) 과정 가격·수익·커리큘럼 설정 클라우드 실시간 수신
+      // 1) 과정 수강료·모집·커리큘럼 설정 클라우드 실시간 수신
       if (window.YebaekAcademyConfig) {
         window.YebaekAcademyConfig.loadFromCloud(fbDb, function () {
           if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'pricing') {
             renderAcademyCoursePricingEditor();
           } else if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'curriculum') {
             renderAcademyCurriculumEditor();
+          }
+        });
+      }
+
+      // 1-b) 현장 진행사례·사진 갤러리 클라우드 실시간 수신
+      if (window.YebaekAcademyCases) {
+        window.YebaekAcademyCases.loadFromCloud(fbDb, function () {
+          if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'cases' && typeof renderAdminAcademyCasesList === 'function') {
+            renderAdminAcademyCasesList();
           }
         });
       }
@@ -14379,17 +14507,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (!window.YebaekAcademyConfig) return;
       const cfg = window.YebaekAcademyConfig.getConfig();
 
-      const elShow = document.getElementById('cfgAcadShowRevenue');
       const elCohort = document.getElementById('cfgAcadCohortLabel');
       const elCap = document.getElementById('cfgAcadCapacityNote');
       const elOpen = document.getElementById('cfgAcadOpeningDate');
-      const elDisc = document.getElementById('cfgAcadDisclaimer');
       const elSaved = document.getElementById('academyPricingLastSaved');
-      if (elShow) elShow.checked = cfg.showRevenuePublic !== false;
       if (elCohort) elCohort.value = cfg.cohortLabel || '';
       if (elCap) elCap.value = cfg.capacityNote || '';
       if (elOpen) elOpen.value = cfg.nextOpeningDate || '';
-      if (elDisc) elDisc.value = cfg.revenueDisclaimer || '';
       if (elSaved) elSaved.textContent = cfg.updatedAt ? ('마지막 저장: ' + cfg.updatedAt) : '기본 표준 설정 사용 중';
 
       const wrap = document.getElementById('academyCoursePricingList');
@@ -14397,8 +14521,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
       wrap.innerHTML = cfg.courses.map(function (c, idx) {
         const discPct = window.YebaekAcademyConfig.calcDiscountPercent(c.regularPrice, c.salePrice);
-        const payback = window.YebaekAcademyConfig.calcPaybackCount(c.salePrice, c.coachFeePerCase);
-        const estMonth = (Number(c.coachFeePerCase) || 0) * (Number(c.recommendedMonthlyCount) || 1);
+        const saveAmt = Math.max(0, (Number(c.regularPrice) || 0) - (Number(c.salePrice) || 0));
         return `
           <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-left: 5px solid ${escapeHtml(c.accentColor || '#1e4d35')}; border-radius: 14px; padding: 15px 18px;">
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #e2e8f0;">
@@ -14409,7 +14532,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               </div>
               <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                 <span id="acadCalcSummary_${idx}" style="font-size: 0.78rem; font-weight: 850; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 999px;">
-                  ${discPct > 0 ? discPct + '% 할인 · ' : ''}예상 월수익 ${estMonth.toLocaleString()}원 · ${payback > 0 ? '약 ' + payback + '회 활동 시 수강료 회수' : '회수 계산'}
+                  ${discPct > 0 ? ('1기 특가 ' + discPct + '% 할인 (' + saveAmt.toLocaleString() + '원 절약)') : '정가 동일 노출'}
                 </span>
                 <select id="acadCourseStatus_${idx}" style="padding: 5px 10px; border-radius: 8px; border: 1.2px solid #cbd5e1; font-size: 0.78rem; font-weight: 850; background: #fff;">
                   <option value="모집중" ${(c.status || '모집중') === '모집중' ? 'selected' : ''}>🟢 모집중</option>
@@ -14419,7 +14542,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">
               <div>
                 <label style="display:block; font-size:0.75rem; font-weight:800; color:#64748b; margin-bottom:4px;">정상 수강료 (원)</label>
                 <input type="number" id="acadCourseReg_${idx}" value="${Number(c.regularPrice) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:800; font-size:0.88rem;">
@@ -14428,19 +14551,6 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
                 <label style="display:block; font-size:0.75rem; font-weight:800; color:#b83354; margin-bottom:4px;">1기 특별 수강료 (원)</label>
                 <input type="number" id="acadCourseSale_${idx}" value="${Number(c.salePrice) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:900; font-size:0.88rem; border-color:#f5c6be; color:#b83354;">
               </div>
-              <div>
-                <label style="display:block; font-size:0.75rem; font-weight:800; color:#1e4d35; margin-bottom:4px;">건당 코치 예상수익 (원)</label>
-                <input type="number" id="acadCourseFee_${idx}" value="${Number(c.coachFeePerCase) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:900; font-size:0.88rem; border-color:#a7f3d0; color:#1e4d35;">
-              </div>
-              <div>
-                <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">월 권장 활동 건수 (회)</label>
-                <input type="number" id="acadCourseMonthly_${idx}" value="${Number(c.recommendedMonthlyCount) || 2}" step="1" min="1" max="30" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:800; font-size:0.88rem;">
-              </div>
-            </div>
-
-            <div style="margin-top: 10px;">
-              <label style="display:block; font-size:0.74rem; font-weight:800; color:#64748b; margin-bottom:3px;">예상 수익 설명 문구 (아카데미 페이지 노출)</label>
-              <input type="text" id="acadCourseFeeNote_${idx}" value="${escapeHtml(c.coachFeeNote || '')}" class="setting-input" style="font-size:0.82rem; background:#f8fafc;">
             </div>
           </div>
         `;
@@ -14452,14 +14562,11 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (!window.YebaekAcademyConfig) return;
       const reg = Number(document.getElementById('acadCourseReg_' + idx)?.value) || 0;
       const sale = Number(document.getElementById('acadCourseSale_' + idx)?.value) || 0;
-      const fee = Number(document.getElementById('acadCourseFee_' + idx)?.value) || 0;
-      const mon = Math.max(1, Number(document.getElementById('acadCourseMonthly_' + idx)?.value) || 1);
       const disc = window.YebaekAcademyConfig.calcDiscountPercent(reg, sale);
-      const payback = window.YebaekAcademyConfig.calcPaybackCount(sale, fee);
-      const estMonth = fee * mon;
+      const saveAmt = Math.max(0, reg - sale);
       const badge = document.getElementById('acadCalcSummary_' + idx);
       if (badge) {
-        badge.textContent = (disc > 0 ? disc + '% 할인 · ' : '') + '예상 월수익 ' + estMonth.toLocaleString() + '원' + (payback > 0 ? ' · 약 ' + payback + '회 활동 시 수강료 회수' : '');
+        badge.textContent = disc > 0 ? ('1기 특가 ' + disc + '% 할인 (' + saveAmt.toLocaleString() + '원 절약)') : '정가 동일 노출';
       }
     }
     window.updateAcademyCourseCalcPreview = updateAcademyCourseCalcPreview;
@@ -14467,19 +14574,15 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     async function saveAcademyCoursePricingSettings() {
       if (!window.YebaekAcademyConfig) return;
       const cfg = window.YebaekAcademyConfig.getConfig();
-      cfg.showRevenuePublic = document.getElementById('cfgAcadShowRevenue')?.checked !== false;
+      cfg.showRevenuePublic = false;
       cfg.cohortLabel = document.getElementById('cfgAcadCohortLabel')?.value.trim() || cfg.cohortLabel;
       cfg.capacityNote = document.getElementById('cfgAcadCapacityNote')?.value.trim() || cfg.capacityNote;
       cfg.nextOpeningDate = document.getElementById('cfgAcadOpeningDate')?.value.trim() || cfg.nextOpeningDate;
-      cfg.revenueDisclaimer = document.getElementById('cfgAcadDisclaimer')?.value.trim() || cfg.revenueDisclaimer;
 
       cfg.courses = cfg.courses.map(function (c, idx) {
         return Object.assign({}, c, {
           regularPrice: Math.max(0, Number(document.getElementById('acadCourseReg_' + idx)?.value) || 0),
           salePrice: Math.max(0, Number(document.getElementById('acadCourseSale_' + idx)?.value) || 0),
-          coachFeePerCase: Math.max(0, Number(document.getElementById('acadCourseFee_' + idx)?.value) || 0),
-          recommendedMonthlyCount: Math.max(1, Number(document.getElementById('acadCourseMonthly_' + idx)?.value) || 1),
-          coachFeeNote: document.getElementById('acadCourseFeeNote_' + idx)?.value.trim() || c.coachFeeNote,
           status: document.getElementById('acadCourseStatus_' + idx)?.value || '모집중'
         });
       });
@@ -14487,7 +14590,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const res = await window.YebaekAcademyConfig.saveConfig(cfg, typeof fbDb !== 'undefined' ? fbDb : null);
       renderAcademyCoursePricingEditor();
       alert(
-        '✅ 5대 4주 정규과정의 수강료 및 코치 예상수익 설정이 저장되었습니다!\n\n' +
+        '✅ 5대 4주 정규과정의 수강료 및 모집 상태가 저장되었습니다!\n\n' +
         (res.cloudSaved
           ? '☁️ Firebase 클라우드 동기화 완료 — 아카데미 사이트(PC·모바일)에 즉시 반영됩니다.'
           : '💾 로컬 저장 완료 — 같은 브라우저의 아카데미 사이트에 즉시 반영됩니다.')
@@ -14497,10 +14600,19 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
     async function resetAcademyCoursePricingSettings() {
       if (!window.YebaekAcademyConfig) return;
-      if (!confirm('5대 4주 정규과정의 수강료 및 코치 예상수익을 표준 기본값으로 복원하시겠습니까?')) return;
-      await window.YebaekAcademyConfig.resetDefault(typeof fbDb !== 'undefined' ? fbDb : null);
+      if (!confirm('5대 4주 정규과정의 수강료 및 모집 문구를 표준 기본값으로 복원하시겠습니까?')) return;
+      const cfg = window.YebaekAcademyConfig.getConfig();
+      const def = window.YebaekAcademyConfig.DEFAULT_CONFIG;
+      cfg.cohortLabel = def.cohortLabel;
+      cfg.capacityNote = def.capacityNote;
+      cfg.nextOpeningDate = def.nextOpeningDate;
+      cfg.courses = cfg.courses.map(function (c) {
+        const dc = (def.courses || []).find(x => x.id === c.id);
+        return dc ? Object.assign({}, c, { regularPrice: dc.regularPrice, salePrice: dc.salePrice, status: dc.status }) : c;
+      });
+      await window.YebaekAcademyConfig.saveConfig(cfg, typeof fbDb !== 'undefined' ? fbDb : null);
       renderAcademyCoursePricingEditor();
-      alert('🔄 표준 기본 수강료·예상수익으로 복원되었습니다.');
+      alert('🔄 표준 기본 수강료로 복원되었습니다.');
     }
     window.resetAcademyCoursePricingSettings = resetAcademyCoursePricingSettings;
 
@@ -14680,7 +14792,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (!window.YebaekAcademyConfig) return;
       const defCourse = (window.YebaekAcademyConfig.DEFAULT_CONFIG.courses || []).find(c => c.id === currentAdminCurrCourseId);
       if (!defCourse) return;
-      if (!confirm('[' + defCourse.title + '] 과정의 소개 및 1~4주차 커리큘럼만 표준 기본값으로 복원하시겠습니까?\n(6-3에서 설정한 수강료와 예상수익은 그대로 유지됩니다.)')) return;
+      if (!confirm('[' + defCourse.title + '] 과정의 소개 및 1~4주차 커리큘럼만 표준 기본값으로 복원하시겠습니까?\n(6-3에서 설정한 수강료와 모집 상태는 그대로 유지됩니다.)')) return;
 
       const cfg = window.YebaekAcademyConfig.getConfig();
       const target = cfg.courses.find(c => c.id === currentAdminCurrCourseId);
@@ -14700,6 +14812,355 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       alert('🔄 [' + target.title + '] 커리큘럼이 표준 기본값으로 복원되었습니다.');
     }
     window.resetSingleCourseCurriculum = resetSingleCourseCurriculum;
+
+    // ================= 5-4. 📸 6-5 현장 진행사례 · 사진 업로드 & 실시간 관리 엔진 =================
+    let workingAdminCasePhotos = [];
+    let currentAdminCaseFilter = 'all';
+
+    function renderAdminAcademyCasesManager() {
+      if (!window.YebaekAcademyCases || !window.YebaekAcademyConfig) return;
+      const courses = window.YebaekAcademyConfig.getConfig().courses || [];
+      const sel = document.getElementById('caseEditCourseId');
+      if (sel) {
+        const prev = sel.value;
+        sel.innerHTML = courses.map(c =>
+          `<option value="${escapeHtml(c.id)}">${escapeHtml(c.icon || '🎓')} ${escapeHtml(c.code)}. ${escapeHtml(c.title)}</option>`
+        ).join('');
+        if (prev && courses.some(c => c.id === prev)) sel.value = prev;
+      }
+      const dateEl = document.getElementById('caseEditDate');
+      if (dateEl && !dateEl.value) {
+        dateEl.value = new Date().toISOString().slice(0, 7).replace('-', '.');
+      }
+      renderAdminCasePhotoPreviews();
+      renderAdminAcademyCasesList();
+    }
+    window.renderAdminAcademyCasesManager = renderAdminAcademyCasesManager;
+
+    function renderAdminCasePhotoPreviews() {
+      const wrap = document.getElementById('casePhotoPreviewGrid');
+      const statusEl = document.getElementById('casePhotoUploadStatus');
+      if (!wrap) return;
+      if (statusEl) {
+        statusEl.textContent = workingAdminCasePhotos.length > 0
+          ? ('첨부 완료: ' + workingAdminCasePhotos.length + ' / 3장')
+          : '사진을 첨부해 주세요 (미첨부 시 과정 기본 이미지 사용)';
+      }
+      if (!workingAdminCasePhotos.length) {
+        wrap.innerHTML = '';
+        return;
+      }
+      wrap.innerHTML = workingAdminCasePhotos.map((src, idx) => {
+        const isDataUrl = String(src).indexOf('data:') === 0;
+        const sizeKb = isDataUrl ? Math.round((src.length * 3) / 4 / 1024) : 0;
+        return `
+          <div style="position: relative; width: 152px; border-radius: 12px; overflow: hidden; border: ${idx === 0 ? '2px solid #c9a24b' : '1.3px solid #cbd5e1'}; background: #ffffff; box-shadow: 0 4px 10px rgba(0,0,0,0.06);">
+            <img src="${escapeHtml(src)}" alt="첨부 사진 ${idx + 1}" style="width: 100%; height: 102px; object-fit: cover; display: block;">
+            ${idx === 0
+              ? '<span style="position:absolute; top:6px; left:6px; background:#14281f; color:#f6e7c1; font-size:0.68rem; font-weight:900; padding:2px 7px; border-radius:999px;">⭐ 대표사진</span>'
+              : `<button type="button" onclick="setAdminCaseCoverPhoto(${idx})" style="position:absolute; top:6px; left:6px; background:rgba(255,255,255,0.92); color:#14281f; border:1px solid #cbd5e1; font-size:0.68rem; font-weight:850; padding:2px 7px; border-radius:999px; cursor:pointer;">대표로</button>`
+            }
+            <button type="button" onclick="removeAdminCasePhoto(${idx})" title="사진 삭제" style="position:absolute; top:6px; right:6px; width:22px; height:22px; border-radius:50%; border:none; background:rgba(220,38,38,0.9); color:#fff; font-size:0.74rem; font-weight:900; cursor:pointer; display:inline-flex; align-items:center; justify-content:center;">✕</button>
+            <div style="padding: 4px 8px; font-size: 0.7rem; color: #64748b; font-weight: 750; text-align: center;">
+              사진 ${idx + 1}${sizeKb > 0 ? ' · ' + sizeKb + 'KB' : ' · 기본'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function handleAdminCasePhotoUpload(fileList) {
+      if (!fileList || !fileList.length || !window.YebaekAcademyCases) return;
+      const remain = 3 - workingAdminCasePhotos.length;
+      if (remain <= 0) {
+        alert('현장 사진은 진행사례당 최대 3장까지 첨부할 수 있습니다. 기존 사진을 삭제한 뒤 추가해 주세요.');
+        return;
+      }
+      const files = Array.from(fileList).filter(f => f && f.type && f.type.indexOf('image/') === 0).slice(0, remain);
+      if (!files.length) {
+        alert('이미지 파일(JPG, PNG, WEBP 등)만 업로드할 수 있습니다.');
+        return;
+      }
+      const statusEl = document.getElementById('casePhotoUploadStatus');
+      if (statusEl) statusEl.textContent = '⏳ 사진 최적화 및 압축 중...';
+
+      for (let i = 0; i < files.length; i++) {
+        try {
+          const compressed = await window.YebaekAcademyCases.compressImage(files[i], 1080, 0.78);
+          workingAdminCasePhotos.push(compressed.dataUrl);
+        } catch (err) {
+          console.warn('[Admin Case Photo Compress]', err);
+          alert('사진 처리 중 오류가 발생했습니다: ' + (files[i].name || '이미지'));
+        }
+      }
+      renderAdminCasePhotoPreviews();
+    }
+    window.handleAdminCasePhotoUpload = handleAdminCasePhotoUpload;
+
+    function handleAdminCasePhotoDrop(ev) {
+      ev.preventDefault();
+      const dz = document.getElementById('casePhotoDropzone');
+      if (dz) {
+        dz.style.borderColor = '#cbd5e1';
+        dz.style.background = '#ffffff';
+      }
+      if (ev.dataTransfer && ev.dataTransfer.files) {
+        handleAdminCasePhotoUpload(ev.dataTransfer.files);
+      }
+    }
+    window.handleAdminCasePhotoDrop = handleAdminCasePhotoDrop;
+
+    function setAdminCaseCoverPhoto(idx) {
+      if (idx <= 0 || idx >= workingAdminCasePhotos.length) return;
+      const picked = workingAdminCasePhotos.splice(idx, 1)[0];
+      workingAdminCasePhotos.unshift(picked);
+      renderAdminCasePhotoPreviews();
+    }
+    window.setAdminCaseCoverPhoto = setAdminCaseCoverPhoto;
+
+    function removeAdminCasePhoto(idx) {
+      workingAdminCasePhotos.splice(idx, 1);
+      renderAdminCasePhotoPreviews();
+    }
+    window.removeAdminCasePhoto = removeAdminCasePhoto;
+
+    function resetAdminCaseForm(scrollToForm) {
+      const idEl = document.getElementById('caseEditId');
+      const titleEl = document.getElementById('caseEditTitle');
+      const locEl = document.getElementById('caseEditLocation');
+      const coachEl = document.getElementById('caseEditCoachName');
+      const dateEl = document.getElementById('caseEditDate');
+      const sumEl = document.getElementById('caseEditSummary');
+      const pubEl = document.getElementById('caseEditPublished');
+      const formTitleEl = document.getElementById('adminCaseFormTitle');
+      const btnEl = document.getElementById('btnSaveAdminCase');
+
+      if (idEl) idEl.value = '';
+      if (titleEl) titleEl.value = '';
+      if (locEl) locEl.value = '';
+      if (coachEl) coachEl.value = '';
+      if (dateEl) dateEl.value = new Date().toISOString().slice(0, 7).replace('-', '.');
+      if (sumEl) sumEl.value = '';
+      if (pubEl) pubEl.checked = true;
+      if (formTitleEl) formTitleEl.textContent = '➕ 새 현장 진행사례 등록';
+      if (btnEl) btnEl.textContent = '💾 진행사례 저장 & 사이트 즉시 반영';
+
+      workingAdminCasePhotos = [];
+      renderAdminCasePhotoPreviews();
+
+      if (scrollToForm) {
+        const card = document.getElementById('adminCaseEditorCard');
+        if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (titleEl) titleEl.focus();
+      }
+    }
+    window.resetAdminCaseForm = resetAdminCaseForm;
+
+    async function saveAdminAcademyCase() {
+      if (!window.YebaekAcademyCases || !window.YebaekAcademyConfig) return;
+      const id = (document.getElementById('caseEditId')?.value || '').trim();
+      const courseId = document.getElementById('caseEditCourseId')?.value || 'track_beauty';
+      const title = (document.getElementById('caseEditTitle')?.value || '').trim();
+      const location = (document.getElementById('caseEditLocation')?.value || '').trim();
+      const coachName = (document.getElementById('caseEditCoachName')?.value || '').trim();
+      const date = (document.getElementById('caseEditDate')?.value || '').trim() || new Date().toISOString().slice(0, 7).replace('-', '.');
+      const summary = (document.getElementById('caseEditSummary')?.value || '').trim();
+      const published = document.getElementById('caseEditPublished')?.checked !== false;
+
+      if (!title) {
+        alert('진행사례 제목을 입력해 주세요.');
+        document.getElementById('caseEditTitle')?.focus();
+        return;
+      }
+      if (!summary) {
+        alert('현장 진행 내용·스토리를 간단히 입력해 주세요.');
+        document.getElementById('caseEditSummary')?.focus();
+        return;
+      }
+
+      const courses = window.YebaekAcademyConfig.getConfig().courses || [];
+      const course = courses.find(c => c.id === courseId) || courses[0];
+      const photosToSave = workingAdminCasePhotos.length > 0
+        ? workingAdminCasePhotos.slice(0, 3)
+        : [course ? course.image : 'images/coach-academy-banner.jpg'];
+
+      const existing = id ? window.YebaekAcademyCases.getCases(true).find(c => c.id === id) : null;
+      const btnEl = document.getElementById('btnSaveAdminCase');
+      if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.textContent = '⏳ 클라우드 저장 중...';
+      }
+
+      const res = await window.YebaekAcademyCases.saveCase({
+        id: id || ('case_' + Date.now()),
+        courseId: courseId,
+        title: title,
+        location: location,
+        coachName: coachName,
+        date: date,
+        summary: summary,
+        photos: photosToSave,
+        published: published,
+        createdAt: existing ? existing.createdAt : Date.now()
+      }, typeof fbDb !== 'undefined' ? fbDb : null);
+
+      if (btnEl) {
+        btnEl.disabled = false;
+        btnEl.textContent = '💾 진행사례 저장 & 사이트 즉시 반영';
+      }
+
+      resetAdminCaseForm(false);
+      renderAdminAcademyCasesList();
+      alert(
+        '✅ [' + title + '] 현장 진행사례가 저장되었습니다!\n\n' +
+        (res.cloudSaved
+          ? '☁️ Firebase 클라우드 동기화 완료 — 아카데미 사이트(03. 현장 진행사례)에 즉시 반영됩니다.'
+          : '💾 로컬 저장 완료 — 같은 브라우저의 아카데미 사이트에 즉시 반영됩니다.')
+      );
+    }
+    window.saveAdminAcademyCase = saveAdminAcademyCase;
+
+    function editAdminAcademyCase(caseId) {
+      if (!window.YebaekAcademyCases) return;
+      const item = window.YebaekAcademyCases.getCases(true).find(c => c.id === caseId);
+      if (!item) return;
+
+      const idEl = document.getElementById('caseEditId');
+      const courseEl = document.getElementById('caseEditCourseId');
+      const titleEl = document.getElementById('caseEditTitle');
+      const locEl = document.getElementById('caseEditLocation');
+      const coachEl = document.getElementById('caseEditCoachName');
+      const dateEl = document.getElementById('caseEditDate');
+      const sumEl = document.getElementById('caseEditSummary');
+      const pubEl = document.getElementById('caseEditPublished');
+      const formTitleEl = document.getElementById('adminCaseFormTitle');
+      const btnEl = document.getElementById('btnSaveAdminCase');
+
+      if (idEl) idEl.value = item.id;
+      if (courseEl) courseEl.value = item.courseId || 'track_beauty';
+      if (titleEl) titleEl.value = item.title || '';
+      if (locEl) locEl.value = item.location || '';
+      if (coachEl) coachEl.value = item.coachName || '';
+      if (dateEl) dateEl.value = item.date || '';
+      if (sumEl) sumEl.value = item.summary || '';
+      if (pubEl) pubEl.checked = item.published !== false;
+      if (formTitleEl) formTitleEl.textContent = '✏️ 진행사례 수정 중: ' + (item.title || '');
+      if (btnEl) btnEl.textContent = '💾 수정 내용 저장 & 사이트 즉시 반영';
+
+      workingAdminCasePhotos = Array.isArray(item.photos) ? item.photos.slice(0, 3) : [];
+      renderAdminCasePhotoPreviews();
+
+      const card = document.getElementById('adminCaseEditorCard');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    window.editAdminAcademyCase = editAdminAcademyCase;
+
+    function setAdminCaseListFilter(courseId) {
+      currentAdminCaseFilter = courseId || 'all';
+      renderAdminAcademyCasesList();
+    }
+    window.setAdminCaseListFilter = setAdminCaseListFilter;
+
+    function renderAdminAcademyCasesList() {
+      if (!window.YebaekAcademyCases || !window.YebaekAcademyConfig) return;
+      const courses = window.YebaekAcademyConfig.getConfig().courses || [];
+      const courseMap = {};
+      courses.forEach(c => { courseMap[c.id] = c; });
+
+      const all = window.YebaekAcademyCases.getCases(true);
+      const filtered = currentAdminCaseFilter === 'all'
+        ? all
+        : all.filter(item => item.courseId === currentAdminCaseFilter);
+
+      const countEl = document.getElementById('adminAcademyCasesCount');
+      if (countEl) countEl.textContent = '(' + all.length + '건)';
+
+      const filterEl = document.getElementById('adminAcademyCasesFilterBar');
+      if (filterEl) {
+        const chips = [
+          `<button type="button" onclick="setAdminCaseListFilter('all')" style="padding:5px 11px; border-radius:999px; font-size:0.76rem; font-weight:850; cursor:pointer; ${currentAdminCaseFilter === 'all' ? 'background:#14281f; color:#f6e7c1; border:1px solid #c9a24b;' : 'background:#fff; color:#475569; border:1px solid #cbd5e1;'}">전체 (${all.length})</button>`
+        ];
+        courses.forEach(c => {
+          const cnt = all.filter(item => item.courseId === c.id).length;
+          const isAct = currentAdminCaseFilter === c.id;
+          chips.push(
+            `<button type="button" onclick="setAdminCaseListFilter('${escapeHtml(c.id)}')" style="padding:5px 11px; border-radius:999px; font-size:0.76rem; font-weight:850; cursor:pointer; ${isAct ? 'background:#14281f; color:#f6e7c1; border:1px solid #c9a24b;' : 'background:#fff; color:#475569; border:1px solid #cbd5e1;'}">${escapeHtml(c.icon)} ${escapeHtml(c.shortName)} (${cnt})</button>`
+          );
+        });
+        filterEl.innerHTML = chips.join('');
+      }
+
+      const listEl = document.getElementById('adminAcademyCasesList');
+      if (!listEl) return;
+      if (!filtered.length) {
+        listEl.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 36px 16px; border: 1.4px dashed #cbd5e1; border-radius: 14px; color: #64748b; font-weight: 700;">등록된 현장 진행사례가 없습니다. 위 폼에서 현장 사진과 함께 첫 사례를 등록해 보세요.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(item => {
+        const course = courseMap[item.courseId] || courses[0] || { icon: '🌿', shortName: '현장 사례', accentColor: '#1e4d35', image: 'images/coach-academy-banner.jpg' };
+        const photos = Array.isArray(item.photos) && item.photos.length > 0 ? item.photos : [course.image || 'images/coach-academy-banner.jpg'];
+        const isPub = item.published !== false;
+        return `
+          <div style="background: #ffffff; border: 1.4px solid ${isPub ? '#e2e8f0' : '#fecaca'}; border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 3px 10px rgba(0,0,0,0.04);">
+            <div style="position: relative; height: 168px; background: #14281f; overflow: hidden;">
+              <img src="${escapeHtml(photos[0])}" alt="${escapeHtml(item.title)}" style="width: 100%; height: 100%; object-fit: cover; display: block; ${isPub ? '' : 'opacity: 0.55; filter: grayscale(40%);'}">
+              <span style="position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,0.94); color: ${escapeHtml(course.accentColor || '#1e4d35')}; font-size: 0.72rem; font-weight: 850; padding: 3px 9px; border-radius: 999px;">
+                ${escapeHtml(course.icon)} ${escapeHtml(course.shortName)}
+              </span>
+              <span style="position: absolute; top: 10px; right: 10px; background: rgba(16,38,29,0.82); color: #f6e7c1; font-size: 0.7rem; font-weight: 850; padding: 3px 8px; border-radius: 999px;">
+                📷 ${photos.length}장
+              </span>
+            </div>
+            <div style="padding: 14px 16px; display: flex; flex-direction: column; flex: 1; gap: 6px;">
+              <div style="font-size: 0.73rem; color: #64748b; font-weight: 750;">
+                ${item.location ? '📍 ' + escapeHtml(item.location) : ''}${item.coachName ? ' · 👤 ' + escapeHtml(item.coachName) : ''}${item.date ? ' · 📅 ' + escapeHtml(item.date) : ''}
+              </div>
+              <strong style="font-size: 0.93rem; color: #0f172a; line-height: 1.38;">${escapeHtml(item.title)}</strong>
+              <p style="font-size: 0.8rem; color: #475569; line-height: 1.55; margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; flex: 1;">${escapeHtml(item.summary || '')}</p>
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 6px; padding-top: 10px; margin-top: 6px; border-top: 1px dashed #e2e8f0; flex-wrap: wrap;">
+                <button type="button" onclick="toggleAdminAcademyCasePublish('${escapeHtml(item.id)}', ${isPub ? 'false' : 'true'})" style="padding: 4px 10px; border-radius: 999px; font-size: 0.73rem; font-weight: 850; cursor: pointer; border: 1px solid ${isPub ? '#a7f3d0' : '#fca5a5'}; background: ${isPub ? '#ecfdf5' : '#fef2f2'}; color: ${isPub ? '#047857' : '#b91c1c'};">
+                  ${isPub ? '🌐 공개중' : '🔒 비공개'}
+                </button>
+                <div style="display: flex; gap: 6px;">
+                  <button type="button" onclick="editAdminAcademyCase('${escapeHtml(item.id)}')" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-size: 0.75rem; font-weight: 800; cursor: pointer;">✏️ 수정</button>
+                  <button type="button" onclick="deleteAdminAcademyCase('${escapeHtml(item.id)}')" style="padding: 5px 10px; border-radius: 8px; border: 1px solid #fecaca; background: #fff1f2; color: #dc2626; font-size: 0.75rem; font-weight: 800; cursor: pointer;">🗑️ 삭제</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    window.renderAdminAcademyCasesList = renderAdminAcademyCasesList;
+
+    async function toggleAdminAcademyCasePublish(caseId, nextPub) {
+      if (!window.YebaekAcademyCases) return;
+      await window.YebaekAcademyCases.toggleCasePublish(caseId, nextPub, typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAdminAcademyCasesList();
+    }
+    window.toggleAdminAcademyCasePublish = toggleAdminAcademyCasePublish;
+
+    async function deleteAdminAcademyCase(caseId) {
+      if (!window.YebaekAcademyCases) return;
+      const item = window.YebaekAcademyCases.getCases(true).find(c => c.id === caseId);
+      if (!confirm('[' + (item ? item.title : '선택한 진행사례') + '] 사례를 삭제하시겠습니까?\n아카데미 사이트에서도 즉시 내려갑니다.')) return;
+      await window.YebaekAcademyCases.deleteCase(caseId, typeof fbDb !== 'undefined' ? fbDb : null);
+      if (document.getElementById('caseEditId')?.value === caseId) {
+        resetAdminCaseForm(false);
+      }
+      renderAdminAcademyCasesList();
+    }
+    window.deleteAdminAcademyCase = deleteAdminAcademyCase;
+
+    async function resetAdminAcademyDefaultCases() {
+      if (!window.YebaekAcademyCases) return;
+      if (!confirm('삭제했던 기본 샘플 진행사례 5건을 복원하시겠습니까?\n(직접 등록하신 사진 사례는 그대로 유지됩니다.)')) return;
+      await window.YebaekAcademyCases.resetDefaultCases(typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAdminAcademyCasesList();
+      alert('🔄 기본 샘플 진행사례가 복원되었습니다.');
+    }
+    window.resetAdminAcademyDefaultCases = resetAdminAcademyDefaultCases;
 
     // ================= 6. 1:1 방문 맞춤 상담 명단 관리 =================
     const CONSULT_KEY = 'yebaek_consult_requests_v1';
