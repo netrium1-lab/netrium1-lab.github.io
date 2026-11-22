@@ -1,0 +1,1931 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>명문 가문 평전 | VIP 가문 전용 영구 프리미엄 온라인 전시관 — 여백과 결</title>
+  <meta name="description" content="대를 이어 전할 가문의 역사와 가훈, AI 복원 옛 사진·훈장·유품 도록, 구술 다큐멘터리 영상과 전문 성우 오디오북을 영구 보존하는 여백과 결 VIP 가문 전용 온라인 전시관." />
+  <link rel="canonical" href="https://yebaekarchive.kr/heritage.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="여백과 결, 리셋 아카이브" />
+  <meta property="og:title" id="ogHeritageTitle" content="명문 가문 평전 | VIP 가문 전용 영구 프리미엄 온라인 전시관" />
+  <meta property="og:description" id="ogHeritageDesc" content="대를 이어 전할 가문의 역사와 가훈, 복원 사진·유품 도록, 다큐 영상과 성우 오디오북을 영구 소장하는 온라인 헤리티지 전시관." />
+  <meta property="og:url" id="ogHeritageUrl" content="https://yebaekarchive.kr/heritage.html" />
+  <meta property="og:image" content="https://yebaekarchive.kr/images/og-share-cover.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://yebaekarchive.kr/images/og-share-cover.jpg" />
+
+  <!-- 웹폰트: 품격 있는 명조(Noto Serif KR) + 본문(Pretendard) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Firebase SDK (App + Firestore + Storage) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <!-- 300 DPI 인쇄용 순수 벡터(SVG) QR 생성기 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <!-- 여백과 결 공용 미디어 · QR · VIP 샘플 모듈 -->
+  <script src="heritage-media.js"></script>
+
+  <style>
+    :root {
+      --forest-deep: #0e1f18;
+      --forest-main: #183629;
+      --forest-soft: #234d3b;
+      --gold-main: #c9a24b;
+      --gold-light: #ebdaaa;
+      --gold-soft: rgba(201, 162, 75, 0.14);
+      --hanji-bg: #faf6ee;
+      --hanji-card: #ffffff;
+      --hanji-border: #e6dcc7;
+      --ink-main: #1b221e;
+      --ink-sub: #4d5852;
+      --ink-muted: #7b857f;
+      --serif: 'Noto Serif KR', Georgia, serif;
+      --sans: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--sans);
+      background: var(--hanji-bg);
+      color: var(--ink-main);
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* 데모 안내 상단 배너 */
+    .demo-banner {
+      background: linear-gradient(90deg, #132c21 0%, #1e4635 50%, #132c21 100%);
+      color: #f6e8c3;
+      padding: 10px 18px;
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(201, 162, 75, 0.45);
+    }
+    .demo-banner strong { color: #ffe7a8; }
+    .demo-banner a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--gold-main);
+      color: #13221a;
+      font-weight: 800;
+      padding: 5px 12px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-size: 0.78rem;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+    .demo-banner a:hover { transform: translateY(-1px); opacity: 0.94; }
+
+    /* 상단 고정 네비게이션 */
+    .heritage-nav {
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: rgba(14, 31, 24, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(201, 162, 75, 0.28);
+      color: #fff;
+    }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: #fff;
+    }
+    .nav-emblem {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #c9a24b 0%, #8e6b20 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .nav-title-main {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #f8ecd0;
+      line-height: 1.2;
+    }
+    .nav-title-sub {
+      font-size: 0.7rem;
+      letter-spacing: 1.4px;
+      color: #a9bdb2;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      color: #d7e3dc;
+      text-decoration: none;
+      font-size: 0.86rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-nav-gold {
+      background: linear-gradient(135deg, #c9a24b, #a8822d);
+      color: #102018;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-nav-gold:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(201, 162, 75, 0.35); }
+    .btn-nav-outline {
+      background: rgba(255, 255, 255, 0.08);
+      color: #eef5f0;
+      border: 1px solid rgba(255, 255, 255, 0.24);
+      padding: 8px 13px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .btn-nav-outline:hover { background: rgba(255, 255, 255, 0.16); }
+
+    /* 히어로 섹션 (가문 헌정 + 가훈 족자) */
+    .hero-section {
+      position: relative;
+      background: radial-gradient(circle at 20% 20%, #1f4635 0%, #0e1f18 72%);
+      color: #f9f3e5;
+      padding: 72px 20px 84px;
+      overflow: hidden;
+      border-bottom: 3px solid var(--gold-main);
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 85% 25%, rgba(201, 162, 75, 0.16), transparent 45%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 1px, transparent 1px 16px);
+      pointer-events: none;
+    }
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      max-width: 1140px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 0.85fr;
+      gap: 44px;
+      align-items: center;
+    }
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(201, 162, 75, 0.18);
+      border: 1px solid rgba(201, 162, 75, 0.55);
+      color: #f3de9f;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.6px;
+      margin-bottom: 18px;
+    }
+    .hero-eng {
+      font-size: 0.76rem;
+      letter-spacing: 3px;
+      color: var(--gold-main);
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4.2vw, 3.1rem);
+      font-weight: 900;
+      line-height: 1.25;
+      color: #ffffff;
+      margin-bottom: 14px;
+      word-break: keep-all;
+    }
+    .hero-protagonist {
+      font-family: var(--serif);
+      font-size: 1.18rem;
+      color: var(--gold-light);
+      font-weight: 600;
+      margin-bottom: 22px;
+    }
+    .hero-quote {
+      font-family: var(--serif);
+      font-size: 1.02rem;
+      line-height: 1.85;
+      color: #dce6e0;
+      padding-left: 18px;
+      border-left: 3px solid var(--gold-main);
+      margin-bottom: 28px;
+      word-break: keep-all;
+    }
+    .hero-cta-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-hero-primary {
+      background: linear-gradient(135deg, #d7b25c 0%, #b0892f 100%);
+      color: #102018;
+      border: none;
+      padding: 13px 22px;
+      border-radius: 12px;
+      font-size: 0.94rem;
+      font-weight: 850;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+    .btn-hero-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      color: #f6ebd1;
+      border: 1px solid rgba(235, 218, 170, 0.4);
+      padding: 13px 20px;
+      border-radius: 12px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* 우측 가훈(家訓) 족자 + 대표 사진 프레임 */
+    .hero-frame-card {
+      background: linear-gradient(180deg, rgba(250, 246, 238, 0.98) 0%, rgba(242, 234, 217, 0.96) 100%);
+      color: var(--ink-main);
+      border-radius: 22px;
+      padding: 22px;
+      border: 2px solid var(--gold-main);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+    }
+    .hero-portrait-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      margin-bottom: 18px;
+      border: 1px solid var(--hanji-border);
+      position: relative;
+    }
+    .hero-portrait-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .hero-motto-box {
+      background: #fffdf8;
+      border: 1.5px double var(--gold-main);
+      border-radius: 14px;
+      padding: 18px 16px;
+      text-align: center;
+    }
+    .hero-motto-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #8f6c1e;
+      background: rgba(201, 162, 75, 0.16);
+      padding: 3px 10px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+    }
+    .hero-motto-text {
+      font-family: var(--serif);
+      font-size: 1.38rem;
+      font-weight: 900;
+      color: var(--forest-deep);
+      margin-bottom: 8px;
+      word-break: keep-all;
+    }
+    .hero-motto-sub {
+      font-size: 0.84rem;
+      color: var(--ink-sub);
+      line-height: 1.55;
+      word-break: keep-all;
+    }
+
+    /* 공통 섹션 컨테이너 */
+    .section-wrap {
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 72px 20px;
+    }
+    .section-head {
+      text-align: center;
+      margin-bottom: 42px;
+    }
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 1.6px;
+      color: #8f6c1e;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-family: var(--serif);
+      font-size: clamp(1.55rem, 3vw, 2.25rem);
+      font-weight: 900;
+      color: var(--forest-deep);
+      margin-bottom: 10px;
+      word-break: keep-all;
+    }
+    .section-desc {
+      max-width: 680px;
+      margin: 0 auto;
+      font-size: 0.96rem;
+      color: var(--ink-sub);
+      word-break: keep-all;
+    }
+
+    /* 인터랙티브 4세대 가계도 */
+    .tree-gen-block {
+      margin-bottom: 26px;
+      position: relative;
+    }
+    .tree-gen-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--forest-main);
+      color: var(--gold-light);
+      font-size: 0.78rem;
+      font-weight: 800;
+      padding: 5px 14px;
+      border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .tree-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+    }
+    .tree-node-card {
+      background: var(--hanji-card);
+      border: 1.5px solid var(--hanji-border);
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      text-align: left;
+    }
+    .tree-node-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold-main);
+      box-shadow: 0 12px 28px rgba(24, 54, 41, 0.1);
+    }
+    .tree-node-card.featured {
+      border-color: var(--gold-main);
+      background: linear-gradient(135deg, #fffdf7 0%, #fcf4e1 100%);
+    }
+    .tree-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--gold-main);
+      flex-shrink: 0;
+    }
+    .tree-name {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      margin-bottom: 2px;
+    }
+    .tree-rel {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #8f6c1e;
+      margin-bottom: 4px;
+    }
+    .tree-role {
+      font-size: 0.8rem;
+      color: var(--ink-sub);
+      line-height: 1.35;
+    }
+
+    /* 복원 전 ↔ 후 비교 슬라이더 스포트라이트 */
+    .restore-section-bg {
+      background: #f2ecde;
+      border-top: 1px solid var(--hanji-border);
+      border-bottom: 1px solid var(--hanji-border);
+    }
+    .compare-spotlight {
+      background: var(--hanji-card);
+      border: 1.5px solid var(--hanji-border);
+      border-radius: 24px;
+      padding: 26px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 28px;
+      box-shadow: 0 14px 36px rgba(14, 31, 24, 0.08);
+    }
+    .compare-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #111;
+      user-select: none;
+      touch-action: none;
+      cursor: ew-resize;
+      border: 1px solid #d5c9b0;
+    }
+    .compare-layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .compare-layer img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+    .compare-before-wrap {
+      clip-path: inset(0 50% 0 0);
+      z-index: 2;
+    }
+    .compare-before-wrap.aged-sim img {
+      filter: sepia(0.92) grayscale(0.55) contrast(0.82) brightness(0.9) blur(1.1px);
+    }
+    .compare-before-wrap.aged-sim::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(125deg, rgba(255,244,214,0.16) 0 1px, transparent 1px 19px),
+        radial-gradient(circle at center, transparent 48%, rgba(44, 30, 14, 0.42) 100%);
+      pointer-events: none;
+    }
+    .compare-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      background: #ffffff;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.55);
+      z-index: 5;
+      pointer-events: none;
+    }
+    .compare-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gold-main);
+      color: #102018;
+      border: 3px solid #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.9rem;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+      z-index: 6;
+      pointer-events: none;
+    }
+    .compare-tag {
+      position: absolute;
+      top: 14px;
+      padding: 5px 11px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 800;
+      z-index: 4;
+      pointer-events: none;
+    }
+    .compare-tag.before { left: 14px; background: rgba(24, 24, 24, 0.78); color: #f5ebd6; }
+    .compare-tag.after { right: 14px; background: rgba(24, 54, 41, 0.9); color: #f8e5ac; border: 1px solid var(--gold-main); }
+    .compare-range {
+      width: 100%;
+      margin-top: 12px;
+      accent-color: var(--forest-main);
+      cursor: pointer;
+    }
+
+    /* 갤러리 필터 & 카드 그리드 */
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+    .filter-pill {
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--hanji-border);
+      background: #ffffff;
+      color: var(--ink-sub);
+      font-size: 0.86rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-pill.active, .filter-pill:hover {
+      background: var(--forest-main);
+      color: var(--gold-light);
+      border-color: var(--forest-main);
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 20px;
+    }
+    .gallery-card {
+      background: #ffffff;
+      border: 1.5px solid var(--hanji-border);
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .gallery-card:hover, .gallery-card.active-card {
+      transform: translateY(-4px);
+      border-color: var(--gold-main);
+      box-shadow: 0 14px 30px rgba(14, 31, 24, 0.12);
+    }
+    .gallery-thumb {
+      aspect-ratio: 16 / 10;
+      width: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .gallery-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .gallery-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      font-size: 0.74rem;
+    }
+    .gallery-cat-badge {
+      background: rgba(24, 54, 41, 0.1);
+      color: var(--forest-main);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+    .gallery-year { color: #8f6c1e; font-weight: 800; }
+    .gallery-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--forest-deep);
+      margin-bottom: 6px;
+      line-height: 1.4;
+    }
+    .gallery-story {
+      font-size: 0.84rem;
+      color: var(--ink-sub);
+      line-height: 1.55;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* 다큐멘터리 영상관 + 성우/육성 오디오북 통합관 */
+    .media-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 26px;
+      align-items: start;
+    }
+    .cinema-card, .audio-card {
+      background: var(--forest-deep);
+      color: #f6efe0;
+      border-radius: 22px;
+      padding: 24px;
+      border: 1.5px solid rgba(201, 162, 75, 0.42);
+      box-shadow: 0 18px 44px rgba(14, 31, 24, 0.22);
+    }
+    .video-stage {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #07100c;
+      margin-bottom: 16px;
+      border: 1px solid rgba(201, 162, 75, 0.3);
+    }
+    .video-stage iframe, .video-stage video {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+    .video-demo-overlay {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .video-demo-overlay img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.56);
+    }
+    .video-demo-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+    .video-play-ring {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(201, 162, 75, 0.92);
+      color: #0e1f18;
+      border: 4px solid rgba(255, 255, 255, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .video-play-ring:hover { transform: scale(1.07); }
+    .docu-chapters {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .docu-ch-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-size: 0.83rem;
+    }
+    .docu-time {
+      font-family: monospace;
+      color: var(--gold-light);
+      font-weight: 800;
+      background: rgba(201, 162, 75, 0.18);
+      padding: 2px 7px;
+      border-radius: 6px;
+    }
+
+    /* 오디오북 플레이어 */
+    .audio-now-playing {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(201, 162, 75, 0.35);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 14px;
+    }
+    .audio-controls-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-audio-play {
+      background: var(--gold-main);
+      color: #0e1f18;
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-weight: 850;
+      font-size: 0.86rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .audio-speed-btn {
+      background: rgba(255, 255, 255, 0.1);
+      color: #f4e6c1;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 6px 11px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .audio-track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+    .audio-track-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      text-align: left;
+      color: #f3ede0;
+      width: 100%;
+    }
+    .audio-track-item:hover, .audio-track-item.active {
+      background: rgba(201, 162, 75, 0.16);
+      border-color: var(--gold-main);
+    }
+    .track-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 4px;
+    }
+    .track-badge.elder { background: rgba(234, 179, 8, 0.22); color: #fde68a; }
+    .track-badge.voiceactor { background: rgba(52, 211, 153, 0.2); color: #a7f3d0; }
+
+    /* 영구 보존 이중 백업 증명서 + 플립북 연결 */
+    .cert-card {
+      background: linear-gradient(135deg, #fffdf8 0%, #f5ecda 100%);
+      border: 2px solid var(--gold-main);
+      border-radius: 24px;
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 28px;
+      align-items: center;
+      box-shadow: 0 14px 36px rgba(14, 31, 24, 0.08);
+    }
+    .cert-badges {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .cert-badge-box {
+      background: #ffffff;
+      border: 1px solid var(--hanji-border);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .cert-badge-box strong {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--forest-deep);
+      margin-bottom: 4px;
+    }
+    .cert-badge-box span {
+      font-size: 0.8rem;
+      color: var(--ink-sub);
+    }
+
+    /* 후손 헌정 방명록 */
+    .guestbook-grid {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 26px;
+      align-items: start;
+    }
+    .gb-form-card {
+      background: #ffffff;
+      border: 1.5px solid var(--hanji-border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+    .gb-input, .gb-select, .gb-textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--hanji-border);
+      background: #fdfbf7;
+      font-family: var(--sans);
+      font-size: 0.92rem;
+      color: var(--ink-main);
+      margin-bottom: 12px;
+    }
+    .gb-input:focus, .gb-select:focus, .gb-textarea:focus {
+      outline: none;
+      border-color: var(--forest-main);
+      background: #ffffff;
+    }
+    .gb-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .gb-item {
+      background: #ffffff;
+      border: 1px solid var(--hanji-border);
+      border-left: 4px solid var(--gold-main);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+    .gb-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .gb-author {
+      font-weight: 800;
+      color: var(--forest-deep);
+      font-size: 0.94rem;
+    }
+    .gb-rel-pill {
+      display: inline-block;
+      margin-left: 6px;
+      background: var(--gold-soft);
+      color: #846218;
+      font-size: 0.74rem;
+      font-weight: 800;
+      padding: 2px 9px;
+      border-radius: 999px;
+    }
+    .gb-date { font-size: 0.78rem; color: var(--ink-muted); }
+    .gb-msg { font-size: 0.92rem; color: var(--ink-sub); line-height: 1.65; white-space: pre-line; }
+
+    /* 비밀번호 잠금 오버레이 */
+    .lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: radial-gradient(circle at center, #1b3d2d 0%, #0b1812 80%);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lock-overlay.open { display: flex; }
+    .lock-card {
+      max-width: 420px;
+      width: 100%;
+      background: #faf6ee;
+      border: 2px solid var(--gold-main);
+      border-radius: 24px;
+      padding: 34px 28px;
+      text-align: center;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.55);
+    }
+
+    /* 범용 모달 (가계도 인물 상세 · 인쇄용 SVG QR 코드) */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 1500;
+      background: rgba(10, 22, 16, 0.72);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-panel {
+      background: #ffffff;
+      border: 2px solid var(--gold-main);
+      border-radius: 22px;
+      max-width: 480px;
+      width: 100%;
+      padding: 26px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--hanji-border);
+      background: var(--hanji-bg);
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    footer.heritage-footer {
+      background: var(--forest-deep);
+      color: #a9bdb2;
+      text-align: center;
+      padding: 38px 20px;
+      font-size: 0.84rem;
+      border-top: 2px solid rgba(201, 162, 75, 0.35);
+    }
+    footer.heritage-footer a { color: var(--gold-light); text-decoration: none; font-weight: 700; }
+
+    @media (max-width: 900px) {
+      .hero-grid, .compare-spotlight, .media-grid, .cert-card, .guestbook-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links { display: none; }
+      .hero-section { padding: 48px 18px 56px; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 가족 전용 비밀번호 잠금 게이트 (비밀번호가 설정된 VIP 가문 전시관 전용) -->
+  <div class="lock-overlay" id="heritageLockOverlay">
+    <div class="lock-card">
+      <div style="font-size: 2.3rem; margin-bottom: 10px;">🏛️</div>
+      <div style="font-size: 0.76rem; font-weight: 800; letter-spacing: 2px; color: #8f6c1e; margin-bottom: 6px;">PRIVATE FAMILY ARCHIVE</div>
+      <h2 style="font-family: var(--serif); font-size: 1.45rem; color: var(--forest-deep); margin-bottom: 10px;" id="lockFamilyTitle">가문 전용 프라이빗 전시관</h2>
+      <p style="font-size: 0.88rem; color: var(--ink-sub); margin-bottom: 20px; word-break: keep-all;">
+        본 온라인 전시관은 가족과 초대된 친지분들만 열람할 수 있도록 보호되어 있습니다. 안내받으신 가족 입장 코드를 입력해 주세요.
+      </p>
+      <input type="password" id="lockPasswordInput" class="gb-input" placeholder="가족 입장 비밀번호 입력" style="text-align: center; font-size: 1.05rem; letter-spacing: 3px;" onkeydown="if(event.key==='Enter') unlockHeritage();" />
+      <div id="lockErrorMsg" style="color: #dc2626; font-size: 0.82rem; font-weight: 700; min-height: 20px; margin-bottom: 10px;"></div>
+      <button type="button" onclick="unlockHeritage()" class="btn-hero-primary" style="width: 100%; justify-content: center;">
+        🔓 가문 전시관 입장하기
+      </button>
+    </div>
+  </div>
+
+  <!-- 체험 모드 안내 배너 (실제 VIP 전시관 ?id=... 로 접속 시 자동 숨김) -->
+  <div class="demo-banner" id="demoModeBanner" style="display: none;">
+    <span>🏛️ <strong>VIP 명문 가문 평전 온라인 전시관 체험 모드</strong>입니다. 실제 의뢰 시 어르신 가문만의 전용 주소(<code>yebaekarchive.kr/heritage.html?id=...</code>)로 영구 구축됩니다.</span>
+    <a href="index.html#memoir">✨ 명문 가문 평전 상담 신청 →</a>
+  </div>
+
+  <!-- 상단 고정 네비게이션 -->
+  <header class="heritage-nav">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-brand">
+        <div class="nav-emblem">🏛️</div>
+        <div>
+          <div class="nav-title-main" id="navFamilyName">여백과 결 VIP 가문 전시관</div>
+          <div class="nav-title-sub">HERITAGE PRESTIGE ARCHIVE</div>
+        </div>
+      </a>
+      <nav class="nav-links">
+        <a href="#sectionTree">가계도</a>
+        <a href="#sectionRestore">AI 복원 도록</a>
+        <a href="#sectionMedia">다큐 · 오디오북</a>
+        <a href="#sectionArchive">영구 보존</a>
+        <a href="#sectionGuestbook">후손 방명록</a>
+      </nav>
+      <div class="nav-actions">
+        <button type="button" class="btn-nav-gold" onclick="openHeritageQrModal()">
+          <span>📷</span><span>인쇄용 SVG QR</span>
+        </button>
+        <a href="index.html" class="btn-nav-outline">← 홈으로</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. 가문 헌정 히어로 & 가훈(家訓) 족자 -->
+  <section class="hero-section">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-pill">🏛️ VIP HERITAGE PRESTIGE · 영구 온라인 헌정관</div>
+        <div class="hero-eng" id="heroEngTitle">THE HAESONG HERITAGE ARCHIVE</div>
+        <h1 class="hero-title" id="heroFamilyTitle">경주 김씨 해송(海松) 가문 평전</h1>
+        <div class="hero-protagonist" id="heroProtagonist">김정호 옹 · 이영자 여사 (1938 — 현재)</div>
+        <p class="hero-quote" id="heroQuote"></p>
+        <div class="hero-cta-row">
+          <a href="#sectionRestore" class="btn-hero-primary">🎞️ AI 복원 전·후 비교 체험</a>
+          <a href="#sectionMedia" class="btn-hero-secondary">🎬 다큐 영상 &amp; 오디오북 감상</a>
+          <button type="button" class="btn-hero-secondary" onclick="copyHeritageLink()">🔗 가족에게 전시관 공유</button>
+        </div>
+      </div>
+
+      <div class="hero-frame-card">
+        <div class="hero-portrait-wrap">
+          <img id="heroPortraitImg" src="images/showcase-senior-memoir.jpg" alt="가문 대표 헌정 화보" />
+        </div>
+        <div class="hero-motto-box">
+          <span class="hero-motto-label">가 훈 · 家 訓</span>
+          <div class="hero-motto-text" id="heroMottoText">뿌리 깊은 나무는 바람에 아니 묄세</div>
+          <div class="hero-motto-sub" id="heroMottoSub">정직한 땀방울과 서로를 아끼는 화목함이 대를 이어 빛나는 가문의 뿌리가 된다.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. 인터랙티브 4세대 가계도 -->
+  <section class="section-wrap" id="sectionTree">
+    <div class="section-head">
+      <div class="section-kicker">🌳 INTERACTIVE FAMILY TREE</div>
+      <h2 class="section-title">대를 이어 흐르는 가문의 뿌리 · 4세대 가계도</h2>
+      <p class="section-desc">가족 구성원 카드를 클릭하시면 각 세대의 생애 약력과 후손에게 남긴 소중한 말씀을 자세히 열람하실 수 있습니다.</p>
+    </div>
+    <div id="familyTreeContainer"></div>
+  </section>
+
+  <!-- 3. 옛 사진 & 훈장·유품 AI 정밀 복원 도록 (복원 전 ↔ 후 비교 슬라이더) -->
+  <section class="restore-section-bg" id="sectionRestore">
+    <div class="section-wrap">
+      <div class="section-head">
+        <div class="section-kicker">🎞️ AI RESTORATION &amp; ARCHIVE GALLERY</div>
+        <h2 class="section-title">옛 사진 · 훈장 · 유품 AI 정밀 복원 도록</h2>
+        <p class="section-desc">빛바랜 흑백 앨범과 가문의 훈장·애장품을 고해상도 스캔 및 AI 정밀 복원 기술로 되살렸습니다. 가운데 손잡이를 좌우로 밀어 <strong>복원 전 ↔ 복원 후</strong>의 감동을 직접 확인해 보세요.</p>
+      </div>
+
+      <!-- 인터랙티브 복원 전/후 스포트라이트 비교기 -->
+      <div class="compare-spotlight">
+        <div>
+          <div class="compare-stage" id="compareStage">
+            <div class="compare-layer">
+              <img id="compareAfterImg" src="images/showcase-senior-memoir.jpg" alt="AI 복원 후 사진" />
+            </div>
+            <div class="compare-layer compare-before-wrap aged-sim" id="compareBeforeWrap">
+              <img id="compareBeforeImg" src="images/showcase-senior-memoir.jpg" alt="복원 전 원본 사진" />
+            </div>
+            <span class="compare-tag before">복원 전 (빛바랜 원본)</span>
+            <span class="compare-tag after">✨ AI 정밀 복원 후</span>
+            <div class="compare-divider" id="compareDivider"></div>
+            <div class="compare-handle" id="compareHandle">⇆</div>
+          </div>
+          <input type="range" id="compareRange" class="compare-range" min="0" max="100" value="50" aria-label="복원 전후 비교 슬라이더" />
+        </div>
+        <div>
+          <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap;">
+            <span class="gallery-cat-badge" id="spotCatBadge">옛 사진 AI 복원</span>
+            <span class="gallery-year" id="spotYear">1965년 봄</span>
+          </div>
+          <h3 style="font-family: var(--serif); font-size: 1.38rem; font-weight: 900; color: var(--forest-deep); margin-bottom: 12px; line-height: 1.4; word-break: keep-all;" id="spotTitle"></h3>
+          <p style="font-size: 0.94rem; color: var(--ink-sub); line-height: 1.75; margin-bottom: 16px; word-break: keep-all;" id="spotStory"></p>
+          <div style="background: #f8f4ea; border: 1px solid var(--hanji-border); border-radius: 12px; padding: 12px 14px; font-size: 0.82rem; color: var(--forest-main);">
+            <strong style="display: block; margin-bottom: 3px;">🔬 정밀 복원 작업 내역</strong>
+            <span id="spotRestoreNote"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 카테고리 필터 -->
+      <div class="filter-pills" id="galleryFilterBar">
+        <button type="button" class="filter-pill active" data-cat="all" onclick="filterHeritageGallery('all', this)">전체 소장품</button>
+        <button type="button" class="filter-pill" data-cat="photo" onclick="filterHeritageGallery('photo', this)">🎞️ 옛 사진 AI 복원</button>
+        <button type="button" class="filter-pill" data-cat="medal" onclick="filterHeritageGallery('medal', this)">🎖️ 훈장 · 상장</button>
+        <button type="button" class="filter-pill" data-cat="keepsake" onclick="filterHeritageGallery('keepsake', this)">🏺 가문 유품 · 애장품</button>
+      </div>
+
+      <!-- 도록 카드 그리드 -->
+      <div class="gallery-grid" id="heritageGalleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- 4. 구술 다큐멘터리 영상관 & 전문 성우 / 어르신 육성 오디오북 -->
+  <section class="section-wrap" id="sectionMedia">
+    <div class="section-head">
+      <div class="section-kicker">🎬 DOCUMENTARY &amp; VOICE AUDIOBOOK</div>
+      <h2 class="section-title">구술 다큐멘터리 영상관 · 성우 &amp; 육성 오디오북</h2>
+      <p class="section-desc">어르신의 살아있는 표정과 음성을 광고 없는 VIP 전용 시네마 프레임과 스튜디오급 오디오북으로 영구 소장합니다.</p>
+    </div>
+
+    <div class="media-grid">
+      <!-- 좌측: 구술 다큐멘터리 영상관 -->
+      <div class="cinema-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+          <span style="font-size: 0.74rem; font-weight: 800; color: var(--gold-light); letter-spacing: 1px;">🎬 VIP ORAL DOCUMENTARY</span>
+          <span id="docuDurationPill" style="font-size: 0.76rem; background: rgba(201,162,75,0.2); color: #f7e4ad; padding: 3px 10px; border-radius: 999px; font-weight: 800;">06:20</span>
+        </div>
+        <h3 style="font-family: var(--serif); font-size: 1.2rem; color: #fff; margin-bottom: 8px;" id="docuTitle"></h3>
+        <p style="font-size: 0.85rem; color: #b8c9bf; margin-bottom: 16px; line-height: 1.55;" id="docuSubtitle"></p>
+
+        <div class="video-stage" id="docuVideoStage"></div>
+
+        <div style="font-size: 0.78rem; font-weight: 800; color: var(--gold-light); margin-top: 8px;">🎞️ 다큐멘터리 구성 챕터</div>
+        <div class="docu-chapters" id="docuChapterList"></div>
+      </div>
+
+      <!-- 우측: 전문 성우 & 어르신 육성 오디오북 -->
+      <div class="audio-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap;">
+          <span style="font-size: 0.74rem; font-weight: 800; color: var(--gold-light); letter-spacing: 1px;">🎧 HYBRID AUDIOBOOK STUDIO</span>
+          <button type="button" onclick="downloadCurrentTrackQr()" style="background: rgba(255,255,255,0.1); color: #f6e7c1; border: 1px solid rgba(201,162,75,0.45); padding: 4px 10px; border-radius: 999px; font-size: 0.74rem; font-weight: 700; cursor: pointer;">
+            📷 책 인쇄용 QR(.svg)
+          </button>
+        </div>
+        <h3 style="font-family: var(--serif); font-size: 1.2rem; color: #fff; margin-bottom: 6px;">어르신 실제 육성 &amp; 전문 성우 오디오북</h3>
+        <p style="font-size: 0.84rem; color: #b8c9bf; margin-bottom: 14px;">프롤로그·에필로그는 어르신의 실제 육성으로, 본문 챕터는 전문 성우의 품격 있는 낭독으로 수록합니다.</p>
+
+        <div class="audio-now-playing">
+          <div id="nowPlayingBadge" class="track-badge elder">🎙️ 어르신 실제 육성</div>
+          <div id="nowPlayingTitle" style="font-family: var(--serif); font-size: 1.02rem; font-weight: 700; color: #fff; margin-bottom: 4px;"></div>
+          <div id="nowPlayingNarrator" style="font-size: 0.78rem; color: #b9cabf; margin-bottom: 10px;"></div>
+          <div id="nowPlayingScript" style="font-size: 0.84rem; color: #eae2d0; background: rgba(0,0,0,0.25); padding: 10px 12px; border-radius: 10px; line-height: 1.6; max-height: 92px; overflow-y: auto;"></div>
+
+          <audio id="heritageRealAudio" controls style="width: 100%; margin-top: 12px; display: none;"></audio>
+
+          <div class="audio-controls-row">
+            <button type="button" class="btn-audio-play" id="btnToggleAudioPlay" onclick="toggleHeritageAudioPlay()">
+              ▶ 오디오북 재생하기
+            </button>
+            <button type="button" class="audio-speed-btn" id="btnAudioSpeed" onclick="cycleAudioSpeed()">배속 1.0x</button>
+            <span id="audioSourceNote" style="font-size: 0.74rem; color: #a7bab0;"></span>
+          </div>
+        </div>
+
+        <div class="audio-track-list" id="audioTrackList"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. 240P 하이엔드 플립북 & 영구 보존 이중 백업 증명서 -->
+  <section class="section-wrap" id="sectionArchive" style="padding-top: 10px;">
+    <div class="cert-card">
+      <div>
+        <div class="section-kicker" style="margin-bottom: 6px;">🛡️ PERMANENT DUAL-BACKUP CERTIFICATE</div>
+        <h2 style="font-family: var(--serif); font-size: 1.65rem; font-weight: 900; color: var(--forest-deep); margin-bottom: 10px;" id="certBookTitle"></h2>
+        <p style="font-size: 0.92rem; color: var(--ink-sub); margin-bottom: 12px;" id="certBookSpecs"></p>
+        <p style="font-size: 0.86rem; color: var(--ink-sub); line-height: 1.65;" id="certCuratorNote"></p>
+
+        <div class="cert-badges">
+          <div class="cert-badge-box">
+            <strong>☁️ 1차 보존 · 브랜드 전용 클라우드</strong>
+            <span><code>yebaekarchive.kr</code> 고유 도메인으로 평생 끊김 없는 온라인 전시관 및 QR 아카이브 제공</span>
+          </div>
+          <div class="cert-badge-box">
+            <strong>💾 2차 보존 · 각인 고급 USB 풀패키지</strong>
+            <span id="certUsbInfo">64GB 황동 각인 USB에 인쇄용 PDF · 복원 원본 60장 · 육성/성우 MP3 · 다큐 MP4 일체 영구 소장</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: var(--forest-deep); color: #f6ecd4; border-radius: 18px; padding: 24px; text-align: center; border: 1.5px solid var(--gold-main);">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">📖</div>
+        <div style="font-family: var(--serif); font-size: 1.15rem; font-weight: 800; margin-bottom: 8px;">모바일 플립북 &amp; 책 속 QR</div>
+        <p style="font-size: 0.82rem; color: #bdd0c5; margin-bottom: 18px; line-height: 1.55;">
+          완성된 240P 하이엔드 평전을 스마트폰 플립북으로 바로 넘겨보거나, 책 인쇄용 300 DPI 벡터 QR을 내려받을 수 있습니다.
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <a id="btnOpenLinkedFlipbook" href="my-room.html?mode=sample&tab=webbook" class="btn-hero-primary" style="justify-content: center;">
+            📱 240P 모바일 플립북 열기
+          </a>
+          <button type="button" onclick="openHeritageQrModal()" class="btn-hero-secondary" style="justify-content: center;">
+            📷 인쇄용 벡터(SVG) QR 보기
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 후손 헌정 방명록 -->
+  <section class="section-wrap" id="sectionGuestbook">
+    <div class="section-head">
+      <div class="section-kicker">💌 DESCENDANT GUESTBOOK</div>
+      <h2 class="section-title">후손과 가족이 남기는 헌정 방명록</h2>
+      <p class="section-desc">어르신의 위대한 생애를 기리며, 자녀와 손주, 친지분들의 따뜻한 감사와 존경의 마음을 이 전시관에 영원히 남겨 주세요.</p>
+    </div>
+
+    <div class="guestbook-grid">
+      <form class="gb-form-card" onsubmit="submitHeritageGuestbook(event)">
+        <h3 style="font-family: var(--serif); font-size: 1.12rem; color: var(--forest-deep); margin-bottom: 14px;">✍️ 감사와 존경의 한 줄 남기기</h3>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <input type="text" id="gbAuthorInput" class="gb-input" placeholder="성함 (예: 김서준)" required />
+          <select id="gbRelationInput" class="gb-select">
+            <option value="장남">장남</option>
+            <option value="장녀">장녀</option>
+            <option value="차남">차남</option>
+            <option value="차녀">차녀</option>
+            <option value="며느리/사위">며느리/사위</option>
+            <option value="손주">손주</option>
+            <option value="친지/지인">친지/지인</option>
+          </select>
+        </div>
+        <textarea id="gbMessageInput" class="gb-textarea" rows="4" placeholder="어르신께 전하고 싶은 사랑과 감사의 말씀을 남겨 주세요." required></textarea>
+        <button type="submit" class="btn-hero-primary" style="width: 100%; justify-content: center;">
+          💌 가문 전시관 방명록에 영구 기록하기
+        </button>
+      </form>
+
+      <div class="gb-list" id="guestbookList"></div>
+    </div>
+  </section>
+
+  <footer class="heritage-footer">
+    <div style="font-family: var(--serif); font-size: 1.05rem; color: #f6e7c1; margin-bottom: 6px;">여백과 결, 리셋 아카이브 — VIP HERITAGE PRESTIGE</div>
+    <p style="margin-bottom: 10px;">본 온라인 전시관은 <a href="https://yebaekarchive.kr">yebaekarchive.kr</a> 공식 브랜드 도메인으로 영구 보존·운영됩니다.</p>
+    <div>
+      <a href="index.html">홈페이지</a> ·
+      <a href="my-room.html">나의 서재</a> ·
+      <a href="index.html#memoir">자서전·가문평전 상담</a>
+    </div>
+  </footer>
+
+  <!-- 모달 1: 가계도 인물 상세 프로필 -->
+  <div class="modal-backdrop" id="treeMemberModal" onclick="if(event.target===this) closeTreeMemberModal();">
+    <div class="modal-panel">
+      <button type="button" class="modal-close" onclick="closeTreeMemberModal()">✕</button>
+      <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px;">
+        <img id="modalMemberImg" src="" alt="가족 사진" style="width: 78px; height: 78px; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--gold-main);" />
+        <div>
+          <div id="modalMemberGen" style="font-size: 0.74rem; font-weight: 800; color: #8f6c1e; margin-bottom: 3px;"></div>
+          <h3 id="modalMemberName" style="font-family: var(--serif); font-size: 1.35rem; color: var(--forest-deep);"></h3>
+          <div id="modalMemberRel" style="font-size: 0.84rem; color: var(--ink-sub); font-weight: 700;"></div>
+        </div>
+      </div>
+      <div id="modalMemberRole" style="background: #f8f4ea; padding: 10px 14px; border-radius: 10px; font-size: 0.86rem; font-weight: 700; color: var(--forest-main); margin-bottom: 14px;"></div>
+      <p id="modalMemberBio" style="font-size: 0.92rem; color: var(--ink-sub); line-height: 1.7; margin-bottom: 16px;"></p>
+      <blockquote id="modalMemberQuote" style="font-family: var(--serif); font-size: 0.96rem; color: var(--forest-deep); border-left: 3px solid var(--gold-main); padding: 8px 14px; background: #fffdf7; border-radius: 0 10px 10px 0;"></blockquote>
+    </div>
+  </div>
+
+  <!-- 모달 2: 인쇄용 300 DPI 순수 벡터(SVG) QR 코드 모달 -->
+  <div class="modal-backdrop" id="heritageQrModal" onclick="if(event.target===this) closeHeritageQrModal();">
+    <div class="modal-panel" style="text-align: center;">
+      <button type="button" class="modal-close" onclick="closeHeritageQrModal()">✕</button>
+      <div style="font-size: 0.74rem; font-weight: 800; letter-spacing: 1.5px; color: #8f6c1e; margin-bottom: 6px;">PRINT-READY 300 DPI VECTOR QR</div>
+      <h3 style="font-family: var(--serif); font-size: 1.3rem; color: var(--forest-deep); margin-bottom: 10px;">📷 가문 전시관 인쇄용 QR 코드</h3>
+      <p style="font-size: 0.85rem; color: var(--ink-sub); margin-bottom: 16px; word-break: keep-all;">
+        수제 가죽 양장본 뒷표지, 각 챕터 도입부, 출판기념회 초대장에 깨짐 없이 바로 인쇄할 수 있는 <strong>순수 벡터(.svg) QR 코드</strong>입니다.
+      </p>
+      <div id="heritageQrBox" style="width: 220px; height: 220px; margin: 0 auto 14px; padding: 14px; background: #fff; border: 2px solid var(--hanji-border); border-radius: 16px;"></div>
+      <div id="heritageQrUrlDisplay" style="font-size: 0.78rem; color: var(--ink-sub); word-break: break-all; background: var(--hanji-bg); padding: 9px 12px; border-radius: 10px; border: 1px solid var(--hanji-border); margin-bottom: 16px;"></div>
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" onclick="downloadExhibitionQrSvg()" class="btn-hero-primary" style="padding: 10px 18px; font-size: 0.88rem;">
+          ⬇️ 인쇄용 벡터(.svg) 다운로드
+        </button>
+        <button type="button" onclick="copyHeritageLink()" class="btn-nav-outline" style="color: var(--forest-deep); border-color: var(--forest-main); padding: 10px 16px;">
+          🔗 링크 복사
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Firebase 초기화 (기존 프로젝트 yebaek-bfa2c 연동)
+    const HERITAGE_FB_CONFIG = {
+      apiKey: "AIzaSyB97-Jn6faTYXjpyH5PrSeMZ8MaVStnLtc",
+      authDomain: "yebaek-bfa2c.firebaseapp.com",
+      databaseURL: "https://yebaek-bfa2c-default-rtdb.firebaseio.com",
+      projectId: "yebaek-bfa2c",
+      storageBucket: "yebaek-bfa2c.firebasestorage.app",
+      messagingSenderId: "450270290519",
+      appId: "1:450270290519:web:0fbc1abf869f51e7797912",
+      measurementId: "G-BF3TQWGRWH"
+    };
+
+    let heritageDb = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) firebase.initializeApp(HERITAGE_FB_CONFIG);
+        heritageDb = firebase.firestore();
+      }
+    } catch (e) {
+      console.warn('[Heritage Firebase Init]', e);
+    }
+
+    let currentExhibition = null;
+    let activeGalleryCategory = 'all';
+    let selectedGalleryIdx = 0;
+    let activeTrackIdx = 0;
+    let currentPlaybackRate = 1.0;
+    let isTtsSpeaking = false;
+
+    function esc(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getExhibitionIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return (params.get('id') || '').trim();
+    }
+
+    function getCanonicalExhibitionUrl() {
+      const id = currentExhibition && !currentExhibition.isDemo && currentExhibition.id
+        ? `heritage.html?id=${encodeURIComponent(currentExhibition.id)}`
+        : 'heritage.html?demo=1';
+      return window.YebaekMedia ? window.YebaekMedia.getPrintUrl(id) : `https://yebaekarchive.kr/${id}`;
+    }
+
+    async function loadHeritageExhibition() {
+      const reqId = getExhibitionIdFromUrl();
+      let loaded = null;
+
+      if (reqId) {
+        // 1. Firestore 조회
+        if (heritageDb) {
+          try {
+            const snap = await heritageDb.collection('heritage_exhibitions').doc(reqId).get();
+            if (snap.exists) {
+              loaded = Object.assign({ id: reqId, isDemo: false }, snap.data());
+            }
+          } catch (err) {
+            console.warn('[Heritage Firestore Load]', err);
+          }
+        }
+        // 2. 로컬 캐시 폴백
+        if (!loaded) {
+          try {
+            const localList = JSON.parse(localStorage.getItem('yebaek_heritage_exhibitions') || '[]');
+            const found = Array.isArray(localList) ? localList.find(x => x.id === reqId) : null;
+            if (found) loaded = Object.assign({ isDemo: false }, found);
+          } catch (e) {}
+        }
+      }
+
+      if (!loaded) {
+        loaded = JSON.parse(JSON.stringify(window.YebaekMedia.SAMPLE_HERITAGE_EXHIBITION));
+      }
+
+      currentExhibition = loaded;
+      renderExhibition(loaded);
+
+      // 방명록 Firestore 실시간 로드
+      if (!loaded.isDemo && loaded.id && heritageDb) {
+        loadFirestoreGuestbook(loaded.id);
+      }
+    }
+
+    function renderExhibition(data) {
+      document.title = `${data.familyName || 'VIP 가문 전시관'} — 여백과 결`;
+      const demoBanner = document.getElementById('demoModeBanner');
+      if (demoBanner) demoBanner.style.display = data.isDemo ? 'flex' : 'none';
+
+      // 비밀번호 잠금 검사
+      const lockOverlay = document.getElementById('heritageLockOverlay');
+      if (data.accessPassword && sessionStorage.getItem(`heritage_unlocked_${data.id}`) !== '1') {
+        document.getElementById('lockFamilyTitle').textContent = data.familyName || '가문 전용 프라이빗 전시관';
+        lockOverlay.classList.add('open');
+      } else {
+        lockOverlay.classList.remove('open');
+      }
+
+      // 히어로 영역
+      document.getElementById('navFamilyName').textContent = data.familyName || 'VIP 가문 전시관';
+      document.getElementById('heroEngTitle').textContent = data.englishTitle || 'HERITAGE PRESTIGE ARCHIVE';
+      document.getElementById('heroFamilyTitle').textContent = data.familyName || '명문 가문 평전';
+      document.getElementById('heroProtagonist').textContent = `${data.protagonistName || ''} ${data.protagonistYears ? `(${data.protagonistYears})` : ''}`.trim();
+      document.getElementById('heroQuote').textContent = data.heroQuote || '';
+      document.getElementById('heroPortraitImg').src = data.heroImage || 'images/showcase-senior-memoir.jpg';
+      document.getElementById('heroMottoText').textContent = data.motto || '뿌리 깊은 나무는 바람에 아니 묄세';
+      document.getElementById('heroMottoSub').textContent = data.mottoSub || '';
+
+      // 영구 보존 증명서 & 플립북 링크
+      document.getElementById('certBookTitle').textContent = data.bookTitle || `${data.familyName} 영구 아카이브`;
+      document.getElementById('certBookSpecs').textContent = data.bookSpecs || '수제 가죽 양장본 · 240페이지 하이엔드 조판 · 영구 보존 패키지';
+      document.getElementById('certCuratorNote').textContent = data.curatorNote || '';
+      if (data.usbSerialNo) {
+        document.getElementById('certUsbInfo').textContent = `${data.usbSerialNo} — PDF·복원 사진·오디오·다큐 원본 일체 영구 소장`;
+      }
+      const flipBtn = document.getElementById('btnOpenLinkedFlipbook');
+      if (flipBtn) {
+        flipBtn.href = data.linkedMemoirId
+          ? `my-room.html?memoir=${encodeURIComponent(data.linkedMemoirId)}`
+          : 'my-room.html?mode=sample&tab=webbook';
+      }
+
+      renderFamilyTree(data.familyTree || []);
+      renderGallerySection(data.gallery || []);
+      renderDocumentary(data.documentary || {});
+      renderAudiobook(data.audiobookTracks || []);
+      renderGuestbookList(getMergedGuestbook(data));
+    }
+
+    function unlockHeritage() {
+      if (!currentExhibition) return;
+      const input = document.getElementById('lockPasswordInput');
+      const errEl = document.getElementById('lockErrorMsg');
+      const entered = (input.value || '').trim();
+      if (entered === String(currentExhibition.accessPassword || '').trim()) {
+        sessionStorage.setItem(`heritage_unlocked_${currentExhibition.id}`, '1');
+        document.getElementById('heritageLockOverlay').classList.remove('open');
+        errEl.textContent = '';
+      } else {
+        errEl.textContent = '비밀번호가 일치하지 않습니다. 가족 안내 문자를 다시 확인해 주세요.';
+        input.focus();
+      }
+    }
+
+    // 2. 인터랙티브 4세대 가계도 렌더링
+    function renderFamilyTree(members) {
+      const wrap = document.getElementById('familyTreeContainer');
+      if (!wrap) return;
+      if (!members.length) {
+        wrap.innerHTML = '<p style="text-align:center;color:var(--ink-muted);">등록된 가계도 정보가 없습니다.</p>';
+        return;
+      }
+      const grouped = {};
+      members.forEach((m, idx) => {
+        const g = m.gen || 1;
+        if (!grouped[g]) grouped[g] = { label: m.genLabel || `제${g}대`, list: [] };
+        grouped[g].list.push(Object.assign({ _idx: idx }, m));
+      });
+
+      wrap.innerHTML = Object.keys(grouped).sort((a, b) => Number(a) - Number(b)).map(g => {
+        const grp = grouped[g];
+        return `
+          <div class="tree-gen-block">
+            <div class="tree-gen-label">🌿 ${esc(grp.label)}</div>
+            <div class="tree-cards-grid">
+              ${grp.list.map(m => `
+                <button type="button" class="tree-node-card ${Number(g) === 2 ? 'featured' : ''}" onclick="openTreeMemberModal(${m._idx})">
+                  <img class="tree-avatar" src="${esc(m.photo || 'images/showcase-senior-memoir.jpg')}" alt="${esc(m.name)}" />
+                  <div>
+                    <div class="tree-name">${esc(m.name)}</div>
+                    <div class="tree-rel">${esc(m.relation)}</div>
+                    <div class="tree-role">${esc(m.role)}</div>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function openTreeMemberModal(idx) {
+      const m = (currentExhibition && currentExhibition.familyTree || [])[idx];
+      if (!m) return;
+      document.getElementById('modalMemberImg').src = m.photo || 'images/showcase-senior-memoir.jpg';
+      document.getElementById('modalMemberGen').textContent = m.genLabel || `제${m.gen || 1}대`;
+      document.getElementById('modalMemberName').textContent = m.name || '';
+      document.getElementById('modalMemberRel').textContent = m.relation || '';
+      document.getElementById('modalMemberRole').textContent = m.role || '';
+      document.getElementById('modalMemberBio').textContent = m.bio || '';
+      document.getElementById('modalMemberQuote').textContent = m.quote ? `“${m.quote}”` : '';
+      document.getElementById('treeMemberModal').classList.add('open');
+    }
+    function closeTreeMemberModal() {
+      document.getElementById('treeMemberModal').classList.remove('open');
+    }
+
+    // 3. 옛 사진 & 훈장/유품 복원 비교 슬라이더 + 도록 그리드
+    function setComparePosition(pct) {
+      const clamped = Math.max(0, Math.min(100, Number(pct)));
+      const beforeWrap = document.getElementById('compareBeforeWrap');
+      const divider = document.getElementById('compareDivider');
+      const handle = document.getElementById('compareHandle');
+      const range = document.getElementById('compareRange');
+      if (beforeWrap) beforeWrap.style.clipPath = `inset(0 ${100 - clamped}% 0 0)`;
+      if (divider) divider.style.left = `${clamped}%`;
+      if (handle) handle.style.left = `${clamped}%`;
+      if (range && Number(range.value) !== clamped) range.value = clamped;
+    }
+
+    function initCompareSliderEvents() {
+      const stage = document.getElementById('compareStage');
+      const range = document.getElementById('compareRange');
+      if (!stage || !range) return;
+
+      let dragging = false;
+      const updateFromClientX = (clientX) => {
+        const rect = stage.getBoundingClientRect();
+        if (!rect.width) return;
+        const pct = ((clientX - rect.left) / rect.width) * 100;
+        setComparePosition(pct);
+      };
+
+      stage.addEventListener('pointerdown', (e) => {
+        dragging = true;
+        stage.setPointerCapture(e.pointerId);
+        updateFromClientX(e.clientX);
+      });
+      stage.addEventListener('pointermove', (e) => {
+        if (!dragging) return;
+        updateFromClientX(e.clientX);
+      });
+      stage.addEventListener('pointerup', () => { dragging = false; });
+      stage.addEventListener('pointercancel', () => { dragging = false; });
+      range.addEventListener('input', (e) => setComparePosition(e.target.value));
+    }
+
+    function selectGallerySpotlight(idx) {
+      const items = (currentExhibition && currentExhibition.gallery) || [];
+      const item = items[idx] || items[0];
+      if (!item) return;
+      selectedGalleryIdx = idx;
+
+      document.getElementById('compareAfterImg').src = item.afterUrl || item.beforeUrl || 'images/showcase-senior-memoir.jpg';
+      document.getElementById('compareBeforeImg').src = item.beforeUrl || item.afterUrl || 'images/showcase-senior-memoir.jpg';
+      const beforeWrap = document.getElementById('compareBeforeWrap');
+      const shouldSimAged = item.simulateAgedBefore || !item.beforeUrl || item.beforeUrl === item.afterUrl;
+      beforeWrap.classList.toggle('aged-sim', !!shouldSimAged);
+
+      document.getElementById('spotCatBadge').textContent = item.categoryLabel || 'AI 정밀 복원';
+      document.getElementById('spotYear').textContent = item.year || '';
+      document.getElementById('spotTitle').textContent = item.title || '';
+      document.getElementById('spotStory').textContent = item.story || '';
+      document.getElementById('spotRestoreNote').textContent = item.restoreNote || '고해상도 디지털 스캔 및 AI 정밀 복원 완료';
+      setComparePosition(50);
+
+      document.querySelectorAll('.gallery-card').forEach(el => {
+        el.classList.toggle('active-card', Number(el.dataset.idx) === idx);
+      });
+    }
+
+    function renderGallerySection(items) {
+      const grid = document.getElementById('heritageGalleryGrid');
+      if (!grid) return;
+      const filtered = items
+        .map((item, idx) => Object.assign({ _idx: idx }, item))
+        .filter(item => activeGalleryCategory === 'all' || item.category === activeGalleryCategory);
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--ink-muted);">해당 카테고리에 등록된 소장품이 없습니다.</div>';
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <article class="gallery-card ${item._idx === selectedGalleryIdx ? 'active-card' : ''}" data-idx="${item._idx}" onclick="selectGallerySpotlight(${item._idx}); document.getElementById('sectionRestore').scrollIntoView({behavior:'smooth', block:'start'});">
+          <img class="gallery-thumb" src="${esc(item.afterUrl || item.beforeUrl)}" alt="${esc(item.title)}" loading="lazy" />
+          <div class="gallery-body">
+            <div class="gallery-meta">
+              <span class="gallery-cat-badge">${esc(item.categoryLabel || 'AI 복원')}</span>
+              <span class="gallery-year">${esc(item.year || '')}</span>
+            </div>
+            <div class="gallery-title">${esc(item.title)}</div>
+            <div class="gallery-story">${esc(item.story)}</div>
+          </div>
+        </article>
+      `).join('');
+
+      selectGallerySpotlight(filtered[0]._idx);
+    }
+
+    function filterHeritageGallery(cat, btn) {
+      activeGalleryCategory = cat;
+      document.querySelectorAll('#galleryFilterBar .filter-pill').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderGallerySection((currentExhibition && currentExhibition.gallery) || []);
+    }
+
+    // 4. 다큐멘터리 영상관 렌더링 (Vimeo / YouTube / Cloudflare / MP4 자동 대응)
+    function renderDocumentary(docu) {
+      document.getElementById('docuTitle').textContent = docu.title || 'VIP 구술 다큐멘터리 영상 클립';
+      document.getElementById('docuSubtitle').textContent = docu.subtitle || '';
+      document.getElementById('docuDurationPill').textContent = docu.duration || 'HD 다큐';
+
+      const stage = document.getElementById('docuVideoStage');
+      const parsed = window.YebaekMedia.parseVideoEmbed(docu.videoUrl || '');
+      if (parsed.type === 'iframe') {
+        stage.innerHTML = `<iframe src="${esc(parsed.src)}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="구술 다큐멘터리 영상"></iframe>`;
+      } else if (parsed.type === 'video') {
+        stage.innerHTML = `<video controls playsinline poster="${esc(docu.posterImage || 'images/living-funeral-party-1.jpg')}" src="${esc(parsed.src)}"></video>`;
+      } else {
+        stage.innerHTML = `
+          <div class="video-demo-overlay">
+            <img src="${esc(docu.posterImage || 'images/living-funeral-party-1.jpg')}" alt="다큐멘터리 예고 스틸컷" />
+            <div class="video-demo-center">
+              <button type="button" class="video-play-ring" onclick="playDocuDemoNotice()" title="다큐멘터리 안내 보기">▶</button>
+              <div style="font-family:var(--serif); font-size:1.02rem; font-weight:700; color:#fff; margin-bottom:4px;">Vimeo · Cloudflare Stream VIP 광고 없는 전용관</div>
+              <div style="font-size:0.78rem; color:#e6d9b8;">실제 VIP 가문 계약 시 촬영된 4K 다큐 영상이 이 프레임에 영구 탑재됩니다.</div>
+            </div>
+          </div>
+        `;
+      }
+
+      const chList = document.getElementById('docuChapterList');
+      const chapters = docu.chapters || [];
+      chList.innerHTML = chapters.map(ch => `
+        <div class="docu-ch-item">
+          <span class="docu-time">${esc(ch.time)}</span>
+          <span>${esc(ch.label)}</span>
+        </div>
+      `).join('');
+    }
+
+    function playDocuDemoNotice() {
+      alert('🎬 [VIP 구술 다큐멘터리 체험 안내]\n\n실제 VIP 명문 가문 평전 제작 시, 관리자 페이지(admin.html)에서 Vimeo / YouTube 일부 공개 / Cloudflare Stream / MP4 링크를 입력하시면 이 시네마 프레임에서 광고 없이 바로 재생됩니다.');
+    }
+
+    // 5. 전문 성우 & 어르신 육성 하이브리드 오디오북 플레이어
+    function renderAudiobook(tracks) {
+      const listEl = document.getElementById('audioTrackList');
+      if (!tracks.length) {
+        listEl.innerHTML = '<div style="font-size:0.84rem;color:#9fb2a7;">등록된 오디오북 트랙이 없습니다.</div>';
+        return;
+      }
+      listEl.innerHTML = tracks.map((t, idx) => `
+        <button type="button" class="audio-track-item ${idx === activeTrackIdx ? 'active' : ''}" onclick="selectAudioTrack(${idx})">
+          <div>
+            <span class="track-badge ${t.badgeType === 'elder' ? 'elder' : 'voiceactor'}">${esc(t.badge || '🎧 오디오북')}</span>
+            <div style="font-weight: 700; font-size: 0.9rem;">${esc(t.title)}</div>
+            <div style="font-size: 0.75rem; color: #adc0b5; margin-top: 2px;">${esc(t.narrator || '')}</div>
+          </div>
+          <span style="font-family: monospace; font-size: 0.8rem; color: var(--gold-light); white-space: nowrap;">${esc(t.duration || '')}</span>
+        </button>
+      `).join('');
+
+      selectAudioTrack(0, false);
+    }
+
+    function stopAllHeritageAudio() {
+      const audioEl = document.getElementById('heritageRealAudio');
+      if (audioEl) {
+        audioEl.pause();
+      }
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      isTtsSpeaking = false;
+      const btn = document.getElementById('btnToggleAudioPlay');
+      if (btn) btn.textContent = '▶ 오디오북 재생하기';
+    }
+
+    function selectAudioTrack(idx, autoPlay) {
+      stopAllHeritageAudio();
+      const tracks = (currentExhibition && currentExhibition.audiobookTracks) || [];
+      const t = tracks[idx];
+      if (!t) return;
+      activeTrackIdx = idx;
+
+      document.querySelectorAll('.audio-track-item').forEach((el, i) => el.classList.toggle('active', i === idx));
+      const badgeEl = document.getElementById('nowPlayingBadge');
+      badgeEl.className = `track-badge ${t.badgeType === 'elder' ? 'elder' : 'voiceactor'}`;
+      badgeEl.textContent = t.badge || '🎧 오디오북';
+      document.getElementById('nowPlayingTitle').textContent = t.title || '';
+      document.getElementById('nowPlayingNarrator').textContent = `${t.narrator || ''} · ${t.duration || ''}`;
+      document.getElementById('nowPlayingScript').textContent = t.script || '오디오 파일이 준비되었습니다.';
+
+      const audioEl = document.getElementById('heritageRealAudio');
+      const noteEl = document.getElementById('audioSourceNote');
+      if (t.audioUrl) {
+        audioEl.src = t.audioUrl;
+        audioEl.playbackRate = currentPlaybackRate;
+        audioEl.style.display = 'block';
+        noteEl.textContent = '☁️ 클라우드 MP3 스트리밍 연결됨';
+      } else {
+        audioEl.removeAttribute('src');
+        audioEl.style.display = 'none';
+        noteEl.textContent = '✨ 샘플 음성 낭독 미리듣기 모드';
+      }
+
+      if (autoPlay) toggleHeritageAudioPlay();
+    }
+
+    function toggleHeritageAudioPlay() {
+      const tracks = (currentExhibition && currentExhibition.audiobookTracks) || [];
+      const t = tracks[activeTrackIdx];
+      if (!t) return;
+      const audioEl = document.getElementById('heritageRealAudio');
+      const btn = document.getElementById('btnToggleAudioPlay');
+
+      if (t.audioUrl) {
+        if (audioEl.paused) {
+          audioEl.playbackRate = currentPlaybackRate;
+          audioEl.play().catch(err => alert('오디오 재생에 실패했습니다. 클라우드 MP3 주소를 확인해 주세요.\n' + err.message));
+          btn.textContent = '⏸ 일시정지';
+        } else {
+          audioEl.pause();
+          btn.textContent = '▶ 오디오북 재생하기';
+        }
+        return;
+      }
+
+      // 샘플 모드: 브라우저 한국어 TTS 미리듣기
+      if (!('speechSynthesis' in window)) {
+        alert('현재 브라우저는 음성 미리듣기를 지원하지 않습니다. 실제 MP3 등록 시 모든 기기에서 재생됩니다.');
+        return;
+      }
+      if (isTtsSpeaking) {
+        stopAllHeritageAudio();
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(t.script || t.title);
+      utter.lang = 'ko-KR';
+      utter.rate = currentPlaybackRate * 0.94;
+      utter.onend = () => {
+        isTtsSpeaking = false;
+        btn.textContent = '▶ 오디오북 재생하기';
+      };
+      utter.onerror = () => {
+        isTtsSpeaking = false;
+        btn.textContent = '▶ 오디오북 재생하기';
+      };
+      isTtsSpeaking = true;
+      btn.textContent = '⏹ 낭독 정지';
+      window.speechSynthesis.speak(utter);
+    }
+
+    function cycleAudioSpeed() {
+      const rates = [0.85, 1.0, 1.15, 1.3];
+      const next = rates[(rates.indexOf(currentPlaybackRate) + 1) % rates.length];
+      currentPlaybackRate = next;
+      document.getElementById('btnAudioSpeed').textContent = `배속 ${next.toFixed(2).replace(/\.00$/, '.0')}x`;
+      const audioEl = document.getElementById('heritageRealAudio');
+      if (audioEl) audioEl.playbackRate = next;
+    }
+
+    function downloadCurrentTrackQr() {
+      const base = getCanonicalExhibitionUrl();
+      const sep = base.includes('?') ? '&' : '?';
+      const trackUrl = `${base}${sep}track=${activeTrackIdx + 1}#sectionMedia`;
+      const name = `${(currentExhibition && currentExhibition.familyName) || 'heritage'}_트랙${activeTrackIdx + 1}`;
+      window.YebaekMedia.downloadPrintQrSvg(trackUrl, name);
+    }
+
+    // 6. 후손 헌정 방명록 (Firestore + 로컬 백업)
+    function getLocalGuestbookKey(id) {
+      return `yebaek_heritage_gb_${id || 'demo'}`;
+    }
+
+    function getMergedGuestbook(data) {
+      const base = Array.isArray(data.guestbook) ? data.guestbook : [];
+      let local = [];
+      try {
+        local = JSON.parse(localStorage.getItem(getLocalGuestbookKey(data.id)) || '[]');
+      } catch (e) {}
+      return [...local, ...base];
+    }
+
+    async function loadFirestoreGuestbook(exhibitionId) {
+      if (!heritageDb) return;
+      try {
+        const snap = await heritageDb
+          .collection('heritage_exhibitions')
+          .doc(exhibitionId)
+          .collection('guestbook')
+          .orderBy('createdAtMs', 'desc')
+          .limit(50)
+          .get();
+        const items = [];
+        snap.forEach(doc => items.push(doc.data()));
+        if (items.length) {
+          renderGuestbookList(items);
+        }
+      } catch (err) {
+        console.warn('[Heritage Guestbook Load]', err);
+      }
+    }
+
+    function renderGuestbookList(list) {
+      const wrap = document.getElementById('guestbookList');
+      if (!wrap) return;
+      if (!list.length) {
+        wrap.innerHTML = '<div class="gb-item" style="text-align:center;color:var(--ink-muted);">첫 번째 헌정 메시지를 남겨 가문 전시관을 빛내 주세요.</div>';
+        return;
+      }
+      wrap.innerHTML = list.map(item => `
+        <div class="gb-item">
+          <div class="gb-item-head">
+            <div>
+              <span class="gb-author">${esc(item.author)}</span>
+              <span class="gb-rel-pill">${esc(item.relation || '가족')}</span>
+            </div>
+            <span class="gb-date">${esc(item.date || '')}</span>
+          </div>
+          <div class="gb-msg">${esc(item.message)}</div>
+        </div>
+      `).join('');
+    }
+
+    async function submitHeritageGuestbook(e) {
+      e.preventDefault();
+      if (!currentExhibition) return;
+      const author = document.getElementById('gbAuthorInput').value.trim();
+      const relation = document.getElementById('gbRelationInput').value;
+      const message = document.getElementById('gbMessageInput').value.trim();
+      if (!author || !message) return;
+
+      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+      const entry = {
+        id: 'gb_' + Date.now(),
+        author,
+        relation,
+        message,
+        date: today,
+        createdAtMs: Date.now()
+      };
+
+      // 1. 로컬 즉시 반영
+      const key = getLocalGuestbookKey(currentExhibition.id);
+      let local = [];
+      try { local = JSON.parse(localStorage.getItem(key) || '[]'); } catch (err) {}
+      local.unshift(entry);
+      localStorage.setItem(key, JSON.stringify(local));
+
+      // 2. 실제 VIP 전시관이면 Firestore에도 영구 기록
+      if (!currentExhibition.isDemo && currentExhibition.id && heritageDb) {
+        try {
+          await heritageDb
+            .collection('heritage_exhibitions')
+            .doc(currentExhibition.id)
+            .collection('guestbook')
+            .doc(entry.id)
+            .set(entry);
+        } catch (err) {
+          console.warn('[Heritage Guestbook Firestore Save]', err);
+        }
+      }
+
+      document.getElementById('gbAuthorInput').value = '';
+      document.getElementById('gbMessageInput').value = '';
+      renderGuestbookList(getMergedGuestbook(currentExhibition));
+      alert('💌 따뜻한 헌정 메시지가 가문 전시관 방명록에 기록되었습니다.');
+    }
+
+    // 7. 공유 링크 복사 & 인쇄용 300 DPI 순수 벡터(SVG) QR 모달
+    function copyHeritageLink() {
+      const url = getCanonicalExhibitionUrl();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url)
+          .then(() => alert(`🔗 VIP 가문 전시관 전용 주소가 복사되었습니다!\n\n${url}`))
+          .catch(() => prompt('아래 전시관 주소를 복사해 주세요:', url));
+      } else {
+        prompt('아래 전시관 주소를 복사해 주세요:', url);
+      }
+    }
+
+    function openHeritageQrModal() {
+      const url = getCanonicalExhibitionUrl();
+      const box = document.getElementById('heritageQrBox');
+      const urlText = document.getElementById('heritageQrUrlDisplay');
+      window.YebaekMedia.renderQrIntoContainer(box, url, { colorDark: '#000000', colorLight: '#ffffff', errorCorrection: 'H' });
+      if (urlText) urlText.textContent = url;
+      document.getElementById('heritageQrModal').classList.add('open');
+    }
+
+    function closeHeritageQrModal() {
+      document.getElementById('heritageQrModal').classList.remove('open');
+    }
+
+    function downloadExhibitionQrSvg() {
+      const url = getCanonicalExhibitionUrl();
+      const name = (currentExhibition && currentExhibition.familyName) || 'yebaek_heritage';
+      window.YebaekMedia.downloadPrintQrSvg(url, name);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initCompareSliderEvents();
+      loadHeritageExhibition();
+    });
+  </script>
+</body>
+</html>

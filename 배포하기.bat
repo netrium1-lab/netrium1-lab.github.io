@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 @chcp 65001 >nul
 cd /d "%~dp0"
 title [여백과 결] 데스크탑 / 노트북 실시간 연동 및 GitHub Pages 원클릭 배포
@@ -45,7 +45,7 @@ if %errorlevel% neq 0 (
 )
 echo.
 
-echo [4/4] 🚀 GitHub Pages (https://netrium1-lab.github.io/) 실시간 배포 중...
+echo [4/4] 🚀 GitHub Pages (https://yebaekarchive.kr/) 실시간 배포 중...
 git push origin main
 if %errorlevel% neq 0 (
     echo [재시도] 기본 브랜치로 푸시 재시도 중...

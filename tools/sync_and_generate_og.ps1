@@ -1,4 +1,4 @@
-﻿$ErrorActionPreference = "Stop"
+$ErrorActionPreference = "Stop"
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $repoRoot = Split-Path -Parent $PSScriptRoot
@@ -70,7 +70,7 @@ foreach ($doc in $resp.documents) {
             $bBytes = [Convert]::FromBase64String($m.Groups[2].Value)
             [IO.File]::WriteAllBytes($bDiskPath, $bBytes)
             Write-Host "Saved inline image for $id -> images/$bFileName"
-            return "https://netrium1-lab.github.io/images/$bFileName"
+            return "https://yebaekarchive.kr/images/$bFileName"
         })
 
         if ($content -ne $cleanedForFirestore) {
@@ -163,7 +163,7 @@ foreach ($doc in $resp.documents) {
         $diskPath = Join-Path $imagesDir $imgFileName
         $imgBytes = [Convert]::FromBase64String($Matches[2])
         [IO.File]::WriteAllBytes($diskPath, $imgBytes)
-        $publicUrl = "https://netrium1-lab.github.io/images/$imgFileName"
+        $publicUrl = "https://yebaekarchive.kr/images/$imgFileName"
         $image = $publicUrl
 
         # Also patch Firestore
@@ -228,7 +228,7 @@ foreach ($art in $sorted) {
     
     $ogImg = $art.image
     if (-not $ogImg -or $ogImg.StartsWith("data:")) {
-        $ogImg = "https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg"
+        $ogImg = "https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg"
     }
 
     $pageHtml = @"
@@ -247,7 +247,7 @@ foreach ($art in $sorted) {
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://netrium1-lab.github.io/articles/$artId.html">
+  <meta property="og:url" content="https://yebaekarchive.kr/articles/$artId.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="$cleanTitle">
   <meta name="twitter:description" content="$cleanDesc">

@@ -2,44 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- 메인 홈페이지 및 6대 카테고리 -->
   <url>
-    <loc>https://netrium1-lab.github.io/</loc>
+    <loc>https://yebaekarchive.kr/</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <!-- [황금키워드 칼럼 1호] 칠순 잔치 대신 부모님께 184쪽 인생 서재를 선물해 드렸습니다 -->
   <url>
-    <loc>https://netrium1-lab.github.io/?article=mag_filial_memoir</loc>
+    <loc>https://yebaekarchive.kr/?article=mag_filial_memoir</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <!-- 여백의 서재 칼럼 매거진 전체 -->
   <url>
-    <loc>https://netrium1-lab.github.io/#magazine</loc>
+    <loc>https://yebaekarchive.kr/#magazine</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- 나만의 고유한 서재 (온라인 아카이빙) -->
   <url>
-    <loc>https://netrium1-lab.github.io/my-room.html</loc>
+    <loc>https://yebaekarchive.kr/my-room.html</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <!-- 김순옥 어르신 완성 서재 (184쪽 예시 체험) -->
   <url>
-    <loc>https://netrium1-lab.github.io/my-room.html?mode=sample</loc>
+    <loc>https://yebaekarchive.kr/my-room.html?mode=sample</loc>
     <lastmod>2026-09-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <!-- 코칭스태프 양성 아카데미 -->
   <url>
-    <loc>https://netrium1-lab.github.io/academy.html</loc>
-    <lastmod>2026-09-27</lastmod>
+    <loc>https://yebaekarchive.kr/academy.html</loc>
+    <lastmod>2026-11-22</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
+  </url>
+  <!-- VIP 가문 전용 프리미엄 온라인 전시관 -->
+  <url>
+    <loc>https://yebaekarchive.kr/heritage.html</loc>
+    <lastmod>2026-11-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>

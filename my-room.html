@@ -43,9 +43,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700;900&family=Pretendard:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <!-- 📄 정식 출판 자서전 PDF 고화질 렌더러 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <!-- ☁️ Firebase SDK (가족 공유용 모바일 웹북 ?memoir= 실시간 클라우드 로드 & 발행) -->
+  <!-- ☁️ Firebase SDK (가족 공유용 모바일 웹북 ?memoir= 실시간 클라우드 로드 · Storage 오디오/사진 업로드) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <!-- 📷 300 DPI 인쇄용 순수 벡터(SVG) QR 생성기 & 여백과 결 공용 미디어 모듈 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="heritage-media.js"></script>
 
   <style>
     :root {
@@ -3708,7 +3712,7 @@
 
         <!-- 전용 공유 URL 표시 & 원클릭 액션 -->
         <div class="webbook-url-row">
-          <input type="text" id="webbookShareUrlInput" class="webbook-url-input" readonly value="https://netrium1-lab.github.io/my-room.html?tab=webbook" aria-label="모바일 웹북 공유 URL">
+          <input type="text" id="webbookShareUrlInput" class="webbook-url-input" readonly value="https://yebaekarchive.kr/my-room.html?tab=webbook" aria-label="모바일 웹북 공유 URL">
           <button type="button" class="wb-act-btn gold" onclick="copyWebbookUrl()">
             <span>🔗</span><span>웹북 URL 복사</span>
           </button>
@@ -3734,6 +3738,21 @@
           <span id="wbPersonalEditionText" style="font-size: 0.88rem; font-weight: 750; color: var(--text-main); word-break: keep-all;">관리자홈에서 등록한 완성 자서전이 내 서재 모바일 웹북에 도착했습니다.</span>
         </div>
         <div id="wbPersonalEditionControls" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;"></div>
+      </div>
+
+      <!-- 1-3. 🎙️ 책 속 QR 연동 클라우드 육성 오디오북 플레이어 (모든 스마트폰 즉시 재생) -->
+      <div id="wbCloudAudioBanner" style="display: none; background: linear-gradient(135deg, #163325 0%, #224b37 100%); border: 1.5px solid #c9a24b; border-radius: 18px; padding: 16px 20px; margin-bottom: 18px; color: #faf3e1; box-shadow: 0 10px 26px rgba(22, 51, 37, 0.16);">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;">
+          <div>
+            <span style="display: inline-block; padding: 2px 9px; border-radius: 999px; background: rgba(201,162,75,0.25); color: #f6e09e; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
+              🎙️ 책 속 육성 오디오북 · 클라우드 영구 스트리밍
+            </span>
+            <div id="wbCloudAudioTitle" style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.05rem; font-weight: 850; color: #ffffff;">어르신 육성 오디오북</div>
+            <div id="wbCloudAudioSubtitle" style="font-size: 0.82rem; color: #cfe0d6; margin-top: 2px;">책 속 QR 코드와 연결된 어르신의 실제 육성 녹음입니다.</div>
+          </div>
+          <span style="font-size: 0.75rem; background: rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 999px; color: #e9d9ab;">🛡️ yebaekarchive.kr 영구 보존</span>
+        </div>
+        <audio id="wbCloudAudioPlayer" controls style="width: 100%; height: 40px; border-radius: 10px;"></audio>
       </div>
 
       <!-- 2. 스마트폰 스타일 프리미엄 플립북 리더 -->
@@ -3808,16 +3827,19 @@
         <h3 style="font-family: 'Noto Serif KR', Georgia, serif; font-size: 1.25rem; font-weight: 850; margin: 0;">📷 가족 공유용 웹북 QR 코드</h3>
         <button type="button" onclick="closeWebbookQrModal()" class="btn-modal-close-back">✕ 닫기</button>
       </div>
-      <p style="font-size: 0.88rem; color: var(--text-sub); line-height: 1.55; margin-bottom: 18px; word-break: keep-all;">
-        스마트폰 카메라로 아래 QR 코드를 비추면 별도 로그인 없이 어르신의 모바일 웹북이 바로 열립니다. 실물 양장본 뒷표지나 감사 카드에 넣어 활용해 보세요.
+      <p style="font-size: 0.88rem; color: var(--text-sub); line-height: 1.55; margin-bottom: 16px; word-break: keep-all;">
+        스마트폰 카메라로 아래 QR 코드를 비추면 별도 로그인 없이 <strong>yebaekarchive.kr</strong> 모바일 웹북과 육성 오디오북이 바로 열립니다. 양장본 인쇄 시에는 깨지지 않는 <strong>300 DPI 벡터(.svg)</strong> 파일을 내려받아 사용해 주세요.
       </p>
-      <div style="background: #ffffff; border: 2px solid #e8e1d5; border-radius: 18px; padding: 18px; display: inline-block; margin-bottom: 16px;">
-        <img id="webbookQrImage" src="" alt="모바일 웹북 QR 코드" style="width: 210px; height: 210px; display: block;">
+      <div style="background: #ffffff; border: 2px solid #e8e1d5; border-radius: 18px; padding: 18px; display: inline-block; margin-bottom: 14px;">
+        <div id="webbookQrSvgWrap" style="width: 210px; height: 210px; display: flex; align-items: center; justify-content: center;">
+          <img id="webbookQrImage" src="" alt="모바일 웹북 QR 코드" style="width: 210px; height: 210px; display: block;">
+        </div>
       </div>
       <div id="webbookQrUrlText" style="font-size: 0.78rem; color: var(--text-muted); word-break: break-all; background: var(--paper-warm); padding: 9px 12px; border-radius: 10px; border: 1px solid var(--paper-border); margin-bottom: 16px;"></div>
-      <div style="display: flex; gap: 10px; justify-content: center;">
-        <button type="button" onclick="copyWebbookUrl()" class="btn-share" style="padding: 10px 18px;">🔗 주소 복사</button>
-        <button type="button" onclick="closeWebbookQrModal()" class="btn-back-home" style="padding: 10px 18px;">닫기</button>
+      <div style="display: flex; gap: 8px; justify-content: center; flex-wrap: wrap;">
+        <button type="button" onclick="downloadWebbookQrSvg()" class="btn-share" style="padding: 10px 16px; background: #1e4d35; color: #f6e7c1; border-color: #c29b38;">⬇️ 인쇄용 벡터(.svg) QR</button>
+        <button type="button" onclick="copyWebbookUrl()" class="btn-share" style="padding: 10px 14px;">🔗 주소 복사</button>
+        <button type="button" onclick="closeWebbookQrModal()" class="btn-back-home" style="padding: 10px 14px;">닫기</button>
       </div>
     </div>
   </div>
@@ -4267,10 +4289,18 @@
             <div>
               <strong id="coachAudioFileNameDisplay" style="font-size: 0.90rem; color: var(--text-main);">김순옥_어르신_1분_육성_회고록.mp3</strong>
               <div id="coachAudioDurationDisplay" style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">재생시간: 01:15</div>
+              <div id="coachAudioCloudBadge" style="font-size: 0.76rem; color: #1e4d35; font-weight: 700; margin-top: 3px;"></div>
             </div>
             <button type="button" class="btn-coach-admin" onclick="toggleAudioPlayer()" style="font-size: 0.80rem; padding: 6px 12px; background: var(--accent-gold); border-color: var(--accent-gold);">
               ▶ 미리듣기
             </button>
+          </div>
+
+          <div style="margin-top: 12px; background: rgba(30, 77, 53, 0.05); border: 1px solid rgba(30, 77, 53, 0.22); border-radius: 10px; padding: 11px 13px;">
+            <label class="coach-form-label" style="margin-bottom: 5px; color: #1e4d35;">
+              ☁️ 영구 클라우드 오디오 URL <small>(파일 선택 시 Firebase Storage 자동 업로드 · 또는 Cloudflare R2/MP3 직접 링크 입력)</small>
+            </label>
+            <input type="url" id="inputCoachAudioCloudUrl" class="coach-form-input" placeholder="https://... (모든 가족 스마트폰에서 책 속 QR 스캔 시 즉시 재생)" />
           </div>
         </div>
 
@@ -5212,9 +5242,10 @@
       const realAudio = document.getElementById('realAudioElement');
       const btn = document.getElementById('btnAudioToggle');
 
-      if (data.audioDataUrl && realAudio) {
-        if (realAudio.src !== data.audioDataUrl) {
-          realAudio.src = data.audioDataUrl;
+      const audioSrc = data.audioCloudUrl || data.audioDataUrl;
+      if (audioSrc && realAudio) {
+        if (realAudio.src !== audioSrc) {
+          realAudio.src = audioSrc;
         }
         if (realAudio.paused) {
           realAudio.play().then(() => {
@@ -5399,6 +5430,14 @@
       if (audioDurationInput) audioDurationInput.value = data.audioDuration || '01:15';
       const audioSubtitleInput = document.getElementById('inputCoachAudioSubtitle');
       if (audioSubtitleInput) audioSubtitleInput.value = data.audioSubtitle || '';
+      const audioCloudInput = document.getElementById('inputCoachAudioCloudUrl');
+      if (audioCloudInput) audioCloudInput.value = data.audioCloudUrl || '';
+      const audioCloudBadge = document.getElementById('coachAudioCloudBadge');
+      if (audioCloudBadge) {
+        audioCloudBadge.textContent = data.audioCloudUrl
+          ? '☁️ 클라우드 영구 URL 연결됨 (모든 폰 QR 스캔 즉시 재생)'
+          : (data.audioDataUrl ? '⚠️ 로컬 임시 저장 상태 — 클라우드 업로드 또는 URL 입력 권장' : '');
+      }
 
       // 3. Delivery
       selectCoachStage(data.deliveryStage || 4);
@@ -5454,27 +5493,64 @@
       reader.readAsDataURL(file);
     }
 
-    // 육성 오디오 파일 선택 핸들러
-    function handleCoachAudioSelected(e) {
+    // 육성 오디오 파일 선택 핸들러 (Firebase Storage 클라우드 자동 업로드 + 로컬 미리듣기)
+    async function handleCoachAudioSelected(e) {
       const file = e.target.files[0];
       if (!file) return;
 
       currentEditingCoachData.audioFileName = file.name;
       document.getElementById('coachAudioFileNameDisplay').textContent = file.name;
+      const cloudBadge = document.getElementById('coachAudioCloudBadge');
+      const cloudInput = document.getElementById('inputCoachAudioCloudUrl');
 
+      // 1. 즉시 로컬 재생시간 측정 및 미리듣기 준비
+      const objectUrl = URL.createObjectURL(file);
+      const tempAudio = new Audio(objectUrl);
+      tempAudio.onloadedmetadata = function() {
+        const m = String(Math.floor(tempAudio.duration / 60)).padStart(2, '0');
+        const s = String(Math.floor(tempAudio.duration % 60)).padStart(2, '0');
+        currentEditingCoachData.audioDuration = `${m}:${s}`;
+        document.getElementById('coachAudioDurationDisplay').textContent = `재생시간: ${m}:${s}`;
+        document.getElementById('inputCoachAudioDuration').value = `${m}:${s}`;
+        URL.revokeObjectURL(objectUrl);
+      };
+
+      // 2. Firebase Storage 영구 클라우드 업로드 시도 (모든 스마트폰 QR 즉시 재생용)
+      if (window.YebaekMedia && typeof window.YebaekMedia.uploadFileToFirebaseStorage === 'function') {
+        if (cloudBadge) {
+          cloudBadge.style.color = '#8c6610';
+          cloudBadge.textContent = '☁️ Firebase Storage 클라우드로 영구 업로드 중... (0%)';
+        }
+        const uploadRes = await window.YebaekMedia.uploadFileToFirebaseStorage(
+          file,
+          'memoir_audio',
+          (pct) => {
+            if (cloudBadge) cloudBadge.textContent = `☁️ Firebase Storage 클라우드로 영구 업로드 중... (${pct}%)`;
+          }
+        );
+
+        if (uploadRes.ok && uploadRes.url) {
+          currentEditingCoachData.audioCloudUrl = uploadRes.url;
+          currentEditingCoachData.audioDataUrl = uploadRes.url;
+          if (cloudInput) cloudInput.value = uploadRes.url;
+          if (cloudBadge) {
+            cloudBadge.style.color = '#15803d';
+            cloudBadge.textContent = '✅ 클라우드 영구 저장 완료! 이제 모든 가족 스마트폰에서 QR 스캔 시 재생됩니다.';
+          }
+          alert(`🎙️ [${file.name}] 육성 오디오가 클라우드(Firebase Storage)에 영구 저장되었습니다!\n하단의 [서재에 실시간 반영하기]를 눌러 완료해 주세요.`);
+          return;
+        }
+      }
+
+      // 3. Storage 미활성화 시 로컬 미리듣기 폴백 + 안내
       const reader = new FileReader();
       reader.onload = function(event) {
         currentEditingCoachData.audioDataUrl = event.target.result;
-        // 오디오 객체에 임시 로드하여 재생시간 계산
-        const tempAudio = new Audio(event.target.result);
-        tempAudio.onloadedmetadata = function() {
-          const m = String(Math.floor(tempAudio.duration / 60)).padStart(2, '0');
-          const s = String(Math.floor(tempAudio.duration % 60)).padStart(2, '0');
-          currentEditingCoachData.audioDuration = `${m}:${s}`;
-          document.getElementById('coachAudioDurationDisplay').textContent = `재생시간: ${m}:${s}`;
-          document.getElementById('inputCoachAudioDuration').value = `${m}:${s}`;
-        };
-        alert(`🎙️ [${file.name}] 어르신 육성 음성 파일이 등록되었습니다!`);
+        if (cloudBadge) {
+          cloudBadge.style.color = '#b45309';
+          cloudBadge.textContent = '⚠️ 로컬 미리듣기 등록됨 (다른 스마트폰 QR 재생을 위해 Firebase Storage 활성화 또는 외부 MP3 URL 입력 권장)';
+        }
+        alert(`🎙️ [${file.name}] 파일이 임시 등록되었습니다.\n모든 가족 스마트폰에서 QR 스캔 시 들리게 하려면 Firebase Storage를 활성화하거나 위 입력란에 클라우드 MP3 URL을 붙여넣어 주세요.`);
       };
       reader.readAsDataURL(file);
     }
@@ -5573,10 +5649,16 @@
       currentEditingCoachData.pdfFileName = document.getElementById('inputCoachPdfTitle').value.trim() || currentEditingCoachData.pdfFileName;
       currentEditingCoachData.pdfPages = document.getElementById('inputCoachPdfPages').value.trim() || "184";
 
-      // 2. Audio 데이터 반영
+      // 2. Audio 데이터 반영 (클라우드 영구 URL 우선)
       currentEditingCoachData.audioTitle = document.getElementById('inputCoachAudioTitle').value.trim() || currentEditingCoachData.audioTitle;
       currentEditingCoachData.audioDuration = document.getElementById('inputCoachAudioDuration').value.trim() || "01:15";
       currentEditingCoachData.audioSubtitle = document.getElementById('inputCoachAudioSubtitle').value.trim() || currentEditingCoachData.audioSubtitle;
+      const cloudUrlEl = document.getElementById('inputCoachAudioCloudUrl');
+      if (cloudUrlEl) {
+        const cleanUrl = cloudUrlEl.value.trim();
+        currentEditingCoachData.audioCloudUrl = cleanUrl;
+        if (cleanUrl) currentEditingCoachData.audioDataUrl = cleanUrl;
+      }
 
       // 3. Delivery 데이터 반영
       currentEditingCoachData.deliveryStage = selectedCoachDeliveryStage;
@@ -5608,8 +5690,22 @@
         console.warn('LocalStorage 저장 한도 초과 위험:', err);
       }
 
-      // 서재 화면 즉시 갱신
+      // 서재 화면 즉시 갱신 + 클라우드 오디오가 연결된 경우 Firestore 웹북 문서에도 동기화
       applyCoachDataToRoom();
+      if (currentEditingCoachData.audioCloudUrl && roomFbDb) {
+        const targetMemoirId = (activeSharedMemoirProject && activeSharedMemoirProject.id)
+          || (getActivePersonalOfficialWebbook && getActivePersonalOfficialWebbook() && getActivePersonalOfficialWebbook().id)
+          || localStorage.getItem('yebaek_my_published_webbook_id');
+        if (targetMemoirId) {
+          roomFbDb.collection('memoir_projects').doc(targetMemoirId).set({
+            audioCloudUrl: currentEditingCoachData.audioCloudUrl,
+            audioTitle: currentEditingCoachData.audioTitle,
+            audioSubtitle: currentEditingCoachData.audioSubtitle,
+            audioDuration: currentEditingCoachData.audioDuration
+          }, { merge: true }).catch(err => console.warn('[Coach Audio Cloud Sync]', err));
+        }
+      }
+      if (typeof syncWebbookCloudAudioPlayer === 'function') syncWebbookCloudAudioPlayer();
       closeCoachAdminModal();
       alert('🌿 전담 코치 관리 데이터가 서재에 성공적으로 실시간 반영되었습니다!');
     }
@@ -7505,11 +7601,34 @@
 
       currentWebbookPageIdx = 0;
       renderMobileWebbook(true);
+      syncWebbookCloudAudioPlayer(found);
       switchTab('tab-webbook', false);
 
       if (found && found.sourceType === 'pdf') {
         await ensurePdfPagesLoadedForDoc(found);
         renderMobileWebbook(true);
+      }
+    }
+
+    // 🎙️ 책 속 QR 연동 클라우드 육성 오디오북 플레이어 자동 표시
+    function syncWebbookCloudAudioPlayer(projectDoc) {
+      const banner = document.getElementById('wbCloudAudioBanner');
+      const player = document.getElementById('wbCloudAudioPlayer');
+      const titleEl = document.getElementById('wbCloudAudioTitle');
+      const subEl = document.getElementById('wbCloudAudioSubtitle');
+      if (!banner || !player) return;
+
+      const doc = projectDoc || activeSharedMemoirProject || (typeof getActivePersonalOfficialWebbook === 'function' ? getActivePersonalOfficialWebbook() : null);
+      const coachData = (typeof getCoachData === 'function') ? getCoachData() : {};
+      const audioUrl = (doc && (doc.audioCloudUrl || doc.audioUrl)) || (!activeSharedMemoirProject ? (coachData.audioCloudUrl || '') : '');
+
+      if (audioUrl) {
+        if (titleEl) titleEl.textContent = (doc && doc.audioTitle) || coachData.audioTitle || `${(doc && (doc.ownerName || doc.clientName)) || '어르신'} 육성 오디오북`;
+        if (subEl) subEl.textContent = (doc && doc.audioSubtitle) || coachData.audioSubtitle || '책 속 QR 코드와 연결된 어르신의 실제 육성 녹음입니다.';
+        if (player.src !== audioUrl) player.src = audioUrl;
+        banner.style.display = 'block';
+      } else {
+        banner.style.display = 'none';
       }
     }
 
@@ -7909,7 +8028,9 @@
     }
 
     function getCurrentWebbookShareUrl() {
-      const base = `${window.location.origin}${window.location.pathname}`;
+      const base = (window.YebaekMedia && window.YebaekMedia.getPrintUrl)
+        ? window.YebaekMedia.getPrintUrl('my-room.html')
+        : 'https://yebaekarchive.kr/my-room.html';
       if (activeSharedMemoirProject && activeSharedMemoirProject.id) {
         return `${base}?memoir=${encodeURIComponent(activeSharedMemoirProject.id)}`;
       }
@@ -7982,6 +8103,7 @@
       }
 
       renderPersonalEditionBar();
+      if (typeof syncWebbookCloudAudioPlayer === 'function') syncWebbookCloudAudioPlayer();
 
       const counterEl = document.getElementById('tabCounterWebbook');
       if (counterEl) counterEl.textContent = `${webbookPages.length}쪽`;
@@ -8652,7 +8774,7 @@
             content: {
               title: `📖 ${cover.title || '여백과 결 모바일 웹북'}`,
               description: cover.subtitle || '지나온 세월의 결을 담은 가족 전용 모바일 자서전 웹북입니다.',
-              imageUrl: 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg',
+              imageUrl: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
               link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
             },
             buttons: [
@@ -8670,11 +8792,27 @@
     function openWebbookQrModal() {
       const shareUrl = getCurrentWebbookShareUrl();
       const modal = document.getElementById('webbookQrModal');
+      const svgWrap = document.getElementById('webbookQrSvgWrap');
       const img = document.getElementById('webbookQrImage');
       const txt = document.getElementById('webbookQrUrlText');
-      if (img) img.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(shareUrl)}`;
+      if (svgWrap && window.YebaekMedia && typeof window.YebaekMedia.renderQrIntoContainer === 'function') {
+        window.YebaekMedia.renderQrIntoContainer(svgWrap, shareUrl, { colorDark: '#000000', colorLight: '#ffffff', errorCorrection: 'H' });
+      } else if (img) {
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=8&data=${encodeURIComponent(shareUrl)}`;
+      }
       if (txt) txt.textContent = shareUrl;
       if (modal) modal.classList.add('open');
+    }
+
+    function downloadWebbookQrSvg() {
+      const shareUrl = getCurrentWebbookShareUrl();
+      const book = activeSharedMemoirProject || (typeof getActivePersonalOfficialWebbook === 'function' ? getActivePersonalOfficialWebbook() : null);
+      const name = (book && (book.ownerName || book.bookTitle)) || 'yebaek_webbook';
+      if (window.YebaekMedia && typeof window.YebaekMedia.downloadPrintQrSvg === 'function') {
+        window.YebaekMedia.downloadPrintQrSvg(shareUrl, name);
+      } else {
+        window.open(`https://api.qrserver.com/v1/create-qr-code/?format=svg&size=600x600&margin=12&data=${encodeURIComponent(shareUrl)}`, '_blank');
+      }
     }
 
     function closeWebbookQrModal() {

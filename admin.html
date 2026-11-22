@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
@@ -17,9 +17,13 @@
   <script src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.2/kakao.min.js"></script>
   <!-- 📍 카카오/다음 우편번호 & 도로명 주소 검색 서비스 -->
   <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-  <!-- 🌟 Firebase SDK (v10 Compat: App + Firestore 실시간 클라우드 DB) -->
+  <!-- 🌟 Firebase SDK (v10 Compat: App + Firestore + Storage 클라우드 미디어 업로드) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-storage-compat.js"></script>
+  <!-- 📷 300 DPI 인쇄용 순수 벡터(SVG) QR 생성기 & 여백과 결 공용 미디어 모듈 -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+  <script src="heritage-media.js"></script>
   <style>
     :root {
       --bg-body: #f1f5f9;
@@ -2289,6 +2293,14 @@
             <span class="subnav-icon">📢</span>
             <span>4. 메인 CTA 배너 설정</span>
           </button>
+          <button type="button" class="subnav-link" id="sideSub_memoir_heritage" onclick="selectMemoirFromSidebar('heritage')">
+            <span class="subnav-icon">🏛️</span>
+            <span>5. VIP 가문 온라인 전시관</span>
+          </button>
+          <button type="button" class="subnav-link" id="sideSub_memoir_cost" onclick="selectMemoirFromSidebar('cost')">
+            <span class="subnav-icon">📊</span>
+            <span>6. 원가·마진 &amp; 실무 가이드</span>
+          </button>
         </div>
 
         <!-- 🤝 05. 코칭스태프 & 정산 센터 (Coach Ops & Settlement) -->
@@ -2716,8 +2728,8 @@
 
             <div style="margin-top: 12px; padding: 10px 14px; background: #ffffff; border-radius: 8px; border: 1px dashed #cbd5e1; font-size: 0.82rem; color: #475569; line-height: 1.5;">
               📌 <strong>sitemap.xml 및 robots.txt 구축 완료:</strong><br>
-              • 로봇 배제 표준: <code>https://netrium1-lab.github.io/robots.txt</code><br>
-              • 사이트맵 주소: <code>https://netrium1-lab.github.io/sitemap.xml</code> (네이버/구글에 sitemap.xml 제출 시 등록)
+              • 로봇 배제 표준: <code>https://yebaekarchive.kr/robots.txt</code><br>
+              • 사이트맵 주소: <code>https://yebaekarchive.kr/sitemap.xml</code> (네이버/구글에 sitemap.xml 제출 시 등록)
             </div>
           </div>
 
@@ -3191,6 +3203,9 @@
               <button type="button" onclick="openPersonalWebbookModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1.2px solid #c29b38; box-shadow: 0 4px 12px rgba(21,54,38,0.22);" title="완성된 자서전을 어르신 개인 서재의 모바일 웹북 탭에 바로 등록합니다">
                 <span>📱</span> 개인 서재 모바일 웹북 올리기
               </button>
+              <button type="button" onclick="openHeritageExhibitionModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #14281f 0%, #244a38 100%); color: #f6e7c1; font-size: 0.88rem; font-weight: 850; padding: 10px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1.2px solid #c9a24b;" title="VIP 명문 가문 평전 전용 영구 온라인 전시관을 구축·발행합니다">
+                <span>🏛️</span> VIP 가문 전시관 발행
+              </button>
               <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
                 <span>📱</span> 코치 글쓰기 앱 열기 ➔
               </a>
@@ -3346,6 +3361,99 @@
                 <!-- JS 동적 렌더링 -->
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- 04-3. 🏛️ VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 발행 관리 (heritage.html 연동) -->
+        <div class="panel-card" id="heritageExhibitionSection" style="margin-top: 24px; border: 1.8px solid rgba(201, 162, 75, 0.55); background: linear-gradient(180deg, rgba(20, 40, 31, 0.04) 0%, var(--bg-card) 130px);">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" style="background: #14281f; color: #f6e7c1;">🏛️</span>
+              <div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #14281f; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
+                  yebaekarchive.kr/heritage.html 실시간 발행 · 유지비 0원 자체 플랫폼
+                </div>
+                <h2 class="panel-title" style="margin: 0;">04-5. VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 관리</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0; line-height: 1.55;">
+                  <strong>명문 가문 평전(VIP)</strong> 고객의 가훈·4세대 인터랙티브 가계도·옛 사진 및 훈장/유품 60점 AI 복원 전↔후 비교 도록·구술 다큐멘터리 영상관(Vimeo/YouTube/MP4)·전문 성우/육성 오디오북·후손 방명록을 한 번에 발행하고 <strong>300 DPI 책 인쇄용 벡터(.svg) QR</strong>을 내려받습니다.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn-save-setting" onclick="openHeritageExhibitionModal()" style="background: linear-gradient(135deg, #14281f 0%, #234d3b 100%); color: #f6e7c1; border: 1.2px solid #c9a24b; font-weight: 850;">
+                <span>➕</span> 새 VIP 가문 전시관 구축
+              </button>
+              <a href="heritage.html?demo=1" target="_blank" class="btn-save-setting" style="background: #fef9e7; color: #7a5912; border: 1.2px solid #c9a24b; font-weight: 800; text-decoration: none;">
+                <span>✨</span> 샘플 전시관 열기 ↗
+              </a>
+              <button type="button" class="btn-save-setting" onclick="syncHeritageExhibitionsFromCloud(true)" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                <span>☁️</span> 클라우드 동기화
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 220px;">가문명 / 주인공</th>
+                  <th>가훈 &amp; 탑재 콘텐츠 현황</th>
+                  <th style="width: 120px; text-align: center;">접근 보안</th>
+                  <th style="width: 100px;">발행일</th>
+                  <th style="width: 280px; text-align: center;">전시관 관리 · 링크 · 300DPI QR</th>
+                </tr>
+              </thead>
+              <tbody id="heritageExhibitionsTableBody">
+                <!-- admin-heritage.js 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 04-6. 📊 상품별 제작 원가 · 외주비 · 적정 판매가 시뮬레이터 & 실무 워크플로우 가이드 -->
+        <div class="panel-card" id="memoirCostSimulatorSection" style="margin-top: 24px; border: 1.5px solid rgba(194, 155, 56, 0.4);">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" style="background: rgba(194, 155, 56, 0.14); color: #8c6610;">📊</span>
+              <div>
+                <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #8c6610; color: #fff; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
+                  실전 수익 관리 · 외주/AI 툴 제작 매뉴얼
+                </div>
+                <h2 class="panel-title" style="margin: 0;">04-6. 상품별 제작 원가 · 외주비 · 마진 시뮬레이터 &amp; 실무 제작 가이드</h2>
+                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0;">
+                  <strong>인생 마스터피스</strong>와 <strong>명문 가문 평전</strong>의 판매가·외주 원가를 실시간 조정해 순수익률을 점검하고, 각 서비스의 실무 제작 툴과 납품 체크리스트를 바로 확인합니다.
+                </p>
+              </div>
+            </div>
+            <button type="button" class="btn-save-setting" onclick="resetMemoirCostSimulator()" style="background: #fff; color: var(--text-main); border: 1.5px solid var(--border-color); font-size: 0.82rem;">
+              <span>🔄</span> 표준 권장가 초기화
+            </button>
+          </div>
+
+          <!-- 실시간 원가·마진 시뮬레이터 2컬럼 그리드 -->
+          <div id="memoirCostSimulatorGrid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 18px; margin-bottom: 20px;"></div>
+
+          <!-- 실무 제작 툴 & 납품 체크리스트 요약 카드 -->
+          <div style="background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 14px; padding: 16px 18px;">
+            <div style="font-size: 0.88rem; font-weight: 850; color: #14281f; margin-bottom: 10px;">🛠️ 항목별 실무 제작 툴 · 외주 · 영구 보존 납품 체크리스트</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; font-size: 0.8rem; color: #334155; line-height: 1.55;">
+              <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:11px;">
+                <strong style="color:#1e4d35; display:block; margin-bottom:3px;">1️⃣ 옛 사진 30~60장 &amp; 유품 복원</strong>
+                스캔(600DPI Epson / Google 포토스캔) · 유품 미니 LED 포토박스 → <strong>Photoshop Neural Filters</strong> + <strong>Remini / Topaz</strong> (원본 50~70% 블렌딩 검수) → InDesign 조판
+              </div>
+              <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:11px;">
+                <strong style="color:#1e4d35; display:block; margin-bottom:3px;">2️⃣ 육성 오디오북 &amp; 책 속 QR</strong>
+                핀마이크 녹음 → <strong>Adobe Podcast Enhance Speech</strong> 스튜디오 보정 → MP3 클라우드 업로드 → 위 표의 <strong>[📷 SVG QR]</strong>(300DPI 벡터, 최소 2×2cm) 인쇄 배치
+              </div>
+              <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:11px;">
+                <strong style="color:#1e4d35; display:block; margin-bottom:3px;">3️⃣ 다큐 영상 &amp; 전문 성우 (VIP)</strong>
+                지역 1인 다큐 PD(50~150만 원) + AI 사진 모션 컷 → <strong>Vimeo / Cloudflare Stream</strong> 무광고 탑재 / 성우(올보이스·크몽) 본문 + 어르신 육성 프롤로그 하이브리드
+              </div>
+              <div style="background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:11px;">
+                <strong style="color:#1e4d35; display:block; margin-bottom:3px;">4️⃣ 영구 보존 이중 백업 납품</strong>
+                ① <strong>yebaekarchive.kr</strong> 고유 도메인 온라인 영구 호스팅 + ② <strong>황동 각인 고급 USB(64GB)</strong>에 PDF·복원 원본·MP3·MP4 일체 담아 양장본과 동봉 납품
+              </div>
+            </div>
           </div>
         </div>
 
@@ -5864,12 +5972,142 @@
           </div>
         </div>
 
+        <!-- 3. 🎙️ 책 속 인쇄 QR 연동 클라우드 육성 오디오북 연결 -->
+        <div style="background: rgba(194, 155, 56, 0.06); border: 1.4px solid rgba(194, 155, 56, 0.42); border-radius: 14px; padding: 14px 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px;">
+            <div style="font-size: 0.88rem; font-weight: 850; color: #7a5912;">
+              3️⃣ 책 속 QR 연동 육성 오디오북 클라우드 연결 <span style="font-size: 0.74rem; font-weight: 600;">(선택 · 모든 가족 스마트폰 즉시 재생)</span>
+            </div>
+            <label style="background: #1e4d35; color: #f6e7c1; padding: 6px 12px; border-radius: 999px; font-size: 0.76rem; font-weight: 850; cursor: pointer; display: inline-flex; align-items: center; gap: 5px;">
+              <span>📤</span><span>MP3 클라우드 업로드</span>
+              <input type="file" id="wbAudioFileInput" accept="audio/*,.mp3,.m4a,.wav" style="display: none;" onchange="handleWbAudioFileChange(event)">
+            </label>
+          </div>
+          <div id="wbAudioUploadStatus" style="display: none; font-size: 0.77rem; font-weight: 700; margin-bottom: 8px; padding: 7px 10px; border-radius: 8px; background: #fff;"></div>
+          <div style="display: grid; grid-template-columns: 1.2fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <input type="url" id="wbAudioCloudUrl" class="setting-input" placeholder="☁️ 클라우드 MP3 URL (업로드 시 자동 입력 또는 직접 붙여넣기)" style="font-size: 0.8rem; background: #fff;">
+            <input type="text" id="wbAudioTitle" class="setting-input" placeholder="오디오 제목 (예: 🎙️ 홍길동 어르신 육성 회고록)" style="font-size: 0.8rem; background: #fff;">
+          </div>
+          <input type="text" id="wbAudioSubtitle" class="setting-input" placeholder="오디오 하단 감동 안내 문구 (선택 · 예: 자녀와 손주들에게 직접 남기신 육성 편지입니다)" style="font-size: 0.79rem; background: #fff;">
+        </div>
+
         <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-color);">
           <button type="button" class="btn-save-setting" onclick="closePersonalWebbookModal()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
             취소
           </button>
           <button type="submit" id="btnSubmitPersonalWebbook" class="btn-save-setting" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #ffffff; border: 1px solid #c29b38; font-weight: 850; padding: 10px 22px;">
             ☁️ 개인 서재 모바일 웹북에 올리기 (자동 배포)
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= 모달 8) 🏛️ VIP 가문 전용 프리미엄 온라인 전시관 구축 · 편집 모달 ================= -->
+  <div class="cms-modal-overlay" id="heritageExhibitionModal" onclick="if(event.target===this) closeHeritageExhibitionModal();" style="z-index: 100025;">
+    <div class="coach-modal-card" style="max-width: 820px; width: 96%; max-height: 92vh; overflow-y: auto;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 12px;">
+        <div>
+          <span style="display: inline-block; padding: 2px 10px; border-radius: 999px; background: #14281f; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
+            yebaekarchive.kr/heritage.html 실시간 클라우드 발행
+          </span>
+          <h3 id="heritageModalTitle" style="font-family: 'Noto Serif KR', serif; font-size: 1.24rem; font-weight: 850; color: var(--text-main); margin: 0;">
+            🏛️ VIP 가문 전용 온라인 전시관 구축 · 발행
+          </h3>
+        </div>
+        <button type="button" onclick="closeHeritageExhibitionModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 34px; height: 34px; cursor: pointer; font-size: 1rem;">✕</button>
+      </div>
+
+      <form onsubmit="handleHeritageExhibitionSubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
+        <input type="hidden" id="hmId">
+
+        <!-- 1. 기본 가문 정보 & 가훈 -->
+        <div style="background: rgba(20, 40, 31, 0.04); border: 1.3px solid rgba(20, 40, 31, 0.2); border-radius: 12px; padding: 14px;">
+          <div style="font-size: 0.86rem; font-weight: 850; color: #14281f; margin-bottom: 10px;">1️⃣ 가문 헌정 기본 정보 · 가훈 · 보안</div>
+          <div style="display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size:0.78rem; font-weight:800; display:block; margin-bottom:3px;">가문 전시관 제목 *</label>
+              <input type="text" id="hmFamilyName" class="setting-input" placeholder="예: 경주 김씨 해송(海松) 가문 평전" required>
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:800; display:block; margin-bottom:3px;">영문 헌정 부제</label>
+              <input type="text" id="hmEnglishTitle" class="setting-input" placeholder="THE HAESONG HERITAGE ARCHIVE">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 0.9fr; gap: 8px; margin-bottom: 8px;">
+            <div>
+              <label style="font-size:0.78rem; font-weight:800; display:block; margin-bottom:3px;">주인공 어르신 성함 *</label>
+              <input type="text" id="hmProtagonistName" class="setting-input" placeholder="예: 김정호 옹 · 이영자 여사" required>
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:800; display:block; margin-bottom:3px;">생애 연대 표기</label>
+              <input type="text" id="hmProtagonistYears" class="setting-input" placeholder="예: 1938 — 현재 · 88년의 여정">
+            </div>
+            <div>
+              <label style="font-size:0.78rem; font-weight:800; display:block; margin-bottom:3px;">🔒 가족 비밀번호 (선택)</label>
+              <input type="text" id="hmAccessPassword" class="setting-input" placeholder="비워두면 링크 공개">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1.3fr; gap: 8px; margin-bottom: 8px;">
+            <input type="text" id="hmMotto" class="setting-input" placeholder="가훈 (예: 뿌리 깊은 나무는 바람에 아니 묄세)">
+            <input type="text" id="hmMottoSub" class="setting-input" placeholder="가훈 한 줄 해설">
+          </div>
+          <input type="text" id="hmHeroQuote" class="setting-input" placeholder="전시관 메인 헌정 인용구 (어르신 대표 말씀)" style="margin-bottom: 8px;">
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px;">
+            <input type="text" id="hmHeroImage" class="setting-input" placeholder="대표 헌정 화보 이미지 URL">
+            <label style="background:#14281f; color:#f6e7c1; padding:8px 12px; border-radius:8px; font-size:0.78rem; font-weight:800; cursor:pointer;">
+              📤 화보 업로드
+              <input type="file" accept="image/*" style="display:none;" onchange="uploadHmHeroImage(event)">
+            </label>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+            <input type="text" id="hmBookTitle" class="setting-input" placeholder="연결 평전 도서명">
+            <input type="text" id="hmLinkedMemoirId" class="setting-input" placeholder="연결할 모바일 웹북 ID (선택)">
+            <input type="text" id="hmUsbSerial" class="setting-input" placeholder="각인 USB 보관번호 (예: YK-HP-2026-001)">
+          </div>
+        </div>
+
+        <!-- 2. 구술 다큐멘터리 영상관 -->
+        <div style="background: #ffffff; border: 1.3px solid var(--border-color); border-radius: 12px; padding: 14px;">
+          <div style="font-size: 0.86rem; font-weight: 850; color: #14281f; margin-bottom: 8px;">2️⃣ 🎬 구술 다큐멘터리 영상관 (Vimeo · YouTube 일부공개 · Cloudflare Stream · MP4)</div>
+          <div style="display: grid; grid-template-columns: 1.4fr 1.6fr 0.6fr; gap: 8px;">
+            <input type="text" id="hmDocuTitle" class="setting-input" placeholder="다큐 영상 제목">
+            <input type="url" id="hmDocuUrl" class="setting-input" placeholder="https://vimeo.com/... 또는 YouTube/MP4 주소">
+            <input type="text" id="hmDocuDuration" class="setting-input" placeholder="06:20">
+          </div>
+        </div>
+
+        <!-- 3. 전문 성우 & 어르신 육성 오디오북 트랙 -->
+        <div style="background: #ffffff; border: 1.3px solid var(--border-color); border-radius: 12px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 0.86rem; font-weight: 850; color: #14281f;">3️⃣ 🎧 어르신 육성 &amp; 전문 성우 오디오북 트랙</div>
+            <button type="button" onclick="addHmTrack()" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; font-weight:800;">+ 트랙 추가</button>
+          </div>
+          <div id="hmTracksEditor"></div>
+        </div>
+
+        <!-- 4. 옛 사진 · 훈장 · 유품 복원 도록 -->
+        <div style="background: #ffffff; border: 1.3px solid var(--border-color); border-radius: 12px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 0.86rem; font-weight: 850; color: #14281f;">4️⃣ 🎞️ 옛 사진 · 훈장 · 유품 AI 복원 도록 (복원 전↔후 비교 슬라이더 자동 지원)</div>
+            <button type="button" onclick="addHmGallery()" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; font-weight:800;">+ 소장품 추가</button>
+          </div>
+          <div id="hmGalleryEditor"></div>
+        </div>
+
+        <!-- 5. 4세대 인터랙티브 가계도 -->
+        <div style="background: #ffffff; border: 1.3px solid var(--border-color); border-radius: 12px; padding: 14px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <div style="font-size: 0.86rem; font-weight: 850; color: #14281f;">5️⃣ 🌳 4세대 인터랙티브 가계도 구성원</div>
+            <button type="button" onclick="addHmTreeMember()" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; font-weight:800;">+ 가족 추가</button>
+          </div>
+          <div id="hmTreeEditor"></div>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-color);">
+          <button type="button" class="btn-save-setting" onclick="closeHeritageExhibitionModal()" style="background: #fff; color: var(--text-main); border: 1.5px solid var(--border-color);">취소</button>
+          <button type="submit" class="btn-save-setting" style="background: linear-gradient(135deg, #14281f 0%, #234d3b 100%); color: #f6e7c1; border: 1.2px solid #c9a24b; font-weight: 850; padding: 10px 22px;">
+            🏛️ VIP 가문 전시관 클라우드 발행하기
           </button>
         </div>
       </form>
@@ -6252,11 +6490,11 @@
         aliasIds: ['mag_1791208879438', 'mag_1791200706701', 'mag_1791208784105', 'mag_care_beauty_reset'],
         title: "거울 속에서 되찾는 품격, “오늘이 내 인생 가장 빛나는 날”",
         category: '비움과 갈무리',
-        image: 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg',
+        image: 'https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg',
         excerpt: "나이가 들어 거동이 불편해지면, 자연스럽게 외출이나 꾸밈과는 멀어지게 됩니다. \"이제 와서 화장해서 어디에 쓰겠어...\" 스스로의 아름다움을 장롱 속에 고이 접어두신 부모님께 인생 가장 찬란했던 시절의 품격과 자존감을 되찾아 드리는 일본 선진 개호미용(Care Beauty)과 웰니스 방문 맞춤 리셋 케어.",
         content: `
           <figure style="margin: 0 0 28px; text-align: center;">
-            <img src="https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg" alt="거울 속에서 되찾은 환한 미소와 자존감" style="width: 100%; max-height: 540px; object-fit: cover; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
+            <img src="https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg" alt="거울 속에서 되찾은 환한 미소와 자존감" style="width: 100%; max-height: 540px; object-fit: cover; border-radius: 14px; box-shadow: 0 8px 24px rgba(0,0,0,0.08);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ "나 아직 이렇게 고왔네" - 거울 속 바뀐 자신의 모습에 환한 미소를 되찾으신 어르신</figcaption>
           </figure>
 
@@ -6275,7 +6513,7 @@
           <p>마음속 깊은 곳에서는 누구나 기억하고 있습니다. 가장 찬란했던 청춘의 날, 혹은 누군가에게 가장 아름답게 보이고 싶었던 그 시절의 내 모습을 말이죠.</p>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="https://netrium1-lab.github.io/images/care-beauty-styling.jpg" alt="전문 뷰티 코치진의 정성스러운 손길로 완성되는 찾아가는 리셋 살롱" style="width: 100%; max-height: 520px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="https://yebaekarchive.kr/images/care-beauty-styling.jpg" alt="전문 뷰티 코치진의 정성스러운 손길로 완성되는 찾아가는 리셋 살롱" style="width: 100%; max-height: 520px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 손끝에서 피어나는 생기, 어르신의 품격과 자존감을 되찾아드리는 맞춤 케어</figcaption>
           </figure>
 
@@ -6301,7 +6539,7 @@
           <p><strong>이것이 바로 진정한 의미의 ‘웰니스’이자, 삶을 지탱하는 강력한 자신감입니다.</strong></p>
 
           <figure style="margin: 32px 0; text-align: center;">
-            <img src="https://netrium1-lab.github.io/images/care-beauty-mirror.jpg" alt="한복을 곱게 차려입고 가족들과 함께 환하게 웃으시는 어르신" style="width: 100%; max-height: 520px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
+            <img src="https://yebaekarchive.kr/images/care-beauty-mirror.jpg" alt="한복을 곱게 차려입고 가족들과 함께 환하게 웃으시는 어르신" style="width: 100%; max-height: 520px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);" />
             <figcaption style="margin-top: 10px; font-size: 0.88rem; color: #64748b;">▲ 가장 빛나는 날, 온 가족의 축복 속에 완성된 눈부신 인생 화보</figcaption>
           </figure>
 
@@ -6339,7 +6577,7 @@
         aliasIds: ['mag_living_funeral_best'],
         title: "살아있을 때 나누는 가장 따뜻한 고별: 일본에서 주목받는 '생전 장례식'과 감사의 기술",
         category: '웰다잉',
-        image: 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg',
+        image: 'https://yebaekarchive.kr/images/living-funeral-party-4.jpg',
         excerpt: '"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다." 평생을 살아오며 빚진 고마움을 살아있을 때 온전히 전하는 새로운 고별 문화.',
         content: `
           <p class="article-lead">"내가 세상을 떠난 뒤 차가운 영안실에 놓인 사진을 보며 울게 하지 말고, 내 두 눈이 당신을 볼 수 있고 내 손이 당신의 따스한 온기를 느낄 수 있을 때 우리 마지막 따뜻한 안녕을 고합시다."</p>
@@ -6431,7 +6669,7 @@
         id: 'mag_filial_memoir',
         title: "칠순 잔치 대신 부모님께 '184쪽의 인생 서재'를 선물해 드렸습니다",
         category: '웰라이프',
-        image: 'https://netrium1-lab.github.io/images/showcase-senior-memoir.jpg',
+        image: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
         excerpt: "뻔한 돈 봉투나 일회성 식사 대접 대신, 평생을 헌신해오신 부모님의 70년 인생 서사를 양장본 디지털 자서전으로 엮어드린 어느 자녀의 가슴 뭉클한 이야기.",
         content: `
           <p class="article-lead">"현금 200만 원 봉투를 건넸을 때, 아버지의 눈빛은 기쁨보다 어딘가 쓸쓸해 보이셨습니다."</p>
@@ -6635,27 +6873,27 @@
     // 🌟 카카오톡 & SNS 공유용 이미지 절대 HTTPS URL 정규화 헬퍼 (대용량 PNG 자동 감지 및 JPEG 치환)
     function toAbsoluteImageUrl(imgUrl) {
       if (!imgUrl || typeof imgUrl !== 'string') {
-        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
+        return 'https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg';
       }
       let trimmed = imgUrl.trim();
       if (!trimmed || trimmed.startsWith('data:')) {
-        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
+        return 'https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg';
       }
       // 대용량 원본 PNG를 가볍고 선명한 웹 최적화 JPEG로 스마트 치환
       if (trimmed.includes('care-beauty-hero')) {
-        return 'https://netrium1-lab.github.io/images/care-beauty-treatment-3panel.jpg';
+        return 'https://yebaekarchive.kr/images/care-beauty-treatment-3panel.jpg';
       }
       if (trimmed.includes('living-funeral-party-4.png')) {
-        return 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+        return 'https://yebaekarchive.kr/images/living-funeral-party-4.jpg';
       }
       if (trimmed.includes('living-funeral-party-1.png')) {
-        return 'https://netrium1-lab.github.io/images/living-funeral-party-1.jpg';
+        return 'https://yebaekarchive.kr/images/living-funeral-party-1.jpg';
       }
       if (trimmed.includes('living-funeral-party-2.png')) {
-        return 'https://netrium1-lab.github.io/images/living-funeral-party-2.jpg';
+        return 'https://yebaekarchive.kr/images/living-funeral-party-2.jpg';
       }
       if (trimmed.includes('living-funeral-party-3.png')) {
-        return 'https://netrium1-lab.github.io/images/living-funeral-party-3.jpg';
+        return 'https://yebaekarchive.kr/images/living-funeral-party-3.jpg';
       }
       // 이미 http/https URL인 경우 안전한 https://로 보정
       if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
@@ -6663,7 +6901,7 @@
       }
       // 상대경로인 경우 루트 도메인 결합
       const cleanPath = trimmed.replace(/^\.?\//, '');
-      return `https://netrium1-lab.github.io/${cleanPath}`;
+      return `https://yebaekarchive.kr/${cleanPath}`;
     }
 
     // 삭제된 칼럼 ID 영구 보존 헬퍼 (삭제된 글이 다시 부활하는 현상 원천 차단)
@@ -6743,7 +6981,7 @@
         }
         if (item.image && typeof item.image === 'string') {
           if (item.image.includes('living-funeral-party-4.png')) {
-            item.image = 'https://netrium1-lab.github.io/images/living-funeral-party-4.jpg';
+            item.image = 'https://yebaekarchive.kr/images/living-funeral-party-4.jpg';
             migrated = true;
           } else if (!item.image.startsWith('http://') && !item.image.startsWith('https://') && !item.image.startsWith('data:')) {
             item.image = toAbsoluteImageUrl(item.image);
@@ -7005,7 +7243,7 @@
 
       // canonical 공유 URL 생성 (카카오톡/SNS 봇이 대표이미지와 제목을 100% 읽을 수 있도록 articles/{id}.html 전용 OG 정적 페이지로 연결)
       const canonicalId = (target.id === 'mag_living_funeral_best') ? 'mag_1791111944097' : target.id;
-      let shareUrl = `https://netrium1-lab.github.io/articles/${canonicalId}.html`;
+      let shareUrl = `https://yebaekarchive.kr/articles/${canonicalId}.html`;
 
       const shareTitle = target.title;
       const shareDesc = target.excerpt || '여백과 결에서 전하는 인생 2막 라이프 리셋 칼럼입니다.';
@@ -7075,7 +7313,7 @@
       const title = target ? target.title : '칼럼';
 
       // admin.html 경로를 메인 경로(index.html)로 치환 (외부 공유는 항상 라이브 도메인 기준 보장)
-      let baseUrl = 'https://netrium1-lab.github.io/index.html';
+      let baseUrl = 'https://yebaekarchive.kr/index.html';
       if (window.location.protocol.startsWith('http') && !window.location.hostname.includes('localhost') && !window.location.hostname.includes('127.0.0.1')) {
         baseUrl = window.location.href.split('?')[0].split('#')[0];
         if (baseUrl.endsWith('admin.html')) {
@@ -7088,7 +7326,7 @@
       const canonicalId = (id === 'mag_living_funeral_best') ? 'mag_1791111944097' : id;
 
       // 모든 칼럼은 카카오톡/SNS 봇이 대표이미지와 제목을 100% 읽을 수 있도록 articles/{id}.html 전용 OG 정적 페이지로 연결
-      const shareUrl = `https://netrium1-lab.github.io/articles/${canonicalId}.html`;
+      const shareUrl = `https://yebaekarchive.kr/articles/${canonicalId}.html`;
 
       const excerpt = target && target.excerpt ? `"${target.excerpt}"\n\n` : '';
       const fullShareMessage = `[여백과 결 칼럼] 🌿 ${title}\n\n${excerpt}👉 칼럼 전문 편안하게 읽기:\n${shareUrl}`;
@@ -14746,7 +14984,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
     // 🔗 코치 앱(coach.html) 배정 데이터 탑재 URL 생성 유틸 (어느 기기/브라우저에서든 100% 동기화)
     function buildCoachAppUrl(targetDispatch) {
-      let baseUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://netrium1-lab.github.io/coach.html';
+      let baseUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://yebaekarchive.kr/coach.html';
       if (!window.location.origin || window.location.origin === 'null' || window.location.protocol === 'file:') {
         baseUrl = 'coach.html';
       }
@@ -16596,6 +16834,14 @@ ${coachAppUrl}
         activeBtnId = 'sideSub_memoir_banner';
         var bannerCard = document.getElementById('bizMemoirBannerCard');
         if (bannerCard) bannerCard.style.display = 'block';
+      } else if (subTab === 'heritage') {
+        targetId = 'heritageExhibitionSection';
+        activeBtnId = 'sideSub_memoir_heritage';
+        if (typeof renderHeritageExhibitionsTable === 'function') renderHeritageExhibitionsTable();
+      } else if (subTab === 'cost') {
+        targetId = 'memoirCostSimulatorSection';
+        activeBtnId = 'sideSub_memoir_cost';
+        if (typeof renderMemoirCostSimulator === 'function') renderMemoirCostSimulator();
       }
 
       var activeBtn = document.getElementById(activeBtnId);
@@ -18995,7 +19241,7 @@ ${coachAppUrl}
           content: {
             title: '📖 [여백과 결] ' + (p.clientName || '') + ' 어르신 자서전 현장 집필 임무',
             description: cleanCoachName + '님, 현장 방문 녹취 및 AI 목차/초안 자동 집필을 진행해 주세요.',
-            imageUrl: 'https://netrium1-lab.github.io/images/og-share-cover.jpg',
+            imageUrl: 'https://yebaekarchive.kr/images/og-share-cover.jpg',
             link: {
               mobileWebUrl: memoirShareUrl,
               webUrl: memoirShareUrl
@@ -19053,8 +19299,10 @@ ${coachAppUrl}
   }
 
   function getPersonalWebbookUrl(docId) {
-    var base = window.location.origin + window.location.pathname.replace('admin.html', '');
-    return base + 'my-room.html?memoir=' + encodeURIComponent(docId);
+    if (window.YebaekMedia && typeof window.YebaekMedia.getPrintUrl === 'function') {
+      return window.YebaekMedia.getPrintUrl('my-room.html?memoir=' + encodeURIComponent(docId));
+    }
+    return 'https://yebaekarchive.kr/my-room.html?memoir=' + encodeURIComponent(docId);
   }
 
   // =========================================================================
@@ -19286,7 +19534,8 @@ ${coachAppUrl}
             '<div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">' +
               '<a href="' + viewUrl + '" target="_blank" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; text-decoration:none; font-weight:800;" title="모바일 웹북 실제 화면 열기">📱 보기</a>' +
               '<button type="button" class="btn-action-sm" onclick="copyPersonalWebbookShareLink(\'' + wb.id + '\')" style="background:#fef7e6; color:#8c6610; border:1px solid #e6cf8b; font-weight:800;" title="가족 공유 전용 URL 복사">🔗 URL</button>' +
-              '<button type="button" class="btn-action-sm" onclick="openPersonalWebbookModal(\'' + wb.id + '\')" style="background:var(--accent-light); color:var(--accent); font-weight:800;">✏️ PDF·설정</button>' +
+              '<button type="button" class="btn-action-sm" onclick="downloadPersonalWebbookQrSvg(\'' + wb.id + '\', \'' + escapeHtml(ownerClean).replace(/'/g, '') + '\')" style="background:#eef7f1; color:#1e4d35; border:1px solid #b8d8c2; font-weight:800;" title="300 DPI 양장본 인쇄용 순수 벡터(.svg) QR 코드 다운로드">📷 SVG QR</button>' +
+              '<button type="button" class="btn-action-sm" onclick="openPersonalWebbookModal(\'' + wb.id + '\')" style="background:var(--accent-light); color:var(--accent); font-weight:800;">✏️ PDF·오디오</button>' +
               '<button type="button" class="btn-action-sm del" onclick="removePersonalWebbook(\'' + wb.id + '\')" title="개인 서재 웹북 배포 해제 또는 삭제">🗑️</button>' +
             '</div>' +
           '</td>' +
@@ -19623,6 +19872,23 @@ ${coachAppUrl}
       document.getElementById('wbIsPublic').value = existing.isWebbookPublic === false ? 'false' : 'true';
       document.getElementById('wbBookTitle').value = existing.bookTitle || ((cleanName || '어르신') + ' 어르신의 여백과 결');
       document.getElementById('wbEndingMessage').value = existing.bookEndingMessage || ((cleanName || '어르신') + ' 어르신의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다. 가족과 함께 오래도록 기억해 주세요.');
+      var audioUrlEl = document.getElementById('wbAudioCloudUrl');
+      var audioTitleEl = document.getElementById('wbAudioTitle');
+      var audioSubEl = document.getElementById('wbAudioSubtitle');
+      var audioStatEl = document.getElementById('wbAudioUploadStatus');
+      if (audioUrlEl) audioUrlEl.value = existing.audioCloudUrl || '';
+      if (audioTitleEl) audioTitleEl.value = existing.audioTitle || '';
+      if (audioSubEl) audioSubEl.value = existing.audioSubtitle || '';
+      if (audioStatEl) {
+        if (existing.audioCloudUrl) {
+          audioStatEl.style.display = 'block';
+          audioStatEl.style.color = '#15803d';
+          audioStatEl.textContent = '✅ 클라우드 육성 오디오북 연결 완료 (책 속 QR 스캔 시 모든 폰 재생)';
+        } else {
+          audioStatEl.style.display = 'none';
+          audioStatEl.textContent = '';
+        }
+      }
       wbPdfPendingState.existingChapters = Array.isArray(existing.chapters) ? existing.chapters : [];
 
       if (existing.sourceType === 'pdf' && existing.pdfPageCount > 0) {
@@ -19652,6 +19918,14 @@ ${coachAppUrl}
       document.getElementById('wbEndingMessage').value = presetClean
         ? (presetClean + ' 어르신의 귀한 생애사가 한 권의 모바일 웹북으로 영원히 기록되었습니다. 사랑하는 가족과 함께 오래도록 기억해 주세요.')
         : '소중한 삶의 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다. 사랑하는 가족과 함께 오래도록 기억해 주세요.';
+      var newAudioUrlEl = document.getElementById('wbAudioCloudUrl');
+      var newAudioTitleEl = document.getElementById('wbAudioTitle');
+      var newAudioSubEl = document.getElementById('wbAudioSubtitle');
+      var newAudioStatEl = document.getElementById('wbAudioUploadStatus');
+      if (newAudioUrlEl) newAudioUrlEl.value = '';
+      if (newAudioTitleEl) newAudioTitleEl.value = presetClean ? ('🎙️ ' + presetClean + ' 어르신 육성 오디오북') : '';
+      if (newAudioSubEl) newAudioSubEl.value = '';
+      if (newAudioStatEl) { newAudioStatEl.style.display = 'none'; newAudioStatEl.textContent = ''; }
     }
 
     modal.style.display = 'flex';
@@ -19791,6 +20065,10 @@ ${coachAppUrl}
       };
     }
 
+    var wbAudioCloudUrl = (document.getElementById('wbAudioCloudUrl') && document.getElementById('wbAudioCloudUrl').value || '').trim();
+    var wbAudioTitle = (document.getElementById('wbAudioTitle') && document.getElementById('wbAudioTitle').value || '').trim();
+    var wbAudioSubtitle = (document.getElementById('wbAudioSubtitle') && document.getElementById('wbAudioSubtitle').value || '').trim();
+
     var updatedDoc = Object.assign(baseDoc, pdfFields, {
       id: docId,
       clientName: baseDoc.clientName || (ownerClean + ' 어르신'),
@@ -19801,6 +20079,9 @@ ${coachAppUrl}
       bookSubtitle: hasNewPdf ? ('완성 자서전 PDF · 총 ' + wbPdfPendingState.pageCount + '쪽') : (baseDoc.bookSubtitle || '어르신의 귀한 생애 기록 모바일 웹북'),
       bookAuthor: baseDoc.bookAuthor || ('지은이: ' + ownerClean + ' 어르신 · 엮은이: 여백과 결'),
       bookEndingMessage: endingMessage || (ownerClean + ' 어르신의 소중한 발자취가 한 권의 모바일 웹북으로 영원히 기록되었습니다.\n가족들과 이 링크를 나누며 따뜻한 추억을 오래도록 함께 기억해 주세요.'),
+      audioCloudUrl: wbAudioCloudUrl,
+      audioTitle: wbAudioTitle || ('🎙️ ' + ownerClean + ' 어르신 육성 오디오북'),
+      audioSubtitle: wbAudioSubtitle || '책 속 QR 코드와 연결된 어르신의 실제 육성 녹음입니다.',
       webbookPublished: true,
       isWebbookPublic: isPublic,
       webbookUpdatedAt: todayStr,
@@ -20078,5 +20359,7 @@ ${coachAppUrl}
 
 })(window);
   </script>
+  <!-- 🏛️ VIP 가문 전시관 · 클라우드 오디오/SVG QR · 원가/마진 시뮬레이터 확장 모듈 -->
+  <script src="admin-heritage.js"></script>
 </body>
 </html>
