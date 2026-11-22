@@ -2636,7 +2636,6 @@
               <p class="cockpit-cat-desc">인사이트 칼럼 발행, AI 자동 글쓰기, 메인 전면 대표글 노출 및 네이버·티스토리 동시 배포 관리</p>
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="switchTab('tabMagazine')">게시판 관리 ➔</button>
-                <button type="button" class="cockpit-cat-chip" onclick="openAiArticleGeneratorModal()">🪄 AI 글쓰기</button>
                 <a href="index.html#magazine" target="_blank" class="cockpit-cat-chip">라이브 ↗</a>
               </div>
             </div>
@@ -2705,7 +2704,7 @@
                 </div>
                 <div class="cockpit-cat-metric" id="cockpitCatCount_archive">0명</div>
               </div>
-              <p class="cockpit-cat-desc">어르신 독립 서재 구축 고객 명단, 전담 코치 상담 일지 및 김순옥 어르신 완성 샘플 서재 운영</p>
+              <p class="cockpit-cat-desc">상담완료 이관 고객의 독립 서재 구축·아카이빙 및 김순옥 어르신 완성 샘플 서재 운영</p>
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="switchTab('tabArchive')">서재 고객 관리 ➔</button>
                 <a href="my-room.html?mode=sample" target="_blank" class="cockpit-cat-chip">👵 샘플서재 ↗</a>
@@ -2722,28 +2721,14 @@
                 </div>
                 <div class="cockpit-cat-metric" id="cockpitCatCount_coach">0명</div>
               </div>
-              <p class="cockpit-cat-desc">현장 수행 사진 검수·활동비 송금 정산, 수료 공인 코칭스태프 풀 관리 및 아카데미 입학 지원자 관리</p>
+              <p class="cockpit-cat-desc">현장 수행 사진 검수·활동비 송금 정산 이력, 수료 공인 코칭스태프 풀 및 아카데미 입학 지원자 관리</p>
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('ops')">📸 검수·정산</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 코치 명단</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('academy')">🎓 지원자</button>
+                <a href="coach.html" target="_blank" class="cockpit-cat-chip">📱 코치앱 ↗</a>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 🔗 운영 사이트 · 파트너 앱 전체 링크 빠른 점검 바 -->
-        <div class="panel-card" style="margin-bottom: 22px; padding: 14px 20px; background: #f8fafc;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
-            <div style="font-size: 0.84rem; font-weight: 850; color: #1e293b;">🔗 전체 서비스 라이브 링크 (<code>yebaekarchive.kr</code> 연결 확인)</div>
-            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
-              <a href="index.html" target="_blank" class="cockpit-cat-chip">🏠 메인 홈페이지 ↗</a>
-              <a href="my-room.html?mode=sample" target="_blank" class="cockpit-cat-chip">🏛️ 샘플 서재 ↗</a>
-              <a href="heritage.html?demo=1" target="_blank" class="cockpit-cat-chip">👑 VIP 전시관 ↗</a>
-              <a href="academy.html" target="_blank" class="cockpit-cat-chip">🎓 코치 아카데미 ↗</a>
-              <a href="coach.html" target="_blank" class="cockpit-cat-chip">📱 코치 현장앱 ↗</a>
-              <a href="coach-memoir.html" target="_blank" class="cockpit-cat-chip">✍️ 자서전 코치앱 ↗</a>
             </div>
           </div>
         </div>
@@ -3144,11 +3129,8 @@
               </a>
             </div>
           </div>
-          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
-            어르신들이 일상에서 가볍게 비워낸 한 줄 글 목록입니다. 부적절한 글은 삭제하거나, 감동적인 글을 메인 상단에 고정할 수 있습니다.
-          </p>
 
-          <div class="admin-table-wrap">
+          <div class="admin-table-wrap" style="margin-top: 14px;">
             <table class="admin-table">
               <thead>
                 <tr>
@@ -3203,8 +3185,8 @@
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="btn-save-setting" onclick="selectCoachSubFromSidebar('ops')" style="background: #245b8e; color: #ffffff; border: none; font-weight: 850; cursor: pointer;" title="현장 사진 검수 및 코치 활동비 송금·정산 센터로 이동합니다">
-                <span>📸</span> 현장검수 · 정산 이동 ➔
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabCockpit'); focusCockpitSettlementQueue('pending');" style="background: #b83354; color: #ffffff; border: none; font-weight: 850; cursor: pointer;" title="통합 관제 홈의 현장완료 송금·비즈니스 마감 보드로 바로 이동합니다">
+                <span>🏁</span> 통합관제 송금·마감 ➔
               </button>
               <a href="index.html#test" target="_blank" class="btn-save-setting" style="background: #eef4ef; color: #235a3f; border: 1.5px solid #bfd3c3; text-decoration: none; font-weight: 800;">
                 <span>🌿</span> 메인 웰라이프 보기 ↗
@@ -3306,144 +3288,124 @@
         </details>
       </section>
 
-      <!-- ================= 탭: 📖 04. 자서전 출판 관제센터 & AI 윤문 파이프라인 ================= -->
+      <!-- ================= 탭: 📖 04. 디지털 자서전 · VIP 전시관 (하위 4-1 ~ 4-5 메뉴별 독립 전환) ================= -->
       <section class="tab-panel" id="tabMemoirDashboard">
-        <!-- 1. 관제센터 상단 헤더 -->
-        <div class="panel-card" style="margin-bottom: 20px; background: linear-gradient(135deg, rgba(194, 155, 56, 0.08) 0%, rgba(30, 61, 47, 0.06) 100%); border: 1.5px solid rgba(194, 155, 56, 0.3);">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-            <div>
-              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; background: #c29b38; color: #fff; border-radius: 999px; font-size: 0.76rem; font-weight: 850; margin-bottom: 8px;">
-                <span>📖</span> 04. 자서전 출판 관제센터 (Memoir Control &amp; AI Pipeline)
+        <!-- 4-1. 출판 프로젝트 & AI 감성윤문 파이프라인 (상담완료 이관 전용 · 4단계 클릭 필터) -->
+        <div id="memoirSubPanel_projects">
+          <div class="panel-card" id="memoirProjectsCard" style="margin-top: 0; border-top: 4px solid #a84432;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon" style="background: #fdf2f0; color: #a84432; font-size: 1.55rem;">✍️</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h2 class="panel-title" style="margin: 0;">4-1. 디지털 자서전 출판 파이프라인</h2>
+                    <span class="badge" style="background: #fdf2f0; color: #a84432; border: 1px solid #f5c6be; font-size: 0.74rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">상담완료 이관 · 4단계 순차 진행</span>
+                  </div>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                    통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 자서전 건을 순서대로 진행합니다. 현장 구술 완료 시 <strong>00. 통합 관제 홈</strong>에서 송금 정산을 마감합니다.
+                  </p>
+                </div>
               </div>
-              <h2 style="font-family: 'MaruBuri', 'Noto Serif KR', serif; font-size: 1.45rem; font-weight: 850; color: var(--text-primary); margin: 0 0 6px 0;">
-                생애 구술 채록 · AI 5단계 감성 윤문 · 양장본 출판 파이프라인
-              </h2>
-              <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; line-height: 1.5;">
-                현장 코치의 20문항 구술 음성 업로드부터 Whisper 음성인식, '여백과 결' AI 감성 윤문, 스플릿 뷰 에디터 검수, 가족용 플립북 및 신국판 양장본 인쇄 조판까지 원스톱으로 관리합니다.
-              </p>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn-save-setting" onclick="switchTab('tabCockpit'); focusCockpitSettlementQueue('pending');" style="background: #b83354; color: #ffffff; border: none; font-weight: 850; cursor: pointer;" title="현장 구술 완료 건의 코치 활동비 송금·마감 보드로 이동">
+                  <span>🏁</span> 통합관제 송금·마감 ➔
+                </button>
+                <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: #eef4ef; color: #1e3d2f; border: 1.5px solid #bfd3c3; text-decoration: none; font-weight: 800;" title="현장 방문 코치가 사용하는 구술 녹취 & AI 초안 앱">
+                  <span>📱</span> 코치 글쓰기 앱 ↗
+                </a>
+              </div>
             </div>
-            <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
-              <button type="button" onclick="openPersonalWebbookModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #1e4d35 0%, #153626 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1.2px solid #c29b38; box-shadow: 0 4px 12px rgba(21,54,38,0.22);" title="완성된 자서전을 어르신 개인 서재의 모바일 웹북 탭에 바로 등록합니다">
-                <span>📱</span> 개인 서재 모바일 웹북 올리기
-              </button>
-              <button type="button" onclick="openHeritageExhibitionModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #14281f 0%, #244a38 100%); color: #f6e7c1; font-size: 0.88rem; font-weight: 850; padding: 10px 16px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: 1.2px solid #c9a24b;" title="VIP 명문 가문 평전 전용 영구 온라인 전시관을 구축·발행합니다">
-                <span>🏛️</span> VIP 가문 전시관 발행
-              </button>
-              <a href="coach-memoir.html" target="_blank" class="btn-save-setting" style="background: rgba(30, 61, 47, 0.08); color: #1e3d2f; border: 1.2px solid #1e3d2f; font-size: 0.86rem; font-weight: 850; padding: 10px 14px; border-radius: 10px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px;" title="현장 방문 코치가 사용하는 전용 음성 녹취 & AI 자동 집필 대시보드">
-                <span>📱</span> 코치 글쓰기 앱 열기 ➔
-              </a>
-              <button type="button" onclick="openMemoirProjectCreateModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; font-size: 0.88rem; font-weight: 850; padding: 10px 18px; border-radius: 10px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; border: none;">
-                <span>➕</span> 새 자서전 프로젝트 등록
-              </button>
-              <button type="button" onclick="renderMemoirDashboard()" class="btn-save-setting" style="background: var(--bg-card); color: var(--text-primary); border: 1.2px solid var(--border-color); font-size: 0.86rem; padding: 10px 14px; border-radius: 10px; cursor: pointer;">
-                <span>🔄</span> 새로고침
-              </button>
+
+            <!-- 4단계 실행 파이프라인 클릭형 KPI 카드 (단일화 · 클릭 시 필터, 재클릭 시 전체보기) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 12px; margin: 16px 0 14px;">
+              <div id="memoirKpiCard_consult" class="kpi-filter-card" onclick="filterMemoirProjects(currentMemoirFilter === 'consult' ? 'all' : 'consult')" style="border-left: 4px solid #0284c7;" title="클릭 시 ① 코치 배정·카톡발송 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 코치 배정 · 카톡발송</div>
+                  <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="statMemoirConsult">0건</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">상담완료 이관 · 전담 코치 매칭</div>
+              </div>
+
+              <div id="memoirKpiCard_interview" class="kpi-filter-card" onclick="filterMemoirProjects(currentMemoirFilter === 'interview' ? 'all' : 'interview')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ② 현장 구술 인터뷰 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 현장 구술 인터뷰</div>
+                  <span style="font-size: 0.72rem; color: #2b7a4b; background: #f0fdf4; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="statMemoirInterview">0건</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">현장완료 시 통합관제 송금 등록</div>
+              </div>
+
+              <div id="memoirKpiCard_drafting" class="kpi-filter-card" onclick="filterMemoirProjects(currentMemoirFilter === 'drafting' ? 'all' : 'drafting')" style="border-left: 4px solid #d97706;" title="클릭 시 ③ AI윤문·가족승인 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ AI윤문 · 가족승인</div>
+                  <span style="font-size: 0.72rem; color: #b45309; background: #fffbeb; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #d97706; margin-top: 4px;" id="statMemoirDrafting">0건</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">AI 감성윤문 검수 · 가족 플립북</div>
+              </div>
+
+              <div id="memoirKpiCard_done" class="kpi-filter-card" onclick="filterMemoirProjects(currentMemoirFilter === 'printing_done' ? 'all' : 'printing_done')" style="border-left: 4px solid #059669;" title="클릭 시 ④ 인쇄·출판 완간 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">④ 인쇄 · 출판 완간</div>
+                  <span style="font-size: 0.72rem; color: #059669; background: #ecfdf5; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #059669; margin-top: 4px;" id="statMemoirCompleted">0건</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">신국판 양장본 조판 · 완간 확정</div>
+              </div>
+            </div>
+
+            <!-- 심플 1줄 컨트롤 툴바 (중복 파이프라인 버튼·기본 데이터 복원 버튼 제거) -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 8px 2px 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;" id="memoirFilterButtonGroup">
+                <button type="button" class="pipeline-step-btn active" id="memoirFilterBtnAll" onclick="filterMemoirProjects('all', this)" style="padding: 5px 12px; font-size: 0.8rem;">
+                  전체보기 <span class="pipeline-step-badge" id="cntFilterMemoirAll">0</span>
+                </button>
+                <span id="memoirCurrentViewLabel" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">
+                  통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 건만 표시됩니다. (위 카드 클릭 시 단계별 필터)
+                </span>
+                <!-- 하위 호환 카운터 앵커 -->
+                <span style="display:none;">
+                  <span id="statMemoirTotal">0건</span>
+                  <span id="cntFilterMemoirConsult">0</span>
+                  <span id="cntFilterMemoirInterview">0</span>
+                  <span id="cntFilterMemoirDrafting">0</span>
+                  <span id="cntFilterMemoirFamily">0</span>
+                  <span id="cntFilterMemoirDone">0</span>
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신·의뢰인·코치 검색..." style="padding: 6px 11px; border-radius: 999px; border: 1.2px solid var(--border-color); font-size: 0.8rem; background: var(--bg-card); color: var(--text-primary); width: 190px;">
+                <button type="button" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 5px 11px; border-radius: 999px; font-size: 0.77rem; font-weight: 800; cursor: pointer; white-space: nowrap;">
+                  📋 통합 상담함 이동 ➔
+                </button>
+              </div>
+            </div>
+
+            <!-- 출판 파이프라인 단일 통합 테이블 -->
+            <div style="overflow-x: auto;">
+              <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.86rem;">
+                <thead id="memoirTableThead">
+                  <tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">
+                    <th style="padding: 10px 12px; width: 155px;">주인공 (어르신) · 등록일</th>
+                    <th style="padding: 10px 12px; width: 160px;">의뢰인 · 패키지</th>
+                    <th style="padding: 10px 12px; width: 120px;">담당 코치</th>
+                    <th style="padding: 10px 12px; width: 145px;">수집 · 챕터 진척</th>
+                    <th style="padding: 10px 12px; width: 130px; text-align: center;">현재 단계</th>
+                    <th style="padding: 10px 12px; width: 215px; text-align: center;">다음 단계 진행</th>
+                  </tr>
+                </thead>
+                <tbody id="memoirProjectsTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- 2. 5대 핵심 KPI 카드 (상담·배정부터 출판 완간까지 원스톱) -->
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 24px;">
-          <!-- KPI 1 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #c29b38;">
-            <div style="font-size: 2rem; background: rgba(194, 155, 56, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📚</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">전체 자서전 프로젝트</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #c29b38;" id="statMemoirTotal">0건</div>
-            </div>
-          </div>
-          <!-- KPI 2: 자서전 상담 & 코치배정 (신규 추가) -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #8b5cf6;">
-            <div style="font-size: 2rem; background: rgba(139, 92, 246, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">📋</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">자서전 상담 &amp; 코치배정</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #8b5cf6;" id="statMemoirConsult">0건</div>
-            </div>
-          </div>
-          <!-- KPI 3 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #2563eb;">
-            <div style="font-size: 2rem; background: rgba(37, 99, 235, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🎙️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">현장 구술 인터뷰 중</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #2563eb;" id="statMemoirInterview">0건</div>
-            </div>
-          </div>
-          <!-- KPI 4 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #d97706;">
-            <div style="font-size: 2rem; background: rgba(217, 119, 6, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">✍️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">AI 윤문 &amp; 코치 교정 중</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #d97706;" id="statMemoirDrafting">0건</div>
-            </div>
-          </div>
-          <!-- KPI 5 -->
-          <div class="panel-card" style="padding: 16px 20px; display: flex; align-items: center; gap: 14px; border-left: 4px solid #059669;">
-            <div style="font-size: 2rem; background: rgba(5, 150, 105, 0.12); width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">🖨️</div>
-            <div>
-              <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">인쇄·발주 &amp; 출판 완료</div>
-              <div style="font-size: 1.45rem; font-weight: 900; color: #059669;" id="statMemoirCompleted">0건</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 04-1. 3. 필터 툴바 & 프로젝트 목록 카드 (출판 프로젝트 & AI 감성윤문 파이프라인) -->
-        <div class="panel-card" id="memoirProjectsCard">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
-            <!-- 단계별 필터 버튼군 -->
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;" id="memoirFilterButtonGroup">
-              <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">출판 파이프라인:</span>
-              <button type="button" class="memoir-pipeline-btn active" onclick="filterMemoirProjects('all', this)">
-                <span>전체</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirAll">0</span>
-              </button>
-              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('consult', this)">
-                <span>📋 1. 자서전 상담 &amp; 배정</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirConsult">0</span>
-              </button>
-              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('interview', this)">
-                <span>🎙️ 2. 구술 인터뷰</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirInterview">0</span>
-              </button>
-              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('drafting', this)">
-                <span>🤖 3. AI윤문 &amp; 코치교정</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirDrafting">0</span>
-              </button>
-              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('family', this)">
-                <span>👨‍👩‍👧 4. 가족 승인</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirFamily">0</span>
-              </button>
-              <button type="button" class="memoir-pipeline-btn" onclick="filterMemoirProjects('printing_done', this)">
-                <span>🖨️ 5. 인쇄 &amp; 출판완료</span> <span class="memoir-pipeline-badge" id="cntFilterMemoirDone">0</span>
-              </button>
-            </div>
-            <!-- 검색창 및 기본 데이터 복원 -->
-            <div style="display: flex; align-items: center; gap: 8px;">
-              <input type="text" id="memoirSearchInput" oninput="handleMemoirSearch(this.value)" placeholder="어르신, 신청인, 코치명 검색..." style="padding: 8px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.85rem; background: var(--bg-card); color: var(--text-primary); width: 200px;">
-              <button type="button" onclick="resetAndRestoreMemoirDemoData()" class="btn-save-setting" style="background: rgba(139, 92, 246, 0.12); color: #7c3aed; border: 1.2px solid #8b5cf6; font-size: 0.80rem; font-weight: 850; padding: 7px 11px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; white-space: nowrap;" title="기본 데모 상담 신청 데이터 및 파이프라인 데이터 초기화/복원">
-                <span>🔄</span> 기본 데이터 복원
-              </button>
-            </div>
-          </div>
-
-          <!-- 프로젝트 데이터 테이블 -->
-          <div style="overflow-x: auto;">
-            <table class="admin-table" style="width: 100%; border-collapse: collapse; font-size: 0.88rem;">
-              <thead id="memoirTableThead">
-                <tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">
-                  <th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>
-                  <th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>
-                  <th style="padding: 10px 12px; width: 150px;">신청인 / 패키지</th>
-                  <th style="padding: 10px 12px; width: 100px;">담당 코치</th>
-                  <th style="padding: 10px 12px; width: 110px; text-align: center;">수집 자산</th>
-                  <th style="padding: 10px 12px; width: 150px;">5대 챕터 완성률</th>
-                  <th style="padding: 10px 12px; width: 110px; text-align: center;">진행 상태</th>
-                  <th style="padding: 10px 12px; width: 170px; text-align: center;">출판 관제 액션</th>
-                </tr>
-              </thead>
-              <tbody id="memoirProjectsTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 04-2. 📱 개인 서재 모바일 웹북 등록 · 배포 관리 (각 어르신 my-room.html 자동 연동) -->
-        <div class="panel-card" id="personalWebbooksSection" style="margin-top: 24px; border: 1.6px solid rgba(43, 106, 56, 0.3); background: linear-gradient(180deg, rgba(43, 106, 56, 0.03) 0%, var(--bg-card) 120px);">
+        <!-- 4-2. 📱 개인 서재 모바일 웹북 등록 · 배포 관리 (좌측 4-2 메뉴 선택 시 단독 표시) -->
+        <div id="memoirSubPanel_webbooks" style="display: none;">
+          <div class="panel-card" id="personalWebbooksSection" style="margin-top: 0; border: 1.6px solid rgba(43, 106, 56, 0.3); border-top: 4px solid #1e4d35; background: linear-gradient(180deg, rgba(43, 106, 56, 0.03) 0%, var(--bg-card) 120px);">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background: rgba(43, 106, 56, 0.12); color: #1e4d35;">📱</span>
@@ -3487,8 +3449,48 @@
           </div>
         </div>
 
-        <!-- 04-3. 🏛️ VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 발행 관리 (heritage.html 연동) -->
-        <div class="panel-card" id="heritageExhibitionSection" style="margin-top: 24px; border: 1.8px solid rgba(201, 162, 75, 0.55); background: linear-gradient(180deg, rgba(20, 40, 31, 0.04) 0%, var(--bg-card) 130px);">
+        <!-- 📦 [구버전 보관함 · 4-2 하단 접이식] 기존 완간 도서 PDF 목록 -->
+        <details class="panel-card" id="publishedMemoirsSection" style="margin-top: 20px; background: #f8fafc;">
+          <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; font-weight: 850; font-size: 0.9rem; color: #475569;">
+            <span>📦 [구버전 보관함] 기존 완간 자서전 PDF 기록 열람 (신규 PDF·오디오·QR 배포는 위 4-2 통합 배포 사용 ▾)</span>
+            <span style="font-size: 0.74rem; background: #e2e8f0; color: #475569; padding: 2px 9px; border-radius: 999px;">구버전 보관</span>
+          </summary>
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px;">
+              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
+                <span>➕</span> 구버전 목록 추가
+              </button>
+              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                <span>📥</span> 도서 목록(CSV) 다운로드
+              </button>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px; text-align: center;">표지</th>
+                    <th style="width: 180px;">자서전 도서명</th>
+                    <th style="width: 100px;">저자 (어르신)</th>
+                    <th style="width: 85px; text-align: center;">총 분량</th>
+                    <th style="width: 100px;">전담 코치</th>
+                    <th style="width: 100px;">완간 일자</th>
+                    <th style="width: 220px;">자서전 PDF 파일 &amp; 다운로드</th>
+                    <th style="width: 100px; text-align: center;">서재 공개</th>
+                    <th style="width: 110px; text-align: center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody id="publishedMemoirsTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
+        </div>
+
+        <!-- 4-3. 🏛️ VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 발행 관리 (좌측 4-3 메뉴 선택 시 단독 표시) -->
+        <div id="memoirSubPanel_heritage" style="display: none;">
+        <div class="panel-card" id="heritageExhibitionSection" style="margin-top: 0; border: 1.8px solid rgba(201, 162, 75, 0.55); border-top: 4px solid #c9a24b; background: linear-gradient(180deg, rgba(20, 40, 31, 0.04) 0%, var(--bg-card) 130px);">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background: #14281f; color: #f6e7c1;">🏛️</span>
@@ -3532,9 +3534,11 @@
             </table>
           </div>
         </div>
+        </div>
 
-        <!-- 04-6. 📊 상품별 제작 원가 · 외주비 · 적정 판매가 시뮬레이터 & 실무 워크플로우 가이드 -->
-        <div class="panel-card" id="memoirCostSimulatorSection" style="margin-top: 24px; border: 1.5px solid rgba(194, 155, 56, 0.4);">
+        <!-- 4-4. 📊 상품별 제작 원가 · 외주비 · 마진 시뮬레이터 & 실무 가이드 (좌측 4-4 메뉴 선택 시 단독 표시) -->
+        <div id="memoirSubPanel_cost" style="display: none;">
+        <div class="panel-card" id="memoirCostSimulatorSection" style="margin-top: 0; border: 1.5px solid rgba(194, 155, 56, 0.4); border-top: 4px solid #8c6610;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background: rgba(194, 155, 56, 0.14); color: #8c6610;">📊</span>
@@ -3579,10 +3583,12 @@
             </div>
           </div>
         </div>
+        </div>
 
-        <!-- 4-5. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 -->
-        <div id="bizMemoirBannerCard" style="display: block; margin-top: 24px;">
-          <div class="panel-card">
+        <!-- 4-5. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 (좌측 4-5 메뉴 선택 시 단독 표시) -->
+        <div id="memoirSubPanel_banner" style="display: none;">
+        <div id="bizMemoirBannerCard" style="display: block; margin-top: 0;">
+          <div class="panel-card" style="border-top: 4px solid #c29b38;">
             <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
               <div class="panel-title-wrap">
                 <span class="panel-icon">📢</span>
@@ -3662,44 +3668,7 @@
             </div>
           </div>
         </div>
-
-        <!-- 📦 [구버전 보관함 · 중복 정리] 기존 완간 도서 PDF 목록 (신규 배포는 위 4-2 통합 배포 사용) -->
-        <details class="panel-card" id="publishedMemoirsSection" style="margin-top: 20px; background: #f8fafc;">
-          <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; font-weight: 850; font-size: 0.92rem; color: #475569;">
-            <span>📦 [구버전 보관함] 기존 완간 자서전 PDF 기록 열람 (신규 PDF·오디오·QR 배포는 위 4-2 통합 배포 사용 ▾)</span>
-            <span style="font-size: 0.76rem; background: #e2e8f0; color: #475569; padding: 2px 9px; border-radius: 999px;">중복 통합 완료</span>
-          </summary>
-          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
-            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px;">
-              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
-                <span>➕</span> 구버전 목록 추가
-              </button>
-              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                <span>📥</span> 도서 목록(CSV) 다운로드
-              </button>
-            </div>
-            <div class="admin-table-wrap">
-              <table class="admin-table">
-                <thead>
-                  <tr>
-                    <th style="width: 70px; text-align: center;">표지</th>
-                    <th style="width: 180px;">자서전 도서명</th>
-                    <th style="width: 100px;">저자 (어르신)</th>
-                    <th style="width: 85px; text-align: center;">총 분량</th>
-                    <th style="width: 100px;">전담 코치</th>
-                    <th style="width: 100px;">완간 일자</th>
-                    <th style="width: 220px;">자서전 PDF 파일 &amp; 다운로드</th>
-                    <th style="width: 100px; text-align: center;">서재 공개</th>
-                    <th style="width: 110px; text-align: center;">관리</th>
-                  </tr>
-                </thead>
-                <tbody id="publishedMemoirsTableBody">
-                  <!-- JS 동적 렌더링 -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </details>
+        </div>
       </section>
 
       <!-- ================= 탭 1: 🎓 01. 코치 아카데미 & 코치 배정 관리 ================= -->
@@ -3717,26 +3686,27 @@
       </section>
 
       <section class="tab-panel" id="tabCoachControl">
-        <!-- 🌟 코칭스태프 파견 배정·현장관제 & 정산 통합 센터 (단일 카테고리) -->
+        <!-- 🌟 06. 코치 아카데미 · 파견·정산 (하위 6-1 ~ 6-3 메뉴별 독립 전환) -->
         
-        <!-- 🌟 6-1. 코칭스태프 현장수행 관제 & 활동비 송금·정산 센터 -->
+        <!-- 🌟 6-1. 코칭스태프 현장수행 검수 & 활동비 정산 전체 아카이브 -->
+        <div id="coachSubPanel_ops">
         <div class="panel-card" id="coachOpsSection" style="margin-bottom: 16px; border-top: 4px solid #245b8e; padding: 16px 22px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
               <span class="panel-icon" style="background:#eef3f9; color:#245b8e; font-size:1.4rem; padding:6px 9px; border-radius:10px;">📸</span>
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-1. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산</h2>
-                  <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">실시간 현장 검수·송금</span>
+                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-1. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산 이력</h2>
+                  <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">전체 현장 이력 · 사진 검수</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.83rem; margin: 3px 0 0;">
-                  코칭스태프의 <strong>실시간 현장 활동 상황(도착·완료 스탬프, 사진 3종 &amp; 소감 검수)</strong>과 <strong>활동비 송금 및 정산 내역</strong>을 집중 관리합니다.
+                  모든 비즈니스의 파견·현장 수행 사진 3종·정산 이력을 상세 조회합니다. (신규 코치 배정은 <strong>03·04 비즈니스</strong>에서, 현장완료 마감은 <strong>00. 통합관제 홈</strong>에서 진행)
                 </p>
               </div>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-              <button type="button" class="btn-save-setting" onclick="openDispatchModal()" style="background: #245b8e; color: #ffffff; border: none; font-weight: 850; font-size: 0.82rem; padding: 7px 13px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
-                <span>➕</span> 신규 배정 등록
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabCockpit'); focusCockpitSettlementQueue('pending');" style="background: #b83354; color: #ffffff; border: none; font-weight: 850; font-size: 0.82rem; padding: 7px 13px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="통합 관제 홈의 현장완료 송금 마감 보드로 이동">
+                <span>🏁</span> 통합관제 마감 보드 ➔
               </button>
               <a href="coach.html" target="_blank" class="btn-save-setting" style="background: #1e293b; color: #ffffff; text-decoration: none; font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
                 <span>📱</span> 코치 현장앱 ↗
@@ -3839,9 +3809,11 @@
             </table>
           </div>
         </div>
+        </div>
 
-        <!-- 🏅 6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리 -->
-        <div class="panel-card" id="coachPoolSection" style="margin-top: 24px;">
+        <!-- 🏅 6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리 (좌측 6-2 선택 시 단독 표시) -->
+        <div id="coachSubPanel_pool" style="display: none;">
+        <div class="panel-card" id="coachPoolSection" style="margin-top: 0; border-top: 4px solid #245b8e;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
               <span class="panel-icon">🏅</span>
@@ -3883,9 +3855,11 @@
             </table>
           </div>
         </div>
+        </div>
 
-        <!-- 🎓 6-3. 코칭스태프 양성 아카데미 지원 신청자 명단 -->
-        <div class="panel-card" id="academyApplicantsSection" style="margin-top: 24px;">
+        <!-- 🎓 6-3. 코칭스태프 양성 아카데미 지원 신청자 명단 (좌측 6-3 선택 시 단독 표시) -->
+        <div id="coachSubPanel_academy" style="display: none;">
+        <div class="panel-card" id="academyApplicantsSection" style="margin-top: 0; border-top: 4px solid #245b8e;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">🎓</span>
@@ -3924,29 +3898,30 @@
             </table>
           </div>
         </div>
+        </div>
 
       </section>
 
       <!-- ================= 05. 🏛️ 나의 고유한 서재 관리 (메인 카테고리 5번) ================= -->
       <section class="tab-panel" id="tabArchive">
-        <!-- 5-1. 나의 서재 신청 명단 및 상담 내용 관리 -->
+        <!-- 5-1. 나의 서재 구축 고객 관리 (상담완료 이관 전용) -->
         <div class="panel-card" style="border-top: 4px solid #a87b18;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background:#fbf3df; color:#a87b18;">🏛️</span>
               <div>
-                <h2 class="panel-title">5-1. 나의 고유한 서재 구축 신청 고객 &amp; 상담 관리</h2>
+                <h2 class="panel-title">5-1. 나의 고유한 서재 구축 고객 관리 (상담완료 이관)</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  나만의 독립 서재 구축, 추억 사진전시관, 애장품 전시관, 엔딩 금고 보관을 신청한 고객 명단 및 상담 진행 일지를 관리합니다.
+                  통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 독립 서재·추억 사진관·애장품 전시관·엔딩 금고 구축 고객의 진행 현황을 관리합니다.
                 </p>
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="btn-save-setting" onclick="selectMemoirFromSidebar('webbooks')" style="background: #1e4d35; color: #f6e7c1; border: none; font-weight: 800;">
-                <span>📱</span> 어르신 모바일 웹북 배포 ➔
+              <button type="button" class="btn-save-setting" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1.5px solid #cbd5e1; font-weight: 800;">
+                <span>📋</span> 통합 상담함 이동 ➔
               </button>
               <button class="btn-save-setting" onclick="promptAddRoomClient()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                <span>+</span> 신규 서재 고객 등록
+                <span>+</span> 구축 고객 직접 추가
               </button>
               <button class="btn-save-setting" onclick="exportArchiveClientsCSV()">
                 <span>📥</span> 엑셀(CSV) 다운로드
@@ -3960,11 +3935,11 @@
                 <tr>
                   <th style="width: 95px;">고객 성함</th>
                   <th style="width: 120px;">연락처</th>
-                  <th style="width: 120px;">신청 서재 분야</th>
-                  <th>상담 내용 및 전담 코치 메모</th>
-                  <th style="width: 100px;">신청 일자</th>
+                  <th style="width: 125px;">신청 서재 분야</th>
+                  <th>서재 구축 · 전담 코치 메모</th>
+                  <th style="width: 100px;">이관/등록일</th>
                   <th style="width: 110px; text-align: center;">구축 단계</th>
-                  <th style="width: 120px; text-align: center;">관리</th>
+                  <th style="width: 110px; text-align: center;">관리</th>
                 </tr>
               </thead>
               <tbody id="archiveClientsTableBody">
@@ -3994,9 +3969,6 @@
               </a>
               <a href="my-room.html?mode=user" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.88rem; padding: 7px 16px; background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
                 🏛️ 고객 독립 서재 열기 ↗
-              </a>
-              <a href="heritage.html?demo=1" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.88rem; padding: 7px 16px; background: #fef9e7; color: #7a5912; border: 1.5px solid #c9a24b;">
-                👑 VIP 가문 온라인 전시관 체험 ↗
               </a>
             </div>
           </div>
@@ -6347,13 +6319,13 @@
         if (btnMap[tabId]) btn = document.getElementById(btnMap[tabId]);
       }
 
-      /* 04. 디지털 자서전 진입 시 실시간 렌더링 */
+      /* 04. 디지털 자서전 진입 시 현재 하위 메뉴 단독 렌더링 */
       if (tabId === 'tabMemoirDashboard') {
-        if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
-        if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
-        if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
-        if (typeof renderHeritageExhibitionsTable === 'function') renderHeritageExhibitionsTable();
-        if (typeof renderMemoirCostSimulator === 'function') renderMemoirCostSimulator();
+        if (typeof switchMemoirSubTab === 'function') {
+          switchMemoirSubTab(typeof currentMemoirSubTab !== 'undefined' ? currentMemoirSubTab : 'projects');
+        } else {
+          if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        }
       }
 
       var panels = document.querySelectorAll('.tab-panel');
@@ -6402,9 +6374,13 @@
       } else if (tabId === 'tabArchive') {
         if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
       } else if (tabId === 'tabCoachControl') {
-        if (typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
-        if (typeof renderCoachesTable === 'function') renderCoachesTable();
-        if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+        if (typeof switchCoachSubTab === 'function') {
+          switchCoachSubTab(typeof currentCoachSubTab !== 'undefined' ? currentCoachSubTab : 'ops');
+        } else {
+          if (typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
+          if (typeof renderCoachesTable === 'function') renderCoachesTable();
+          if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+        }
       }
 
       var mainEl = document.querySelector('.admin-main');
@@ -6417,24 +6393,44 @@
       }
     }
 
-    function selectCoachSubFromSidebar(subKey) {
-      switchTab('tabCoachControl');
+    var currentCoachSubTab = 'ops';
+
+    function switchCoachSubTab(subKey) {
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'academy') ? subKey : 'ops';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
+
       var map = {
-        ops: { target: 'coachOpsSection', btn: 'sideSub_coach_ops' },
-        pool: { target: 'coachPoolSection', btn: 'sideSub_coach_pool' },
-        academy: { target: 'academyApplicantsSection', btn: 'sideSub_coach_academy' }
+        ops: { panel: 'coachSubPanel_ops', btn: 'sideSub_coach_ops', label: '<span>📸</span> 06. 코치 아카데미 · 6-1 현장수행 검수 &amp; 정산' },
+        pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코칭스태프 명단' },
+        academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-3 아카데미 입학 지원자' }
       };
-      var sel = map[subKey] || map.ops;
+
+      Object.keys(map).forEach(function(k) {
+        var el = document.getElementById(map[k].panel);
+        if (el) el.style.display = (k === currentCoachSubTab) ? 'block' : 'none';
+      });
+
+      var sel = map[currentCoachSubTab];
       var activeBtn = document.getElementById(sel.btn);
       if (activeBtn) activeBtn.classList.add('active');
-      var targetEl = document.getElementById(sel.target);
-      if (targetEl) {
-        setTimeout(function() {
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 80);
-      }
+
+      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
+      if (headerTabBadge) headerTabBadge.innerHTML = sel.label;
+
+      if (currentCoachSubTab === 'ops' && typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
+      if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
+      if (currentCoachSubTab === 'academy' && typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+
+      var mainEl = document.querySelector('.admin-main');
+      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.switchCoachSubTab = switchCoachSubTab;
+
+    function selectCoachSubFromSidebar(subKey) {
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'academy') ? subKey : 'ops';
+      switchTab('tabCoachControl');
+      switchCoachSubTab(currentCoachSubTab);
     }
     window.selectCoachSubFromSidebar = selectCoachSubFromSidebar;
 
@@ -6522,8 +6518,10 @@
         var qSettledCnt = document.getElementById('cockpitQueueSettledCnt');
         if (qSettledCnt) qSettledCnt.innerText = settledList.length;
 
-        // 3. 자서전 출판 프로젝트 수
-        var memoirList = (typeof getMemoirProjects === 'function') ? getMemoirProjects() : [];
+        // 3. 자서전 출판 프로젝트 수 (상담완료 확정 프로젝트 기준 — 단독 웹북/미완료 제외)
+        var memoirList = (typeof getActiveMemoirProjectsForPipeline === 'function')
+          ? getActiveMemoirProjectsForPipeline()
+          : ((typeof getMemoirProjects === 'function') ? getMemoirProjects().filter(function(p) { return p && p.recordType !== 'personal_webbook'; }) : []);
         var memoirElem = document.getElementById('cockpitActiveMemoirCount');
         var memoirCount = (memoirList.length || 0);
         if (memoirElem) memoirElem.innerText = memoirCount + '건';
@@ -14145,6 +14143,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         target.handedOffLabel = '';
         saveDiagReservations(list);
         if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
+        if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
       }
     }
     window.setDiagReservationStatus = setDiagReservationStatus;
@@ -14278,7 +14278,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
           switchPipelineStep('step2');
         }
       } else if (bizKey === 'memoir') {
-        switchTab('tabMemoirDashboard');
+        if (typeof selectMemoirFromSidebar === 'function') {
+          selectMemoirFromSidebar('projects');
+        } else {
+          switchTab('tabMemoirDashboard');
+        }
+        if (typeof filterMemoirProjects === 'function') {
+          filterMemoirProjects('consult');
+        }
       } else if (bizKey === 'archive') {
         switchTab('tabArchive');
       } else if (bizKey === 'academy') {
@@ -14315,6 +14322,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         list = list.filter(item => item.id !== id);
         saveDiagReservations(list);
         if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
+        if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
       }
     }
 
@@ -14406,50 +14415,96 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     }
 
-    // ================= 10. 나의 서재 신청 명단 및 코치 상담 관리 =================
+    // ================= 10. 나의 서재 구축 고객 관리 (통합 상담함 완료 이관 연동) =================
     const ARCHIVE_CLIENTS_KEY = 'yebaek_archive_clients_v1';
+    const ARCHIVE_CLIENTS_VER_KEY = 'archiveClientsDataVer';
+    const ARCHIVE_CLIENTS_VER = '20261122_v5_strict_consult';
     const DEFAULT_ARCHIVE_CLIENTS = [
       {
         id: 'arc_1',
         name: '김순옥 어르신',
         phone: '010-3841-9210',
-        category: '디지털 자서전 양장본',
+        category: '디지털 자서전 양장본 (공식 샘플 서재)',
         memo: '184쪽 분량 완성본 제작 완료. 가족 헌정본 10권 인쇄 배송 및 서재 온라인 전시 등록 완료.',
         date: '2026.09.20',
         stage: '완료'
-      },
-      {
-        id: 'arc_2',
-        name: '이만수 어르신',
-        phone: '010-7712-4459',
-        category: '추억의 옛 사진 복원관',
-        memo: '1960~70년대 흑백 앨범 2권 고해상도 디지털 스캔 및 AI 복원 작업 의뢰. 1차 구술 인터뷰 완료.',
-        date: '2026.09.24',
-        stage: '진행중'
-      },
-      {
-        id: 'arc_3',
-        name: '박정희 님',
-        phone: '010-6321-8902',
-        category: '비움 일기장 & 금고 보관',
-        memo: '모친 생전 비움 일기 및 디지털 유언/유품 금고 지정 보관 서비스 사전 상담 신청.',
-        date: '2026.09.26',
-        stage: '접수'
       }
     ];
 
     function getArchiveClients() {
+      let list = [];
+      let changed = false;
       const saved = localStorage.getItem(ARCHIVE_CLIENTS_KEY);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) list = parsed;
         } catch (e) {
           console.error('서재 고객 명단 파싱 오류:', e);
         }
+      } else {
+        list = JSON.parse(JSON.stringify(DEFAULT_ARCHIVE_CLIENTS));
+        changed = true;
       }
-      localStorage.setItem(ARCHIVE_CLIENTS_KEY, JSON.stringify(DEFAULT_ARCHIVE_CLIENTS));
-      return DEFAULT_ARCHIVE_CLIENTS;
+
+      // 1회 마이그레이션: 과거 미확정 상담 데모 샘플(arc_2, arc_3) 정리 (실제 고객·공식 샘플 arc_1 유지)
+      if (localStorage.getItem(ARCHIVE_CLIENTS_VER_KEY) !== ARCHIVE_CLIENTS_VER) {
+        list = list.filter(c => c && c.id !== 'arc_2' && c.id !== 'arc_3');
+        if (list.length === 0) {
+          list = JSON.parse(JSON.stringify(DEFAULT_ARCHIVE_CLIENTS));
+        }
+        localStorage.setItem(ARCHIVE_CLIENTS_VER_KEY, ARCHIVE_CLIENTS_VER);
+        changed = true;
+      }
+
+      // 통합 상담함(reset_consult_list)에서 [✓ 완료]된 서재 구축 건 자동 동기화
+      try {
+        const consults = (typeof getDiagReservations === 'function') ? getDiagReservations() : [];
+        const completedArchiveMap = {};
+        consults.forEach(c => {
+          if (!c || c.status !== '완료') return;
+          const biz = (typeof classifyConsultBusiness === 'function') ? classifyConsultBusiness(c) : null;
+          if (biz && biz.key === 'archive') {
+            completedArchiveMap[c.id] = c;
+          }
+        });
+
+        // 상담 완료가 취소/삭제된 이관 건은 목록에서 제외
+        const beforeLen = list.length;
+        list = list.filter(item => {
+          if (!item) return false;
+          if (item.sourceConsultId && !completedArchiveMap[item.sourceConsultId]) return false;
+          return true;
+        });
+        if (list.length !== beforeLen) changed = true;
+
+        Object.keys(completedArchiveMap).forEach(cid => {
+          const c = completedArchiveMap[cid];
+          const normPhone = String(c.phone || '').replace(/[^0-9]/g, '');
+          const exists = list.some(x =>
+            (x.sourceConsultId && x.sourceConsultId === cid) ||
+            (normPhone && x.phone && String(x.phone).replace(/[^0-9]/g, '') === normPhone)
+          );
+          if (!exists) {
+            list.unshift({
+              id: 'arc_c_' + cid,
+              sourceConsultId: cid,
+              name: c.name || (c.role || '고객').split('(')[0].trim(),
+              phone: c.phone || '-',
+              category: c.category || '서재 구축',
+              memo: (c.counselMemo ? '[상담완료] ' + c.counselMemo + ' / ' : '') + (c.note || ''),
+              date: (c.createdAt ? String(c.createdAt).slice(0, 10) : new Date().toISOString().slice(0, 10).replace(/-/g, '.')),
+              stage: '진행중'
+            });
+            changed = true;
+          }
+        });
+      } catch (e) {}
+
+      if (changed) {
+        try { localStorage.setItem(ARCHIVE_CLIENTS_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+      return list;
     }
 
     function saveArchiveClients(list) {
@@ -14465,13 +14520,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               clientName: c.name,
               phone: c.phone || '',
               category: c.category || '서재 구축',
-              stage: c.stage || '접수',
+              stage: c.stage || '진행중',
               updatedAt: Date.now()
             }, { merge: true });
           } catch (err) {}
         });
       }
       renderArchiveClientsTable();
+      if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
     }
 
     function renderArchiveClientsTable() {
@@ -14480,12 +14536,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
       const list = getArchiveClients();
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color:#94a3b8;">나의 서재 신청 및 관리 내역이 없습니다.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 28px; color:#94a3b8;">상담 완료·이관된 서재 구축 고객이 없습니다. <button type="button" onclick="switchTab(\'tabConsult\')" style="margin-left:8px; padding:4px 10px; border-radius:999px; border:1px solid #cbd5e1; background:#fff; color:#334155; font-weight:800; cursor:pointer;">📋 통합 상담함 이동 ➔</button></td></tr>';
         return;
       }
 
       tbody.innerHTML = list.map(c => {
-        const stage = c.stage || '접수';
+        const stage = (c.stage === '접수' || !c.stage) ? '구축대기' : c.stage;
         return `
           <tr>
             <td style="font-weight:800; color:var(--text-main);">${escapeHtml(c.name)}</td>
@@ -14495,23 +14551,22 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
                 ${escapeHtml(c.category || '서재 구축')}
               </span>
             </td>
-            <td style="max-width:320px; line-height:1.45; font-size:0.88rem; color:var(--text-main);">
-              <div style="cursor:pointer;" onclick="editArchiveClientMemo('${c.id}')" title="클릭하여 상담 메모 수정">
-                ${escapeHtml(c.memo || '(상담 메모 없음 - 클릭하여 입력)')}
+            <td style="max-width:340px; line-height:1.45; font-size:0.88rem; color:var(--text-main);">
+              <div style="cursor:pointer;" onclick="editArchiveClientMemo('${c.id}')" title="클릭하여 서재 구축 메모 수정">
+                ${escapeHtml(c.memo || '(메모 없음 - 클릭하여 입력)')}
                 <span style="font-size:0.75rem; color:var(--accent); margin-left:4px;">✏️</span>
               </div>
             </td>
             <td style="color:var(--text-muted); font-size:0.85rem;">${escapeHtml(c.date || '-')}</td>
             <td style="text-align:center;">
               <select class="status-select-sm" onchange="updateArchiveClientStage('${c.id}', this.value)" style="padding:4px 8px; border-radius:6px; border:1px solid var(--border-color); font-size:0.82rem; font-weight:700; background:#fff;">
-                <option value="접수" ${stage === '접수' ? 'selected' : ''}>⏳ 접수</option>
-                <option value="진행중" ${stage === '진행중' ? 'selected' : ''}>🏃 진행중</option>
-                <option value="완료" ${stage === '완료' ? 'selected' : ''}>✅ 완료</option>
+                <option value="구축대기" ${stage === '구축대기' ? 'selected' : ''}>⏳ 구축대기</option>
+                <option value="진행중" ${stage === '진행중' ? 'selected' : ''}>🏃 구축진행</option>
+                <option value="완료" ${stage === '완료' ? 'selected' : ''}>✅ 구축완료</option>
               </select>
             </td>
             <td style="text-align:center;">
               <div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">
-                <button class="btn-action-sm" onclick="openPersonalWebbookForClient('${escapeHtml(c.name)}', '${escapeHtml(c.phone || '')}')" style="background:#1e4d35; color:#f6e7c1; font-weight:800;" title="이 어르신의 개인 서재 모바일 웹북에 완성 자서전 등록">📱 웹북</button>
                 <button class="btn-action-sm" onclick="editArchiveClientMemo('${c.id}')" style="background:var(--accent-light); color:var(--accent);">메모</button>
                 <button class="btn-action-sm del" onclick="deleteArchiveClient('${c.id}')">삭제</button>
               </div>
@@ -14528,8 +14583,8 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const phone = prompt('연락처를 입력해주세요:', '010-');
       if (!phone || !phone.trim()) return;
 
-      const category = prompt('신청 서재 분야를 입력해주세요:\n(예: 디지털 자서전 / 추억 복원 / 비움 일기 / 엔딩 금고)', '디지털 자서전 양장본');
-      const memo = prompt('상담 내용 및 전담 코치 메모를 입력해주세요:', '1차 구술 상담 및 서재 아카이빙 신청');
+      const category = prompt('서재 구축 분야를 입력해주세요:\n(예: 추억 사진 복원관 / 애장품 전시관 / 비움 일기 / 엔딩 금고)', '독립 서재 구축');
+      const memo = prompt('서재 구축 및 전담 코치 메모를 입력해주세요:', '상담 완료 · 서재 아카이빙 구축 시작');
 
       const today = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
       const newClient = {
@@ -14537,15 +14592,15 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         name: name.trim(),
         phone: phone.trim(),
         category: (category && category.trim()) || '서재 구축',
-        memo: (memo && memo.trim()) || '신규 접수',
+        memo: (memo && memo.trim()) || '서재 구축 대기',
         date: today,
-        stage: '접수'
+        stage: '구축대기'
       };
 
       const list = getArchiveClients();
       list.unshift(newClient);
       saveArchiveClients(list);
-      alert('신규 서재 고객이 등록되었습니다.');
+      alert('신규 서재 구축 고객이 등록되었습니다.');
     }
 
     function editArchiveClientMemo(id) {
@@ -15272,12 +15327,29 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
               (normPhone && String(p.applicantPhone || '').replace(/[^0-9]/g, '') === normPhone)
             );
             if (target) {
-              if (targetStage === 'business_done') {
-                target.coachSettled = true;
-                target.settledAt = nowIso;
+              if (targetStage === 'field_done') {
                 if (target.status === 'coach_assigned' || target.status === 'interview_pending') {
                   target.status = 'interview_done';
+                  target.statusLabel = '현장완료 · 송금대기';
+                }
+                saveMemoirProjects(mList);
+                if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+                synced = true;
+              } else if (targetStage === 'business_done') {
+                target.coachSettled = true;
+                target.settledAt = nowIso;
+                if (target.status === 'coach_assigned' || target.status === 'interview_pending' || target.status === 'interview_done') {
+                  target.status = 'interview_done';
                   target.statusLabel = '현장 구술완료 · 정산마감';
+                }
+                saveMemoirProjects(mList);
+                if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+                synced = true;
+              } else if (targetStage === 'revert_field_done') {
+                target.coachSettled = false;
+                target.settledAt = null;
+                if (target.status === 'interview_done') {
+                  target.statusLabel = '현장완료 · 송금대기';
                 }
                 saveMemoirProjects(mList);
                 if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
@@ -17621,56 +17693,62 @@ ${coachAppUrl}
     }
 
     // 📖 좌측 사이드바에서 자서전 출판 서브탭 원클릭 선택
+    var currentMemoirSubTab = 'projects';
+
     function selectMemoirFromSidebar(subTab) {
+      currentMemoirSubTab = subTab || 'projects';
       if (typeof switchTab === 'function') {
         switchTab('tabMemoirDashboard');
       }
-      switchMemoirSubTab(subTab);
+      switchMemoirSubTab(currentMemoirSubTab);
     }
     window.selectMemoirFromSidebar = selectMemoirFromSidebar;
 
-    // 📖 자서전 출판 관제 섹션 전환 및 부드러운 스크롤 이동
+    // 📖 자서전 하위 메뉴(4-1 ~ 4-5) 독립 화면 전환 (한 화면에 쌓이지 않도록 단독 표시)
     function switchMemoirSubTab(subTab) {
+      var normalized = (subTab === 'published') ? 'webbooks' : (subTab || 'projects');
+      var panelMap = {
+        projects: { panel: 'memoirSubPanel_projects', btn: 'sideSub_memoir_projects', label: '<span>✍️</span> 04. 디지털 자서전 · 4-1 출판 프로젝트 &amp; AI윤문' },
+        webbooks: { panel: 'memoirSubPanel_webbooks', btn: 'sideSub_memoir_webbooks', label: '<span>📱</span> 04. 디지털 자서전 · 4-2 모바일 웹북 · 오디오 · QR' },
+        heritage: { panel: 'memoirSubPanel_heritage', btn: 'sideSub_memoir_heritage', label: '<span>🏛️</span> 04. 디지털 자서전 · 4-3 VIP 가문 온라인 전시관' },
+        cost: { panel: 'memoirSubPanel_cost', btn: 'sideSub_memoir_cost', label: '<span>📊</span> 04. 디지털 자서전 · 4-4 원가·마진 &amp; 실무 가이드' },
+        banner: { panel: 'memoirSubPanel_banner', btn: 'sideSub_memoir_banner', label: '<span>📢</span> 04. 디지털 자서전 · 4-5 메인 CTA 배너 설정' }
+      };
+      if (!panelMap[normalized]) normalized = 'projects';
+      currentMemoirSubTab = normalized;
+
       var subLinks = document.querySelectorAll('#sidebarSubnavMemoir .subnav-link');
       subLinks.forEach(function(l) { l.classList.remove('active'); });
 
-      var targetId = 'memoirProjectsCard';
-      var activeBtnId = 'sideSub_memoir_projects';
+      Object.keys(panelMap).forEach(function(key) {
+        var el = document.getElementById(panelMap[key].panel);
+        if (el) el.style.display = (key === normalized) ? 'block' : 'none';
+      });
 
-      if (subTab === 'projects') {
-        targetId = 'memoirProjectsCard';
-        activeBtnId = 'sideSub_memoir_projects';
-      } else if (subTab === 'webbooks') {
-        targetId = 'personalWebbooksSection';
-        activeBtnId = 'sideSub_memoir_webbooks';
-        if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
-      } else if (subTab === 'published') {
-        targetId = 'publishedMemoirsSection';
-        activeBtnId = 'sideSub_memoir_published';
-      } else if (subTab === 'banner') {
-        targetId = 'bizMemoirBannerCard';
-        activeBtnId = 'sideSub_memoir_banner';
-        var bannerCard = document.getElementById('bizMemoirBannerCard');
-        if (bannerCard) bannerCard.style.display = 'block';
-      } else if (subTab === 'heritage') {
-        targetId = 'heritageExhibitionSection';
-        activeBtnId = 'sideSub_memoir_heritage';
-        if (typeof renderHeritageExhibitionsTable === 'function') renderHeritageExhibitionsTable();
-      } else if (subTab === 'cost') {
-        targetId = 'memoirCostSimulatorSection';
-        activeBtnId = 'sideSub_memoir_cost';
-        if (typeof renderMemoirCostSimulator === 'function') renderMemoirCostSimulator();
-      }
-
-      var activeBtn = document.getElementById(activeBtnId);
+      var sel = panelMap[normalized];
+      var activeBtn = document.getElementById(sel.btn);
       if (activeBtn) activeBtn.classList.add('active');
 
-      var targetEl = document.getElementById(targetId);
-      if (targetEl) {
-        setTimeout(function() {
-          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }, 80);
+      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
+      if (headerTabBadge) headerTabBadge.innerHTML = sel.label;
+
+      if (normalized === 'projects') {
+        if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+      } else if (normalized === 'webbooks') {
+        if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
+        if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
+      } else if (normalized === 'heritage') {
+        if (typeof renderHeritageExhibitionsTable === 'function') renderHeritageExhibitionsTable();
+      } else if (normalized === 'cost') {
+        if (typeof renderMemoirCostSimulator === 'function') renderMemoirCostSimulator();
+      } else if (normalized === 'banner') {
+        var bannerCard = document.getElementById('bizMemoirBannerCard');
+        if (bannerCard) bannerCard.style.display = 'block';
+        if (typeof loadMemoirBannerConfigToAdmin === 'function') loadMemoirBannerConfigToAdmin();
       }
+
+      var mainEl = document.querySelector('.admin-main');
+      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
     }
     window.switchMemoirSubTab = switchMemoirSubTab;
 
@@ -18044,6 +18122,38 @@ ${coachAppUrl}
     }
   ];
 
+  var MEMOIR_DATA_VER_KEY = 'memoirDataVer';
+  var MEMOIR_DATA_VER = '20261122_v5_strict_consult';
+
+  // 통합 고객 접수·상담함(reset_consult_list)에서 [✓ 완료]된 자서전 상담 맵 조회
+  function getCompletedMemoirConsultMap() {
+    var byId = {};
+    var byPhone = {};
+    try {
+      var list = (typeof getDiagReservations === 'function')
+        ? getDiagReservations()
+        : JSON.parse(localStorage.getItem('reset_consult_list') || '[]');
+      if (Array.isArray(list)) {
+        list.forEach(function(c) {
+          if (!c || c.status !== '완료') return;
+          var isMemoir = false;
+          if (typeof classifyConsultBusiness === 'function') {
+            var biz = classifyConsultBusiness(c);
+            isMemoir = !!(biz && biz.key === 'memoir');
+          } else {
+            var cat = String(c.category || '') + ' ' + String(c.note || '');
+            isMemoir = /자서전|회고록|생애|워크북/.test(cat);
+          }
+          if (!isMemoir) return;
+          if (c.id) byId[c.id] = c;
+          var digits = String(c.phone || '').replace(/[^0-9]/g, '');
+          if (digits) byPhone[digits] = c;
+        });
+      }
+    } catch (e) {}
+    return { byId: byId, byPhone: byPhone };
+  }
+
   function getMemoirProjects() {
     try {
       var raw = localStorage.getItem('yebaek_memoir_projects');
@@ -18051,169 +18161,67 @@ ${coachAppUrl}
       if (raw) {
         try { parsed = JSON.parse(raw); } catch(err) { parsed = []; }
       }
-      if (!Array.isArray(parsed) || parsed.length === 0) {
-        parsed = JSON.parse(JSON.stringify(DEFAULT_MEMOIR_PROJECTS));
-        localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
-        return parsed;
-      }
+      if (!Array.isArray(parsed)) parsed = [];
 
       var changed = false;
 
-      // 💡 [실시간 연동] 02. 고객 맞춤 상담(yebaek_diag_reservations)에서 자서전 신청 건 자동 흡수
-      try {
-        var rawDiag = localStorage.getItem('yebaek_diag_reservations');
-        if (rawDiag) {
-          var diagList = JSON.parse(rawDiag);
-          if (Array.isArray(diagList)) {
-            diagList.forEach(function(diag) {
-              var isMemoirCategory = diag.category && (
-                diag.category.indexOf('자서전') !== -1 ||
-                diag.category.indexOf('회고록') !== -1 ||
-                diag.category.indexOf('생애') !== -1
-              );
-              if (isMemoirCategory) {
-                var exists = parsed.some(function(p) {
-                  return (diag.memoirProjectId && p.id === diag.memoirProjectId) || 
-                         (p.applicantPhone && diag.phone && p.applicantPhone.replace(/[^0-9]/g, '') === diag.phone.replace(/[^0-9]/g, ''));
-                });
-                if (!exists) {
-                  var elderName = '어르신';
-                  var applicantName = '가족';
-                  var relation = '자녀';
-                  if (diag.role) {
-                    var roleMatch = diag.role.match(/^(.+?)\s*(?:어르신)?\s*(?:\((?:(.+?)\s+)?(.+?)\s*신청\))?$/);
-                    if (roleMatch) {
-                      elderName = (roleMatch[1] || '어르신').replace(/어르신/g, '').trim() + ' 어르신';
-                      relation = roleMatch[2] || '가족';
-                      applicantName = roleMatch[3] || roleMatch[1] || '신청인';
-                    } else {
-                      elderName = diag.role;
-                    }
-                  }
-                  var newProjId = diag.memoirProjectId || ('mem_' + Date.now() + '_' + Math.floor(Math.random()*1000));
-                  var newProj = {
-                    id: newProjId,
-                    clientName: elderName,
-                    clientAge: '70대',
-                    region: '지역 협의',
-                    applicantName: applicantName,
-                    applicantPhone: diag.phone || '',
-                    relation: relation,
-                    packageType: 'masterpiece',
-                    packageLabel: '인생 마스터피스 (시그니처)',
-                    coachName: '배정 대기',
-                    coachPhone: '-',
-                    status: 'consult_pending',
-                    statusLabel: '접수 대기',
-                    preferredDate: '방문일정 협의',
-                    recordingsCount: 0,
-                    photosCount: 0,
-                    notes: diag.note || '온라인 1:1 맞춤 상담 신청 건',
-                    consultLog: '',
-                    familyFeedback: '',
-                    createdAt: (diag.createdAt ? String(diag.createdAt).slice(0, 10).replace(/-/g, '.') : new Date().toISOString().slice(0, 10).replace(/-/g, '.')),
-                    updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
-                    chapters: []
-                  };
-                  parsed.unshift(newProj);
-                  changed = true;
-                }
-              }
-            });
-          }
-        }
-      } catch(diagSyncErr) {
-        console.warn('[Memoir] diag sync warn:', diagSyncErr);
+      // 1회 마이그레이션: 과거 하드코딩 데모(mem_demo_*) 및 미확정 상담 항목 정리
+      // (4-2 개인 서재 모바일 웹북 recordType === 'personal_webbook' 및 실제 배포 웹북은 100% 보존!)
+      if (localStorage.getItem(MEMOIR_DATA_VER_KEY) !== MEMOIR_DATA_VER) {
+        parsed = parsed.filter(function(p) {
+          if (!p) return false;
+          if (p.recordType === 'personal_webbook' || p.webbookPublished === true) return true;
+          if (String(p.id || '').indexOf('mem_demo_') === 0) return false;
+          if (p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold') return false;
+          return true;
+        });
+        localStorage.setItem(MEMOIR_DATA_VER_KEY, MEMOIR_DATA_VER);
+        changed = true;
       }
 
-      // 💡 1단계~5단계 5개 카테고리 전체가 하나라도 누락되지 않도록 지능형 자동 보강!
-      var stage1Count = parsed.filter(function(p) {
-        return p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned';
-      }).length;
-      var hasStage2 = parsed.some(function(p) { return p.status === 'interview_pending' || p.status === 'interview_done'; });
-      var hasStage3 = parsed.some(function(p) { return p.status === 'ai_drafted' || p.status === 'coach_reviewed'; });
-      var hasStage4 = parsed.some(function(p) { return p.status === 'family_approved'; });
-      var hasStage5 = parsed.some(function(p) { return p.status === 'printing' || p.status === 'completed'; });
-
-      // 데모 프로젝트 필드(consultLog, preferredDate 등) 최신 속성 동기화
-      parsed.forEach(function(item) {
-        var demoMatch = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.id === item.id; });
-        if (demoMatch) {
-          if (demoMatch.consultLog && !item.consultLog) {
-            item.consultLog = demoMatch.consultLog;
-            changed = true;
-          }
-          if (demoMatch.preferredDate && !item.preferredDate) {
-            item.preferredDate = demoMatch.preferredDate;
-            changed = true;
-          }
+      // 통합 고객 접수·상담함(reset_consult_list)에서 [✓ 완료]된 자서전 상담만 자동 동기화
+      var completedMap = getCompletedMemoirConsultMap();
+      Object.keys(completedMap.byId).forEach(function(cid) {
+        var c = completedMap.byId[cid];
+        var normPhone = String(c.phone || '').replace(/[^0-9]/g, '');
+        var exists = parsed.some(function(p) {
+          if (!p || p.recordType === 'personal_webbook') return false;
+          return (c.memoirProjectId && p.id === c.memoirProjectId) ||
+                 (p.sourceConsultId && p.sourceConsultId === cid) ||
+                 (normPhone && p.applicantPhone && String(p.applicantPhone).replace(/[^0-9]/g, '') === normPhone);
+        });
+        if (!exists) {
+          var roleText = c.role || c.name || '어르신';
+          var elderName = roleText.split('(')[0].trim() || '어르신';
+          var newId = c.memoirProjectId || ('mem_c_' + cid);
+          parsed.unshift({
+            id: newId,
+            sourceConsultId: cid,
+            clientName: elderName,
+            clientAge: '70대',
+            region: '지역 협의',
+            applicantName: c.name || roleText,
+            applicantPhone: c.phone || '',
+            relation: '본인/가족',
+            packageType: 'masterpiece',
+            packageLabel: '인생 마스터피스 (시그니처)',
+            coachName: '배정 대기',
+            coachPhone: '-',
+            status: 'consult_done',
+            statusLabel: '상담완료 · 코치배정 대기',
+            preferredDate: '방문일정 협의',
+            recordingsCount: 0,
+            photosCount: 0,
+            notes: c.note || '통합 상담함에서 상담 완료 후 이관',
+            consultLog: c.counselMemo || '통합 상담 완료 확정',
+            familyFeedback: '',
+            createdAt: (c.createdAt ? String(c.createdAt).slice(0, 10).replace(/-/g, '.') : new Date().toISOString().slice(0, 10).replace(/-/g, '.')),
+            updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+            chapters: []
+          });
+          changed = true;
         }
       });
-
-      // 1단계 누락 방지: 1단계 상담 대기 건이 0건이거나 부족할 때 상시 3건 보장
-      if (stage1Count === 0) {
-        var defaultStage1 = DEFAULT_MEMOIR_PROJECTS.filter(function(dp) {
-          return dp.status === 'consult_pending' || dp.status === 'consult_contacted' || dp.status === 'coach_assigned';
-        });
-        defaultStage1.forEach(function(dp, idx) {
-          var existsInParsed = parsed.some(function(p) { return p.id === dp.id; });
-          var clone = JSON.parse(JSON.stringify(dp));
-          if (existsInParsed) {
-            clone.id = dp.id + '_auto_' + (idx + 1);
-          }
-          parsed.unshift(clone);
-          changed = true;
-        });
-      }
-
-      // 2단계 누락 시 보강
-      if (!hasStage2) {
-        var dp2 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'interview_pending'; });
-        if (dp2) {
-          var clone2 = JSON.parse(JSON.stringify(dp2));
-          if (parsed.some(function(p) { return p.id === clone2.id; })) {
-            clone2.id = clone2.id + '_auto_2';
-          }
-          parsed.push(clone2);
-          changed = true;
-        }
-      }
-      // 3단계 누락 시 보강
-      if (!hasStage3) {
-        var dp3 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'coach_reviewed'; });
-        if (dp3) {
-          var clone3 = JSON.parse(JSON.stringify(dp3));
-          if (parsed.some(function(p) { return p.id === clone3.id; })) {
-            clone3.id = clone3.id + '_auto_3';
-          }
-          parsed.push(clone3);
-          changed = true;
-        }
-      }
-      // 4단계 누락 시 보강
-      if (!hasStage4) {
-        var dp4 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'family_approved'; });
-        if (dp4) {
-          var clone4 = JSON.parse(JSON.stringify(dp4));
-          if (parsed.some(function(p) { return p.id === clone4.id; })) {
-            clone4.id = clone4.id + '_auto_4';
-          }
-          parsed.push(clone4);
-          changed = true;
-        }
-      }
-      // 5단계 누락 시 보강
-      if (!hasStage5) {
-        var dp5 = DEFAULT_MEMOIR_PROJECTS.find(function(dp) { return dp.status === 'completed'; });
-        if (dp5) {
-          var clone5 = JSON.parse(JSON.stringify(dp5));
-          if (parsed.some(function(p) { return p.id === clone5.id; })) {
-            clone5.id = clone5.id + '_auto_5';
-          }
-          parsed.push(clone5);
-          changed = true;
-        }
-      }
 
       if (changed) {
         localStorage.setItem('yebaek_memoir_projects', JSON.stringify(parsed));
@@ -18221,9 +18229,24 @@ ${coachAppUrl}
       return parsed;
     } catch(e) {
       console.warn('[Memoir] getMemoirProjects fallback:', e);
-      return DEFAULT_MEMOIR_PROJECTS;
+      return [];
     }
   }
+
+  // 4-1 파이프라인 & 00. 통합관제 홈 공통: 상담완료 확정된 실제 출판 프로젝트만 반환
+  function getActiveMemoirProjectsForPipeline() {
+    var allRecords = getMemoirProjects();
+    var completedMap = getCompletedMemoirConsultMap();
+    return allRecords.filter(function(p) {
+      if (!p || p.recordType === 'personal_webbook') return false;
+      if (String(p.id || '').indexOf('mem_demo_') === 0) return false;
+      var st = p.status || 'consult_done';
+      if (st === 'consult_pending' || st === 'consult_contacted' || st === 'consult_hold') return false;
+      if (p.sourceConsultId && !completedMap.byId[p.sourceConsultId]) return false;
+      return true;
+    });
+  }
+  window.getActiveMemoirProjectsForPipeline = getActiveMemoirProjectsForPipeline;
 
   function saveMemoirProjects(projects) {
     localStorage.setItem('yebaek_memoir_projects', JSON.stringify(projects));
@@ -18241,26 +18264,21 @@ ${coachAppUrl}
   }
 
   function renderMemoirDashboard() {
-    var allRecords = getMemoirProjects();
-    // 단독 등록된 개인 서재 모바일 웹북은 04-2 전용 패널에서 관리하고, 04-1 출판 파이프라인에는 프로젝트만 표시
-    var projects = allRecords.filter(function(p) { return p && p.recordType !== 'personal_webbook'; });
+    var projects = getActiveMemoirProjectsForPipeline();
 
     var total = projects.length;
     var cntConsult = 0;
     var cntInterview = 0;
     var cntDrafting = 0;
-    var cntFamily = 0;
-    var cntPrinting = 0;
     var cntCompleted = 0;
 
     projects.forEach(function(p) {
-      var st = p.status || 'consult_pending';
-      if (st === 'consult_pending' || st === 'consult_contacted' || st === 'consult_hold' || st === 'consult_done' || st === 'coach_assigned') cntConsult++;
+      var st = p.status || 'consult_done';
+      if (st === 'consult_done' || st === 'coach_assigned') cntConsult++;
       else if (st === 'interview_pending' || st === 'interview_done') cntInterview++;
-      else if (st === 'ai_drafted' || st === 'coach_reviewed') cntDrafting++;
-      else if (st === 'family_approved') cntFamily++;
-      else if (st === 'printing') cntPrinting++;
-      else if (st === 'completed') cntCompleted++;
+      else if (st === 'ai_drafted' || st === 'coach_reviewed' || st === 'family_approved') cntDrafting++;
+      else if (st === 'printing' || st === 'completed') cntCompleted++;
+      else cntConsult++;
     });
 
     var elTotal = document.getElementById('statMemoirTotal');
@@ -18272,27 +18290,44 @@ ${coachAppUrl}
     if (elConsult) elConsult.innerText = cntConsult + '건';
     if (elInterview) elInterview.innerText = cntInterview + '건';
     if (elDrafting) elDrafting.innerText = cntDrafting + '건';
-    if (elCompleted) elCompleted.innerText = (cntPrinting + cntCompleted) + '건';
+    if (elCompleted) elCompleted.innerText = cntCompleted + '건';
 
     var fAll = document.getElementById('cntFilterMemoirAll');
-    var fCns = document.getElementById('cntFilterMemoirConsult');
-    var fInt = document.getElementById('cntFilterMemoirInterview');
-    var fDrf = document.getElementById('cntFilterMemoirDrafting');
-    var fFam = document.getElementById('cntFilterMemoirFamily');
-    var fDone = document.getElementById('cntFilterMemoirDone');
     if (fAll) fAll.innerText = total;
-    if (fCns) fCns.innerText = cntConsult;
-    if (fInt) fInt.innerText = cntInterview;
-    if (fDrf) fDrf.innerText = cntDrafting;
-    if (fFam) fFam.innerText = cntFamily;
-    if (fDone) fDone.innerText = (cntPrinting + cntCompleted);
+
+    // 4단계 클릭형 KPI 카드 & 전체보기 버튼 활성 표시 동기화
+    var cardMap = {
+      consult: document.getElementById('memoirKpiCard_consult'),
+      interview: document.getElementById('memoirKpiCard_interview'),
+      drafting: document.getElementById('memoirKpiCard_drafting'),
+      printing_done: document.getElementById('memoirKpiCard_done')
+    };
+    var normalizedFilter = (currentMemoirFilter === 'family') ? 'drafting'
+      : ((currentMemoirFilter === 'printing' || currentMemoirFilter === 'completed') ? 'printing_done' : (currentMemoirFilter || 'all'));
+    Object.keys(cardMap).forEach(function(k) {
+      if (cardMap[k]) cardMap[k].classList.toggle('active', normalizedFilter === k);
+    });
+    var btnAll = document.getElementById('memoirFilterBtnAll');
+    if (btnAll) btnAll.classList.toggle('active', normalizedFilter === 'all');
+
+    var viewLabelEl = document.getElementById('memoirCurrentViewLabel');
+    if (viewLabelEl) {
+      var labelTexts = {
+        all: '통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 건만 표시됩니다. (위 카드 클릭 시 단계별 필터)',
+        consult: '<strong>① 코치 배정 · 카톡발송</strong> 단계만 필터링 중입니다. (카드 재클릭 시 전체보기)',
+        interview: '<strong>② 현장 구술 인터뷰</strong> 단계만 필터링 중입니다. 현장완료 시 통합관제 홈 송금대기에 자동 등록됩니다.',
+        drafting: '<strong>③ AI윤문 · 가족승인</strong> 단계만 필터링 중입니다.',
+        printing_done: '<strong>④ 인쇄 · 출판 완간</strong> 단계만 필터링 중입니다.'
+      };
+      viewLabelEl.innerHTML = labelTexts[normalizedFilter] || labelTexts.all;
+    }
 
     var filtered = projects.filter(function(p) {
-      if (currentMemoirFilter === 'consult' && !(p.status === 'consult_pending' || p.status === 'consult_contacted' || p.status === 'consult_hold' || p.status === 'consult_done' || p.status === 'coach_assigned')) return false;
-      if (currentMemoirFilter === 'interview' && !(p.status === 'interview_pending' || p.status === 'interview_done')) return false;
-      if (currentMemoirFilter === 'drafting' && !(p.status === 'ai_drafted' || p.status === 'coach_reviewed')) return false;
-      if (currentMemoirFilter === 'family' && p.status !== 'family_approved') return false;
-      if ((currentMemoirFilter === 'printing_done' || currentMemoirFilter === 'printing' || currentMemoirFilter === 'completed') && !(p.status === 'printing' || p.status === 'completed')) return false;
+      var st = p.status || 'consult_done';
+      if (normalizedFilter === 'consult' && !(st === 'consult_done' || st === 'coach_assigned')) return false;
+      if (normalizedFilter === 'interview' && !(st === 'interview_pending' || st === 'interview_done')) return false;
+      if (normalizedFilter === 'drafting' && !(st === 'ai_drafted' || st === 'coach_reviewed' || st === 'family_approved')) return false;
+      if (normalizedFilter === 'printing_done' && !(st === 'printing' || st === 'completed')) return false;
 
       if (currentMemoirSearch) {
         var q = currentMemoirSearch.toLowerCase();
@@ -18305,327 +18340,127 @@ ${coachAppUrl}
       return true;
     });
 
-    // 💡 1단계 상담 단계와 2~5단계 출판 공정에 맞게 헤더 컬럼을 스마트하게 전환
-    var thead = document.getElementById('memoirTableThead');
-    if (thead) {
-      if (currentMemoirFilter === 'consult') {
-        thead.innerHTML = '<tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">' +
-          '<th style="padding: 10px 12px; width: 105px;">등록일 / ID</th>' +
-          '<th style="padding: 10px 12px; width: 130px;">주인공 (어르신)</th>' +
-          '<th style="padding: 10px 12px; width: 150px;">신청인 (가족) / 연락처</th>' +
-          '<th style="padding: 10px 12px; width: 135px;">희망일정 / 패키지</th>' +
-          '<th style="padding: 10px 12px; min-width: 220px;">상담 신청 내용 (요청 사유 &amp; 일지)</th>' +
-          '<th style="padding: 10px 12px; width: 125px; text-align: center;">상담 진행 상태</th>' +
-          '<th style="padding: 10px 12px; width: 100px; text-align: center;">담당 코치</th>' +
-          '<th style="padding: 10px 12px; width: 195px; text-align: center;">상담 &amp; 배정 액션</th>' +
-        '</tr>';
-      } else {
-        thead.innerHTML = '<tr style="background: var(--bg-secondary); border-bottom: 1.5px solid var(--border-color); text-align: left;">' +
-          '<th style="padding: 10px 12px; width: 110px;">등록일 / ID</th>' +
-          '<th style="padding: 10px 12px; width: 140px;">주인공 (어르신)</th>' +
-          '<th style="padding: 10px 12px; width: 150px;">신청인 / 패키지</th>' +
-          '<th style="padding: 10px 12px; width: 100px;">담당 코치</th>' +
-          '<th style="padding: 10px 12px; width: 110px; text-align: center;">수집 자산</th>' +
-          '<th style="padding: 10px 12px; width: 150px;">5대 챕터 완성률</th>' +
-          '<th style="padding: 10px 12px; width: 110px; text-align: center;">진행 상태</th>' +
-          '<th style="padding: 10px 12px; width: 170px; text-align: center;">출판 관제 액션</th>' +
-        '</tr>';
-      }
-    }
-
     var tbody = document.getElementById('memoirProjectsTableBody');
     if (!tbody) return;
 
     if (filtered.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 36px; color: var(--text-muted); font-size: 0.92rem;">조건에 일치하는 자서전 프로젝트가 없습니다.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem;">' +
+        '<div style="font-size: 1.5rem; margin-bottom: 6px;">✍️</div>' +
+        '<div style="font-weight: 800; color: var(--text-main); margin-bottom: 4px;">' +
+          (normalizedFilter === 'all' ? '상담 완료·이관된 자서전 프로젝트가 없습니다.' : '선택한 단계에 해당하는 자서전 프로젝트가 없습니다.') +
+        '</div>' +
+        '<div style="font-size: 0.8rem; margin-bottom: 12px;">통합 고객 접수·상담함에서 자서전 상담을 <strong>[✓ 완료]</strong> 처리하면 이곳 ① 코치 배정 단계에 자동 등록됩니다.</div>' +
+        '<button type="button" onclick="switchTab(\'tabConsult\')" style="padding: 7px 14px; border-radius: 999px; border: 1.2px solid #cbd5e1; background: #ffffff; color: #1e293b; font-size: 0.8rem; font-weight: 850; cursor: pointer;">📋 통합 고객 접수·상담함으로 이동 ➔</button>' +
+      '</td></tr>';
+      if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
       return;
     }
 
     var statusConfig = {
-      'consult_pending': { label: '📋 접수 대기', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
-      'consult_contacted': { label: '📞 1차상담 완료', bg: 'rgba(37, 99, 235, 0.14)', color: '#1d4ed8' },
-      'consult_hold': { label: '⏸️ 상담 보류', bg: 'rgba(245, 158, 11, 0.14)', color: '#b45309' },
-      'consult_done': { label: '📞 상담 완료', bg: 'rgba(37, 99, 235, 0.14)', color: '#1d4ed8' },
-      'coach_assigned': { label: '🤝 코치 배정 완료', bg: 'rgba(14, 165, 233, 0.14)', color: '#0284c7' },
-      'interview_pending': { label: '🎙️ 인터뷰 진행 중', bg: 'rgba(37, 99, 235, 0.1)', color: '#2563eb' },
-      'interview_done': { label: '🎙️ 인터뷰 완료', bg: 'rgba(37, 99, 235, 0.16)', color: '#1d4ed8' },
-      'ai_drafted': { label: '🤖 AI 윤문 완료', bg: 'rgba(217, 119, 6, 0.12)', color: '#d97706' },
-      'coach_reviewed': { label: '✍️ 코치 교정 중', bg: 'rgba(194, 155, 56, 0.16)', color: '#936f1c' },
-      'family_approved': { label: '👨‍👩‍👧 가족 승인', bg: 'rgba(139, 92, 246, 0.12)', color: '#7c3aed' },
-      'printing': { label: '🖨️ 양장본 인쇄 중', bg: 'rgba(5, 150, 105, 0.14)', color: '#059669' },
-      'completed': { label: '✅ 출판 완간', bg: 'rgba(5, 150, 105, 0.22)', color: '#047857' }
+      'consult_done': { label: '① 코치배정 대기', bg: 'rgba(2, 132, 199, 0.12)', color: '#0369a1' },
+      'coach_assigned': { label: '① 배정완료·발송대기', bg: 'rgba(14, 165, 233, 0.16)', color: '#0284c7' },
+      'interview_pending': { label: '② 현장 구술중', bg: 'rgba(43, 122, 75, 0.12)', color: '#1e6b3f' },
+      'interview_done': { label: '② 현장 구술완료', bg: 'rgba(37, 99, 235, 0.14)', color: '#1d4ed8' },
+      'ai_drafted': { label: '③ AI 윤문 완료', bg: 'rgba(217, 119, 6, 0.13)', color: '#b45309' },
+      'coach_reviewed': { label: '③ 코치 교정중', bg: 'rgba(194, 155, 56, 0.16)', color: '#936f1c' },
+      'family_approved': { label: '③ 가족 승인완료', bg: 'rgba(124, 58, 237, 0.13)', color: '#6d28d9' },
+      'printing': { label: '④ 양장본 인쇄중', bg: 'rgba(5, 150, 105, 0.14)', color: '#047857' },
+      'completed': { label: '④ 출판 완간', bg: 'rgba(5, 150, 105, 0.22)', color: '#065f46' }
     };
 
     var html = '';
     filtered.forEach(function(p) {
-      if (currentMemoirFilter === 'consult') {
-        // ========================================================
-        // 📋 [1단계 전용 뷰] 자서전 상담신청서 & 코치 배정 집중 테이블
-        // ========================================================
-        var curSt = p.status || 'consult_pending';
-        var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기' || curSt !== 'coach_assigned';
-
-        html += '<tr style="border-bottom: 1px solid var(--border-color);">';
-
-        // 1. 등록일 / ID
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-weight: 750; color: var(--text-primary); font-size: 0.84rem;">' + (p.createdAt || '-') + '</div>';
-        html += '<div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">' + (p.id || '') + '</div>';
-        html += '</td>';
-
-        // 2. 주인공 (어르신)
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.94rem; display: flex; align-items: center; gap: 4px;">';
-        html += '<span>👵</span> <span>' + escapeHtml(p.clientName || '성함 미상') + '</span>';
-        html += '</div>';
-        html += '<div style="font-size: 0.78rem; color: var(--text-secondary);">' + (p.clientAge || '-') + ' · ' + escapeHtml(p.region || '지역 미지정') + '</div>';
-        html += '</td>';
-
-        // 3. 의뢰 신청인 (가족) / 연락처 (클릭 시 tel: 직결)
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-size: 0.84rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + ' (' + (p.relation || '의뢰') + ')</div>';
-        var phoneClean = (p.applicantPhone || p.clientPhone || '').replace(/[^0-9]/g, '');
-        if (phoneClean) {
-          html += '<a href="tel:' + phoneClean + '" style="display: inline-flex; align-items: center; gap: 3px; font-size: 0.76rem; color: #0284c7; text-decoration: none; font-weight: 750; margin-top: 2px;" title="클릭 시 바로 전화 연결">';
-          html += '<span>📞</span> ' + (p.applicantPhone || p.clientPhone) + '</a>';
-        } else {
-          html += '<div style="font-size: 0.74rem; color: var(--text-muted);">-</div>';
-        }
-        html += '</td>';
-
-        // 4. 희망일정 / 패키지
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-size: 0.80rem; font-weight: 750; color: var(--text-primary);">' + (p.preferredDate || '방문일정 협의') + '</div>';
-        html += '<div style="display: inline-block; font-size: 0.72rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-top: 3px;">' + (p.packageLabel || '인생 마스터피스') + '</div>';
-        html += '</td>';
-
-        // 5. 상담 신청 내용 (요청 사유 & 일지) - 클릭 시 상담 카드 모달 열림
-        html += '<td style="padding: 10px 10px;">';
-        html += '<div onclick="openMemoirConsultCardModal(\'' + p.id + '\')" style="cursor: pointer; padding: 7px 10px; background: rgba(0,0,0,0.02); border: 1.2px solid var(--border-color); border-radius: 8px; transition: all 0.15s ease;" onmouseover="this.style.background=\'rgba(139,92,246,0.06)\'" onmouseout="this.style.background=\'rgba(0,0,0,0.02)\'" title="클릭하여 상세 상담신청서 원문 &amp; 1:1 상담일지 카드 열기">';
-        html += '<div style="font-size: 0.82rem; color: var(--text-primary); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">';
-        html += '📝 ' + escapeHtml(p.notes || '(고객 작성 상담 사유 미기재)');
-        html += '</div>';
-        if (p.consultLog && p.consultLog.trim()) {
-          html += '<div style="margin-top: 4px; font-size: 0.74rem; color: #047857; font-weight: 800; display: flex; align-items: center; gap: 4px;">';
-          html += '<span>✍️ 일지:</span> <span style="font-weight: 600; color: var(--text-secondary); max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">' + escapeHtml(p.consultLog) + '</span>';
-          html += '</div>';
-        } else {
-          html += '<div style="margin-top: 4px; font-size: 0.70rem; color: #8b5cf6; font-weight: 750;">+ 클릭하여 1:1 상담일지 작성하기</div>';
-        }
-        html += '</div>';
-        html += '</td>';
-
-        // 6. 상담 진행 상태 (인라인 변경 셀렉트)
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        var selBg = (curSt === 'consult_contacted' || curSt === 'consult_done') ? 'rgba(37,99,235,0.1)' :
-                    (curSt === 'coach_assigned') ? 'rgba(14,165,233,0.12)' :
-                    (curSt === 'consult_hold') ? 'rgba(245,158,11,0.12)' : 'rgba(139,92,246,0.12)';
-        var selCol = (curSt === 'consult_contacted' || curSt === 'consult_done') ? '#1d4ed8' :
-                     (curSt === 'coach_assigned') ? '#0284c7' :
-                     (curSt === 'consult_hold') ? '#b45309' : '#7c3aed';
-        html += '<select onchange="changeMemoirConsultStatus(\'' + p.id + '\', this.value)" style="font-size: 0.78rem; font-weight: 850; padding: 4px 7px; border-radius: 6px; border: 1.2px solid var(--border-color); background: ' + selBg + '; color: ' + selCol + '; cursor: pointer;" title="상담 진행 상태 즉시 변경">';
-        html += '<option value="consult_pending"' + (curSt === 'consult_pending' ? ' selected' : '') + '>📋 접수 대기</option>';
-        html += '<option value="consult_contacted"' + (curSt === 'consult_contacted' || curSt === 'consult_done' ? ' selected' : '') + '>📞 1차상담 완료</option>';
-        html += '<option value="consult_hold"' + (curSt === 'consult_hold' ? ' selected' : '') + '>⏸️ 상담 보류</option>';
-        html += '<option value="coach_assigned"' + (curSt === 'coach_assigned' ? ' selected' : '') + '>🤝 코치배정 완료</option>';
-        html += '</select>';
-        html += '</td>';
-
-        // 7. 담당 코치
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        if (isCoachPending) {
-          html += '<span style="font-weight: 800; color: #8b5cf6; font-size: 0.80rem;">배정 대기</span>';
-        } else {
-          html += '<div style="font-weight: 800; color: var(--text-primary); font-size: 0.84rem;">' + escapeHtml(p.coachName) + '</div>';
-          html += '<div style="font-size: 0.70rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
-        }
-        html += '</td>';
-
-        // 8. 상담 & 배정 액션
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        html += '<div style="display: flex; gap: 5px; justify-content: center; flex-wrap: wrap; align-items: center;">';
-        
-        if (isCoachPending) {
-          // [코치 배정 대기 상태] 📋 상담카드 + 🤝 코치 배정 버튼
-          html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 1:1 상담 일지 열기">';
-          html += '<span>📋</span> 상담카드';
-          html += '</button>';
-          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="전담 작가 코치 지정 및 일정 배정">';
-          html += '<span>🤝</span> 코치 배정';
-          html += '</button>';
-        } else {
-          // [코치 배정 완료 상태] 복잡한 상담카드는 숨기고, 핵심인 카톡 전송 & 재배정만 명확하게 제공
-          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
-          html += '<span>💬</span> 코치카톡 전송 ➔';
-          html += '</button>';
-          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
-        }
-
-        // 삭제 버튼
-        html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
-        html += '</div>';
-        html += '</td>';
-
-        html += '</tr>';
-      } else {
-        // ========================================================
-        // 📚 [2~5단계 및 전체 공정 뷰] 수집자산 / 챕터 진척률 관리 테이블
-        // ========================================================
-        var st = statusConfig[p.status] || { label: p.status || '대기', bg: '#f1f5f9', color: '#475569' };
-        
-        var completedChapters = 0;
-        if (p.chapters && Array.isArray(p.chapters)) {
-          p.chapters.forEach(function(ch) {
-            if (ch.content && ch.content.trim().length > 50) completedChapters++;
-          });
-        }
-        var progressPercent = Math.round((completedChapters / 5) * 100);
-
-        html += '<tr style="border-bottom: 1px solid var(--border-color);">';
-        
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-weight: 750; color: var(--text-primary); font-size: 0.84rem;">' + (p.createdAt || '-') + '</div>';
-        html += '<div style="font-size: 0.72rem; color: var(--text-muted); font-family: monospace;">' + (p.id || '') + '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.94rem; display: flex; align-items: center; gap: 4px;">';
-        html += '<span>👵</span> <span>' + escapeHtml(p.clientName || '성함 미상') + '</span>';
-        html += '</div>';
-        html += '<div style="font-size: 0.78rem; color: var(--text-secondary);">' + (p.clientAge || '-') + ' · ' + escapeHtml(p.region || '지역 미지정') + '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="font-size: 0.84rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + ' (' + (p.relation || '의뢰') + ')</div>';
-        html += '<div style="display: inline-block; font-size: 0.72rem; background: rgba(194, 155, 56, 0.12); color: #936f1c; padding: 1px 6px; border-radius: 4px; font-weight: 800; margin-top: 2px;">' + (p.packageLabel || '인생 마스터피스') + '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px;">';
-        var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기';
-        html += '<div style="font-weight: 800; color: ' + (isCoachPending ? '#8b5cf6' : 'var(--text-primary)') + '; font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 대기') + '</div>';
-        html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + (p.coachPhone || '-') + '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        html += '<div style="font-size: 0.82rem; font-weight: 750; color: var(--text-secondary); display: flex; flex-direction: column; gap: 2px;">';
-        html += '<span>🎙️ 녹음 ' + (p.recordingsCount || 0) + '건</span>';
-        html += '<span>🎞️ 사진 ' + (p.photosCount || 0) + '장</span>';
-        html += '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px;">';
-        html += '<div style="display: flex; justify-content: space-between; font-size: 0.74rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 4px;">';
-        html += '<span>' + completedChapters + ' / 5 챕터</span>';
-        html += '<span>' + progressPercent + '%</span>';
-        html += '</div>';
-        html += '<div style="width: 100%; height: 7px; background: var(--bg-secondary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color);">';
-        html += '<div style="height: 100%; width: ' + progressPercent + '%; background: linear-gradient(90deg, #c29b38, #059669); border-radius: 999px; transition: width 0.3s ease;"></div>';
-        html += '</div>';
-        html += '</td>';
-
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        html += '<span style="display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.76rem; font-weight: 850; background: ' + st.bg + '; color: ' + st.color + ';">';
-        html += st.label;
-        html += '</span>';
-        html += '</td>';
-
-        // 💡 공정 단계별 스마트 단일/핵심 액션 버튼 렌더링
-        html += '<td style="padding: 12px 10px; text-align: center;">';
-        html += '<div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; align-items: center;">';
-        
-        // [1단계] 자서전 상담 및 코치 배정 단계 (전체 필터에서 볼 때)
-        if (p.status === 'consult_pending' || isCoachPending) {
-          html += '<button type="button" onclick="openMemoirConsultCardModal(\'' + p.id + '\')" class="btn-save-setting" style="background: #8b5cf6; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="상세 상담신청서 및 일지">';
-          html += '<span>📋</span> 상담';
-          html += '</button>';
-          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="전담 작가 코치 지정 및 상담 확정">';
-          html += '<span>🤝</span> 코치 배정';
-          html += '</button>';
-        } else if (p.status === 'coach_assigned') {
-          html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(254,229,0,0.35);" title="코치에게 글쓰기 앱 링크 카톡 발송 및 구술 인터뷰 단계로 전환">';
-          html += '<span>💬</span> 코치카톡 전송 ➔';
-          html += '</button>';
-          html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: none; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 4px 6px; border-radius: 4px; cursor: pointer;" title="담당 코치 재지정">재배정</button>';
-        }
-        // [2단계] 현장 구술 인터뷰 단계 (코치가 글쓰기 대시보드에서 작성한 글 보기 집중)
-        else if (p.status === 'interview_pending') {
-          var coachAppUrl = 'coach-memoir.html?project=' + encodeURIComponent(p.id) +
-                            '&coach=' + encodeURIComponent(p.coachName || '') +
-                            '&phone=' + encodeURIComponent(p.coachPhone || '') +
-                            '&mode=admin';
-          // 1. 코치가 글쓰기 대시보드에서 작성한 글을 바로 확인하는 버튼 (감수에디터 대신 제공)
-          html += '<a href="' + coachAppUrl + '" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="코치가 글쓰기 대시보드에서 작성한 20문항 구술 녹취 원고 바로보기">';
-          html += '<span>📖</span> 코치 작성글 보기';
-          html += '</a>';
-          // 2. 현장 구술 녹취 완료 확인 버튼
-          html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(37,99,235,0.3);" title="현장 구술 인터뷰 녹음 완료 확인">';
-          html += '<span>🎙️</span> 인터뷰 완료';
-          html += '</button>';
-        } else if (p.status === 'interview_done') {
-          var coachAppUrl = 'coach-memoir.html?project=' + encodeURIComponent(p.id) +
-                            '&coach=' + encodeURIComponent(p.coachName || '') +
-                            '&phone=' + encodeURIComponent(p.coachPhone || '') +
-                            '&mode=admin';
-          // 1. 코치 작성글 보기 버튼
-          html += '<a href="' + coachAppUrl + '" target="_blank" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(30,61,47,0.3);" title="코치가 글쓰기 대시보드에서 작성한 20문항 구술 녹취 원고 바로보기">';
-          html += '<span>📖</span> 코치 작성글 보기';
-          html += '</a>';
-          // 2. 3단계 AI윤문 & 코치교정 단계로 전진 버튼 (감수에디터 대신 단계 전진)
-          html += '<button type="button" onclick="advanceToDraftingPhase(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(194,155,56,0.3);" title="3단계 AI윤문 & 코치교정 단계로 전진">';
-          html += '<span>🤖</span> 3단계 AI윤문 전진 ➔';
-          html += '</button>';
-        }
-        // [3단계] AI 감성윤문 & 코치 교정 단계
-        else if (p.status === 'ai_drafted' || p.status === 'coach_reviewed') {
-          html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: linear-gradient(135deg, #1e3d2f 0%, #152d22 100%); color: #fff; border: none; font-size: 0.78rem; font-weight: 850; padding: 5px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">';
-          html += '<span>✍️</span> 검수 에디터';
-          html += '</button>';
-          html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족용 디지털 플립북 링크 생성 및 가족 승인 요청">';
-          html += '<span>👨‍👩‍👧</span> 가족 승인요청';
-          html += '</button>';
-          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="이 어르신의 개인 서재 모바일 웹북에 올리기/수정">';
-          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북';
-          html += '</button>';
-        }
-        // [4단계] 가족 승인 단계
-        else if (p.status === 'family_approved') {
-          html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 플립북 링크 복사">';
-          html += '<span>📖</span> 플립북 확인';
-          html += '</button>';
-          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="개인 서재 모바일 웹북에 등록·편집">';
-          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북';
-          html += '</button>';
-          html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 5px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="가족 최종 확인 완료 후 양장본 인쇄 발주 단계로 진입">';
-          html += '<span>🖨️</span> 인쇄 발주로 넘기기';
-          html += '</button>';
-        }
-        // [5단계] 인쇄 & 출판 완간 단계
-        else if (p.status === 'printing' || p.status === 'completed') {
-          html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 10px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="신국판 152×225 양장본 인쇄 조판 미리보기 및 PDF">';
-          html += '<span>🖨️</span> 양장본 인쇄 조판';
-          html += '</button>';
-          html += '<button type="button" onclick="openPersonalWebbookModal(\'' + p.id + '\')" class="btn-save-setting" style="background: ' + (p.webbookPublished ? '#15803d' : '#1e4d35') + '; color: #f6e7c1; border: 1px solid #c29b38; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer; display: inline-flex; align-items: center; gap: 3px;" title="완성 자서전을 개인 서재 모바일 웹북에 올리기/수정">';
-          html += p.webbookPublished ? '<span>📱</span> 웹북 배포됨' : '<span>📱</span> 개인 웹북 올리기';
-          html += '</button>';
-          if (p.status === 'printing') {
-            html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; cursor: pointer;" title="완간 도서로 등록하고 개인 서재 모바일 웹북에 자동 전시">';
-            html += '✅ 완간 확정';
-            html += '</button>';
-          } else if (p.status === 'completed') {
-            html += '<a href="my-room.html?memoir=' + encodeURIComponent(p.id) + '" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.74rem; font-weight: 850; padding: 6px 9px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 3px;" title="개인 서재 모바일 웹북 열람">';
-            html += '<span>📚</span> 완간 웹북';
-            html += '</a>';
-          }
-        }
-
-        // 우측 끝에 프로젝트 삭제 버튼 (미니멀 디자인)
-        html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.70rem; color: #94a3b8; cursor: pointer; margin-left: 2px;">🗑️</button>';
-        
-        html += '</div>';
-        html += '</td>';
-
-        html += '</tr>';
+      var st = statusConfig[p.status] || { label: p.statusLabel || '진행중', bg: '#f1f5f9', color: '#475569' };
+      var completedChapters = 0;
+      if (p.chapters && Array.isArray(p.chapters)) {
+        p.chapters.forEach(function(ch) {
+          if (ch.content && ch.content.trim().length > 50) completedChapters++;
+        });
       }
+      var progressPercent = Math.round((completedChapters / 5) * 100);
+      var isCoachPending = !p.coachName || p.coachName === '배정 대기' || p.coachName === '배정대기';
+      var phoneRaw = p.applicantPhone || p.clientPhone || '';
+      var phoneClean = phoneRaw.replace(/[^0-9]/g, '');
+
+      html += '<tr style="border-bottom: 1px solid var(--border-color);">';
+
+      // 1. 주인공 (어르신) · 등록일
+      html += '<td style="padding: 12px 10px;">';
+      html += '<div style="font-weight: 850; color: var(--text-primary); font-size: 0.92rem;">👵 ' + escapeHtml(p.clientName || '어르신') + '</div>';
+      html += '<div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">' + escapeHtml(p.region || '지역 협의') + ' · ' + escapeHtml(p.createdAt || '-') + '</div>';
+      html += '</td>';
+
+      // 2. 의뢰인 · 패키지 · 희망일정
+      html += '<td style="padding: 12px 10px;">';
+      html += '<div style="font-size: 0.82rem; color: var(--text-primary); font-weight: 750;">' + escapeHtml(p.applicantName || '-') + (phoneClean ? ' · <a href="tel:' + phoneClean + '" style="color:#0284c7; text-decoration:none;">' + escapeHtml(phoneRaw) + '</a>' : '') + '</div>';
+      html += '<div style="font-size: 0.73rem; color: #936f1c; font-weight: 800; margin-top: 2px;">' + escapeHtml(p.packageLabel || '인생 마스터피스') + '</div>';
+      html += '<div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 1px;">📅 ' + escapeHtml(p.preferredDate || '방문일정 협의') + '</div>';
+      html += '</td>';
+
+      // 3. 담당 코치
+      html += '<td style="padding: 12px 10px;">';
+      html += '<div style="font-weight: 800; color: ' + (isCoachPending ? '#0284c7' : 'var(--text-primary)') + '; font-size: 0.84rem;">' + escapeHtml(p.coachName || '배정 대기') + '</div>';
+      html += '<div style="font-size: 0.72rem; color: var(--text-muted);">' + escapeHtml(p.coachPhone || '-') + '</div>';
+      html += '</td>';
+
+      // 4. 수집 · 챕터 진척
+      html += '<td style="padding: 12px 10px;">';
+      html += '<div style="display: flex; justify-content: space-between; font-size: 0.73rem; font-weight: 800; color: var(--text-secondary); margin-bottom: 4px;">';
+      html += '<span>🎙️' + (p.recordingsCount || 0) + ' · 🎞️' + (p.photosCount || 0) + '</span>';
+      html += '<span>' + completedChapters + '/5장 (' + progressPercent + '%)</span>';
+      html += '</div>';
+      html += '<div style="width: 100%; height: 6px; background: var(--bg-secondary); border-radius: 999px; overflow: hidden; border: 1px solid var(--border-color);">';
+      html += '<div style="height: 100%; width: ' + progressPercent + '%; background: linear-gradient(90deg, #c29b38, #059669); border-radius: 999px;"></div>';
+      html += '</div>';
+      html += '</td>';
+
+      // 5. 현재 단계 (+ 정산 상태 연동 배지)
+      html += '<td style="padding: 12px 10px; text-align: center;">';
+      html += '<span style="display: inline-block; padding: 4px 10px; border-radius: 999px; font-size: 0.74rem; font-weight: 850; background: ' + st.bg + '; color: ' + st.color + '; white-space: nowrap;">' + st.label + '</span>';
+      if (p.coachSettled) {
+        html += '<div style="margin-top: 4px;"><span style="display:inline-block; padding: 2px 7px; border-radius: 999px; font-size: 0.69rem; font-weight: 850; background: #dcfce7; color: #15803d;">💰 코치 정산완료</span></div>';
+      } else if (p.status === 'interview_done') {
+        html += '<div style="margin-top: 4px;"><button type="button" onclick="switchTab(\'tabCockpit\'); focusCockpitSettlementQueue(\'pending\');" style="padding: 2px 7px; border-radius: 999px; border: 1px solid #fecaca; background: #fff1f2; color: #be123c; font-size: 0.69rem; font-weight: 850; cursor: pointer;">⚡ 통합관제 송금대기 ➔</button></div>';
+      }
+      html += '</td>';
+
+      // 6. 다음 단계 순차 진행 액션 (단계당 핵심 1~2개 버튼만 깔끔하게 표시 · 중복 제거)
+      html += '<td style="padding: 12px 10px; text-align: center;">';
+      html += '<div style="display: flex; gap: 5px; justify-content: center; flex-wrap: nowrap; align-items: center;">';
+
+      if (p.status === 'consult_done' || isCoachPending) {
+        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" class="btn-save-setting" style="background: #1e3d2f; color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🤝 코치 배정</button>';
+      } else if (p.status === 'coach_assigned') {
+        html += '<button type="button" onclick="sendCoachMemoirKakaoAndAdvance(\'' + p.id + '\')" class="btn-save-setting" style="background: #fee500; color: #191600; border: 1.2px solid #e6cf00; font-size: 0.76rem; font-weight: 850; padding: 6px 11px; border-radius: 7px; cursor: pointer; white-space: nowrap;">💬 코치카톡 전송 ➔</button>';
+        html += '<button type="button" onclick="assignCoachToMemoirProject(\'' + p.id + '\')" style="background: #fff; border: 1px solid var(--border-color); font-size: 0.72rem; color: var(--text-muted); padding: 5px 7px; border-radius: 6px; cursor: pointer; white-space: nowrap;">변경</button>';
+      } else if (p.status === 'interview_pending') {
+        var coachAppUrl = 'coach-memoir.html?project=' + encodeURIComponent(p.id) +
+                          '&coach=' + encodeURIComponent(p.coachName || '') +
+                          '&phone=' + encodeURIComponent(p.coachPhone || '') +
+                          '&mode=admin';
+        html += '<a href="' + coachAppUrl + '" target="_blank" class="btn-save-setting" style="background: #f8fafc; color: #1e3d2f; border: 1.2px solid #cbd5e1; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 7px; text-decoration: none; white-space: nowrap;">📖 원고</a>';
+        html += '<button type="button" onclick="advanceToInterviewDone(\'' + p.id + '\')" class="btn-save-setting" style="background: #2563eb; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🏁 현장완료 ➔ 송금등록</button>';
+      } else if (p.status === 'interview_done') {
+        html += '<button type="button" onclick="advanceToDraftingPhase(\'' + p.id + '\')" class="btn-save-setting" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #fff; border: none; font-size: 0.76rem; font-weight: 850; padding: 6px 12px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🤖 AI윤문 시작 ➔</button>';
+      } else if (p.status === 'ai_drafted' || p.status === 'coach_reviewed') {
+        html += '<button type="button" onclick="openMemoirSplitEditor(\'' + p.id + '\', 1)" class="btn-save-setting" style="background: #1e3d2f; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;">✍️ 원고 검수</button>';
+        html += '<button type="button" onclick="requestFamilyApproval(\'' + p.id + '\')" class="btn-save-setting" style="background: #7c3aed; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;">👨‍👩‍👧 가족승인 ➔</button>';
+      } else if (p.status === 'family_approved') {
+        html += '<button type="button" onclick="copyFlipbookLink(\'' + p.id + '\')" class="btn-save-setting" style="background: #f5f3ff; color: #6d28d9; border: 1.2px solid #ddd6fe; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 7px; cursor: pointer; white-space: nowrap;">📖 플립북</button>';
+        html += '<button type="button" onclick="approveAndSendToPrint(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🖨️ 인쇄발주 ➔</button>';
+      } else if (p.status === 'printing') {
+        html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: #fef3c7; color: #92400e; border: 1.2px solid #fcd34d; font-size: 0.74rem; font-weight: 850; padding: 5px 9px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🖨️ 조판</button>';
+        html += '<button type="button" onclick="completeMemoirPublication(\'' + p.id + '\')" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;">✅ 출판 완간</button>';
+      } else if (p.status === 'completed') {
+        html += '<a href="my-room.html?memoir=' + encodeURIComponent(p.id) + '" target="_blank" class="btn-save-setting" style="background: #059669; color: #fff; border: none; font-size: 0.75rem; font-weight: 850; padding: 6px 10px; border-radius: 7px; text-decoration: none; white-space: nowrap;">📚 완간 웹북</a>';
+        html += '<button type="button" onclick="openMemoirPrintPreview(\'' + p.id + '\')" class="btn-save-setting" style="background: #fff; color: #92400e; border: 1.2px solid #fcd34d; font-size: 0.74rem; font-weight: 800; padding: 5px 9px; border-radius: 7px; cursor: pointer; white-space: nowrap;">🖨️ PDF</button>';
+      }
+
+      html += '<button type="button" onclick="deleteMemoirProject(\'' + p.id + '\')" title="프로젝트 삭제" style="background: none; border: 1px solid var(--border-color); border-radius: 5px; padding: 4px 6px; font-size: 0.7rem; color: #94a3b8; cursor: pointer;">🗑️</button>';
+      html += '</div>';
+      html += '</td>';
+
+      html += '</tr>';
     });
 
     tbody.innerHTML = html;
@@ -19077,6 +18912,8 @@ ${coachAppUrl}
 
       var dispatchData = {
         id: dispId,
+        sourceBizType: 'memoir',
+        sourceBizId: p.id,
         memoirProjectId: p.id,
         customerName: (p.clientName || '어르신') + (p.applicantName ? ' (' + p.applicantName + ')' : ''),
         phone: p.applicantPhone || p.clientPhone || '010-0000-0000',
@@ -19096,7 +18933,7 @@ ${coachAppUrl}
         afterPhoto: '',
         coachReport: '',
         createdAt: p.createdAt || new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
-        updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.')
+        updatedAt: Date.now()
       };
 
       if (existingIdx !== -1) {
@@ -19116,17 +18953,18 @@ ${coachAppUrl}
 
     closeMemoirCoachAssignModal();
     renderMemoirDashboard();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + coachName + '] 님이 성공적으로 배정되었습니다!\n\n05. 코치 관제 & 정산 센터 및 코치 현장 파트너앱(coach.html)에 즉시 등록되었습니다.\n\n이제 [💬 코치카톡 전송 ➔] 버튼을 눌러 모바일 글쓰기 앱 링크를 전송하세요.');
+    alert('🎉 [' + (p.clientName) + '] 님의 자서전 전담 코치로 [' + coachName + '] 님이 배정되었습니다!\n\n이제 [💬 코치카톡 전송 ➔] 버튼을 눌러 코치 현장앱·글쓰기 링크를 발송하세요.');
   }
 
-  // 테이블 [🤝 코치 배정] 및 [재배정] 버튼 클릭 시 모달 열기
+  // 테이블 [🤝 코치 배정] 및 [변경] 버튼 클릭 시 모달 열기
   function assignCoachToMemoirProject(projectId) {
     openMemoirCoachAssignModal(projectId);
   }
   window.assignCoachToMemoirProject = assignCoachToMemoirProject;
 
-  // 💬 1-2. 코치 카톡 전송 및 2단계(구술 인터뷰)로 자동 전진
+  // 💬 1-2. 코치 카톡 전송 및 ② 현장 구술 인터뷰 단계로 자동 전진
   function sendCoachMemoirKakaoAndAdvance(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
@@ -19135,46 +18973,112 @@ ${coachAppUrl}
     // 카톡 링크 전송 로직 수행
     sendCoachMemoirKakao(projectId);
 
-    // 공정 단계 전진: coach_assigned ➔ interview_pending (2단계 구술 인터뷰)
+    // 공정 단계 전진: coach_assigned ➔ interview_pending (② 현장 구술 인터뷰)
     p.status = 'interview_pending';
-    p.statusLabel = '인터뷰 진행 중';
+    p.statusLabel = '현장 구술 진행중';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
 
-    // 파견 명부 상태도 실시간 동기화
+    // 파견 명부 상태도 실시간 동기화 (coach.html 표준 step = '진행중')
     try {
       var dispatches = (typeof getDispatches === 'function') ? getDispatches() : [];
       var targetDisp = dispatches.find(function(d) { return d.memoirProjectId === projectId || d.id === 'disp_memoir_' + projectId; });
       if (targetDisp) {
-        targetDisp.step = '도착/진행중';
+        targetDisp.step = '진행중';
         targetDisp.status = '진행중';
+        targetDisp.updatedAt = Date.now();
         if (typeof saveDispatches === 'function') saveDispatches(dispatches);
       }
     } catch(e) {}
 
-    // 필터를 '2. 구술 인터뷰'로 전환하여 방금 전진된 건이 바로 보이도록 지원
     filterMemoirProjects('interview');
-    renderMemoirDashboard();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 현장 파견 및 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [2. 구술 인터뷰] 단계로 자동 전진되었습니다. 코치님이 현장 방문 후 20문항 구술 음성을 등록하면 AI 감성윤문 검수를 시작할 수 있습니다.');
+    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 현장 파견 및 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [② 현장 구술 인터뷰] 단계로 전진되었습니다.');
   }
   window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
 
-  // 🎙️ 2-1. 현장 구술 인터뷰 완료 확인
+  // 🏁 2-1. 현장 구술 인터뷰 완료 확인 ➔ 00. 통합 관제 홈 [⚡ 현장완료 · 송금대기] 자동 등록
   function advanceToInterviewDone(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
     if (!p) return;
 
+    var nowObj = new Date();
+    var pad2 = function(n) { return String(n).padStart(2, '0'); };
+    var nowStamp = nowObj.getFullYear() + '.' + pad2(nowObj.getMonth() + 1) + '.' + pad2(nowObj.getDate()) + ' ' + pad2(nowObj.getHours()) + ':' + pad2(nowObj.getMinutes());
+
     p.status = 'interview_done';
-    p.statusLabel = '구술 인터뷰 완료';
+    p.statusLabel = p.coachSettled ? '현장 구술완료 · 정산마감' : '현장완료 · 송금대기';
     p.recordingsCount = Math.max(p.recordingsCount || 0, 4);
     p.photosCount = Math.max(p.photosCount || 0, 12);
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
-    renderMemoirDashboard();
 
-    alert('🎙️ [' + (p.clientName) + '] 님의 현장 구술 녹취 및 사진 수집이 완료 처리되었습니다!\n\n이제 [📖 코치 작성글 보기]로 작성 원고를 확인하거나, [🤖 3단계 AI윤문 전진 ➔] 버튼을 눌러 다음 단계로 진행하세요.');
+    // 00. 통합 관제 홈 [⚡ 현장완료 · 송금대기] 보드 및 클라우드 자동 등록
+    try {
+      var dispatches = (typeof getDispatches === 'function') ? getDispatches() : [];
+      var dispId = 'disp_memoir_' + p.id;
+      var targetDisp = dispatches.find(function(d) { return d.memoirProjectId === projectId || d.id === dispId; });
+      if (targetDisp) {
+        targetDisp.sourceBizType = 'memoir';
+        targetDisp.sourceBizId = p.id;
+        targetDisp.memoirProjectId = p.id;
+        if (targetDisp.step !== '정산완료') {
+          targetDisp.step = '서비스완료';
+          targetDisp.status = '서비스완료';
+        }
+        targetDisp.completionDate = targetDisp.completionDate || nowStamp;
+        targetDisp.coachReport = targetDisp.coachReport || ('[' + (p.clientName || '어르신') + '] 자서전 현장 구술 인터뷰 및 사진 수집 완료 (녹음 ' + p.recordingsCount + '건 · 사진 ' + p.photosCount + '장)');
+        targetDisp.updatedAt = Date.now();
+      } else {
+        dispatches.unshift({
+          id: dispId,
+          sourceBizType: 'memoir',
+          sourceBizId: p.id,
+          memoirProjectId: p.id,
+          customerName: (p.clientName || '어르신') + (p.applicantName ? ' (' + p.applicantName + ')' : ''),
+          phone: p.applicantPhone || p.clientPhone || '-',
+          serviceType: '✍️ 디지털 자서전 (인생 구술)',
+          preferredDate: p.preferredDate || '현장 완료',
+          address: p.region || '방문지',
+          coach: p.coachName || '전담 코치',
+          coachPhone: p.coachPhone || '',
+          step: '서비스완료',
+          status: '서비스완료',
+          fee: Number(p.fee) || 150000,
+          notes: (p.packageLabel ? '[' + p.packageLabel + '] ' : '') + (p.notes || '자서전 현장 구술'),
+          arrivalStamp: nowStamp,
+          completionDate: nowStamp,
+          coachReport: '[' + (p.clientName || '어르신') + '] 자서전 현장 구술 인터뷰 및 사진 수집 완료 (녹음 ' + p.recordingsCount + '건 · 사진 ' + p.photosCount + '장)',
+          createdAt: p.createdAt || nowStamp.slice(0, 10),
+          updatedAt: Date.now()
+        });
+      }
+      if (typeof saveDispatches === 'function') {
+        saveDispatches(dispatches);
+      } else {
+        localStorage.setItem('yebaek_dispatches_v1', JSON.stringify(dispatches));
+      }
+    } catch (err) {
+      console.warn('[Memoir] 현장완료 송금대기 등록 경고:', err);
+    }
+
+    renderMemoirDashboard();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
+
+    var goCockpit = confirm(
+      '🏁 [' + (p.clientName) + '] 님의 현장 구술 완료가 확인되었습니다!\n\n' +
+      '👉 [00. 통합 관제 홈 > ⚡ 현장완료 · 송금대기]에 자동 등록되었습니다.\n\n' +
+      '지금 바로 통합 관제 홈으로 이동하여 업무카드 검수 및 코치 활동비 송금 정산을 마감하시겠습니까?\n' +
+      '(취소 시 현재 화면에 남아 ③ AI윤문을 바로 진행할 수 있습니다)'
+    );
+    if (goCockpit && typeof switchTab === 'function') {
+      switchTab('tabCockpit');
+      if (typeof focusCockpitSettlementQueue === 'function') {
+        focusCockpitSettlementQueue('pending');
+      }
+    }
   }
   window.advanceToInterviewDone = advanceToInterviewDone;
 
@@ -19191,11 +19095,11 @@ ${coachAppUrl}
     filterMemoirProjects('drafting');
     renderMemoirDashboard();
 
-    alert('✨ [' + (p.clientName) + '] 님의 프로젝트가 [3. AI윤문 & 코치교정] 단계로 전진되었습니다!\n\n이제 3단계 탭에서 AI 5단계 감성윤문 검수 에디터를 열람하실 수 있습니다.');
+    alert('✨ [' + (p.clientName) + '] 님의 프로젝트가 [③ AI윤문 · 가족승인] 단계로 전진되었습니다!\n\n이제 [✍️ 원고 검수] 버튼으로 AI 5단계 감성윤문 에디터를 진행하세요.');
   }
   window.advanceToDraftingPhase = advanceToDraftingPhase;
 
-  // ✍️ 2-3. AI 윤문 에디터 열고 3단계로 전진 (하위 호환 유지)
+  // ✍️ 2-3. AI 윤문 에디터 열고 ③ 단계로 전진 (하위 호환 유지)
   function openMemoirSplitEditorAndDraft(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
@@ -19210,7 +19114,7 @@ ${coachAppUrl}
   }
   window.openMemoirSplitEditorAndDraft = openMemoirSplitEditorAndDraft;
 
-  // 👨‍👩‍👧 3-1. 가족 승인 요청 및 4단계로 전진
+  // 👨‍👩‍👧 3-1. 가족 승인 요청 (③ AI윤문 · 가족승인 단계 내 가족승인 완료 상태 전환)
   function requestFamilyApproval(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
@@ -19224,40 +19128,40 @@ ${coachAppUrl}
     } catch(e) {}
 
     p.status = 'family_approved';
-    p.statusLabel = '가족 승인 대기';
+    p.statusLabel = '가족 승인 완료';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
     renderMemoirDashboard();
 
-    alert('👨‍👩‍👧 가족 검수 안내문과 디지털 서재 링크가 클립보드에 복사되었습니다!\n\n프로젝트가 [4. 가족 승인] 단계로 전환되었습니다.');
+    alert('👨‍👩‍👧 가족 검수 안내문과 디지털 서재 링크가 클립보드에 복사되었습니다!\n\n가족 확인 후 [🖨️ 인쇄발주 ➔] 버튼으로 다음 단계를 진행하세요.');
   }
   window.requestFamilyApproval = requestFamilyApproval;
 
-  // 🖨️ 4-1. 가족 최종 승인 완료 후 인쇄 발주(5단계)로 넘기기
+  // 🖨️ 3-2. 가족 최종 승인 완료 후 ④ 인쇄 · 출판 완간 단계로 넘기기
   function approveAndSendToPrint(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
     if (!p) return;
 
-    if (!confirm('[' + (p.clientName) + '] 님의 자서전 가족 검수가 완료되었습니까?\n\n최종 확인 후 [5. 인쇄 & 출판완료] 단계로 진입하여 양장본 인쇄 규격 조판을 생성합니다.')) return;
+    if (!confirm('[' + (p.clientName) + '] 님의 자서전 가족 검수가 완료되었습니까?\n\n최종 확인 후 [④ 인쇄 · 출판 완간] 단계로 진입하여 양장본 인쇄 조판을 진행합니다.')) return;
 
     p.status = 'printing';
     p.statusLabel = '양장본 인쇄 발주';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
-    renderMemoirDashboard();
+    filterMemoirProjects('printing_done');
 
-    alert('🖨️ 가족 승인이 확정되어 [5. 인쇄 & 출판완료] 단계로 진입했습니다!\n\n바로 [양장본 인쇄 조판] 버튼을 눌러 인쇄용 신국판 PDF를 생성하고 인쇄소 발주를 진행하세요.');
+    alert('🖨️ 가족 승인이 확정되어 [④ 인쇄 · 출판 완간] 단계로 진입했습니다!\n\n[🖨️ 조판] 버튼으로 인쇄 PDF를 확인하고 인쇄 완료 시 [✅ 출판 완간]을 확정하세요.');
   }
   window.approveAndSendToPrint = approveAndSendToPrint;
 
-  // ✅ 5-1. 최종 출판 완간 확정 및 서재 등록
+  // ✅ 4-1. 최종 출판 완간 확정 및 개인 서재 웹북 등록
   function completeMemoirPublication(projectId) {
     var projects = getMemoirProjects();
     var p = projects.find(function(item) { return item.id === projectId; });
     if (!p) return;
 
-    if (!confirm('[' + (p.clientName) + '] 님의 자서전 도서가 인쇄소에서 완간되었습니까?\n\n완간 처리 시 [나의 서재(my-room.html)]에 정식 디지털 도서로 등록되어 유가족과 독자가 열람할 수 있습니다.')) return;
+    if (!confirm('[' + (p.clientName) + '] 님의 자서전 도서가 인쇄소에서 완간되었습니까?\n\n완간 처리 시 [4-2. 모바일 웹북]과 [나의 서재(my-room.html)]에 자동 등록됩니다.')) return;
 
     p.status = 'completed';
     p.statusLabel = '출판 완간';
@@ -19270,7 +19174,7 @@ ${coachAppUrl}
     p.updatedAt = p.webbookUpdatedAt;
     saveMemoirProjects(projects);
 
-    // 하단 완간 도서 목록(publishedMemoirs)에 자동 등록
+    // 구버전 완간 도서 목록(publishedMemoirs)에도 기록
     try {
       var pubList = getPublishedMemoirs();
       if (!pubList.some(function(item) { return item.title.indexOf(p.clientName) !== -1; })) {
@@ -19291,29 +19195,17 @@ ${coachAppUrl}
 
     renderMemoirDashboard();
     if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-    alert('🎉 축하합니다! [' + (p.clientName) + '] 님의 자서전 출판이 공식 완간되었습니다!\n\n[04-2. 완간 도서 & PDF 관리]와 [나의 서재]에 자동 등록되었습니다.');
+    alert('🎉 축하합니다! [' + (p.clientName) + '] 님의 자서전 출판이 공식 완간되었습니다!\n\n[4-2. 모바일 웹북 · 오디오 · QR] 및 [나의 서재]에 자동 등록되었습니다.');
   }
   window.completeMemoirPublication = completeMemoirPublication;
 
   function filterMemoirProjects(filterType, btn) {
     try {
+      if (filterType === 'family') filterType = 'drafting';
+      if (filterType === 'printing' || filterType === 'completed') filterType = 'printing_done';
       currentMemoirFilter = filterType || 'all';
-      var group = document.getElementById('memoirFilterButtonGroup');
-      if (group) {
-        var btns = group.querySelectorAll('.memoir-pipeline-btn, .btn-mag-filter');
-        btns.forEach(function(b) { b.classList.remove('active'); });
-        if (btn && btn.classList) {
-          btn.classList.add('active');
-        } else {
-          btns.forEach(function(b) {
-            var onclickStr = b.getAttribute('onclick') || '';
-            if (onclickStr.indexOf("'" + filterType + "'") !== -1) {
-              b.classList.add('active');
-            }
-          });
-        }
-      }
       renderMemoirDashboard();
     } catch(err) {
       console.error('[Memoir] filterMemoirProjects 에러:', err);
@@ -20016,10 +19908,12 @@ ${coachAppUrl}
     var projects = getMemoirProjects();
     projects = projects.filter(function(p) { return p.id !== projectId; });
     saveMemoirProjects(projects);
-    if (typeof db !== 'undefined' && db) {
-      try { db.collection('memoir_projects').doc(projectId).delete(); } catch(e) {}
+    var firestoreDb = getMemoirFirestoreDb();
+    if (firestoreDb) {
+      try { firestoreDb.collection('memoir_projects').doc(projectId).delete(); } catch(e) {}
     }
     renderMemoirDashboard();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
   }
 
   function sendCoachMemoirKakao(projectId) {
@@ -21030,6 +20924,8 @@ ${coachAppUrl}
       snapshot.forEach(function(doc) {
         var data = doc.data();
         if (!data) return;
+        // 과거 미배포 데모 문서(mem_demo_*) 클라우드 재유입 차단 (배포된 웹북은 유지)
+        if (String(doc.id).indexOf('mem_demo_') === 0 && !data.webbookPublished && data.recordType !== 'personal_webbook') return;
         data.id = doc.id;
         mergedMap[doc.id] = Object.assign({}, mergedMap[doc.id] || {}, data);
         remoteCnt++;
@@ -21060,6 +20956,7 @@ ${coachAppUrl}
         snapshot.forEach(function(doc) {
           var data = doc.data();
           if (!data) return;
+          if (String(doc.id).indexOf('mem_demo_') === 0 && !data.webbookPublished && data.recordType !== 'personal_webbook') return;
           data.id = doc.id;
           mergedMap[doc.id] = Object.assign({}, mergedMap[doc.id] || {}, data);
         });
