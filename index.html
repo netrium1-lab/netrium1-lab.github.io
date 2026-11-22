@@ -6450,6 +6450,90 @@
       margin-bottom: 8px;
       line-height: 1.35;
     }
+
+    /* ================= 6대 카테고리 명확한 시각적 구분 시스템 (상단 버튼 컬러 1:1 매칭) ================= */
+    section.cat-section {
+      --cat-color: #235a3f;
+      position: relative;
+      overflow: visible !important;
+      border-top: 3.5px solid var(--cat-color) !important;
+      box-shadow: inset 0 18px 30px -22px rgba(0, 0, 0, 0.14);
+      padding-top: 86px !important;
+      padding-bottom: 86px !important;
+      scroll-margin-top: 84px;
+    }
+
+    /* 카테고리 경계선 중앙에 걸터앉는 책갈피 챕터 리본 */
+    .cat-chapter-ribbon {
+      position: absolute;
+      top: -21px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 12;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 22px;
+      border-radius: 999px;
+      background: var(--cat-color);
+      color: #ffffff;
+      font-size: 0.88rem;
+      font-weight: 850;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+      border: 3px solid var(--bg-primary);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.16);
+    }
+    .cat-chapter-ribbon .cat-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.22);
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.6px;
+    }
+
+    /* 6대 카테고리 고유 배경 톤 & 시그니처 포인트 컬러 */
+    .cat-theme-01 { --cat-color: #235a3f; background: #ebf3ec !important; }
+    .cat-theme-02 { --cat-color: #9a5d29; background: #fdf9f2 !important; }
+    .cat-theme-03 { --cat-color: #546b4c; background: #edf3e9 !important; }
+    .cat-theme-04 { --cat-color: #a84432; background: #fbf1ed !important; }
+    .cat-theme-05 { --cat-color: #a87b18; background: #f6eedb !important; }
+    .cat-theme-06 { --cat-color: #245b8e; background: #ebf1f8 !important; }
+
+    [data-theme="dark"] .cat-theme-01 { --cat-color: #5ea882; background: #16211b !important; }
+    [data-theme="dark"] .cat-theme-02 { --cat-color: #d69356; background: #221c17 !important; }
+    [data-theme="dark"] .cat-theme-03 { --cat-color: #8ea584; background: #1a2119 !important; }
+    [data-theme="dark"] .cat-theme-04 { --cat-color: #e07b69; background: #241917 !important; }
+    [data-theme="dark"] .cat-theme-05 { --cat-color: #d8b252; background: #231e15 !important; }
+    [data-theme="dark"] .cat-theme-06 { --cat-color: #6aa7e0; background: #151e28 !important; }
+
+    /* 각 카테고리 내부 랜드마크 배너에도 동일 시그니처 컬러 좌측 포인트 적용 */
+    .cat-section .section-landmark-banner {
+      border-left: 6px solid var(--cat-color);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.07);
+    }
+    .cat-section .slb-badge {
+      background: color-mix(in srgb, var(--cat-color) 12%, transparent);
+      color: var(--cat-color);
+      border-color: color-mix(in srgb, var(--cat-color) 36%, transparent);
+    }
+
+    @media (max-width: 768px) {
+      section.cat-section {
+        padding-top: 64px !important;
+        padding-bottom: 60px !important;
+        scroll-margin-top: 112px;
+      }
+      .cat-chapter-ribbon {
+        top: -18px;
+        padding: 6px 16px;
+        font-size: 0.8rem;
+      }
+    }
     @media (max-width: 860px) {
       .slb-title {
         font-size: 1.25rem;
@@ -7098,7 +7182,11 @@
     </div>
 
     <!-- 2. [1단계] 인사이트 매거진: 여백의 서재 (칼럼 & 게시판) -->
-    <section id="magazine" style="background-color: var(--bg-secondary);">
+    <section id="magazine" class="cat-section cat-theme-01">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">01</span>
+        <span>📖 여백의 서재</span>
+      </div>
       <div class="container">
         <!-- [신설] 카테고리 01 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
@@ -7132,7 +7220,11 @@
     </section>
 
     <!-- 3. [2단계] 참여 라운지 (오늘의 비움 한 줄 - 따뜻한 커뮤니티 형성) -->
-    <section id="lounge">
+    <section id="lounge" class="cat-section cat-theme-02">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">02</span>
+        <span>💬 비움 한 줄</span>
+      </div>
       <div class="container">
         <!-- [신설] 카테고리 02 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
@@ -7176,7 +7268,11 @@
     </section>
 
     <!-- 4. [3단계] 여백과결 4대 웰라이프 비즈니스 쇼케이스 & 1:1 라이프케어 안내 -->
-    <section id="test" style="background-color: var(--bg-secondary);">
+    <section id="test" class="cat-section cat-theme-03">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">03</span>
+        <span>🌿 웰라이프</span>
+      </div>
       <div class="container">
         <!-- [신설] 카테고리 03 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
@@ -7767,7 +7863,11 @@
     </div>
 
     <!-- 4. [신설 독립 카테고리] 내 인생의 서사 기록, 디지털 자서전 -->
-    <section id="memoir" class="memoir-section">
+    <section id="memoir" class="memoir-section cat-section cat-theme-04">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">04</span>
+        <span>✍️ 디지털 자서전</span>
+      </div>
       <div class="container">
         <!-- 카테고리 04 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
@@ -8109,7 +8209,11 @@
     </section>
 
     <!-- 6. [5단계] 나의 고유한 서재 (프라이빗 온라인룸 · 메인 카테고리 5번) -->
-    <section id="archive" style="background-color: var(--bg-secondary); padding: 80px 0;">
+    <section id="archive" class="cat-section cat-theme-05">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">05</span>
+        <span>🏛️ 나의 고유한 서재</span>
+      </div>
       <div class="container">
         <!-- [신설] 카테고리 05 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
@@ -8195,7 +8299,11 @@
     </section>
 
     <!-- 7. [6단계 · 맨 마지막] 코칭스태프 양성 아카데미 (메인 카테고리 6번) -->
-    <section id="programs" style="background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 80px 0;">
+    <section id="programs" class="cat-section cat-theme-06">
+      <div class="cat-chapter-ribbon" aria-hidden="true">
+        <span class="cat-num">06</span>
+        <span>🎓 코치 아카데미</span>
+      </div>
       <div class="container">
         <!-- 모바일 전용 카테고리 랜드마크 배너 -->
         <div class="mobile-section-badge">
