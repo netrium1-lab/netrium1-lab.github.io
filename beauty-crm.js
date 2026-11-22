@@ -417,6 +417,53 @@ function generateBeautyStepViewHtml(list, step, meta, counts) {
   return generateStepAllBeautyView(list, meta, counts);
 }
 
+// 06. 코치 아카데미 > 6-2 공인 코칭스태프 명단에 등재된 활동 코치만 엄격 조회
+function getCertifiedAssignableCoaches() {
+  if (typeof window.getAssignableCoaches === 'function') {
+    return window.getAssignableCoaches();
+  }
+  try {
+    const saved = localStorage.getItem('yebaek_certified_coaches_v1');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed)) {
+        return parsed.filter(c => c && c.name && c.status !== '휴식중');
+      }
+    }
+  } catch (e) {}
+  return [];
+}
+
+function buildCertifiedCoachSelectHtml(currentCoach, onChangeExpr) {
+  const coaches = getCertifiedAssignableCoaches();
+  const cleanCur = String(currentCoach || '').replace(/\s+|코치$/g, '');
+  if (coaches.length === 0) {
+    return `
+      <select class="setting-input" style="padding:4px 8px; font-size:0.8rem; font-weight:750; color:#b91c1c; background:#fef2f2; border-color:#fecaca;" onchange="${onChangeExpr}">
+        <option value="미배정" selected>-- 등재된 공인 코치 없음 --</option>
+      </select>
+      <div style="margin-top:3px;">
+        <button type="button" onclick="if(typeof selectCoachSubFromSidebar==='function') selectCoachSubFromSidebar('academy');" style="background:none; border:none; padding:0; font-size:0.72rem; color:#245b8e; font-weight:800; cursor:pointer; text-decoration:underline;">
+          🎓 06. 아카데미 수료·코치등재 필요 ➔
+        </button>
+      </div>
+    `;
+  }
+  const optionsHtml = coaches.map(c => {
+    const labelName = c.name.endsWith('코치') ? c.name : `${c.name} 코치`;
+    const cleanSpec = String(c.specialty || '').replace(/^[^\s]+\s+/, '');
+    const isSel = cleanCur && (c.name.replace(/\s+|코치$/g, '') === cleanCur || String(currentCoach || '').includes(c.name));
+    return `<option value="${escapeHtml(labelName)}" ${isSel ? 'selected' : ''}>${escapeHtml(labelName)}${cleanSpec ? ' (' + escapeHtml(cleanSpec) + ')' : ''}</option>`;
+  }).join('');
+  return `
+    <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:750;" onchange="${onChangeExpr}">
+      <option value="미배정" ${!cleanCur || cleanCur === '미배정' ? 'selected' : ''}>-- 공인 코치 선택 --</option>
+      ${optionsHtml}
+    </select>
+    <div style="font-size:0.71rem; color:var(--text-muted); margin-top:2px;">🏅 아카데미 공인 등재 코치 ${coaches.length}명</div>
+  `;
+}
+
 // 7-2. [1단계: 코치 배정 & 매칭 화면 (상담완료 이관 건)] 생성기
 function generateStep2BeautyView(list, meta) {
   let stepItems = list.filter(i => resolveItemStep(i) === 'step2');
@@ -489,13 +536,7 @@ function generateStep2BeautyView(list, meta) {
                   </div>
                 </td>
                 <td>
-                  <select class="setting-input" style="padding:4px 8px; font-size:0.84rem; font-weight:750;" onchange="assignBeautyCoach('${item.id}', this.value)">
-                    <option value="미배정" ${coach.includes('미배정') ? 'selected' : ''}>-- 코치 선택 --</option>
-                    <option value="김서연 전문 라이프 코치 (40대 시니어 뷰티&라이프스타일 1급)" ${coach.includes('김서연') ? 'selected' : ''}>김서연 코치 (1급)</option>
-                    <option value="박지은 수석 코치 (시니어 뷰티&공간리셋 1급)" ${coach.includes('박지은') ? 'selected' : ''}>박지은 수석코치</option>
-                    <option value="이은영 전문 코치 (시니어 라이프스타일 1급)" ${coach.includes('이은영') ? 'selected' : ''}>이은영 코치 (1급)</option>
-                  </select>
-                  <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">전담 매칭 만족도 98%</div>
+                  ${buildCertifiedCoachSelectHtml(coach, `assignBeautyCoach('${item.id}', this.value)`)}
                 </td>
                 <td style="text-align: center;">
                   <select class="setting-input" style="padding:4px 6px; font-size:0.82rem; font-weight:800; color:#0284c7;" onchange="updateStep2Status('${item.id}', this.value, 'beauty')">
@@ -942,12 +983,7 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
                   ` : ''}
                 </td>
                 <td>
-                  <select class="setting-input" style="padding:4px 8px; font-size:0.84rem;" onchange="assignGeneralCoach('${item.id}', this.value)">
-                    <option value="미배정" ${coach.includes('미배정') ? 'selected' : ''}>-- 코치 선택 --</option>
-                    <option value="박지은 수석 코치" ${coach.includes('박지은') ? 'selected' : ''}>박지은 수석코치</option>
-                    <option value="김서연 전문 코치" ${coach.includes('김서연') ? 'selected' : ''}>김서연 전문코치</option>
-                    <option value="이은영 전문 코치" ${coach.includes('이은영') ? 'selected' : ''}>이은영 전문코치</option>
-                  </select>
+                  ${buildCertifiedCoachSelectHtml(coach, `assignGeneralCoach('${item.id}', this.value)`)}
                 </td>
                 <td style="text-align: center;">
                   <span class="badge" style="background:#f3f4f6; color:#111827; font-weight:800; font-size:0.78rem; padding:3px 8px;">
@@ -1384,9 +1420,15 @@ function assignBeautyCoach(id, coachName) {
   const list = getStoredBeautyBookings();
   const item = list.find(x => x.id === id);
   if (item) {
+    const cleanSel = String(coachName || '').replace(/\s+|코치$/g, '');
+    const matched = getCertifiedAssignableCoaches().find(c => c.name.replace(/\s+|코치$/g, '') === cleanSel);
     item.assignedCoach = coachName;
+    item.coachPhone = matched ? (matched.phone || '') : '';
+    item.coachId = matched ? matched.id : '';
     localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-    alert(`${id} 건에 [${coachName}] 배정이 완료되었습니다.`);
+    if (coachName && !coachName.includes('미배정')) {
+      alert(`${id} 건에 공인 코치 [${coachName}] 지정이 완료되었습니다.\n[💬 배정확정 · 카톡알림 ➔] 버튼을 눌러 현장으로 발송하세요.`);
+    }
   }
 }
 
@@ -1408,9 +1450,15 @@ function assignGeneralCoach(id, coachName) {
   const list = getStoredGeneralConsults();
   const item = list.find(x => x.id === id);
   if (item) {
+    const cleanSel = String(coachName || '').replace(/\s+|코치$/g, '');
+    const matched = getCertifiedAssignableCoaches().find(c => c.name.replace(/\s+|코치$/g, '') === cleanSel);
     item.assignedCoach = coachName;
+    item.coachPhone = matched ? (matched.phone || '') : '';
+    item.coachId = matched ? matched.id : '';
     localStorage.setItem('seniorConsultList', JSON.stringify(list));
-    alert(`${id} 건에 [${coachName}] 배정이 완료되었습니다.`);
+    if (coachName && !coachName.includes('미배정')) {
+      alert(`${id} 건에 공인 코치 [${coachName}] 지정이 완료되었습니다.\n[💬 배정확정 · 카톡알림 ➔] 버튼을 눌러 현장으로 발송하세요.`);
+    }
   }
 }
 
@@ -1525,8 +1573,21 @@ function dispatchAndNotifyBeauty(id) {
   const item = list.find(x => x.id === id);
   if (!item) return;
 
+  const coaches = getCertifiedAssignableCoaches();
+  if (coaches.length === 0) {
+    alert('⚠️ [06. 코치 아카데미 > 6-2 공인 코칭스태프 명단]에 등재된 활동 코치가 없습니다.\n먼저 아카데미 수료 확정 및 코치 등재를 완료해 주세요.');
+    return;
+  }
+
   if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
-    alert('먼저 좌측 [담당 전담 코치 지정] 드롭다운에서 배정할 코치를 선택해 주세요.');
+    alert('먼저 좌측 [담당 전담 코치 지정] 드롭다운에서 공인 코치를 선택해 주세요.');
+    return;
+  }
+
+  const cleanSel = String(item.assignedCoach).replace(/\s+|코치$/g, '');
+  const matchedCoach = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanSel || String(item.assignedCoach).includes(c.name));
+  if (!matchedCoach) {
+    alert('⚠️ [06. 코치 아카데미 > 6-2 공인 코칭스태프 명단]에 등재된 활동 코치만 배정할 수 있습니다.\n드롭다운에서 등재된 코치를 다시 선택해 주세요.');
     return;
   }
 
@@ -1540,13 +1601,16 @@ function dispatchAndNotifyBeauty(id) {
       service: '💄 화려한 외출 (시니어 메이크업)',
       date: (item.visitDate || '방문 일정 협의').replace('T', ' '),
       address: (item.address || item.place || '고객 자택'),
-      coach: item.assignedCoach,
-      coachPhone: item.coachPhone || '',
+      coach: matchedCoach.name + ' 코치',
+      coachPhone: matchedCoach.phone || item.coachPhone || '',
       fee: 150000,
       notes: item.consultNote || item.memo || `[뷰티 180분] ${item.applicantName}(${item.role})`
     });
   }
 
+  item.assignedCoach = matchedCoach.name + ' 코치';
+  item.coachPhone = matchedCoach.phone || '';
+  item.coachId = matchedCoach.id;
   item.status = '진행중';
   item.sopProgress = '코치 배정·카톡 알림 완료 (코치 현장 수행 대기)';
   if (linked && linked.id) item.linkedDispatchId = linked.id;
@@ -1560,8 +1624,21 @@ function dispatchAndNotifyGeneral(id, biz) {
   const item = list.find(x => x.id === id);
   if (!item) return;
 
+  const coaches = getCertifiedAssignableCoaches();
+  if (coaches.length === 0) {
+    alert('⚠️ [06. 코치 아카데미 > 6-2 공인 코칭스태프 명단]에 등재된 활동 코치가 없습니다.\n먼저 아카데미 수료 확정 및 코치 등재를 완료해 주세요.');
+    return;
+  }
+
   if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
-    alert('먼저 [담당 배정 코치] 드롭다운에서 배정할 코치를 선택해 주세요.');
+    alert('먼저 [담당 배정 코치] 드롭다운에서 공인 코치를 선택해 주세요.');
+    return;
+  }
+
+  const cleanSel = String(item.assignedCoach).replace(/\s+|코치$/g, '');
+  const matchedCoach = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanSel || String(item.assignedCoach).includes(c.name));
+  if (!matchedCoach) {
+    alert('⚠️ [06. 코치 아카데미 > 6-2 공인 코칭스태프 명단]에 등재된 활동 코치만 배정할 수 있습니다.\n드롭다운에서 등재된 코치를 다시 선택해 주세요.');
     return;
   }
 
@@ -1576,12 +1653,16 @@ function dispatchAndNotifyGeneral(id, biz) {
       service: item.category || (BIZ_META[bizKey] ? `${BIZ_META[bizKey].icon} ${BIZ_META[bizKey].name}` : '웰라이프 방문 케어'),
       date: item.date || '방문 일정 협의',
       address: item.address || '고객 자택 (상담 확정)',
-      coach: item.assignedCoach,
+      coach: matchedCoach.name + ' 코치',
+      coachPhone: matchedCoach.phone || item.coachPhone || '',
       fee: 150000,
       notes: item.consultNote || item.message || ''
     });
   }
 
+  item.assignedCoach = matchedCoach.name + ' 코치';
+  item.coachPhone = matchedCoach.phone || '';
+  item.coachId = matchedCoach.id;
   item.status = '진행중';
   if (linked && linked.id) item.linkedDispatchId = linked.id;
   localStorage.setItem('seniorConsultList', JSON.stringify(list));

@@ -2457,17 +2457,17 @@
           <span class="nav-tab-chevron">▾</span>
         </button>
         <div class="sidebar-subnav" id="sidebarSubnavCoach">
-          <button type="button" class="subnav-link active" id="sideSub_coach_ops" onclick="selectCoachSubFromSidebar('ops')">
-            <span class="subnav-icon">📸</span>
-            <span>6-1. 현장수행 검수 &amp; 정산</span>
+          <button type="button" class="subnav-link active" id="sideSub_coach_academy" onclick="selectCoachSubFromSidebar('academy')">
+            <span class="subnav-icon">🎓</span>
+            <span>6-1. 아카데미 수강 · 수료</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_coach_pool" onclick="selectCoachSubFromSidebar('pool')">
             <span class="subnav-icon">🏅</span>
             <span>6-2. 공인 코칭스태프 명단</span>
           </button>
-          <button type="button" class="subnav-link" id="sideSub_coach_academy" onclick="selectCoachSubFromSidebar('academy')">
-            <span class="subnav-icon">🎓</span>
-            <span>6-3. 아카데미 입학 지원자</span>
+          <button type="button" class="subnav-link" id="sideSub_coach_ops" onclick="selectCoachSubFromSidebar('ops')">
+            <span class="subnav-icon">📸</span>
+            <span>6-3. 현장수행 검수 &amp; 정산</span>
           </button>
         </div>
 
@@ -2721,11 +2721,11 @@
                 </div>
                 <div class="cockpit-cat-metric" id="cockpitCatCount_coach">0명</div>
               </div>
-              <p class="cockpit-cat-desc">현장 수행 사진 검수·활동비 송금 정산 이력, 수료 공인 코칭스태프 풀 및 아카데미 입학 지원자 관리</p>
+              <p class="cockpit-cat-desc">상담완료 수강생 교육·수료 관리, 수료 후 공인 코치 등재(배정 풀) 및 전체 현장수행·정산 이력 관리</p>
               <div class="cockpit-cat-chips">
-                <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('ops')">📸 검수·정산</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 코치 명단</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('academy')">🎓 지원자</button>
+                <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('ops')">📸 검수·정산</button>
                 <a href="coach.html" target="_blank" class="cockpit-cat-chip">📱 코치앱 ↗</a>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
@@ -3686,17 +3686,166 @@
       </section>
 
       <section class="tab-panel" id="tabCoachControl">
-        <!-- 🌟 06. 코치 아카데미 · 파견·정산 (하위 6-1 ~ 6-3 메뉴별 독립 전환) -->
-        
-        <!-- 🌟 6-1. 코칭스태프 현장수행 검수 & 활동비 정산 전체 아카이브 -->
-        <div id="coachSubPanel_ops">
+        <!-- 🌟 06. 코치 아카데미 · 파견·정산 (6-1 수강·수료 ➔ 6-2 공인코치 등재 ➔ 6-3 현장검수·정산) -->
+
+        <!-- 🎓 6-1. 코치 아카데미 수강 진행 · 수료 관리 (상담완료 이관 전용 · 수료 시 6-2 자동 등재) -->
+        <div id="coachSubPanel_academy">
+          <div class="panel-card" id="academyApplicantsSection" style="margin-top: 0; border-top: 4px solid #245b8e;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon" style="background: #eef3f9; color: #245b8e; font-size: 1.5rem;">🎓</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h2 class="panel-title" style="margin: 0;">6-1. 코치 아카데미 수강 진행 · 수료 관리</h2>
+                    <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.74rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">상담완료 이관 · 수료 시 공인코치 등재</span>
+                  </div>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                    통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong>된 아카데미 수강신청자만 자동 이관됩니다. <strong>[🎓 수료 확정 · 코치 등재]</strong> 완료 시 <strong>6-2. 공인 코칭스태프 명단</strong>에 등록되어 비즈니스 배정이 가능해집니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <button type="button" class="btn-save-setting" onclick="selectCoachSubFromSidebar('pool')" style="background: #1e4d35; color: #ffffff; border: none; font-weight: 850; cursor: pointer;">
+                  <span>🏅</span> 공인 코치 명단 ➔
+                </button>
+                <a href="academy.html" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
+                  <span>🎓</span> 수강신청 페이지 ↗
+                </a>
+                <button type="button" class="btn-save-setting" onclick="exportAcademyCSV()" style="background: #ffffff; color: var(--text-main); border: 1.2px solid var(--border-color); font-weight: 750;">
+                  <span>📥</span> CSV
+                </button>
+              </div>
+            </div>
+
+            <!-- 3단계 클릭형 KPI 카드 (수강대기 ➔ 수강진행 ➔ 수료·코치등재) -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 16px 0 14px;">
+              <div id="acadKpiCard_wait" class="kpi-filter-card" onclick="filterAcademyEnrollments(currentAcademyFilter === '수강대기' ? 'all' : '수강대기')" style="border-left: 4px solid #0284c7;" title="클릭 시 ① 수강 대기 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 수강 대기 (상담완료 이관)</div>
+                  <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="statAcadWait">0명</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">입학 상담완료 · 개강 시작 대기</div>
+              </div>
+
+              <div id="acadKpiCard_progress" class="kpi-filter-card" onclick="filterAcademyEnrollments(currentAcademyFilter === '수강진행' ? 'all' : '수강진행')" style="border-left: 4px solid #d97706;" title="클릭 시 ② 수강 진행중 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 수강 진행중 (교육 · 실습)</div>
+                  <span style="font-size: 0.72rem; color: #b45309; background: #fffbeb; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #d97706; margin-top: 4px;" id="statAcadProgress">0명</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">1~4주차 출석 · 현장 실습 관리</div>
+              </div>
+
+              <div id="acadKpiCard_done" class="kpi-filter-card" onclick="filterAcademyEnrollments(currentAcademyFilter === '수료완료' ? 'all' : '수료완료')" style="border-left: 4px solid #059669;" title="클릭 시 ③ 수료 완료 단계만 필터링">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ 수료 완료 (공인 코치 등재)</div>
+                  <span style="font-size: 0.72rem; color: #059669; background: #ecfdf5; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
+                </div>
+                <div style="font-size: 1.6rem; font-weight: 900; color: #059669; margin-top: 4px;" id="statAcadDone">0명</div>
+                <div style="font-size: 0.74rem; color: var(--text-secondary); margin-top: 2px;">공인 코치 풀 등재 · 비즈니스 배정 가능</div>
+              </div>
+            </div>
+
+            <!-- 심플 1줄 컨트롤 툴바 -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; padding: 8px 2px 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <button type="button" class="pipeline-step-btn active" id="acadFilterBtnAll" onclick="filterAcademyEnrollments('all')" style="padding: 5px 12px; font-size: 0.8rem;">
+                  전체보기 <span class="pipeline-step-badge" id="cntAcadAll">0</span>
+                </button>
+                <span id="acadCurrentViewLabel" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">
+                  통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 수강생만 표시됩니다. (위 카드 클릭 시 단계별 필터)
+                </span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <input type="text" id="acadSearchInput" oninput="handleAcademySearch(this.value)" placeholder="수강생·트랙·지역 검색..." style="padding: 6px 11px; border-radius: 999px; border: 1.2px solid var(--border-color); font-size: 0.8rem; background: var(--bg-card); color: var(--text-primary); width: 185px;">
+                <button type="button" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 5px 11px; border-radius: 999px; font-size: 0.77rem; font-weight: 800; cursor: pointer; white-space: nowrap;">
+                  📋 통합 상담함 이동 ➔
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 140px;">수강생 · 연락처</th>
+                    <th style="width: 175px;">신청 트랙 · 지역</th>
+                    <th style="width: 155px;">기수 · 수강 진도</th>
+                    <th style="width: 115px; text-align: center;">진행 단계</th>
+                    <th>상담 · 교육 메모</th>
+                    <th style="width: 225px; text-align: center;">수강 · 코치등재 처리</th>
+                  </tr>
+                </thead>
+                <tbody id="academyTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🏅 6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 배정 풀 (좌측 6-2 선택 시 단독 표시) -->
+        <div id="coachSubPanel_pool" style="display: none;">
+        <div class="panel-card" id="coachPoolSection" style="margin-top: 0; border-top: 4px solid #1e4d35;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
+            <div class="panel-title-wrap">
+              <span class="panel-icon" style="background: #eef4ef; color: #1e4d35;">🏅</span>
+              <div>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <h2 class="panel-title" style="font-size: 1.25rem; margin: 0;">6-2. 공인 코칭스태프 명단 (비즈니스 배정 전용 풀)</h2>
+                  <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">미등재 시 배정 불가</span>
+                </div>
+                <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                  아카데미 수료를 마치고 공식 등재된 공인 코치 명단입니다. <strong>이 명단에 [활동중/배정대기]로 등재된 코치만</strong> 03. 웰라이프·04. 디지털 자서전의 코치 배정 목록에 표시됩니다.
+                </p>
+              </div>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-save-setting" onclick="selectCoachSubFromSidebar('academy')" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; font-weight: 800; cursor: pointer;">
+                <span>🎓</span> 6-1 수강·수료 관리 ➔
+              </button>
+              <button type="button" class="btn-save-setting" onclick="openCoachModal()" style="background: var(--accent); color: #ffffff; font-weight: 850;">
+                <span>➕</span> 기존 수료 코치 직접 등재
+              </button>
+              <button type="button" class="btn-save-setting" onclick="exportCoachesCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 750;">
+                <span>📥</span> 명단(CSV)
+              </button>
+            </div>
+          </div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th style="width: 90px;">코치 성함</th>
+                  <th style="width: 110px;">수료 기수</th>
+                  <th style="width: 150px;">전문 코칭 분야</th>
+                  <th style="width: 120px;">연락처</th>
+                  <th style="width: 140px;">활동 가능 지역</th>
+                  <th style="width: 80px; text-align: center;">만족도</th>
+                  <th style="width: 85px; text-align: center;">배정 건수</th>
+                  <th style="width: 115px; text-align: center;">배정 가능 상태</th>
+                  <th style="width: 100px; text-align: center;">관리</th>
+                </tr>
+              </thead>
+              <tbody id="coachTableBody">
+                <!-- JS 동적 렌더링 -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+        </div>
+
+        <!-- 🌟 6-3. 코칭스태프 현장수행 검수 & 활동비 정산 전체 아카이브 (좌측 6-3 선택 시 단독 표시) -->
+        <div id="coachSubPanel_ops" style="display: none;">
         <div class="panel-card" id="coachOpsSection" style="margin-bottom: 16px; border-top: 4px solid #245b8e; padding: 16px 22px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
               <span class="panel-icon" style="background:#eef3f9; color:#245b8e; font-size:1.4rem; padding:6px 9px; border-radius:10px;">📸</span>
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-1. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산 이력</h2>
+                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-3. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산 이력</h2>
                   <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">전체 현장 이력 · 사진 검수</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.83rem; margin: 3px 0 0;">
@@ -3769,7 +3918,7 @@
           </div>
         </div>
 
-        <!-- 📋 통합 현장 관제 & 활동비 정산 게시판 (중복 필터 패널 제거 → 테이블 상단 1줄 툴바로 통합) -->
+        <!-- 📋 통합 현장 관제 & 활동비 정산 게시판 -->
         <div class="panel-card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
           <div style="padding: 14px 18px; background: #fafbfc; border-bottom: 1.5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div id="controlFilterBar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
@@ -3804,95 +3953,6 @@
                 </tr>
               </thead>
               <tbody id="controlTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        </div>
-
-        <!-- 🏅 6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리 (좌측 6-2 선택 시 단독 표시) -->
-        <div id="coachSubPanel_pool" style="display: none;">
-        <div class="panel-card" id="coachPoolSection" style="margin-top: 0; border-top: 4px solid #245b8e;">
-          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">🏅</span>
-              <div>
-                <h2 class="panel-title" style="font-size: 1.25rem;">6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  여백과 결 아카데미 전문 과정을 이수하고 공인 자격을 획득한 정예 코치 명단입니다. (서비스 배정 툴의 코치 풀로 자동 연동됩니다)
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-save-setting" onclick="openCoachModal()" style="background: var(--accent); color: #ffffff; font-weight: 850;">
-                <span>➕</span> 신규 수료 코치 등록
-              </button>
-              <button class="btn-save-setting" onclick="exportCoachesCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 750;">
-                <span>📥</span> 코치 명단(CSV) 다운로드
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 90px;">코치 성함</th>
-                  <th style="width: 110px;">수료 기수</th>
-                  <th style="width: 140px;">전문 코칭 분야</th>
-                  <th style="width: 120px;">연락처</th>
-                  <th style="width: 140px;">활동 가능 지역</th>
-                  <th style="width: 85px; text-align: center;">만족도</th>
-                  <th style="width: 85px; text-align: center;">배정 건수</th>
-                  <th style="width: 110px; text-align: center;">활동 상태</th>
-                  <th style="width: 100px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="coachTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        </div>
-
-        <!-- 🎓 6-3. 코칭스태프 양성 아카데미 지원 신청자 명단 (좌측 6-3 선택 시 단독 표시) -->
-        <div id="coachSubPanel_academy" style="display: none;">
-        <div class="panel-card" id="academyApplicantsSection" style="margin-top: 0; border-top: 4px solid #245b8e;">
-          <div class="panel-header">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">🎓</span>
-              <div>
-                <h2 class="panel-title" style="font-size: 1.25rem;">6-3. 코칭스태프 양성 아카데미 지원 신청자 명단</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  2026년 [여백과 결] 공식 코칭스태프 입학 상담 및 교육과정 지원자 명단입니다.
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <a href="academy.html" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
-                <span>🎓</span> 아카데미 사이트 ↗
-              </a>
-              <button class="btn-save-setting" onclick="exportAcademyCSV()" style="font-weight: 750;">
-                <span>📥</span> 지원자 엑셀(CSV) 다운로드
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 90px;">지원자 성함</th>
-                  <th style="width: 120px;">연락처</th>
-                  <th style="width: 130px;">관심 코칭 트랙</th>
-                  <th>지원 동기 / 문의 내용</th>
-                  <th style="width: 100px; text-align: center;">상태</th>
-                  <th style="width: 80px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="academyTableBody">
                 <!-- JS 동적 렌더링 -->
               </tbody>
             </table>
@@ -4450,10 +4510,7 @@
               담당 구술 코치 지정
             </label>
             <select id="newMemoirCoachSelect" style="width: 100%; padding: 10px 12px; border-radius: 8px; border: 1.2px solid var(--border-color); font-size: 0.90rem; background: var(--bg-primary); color: var(--text-primary);">
-              <option value="김은영 수석코치">김은영 수석코치 (전문 생애사 작가)</option>
-              <option value="박미정 코치">박미정 코치 (시니어 심리상담 1급)</option>
-              <option value="최진우 코치">최진우 코치 (가문 역사 아키비스트)</option>
-              <option value="배정 대기">배정 대기 (총괄 실장 검토 후 배정)</option>
+              <option value="배정 대기">배정 대기 (공인 코치 명단에서 선택)</option>
             </select>
           </div>
         </div>
@@ -6401,11 +6458,11 @@
         if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
       } else if (tabId === 'tabCoachControl') {
         if (typeof switchCoachSubTab === 'function') {
-          switchCoachSubTab(typeof currentCoachSubTab !== 'undefined' ? currentCoachSubTab : 'ops');
+          switchCoachSubTab(typeof currentCoachSubTab !== 'undefined' ? currentCoachSubTab : 'academy');
         } else {
-          if (typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
-          if (typeof renderCoachesTable === 'function') renderCoachesTable();
           if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+          if (typeof renderCoachesTable === 'function') renderCoachesTable();
+          if (typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
         }
       }
 
@@ -6419,17 +6476,17 @@
       }
     }
 
-    var currentCoachSubTab = 'ops';
+    var currentCoachSubTab = 'academy';
 
     function switchCoachSubTab(subKey) {
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'academy') ? subKey : 'ops';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'ops') ? subKey : 'academy';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
 
       var map = {
-        ops: { panel: 'coachSubPanel_ops', btn: 'sideSub_coach_ops', label: '<span>📸</span> 06. 코치 아카데미 · 6-1 현장수행 검수 &amp; 정산' },
+        academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강 진행 · 수료 관리' },
         pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코칭스태프 명단' },
-        academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-3 아카데미 입학 지원자' }
+        ops: { panel: 'coachSubPanel_ops', btn: 'sideSub_coach_ops', label: '<span>📸</span> 06. 코치 아카데미 · 6-3 현장수행 검수 &amp; 정산' }
       };
 
       Object.keys(map).forEach(function(k) {
@@ -6444,9 +6501,9 @@
       var headerTabBadge = document.getElementById('headerCurrentTabBadge');
       if (headerTabBadge) headerTabBadge.innerHTML = sel.label;
 
-      if (currentCoachSubTab === 'ops' && typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
-      if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
       if (currentCoachSubTab === 'academy' && typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+      if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
+      if (currentCoachSubTab === 'ops' && typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
 
       var mainEl = document.querySelector('.admin-main');
       if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6454,7 +6511,7 @@
     window.switchCoachSubTab = switchCoachSubTab;
 
     function selectCoachSubFromSidebar(subKey) {
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'academy') ? subKey : 'ops';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'ops') ? subKey : 'academy';
       switchTab('tabCoachControl');
       switchCoachSubTab(currentCoachSubTab);
     }
@@ -6568,10 +6625,11 @@
         var elCatArch = document.getElementById('cockpitCatCount_archive');
         if (elCatArch) elCatArch.innerText = (Array.isArray(archList) ? archList.length : 0) + '명';
 
-        var coachList = (typeof getCoaches === 'function') ? getCoaches() : [];
+        var coachList = (typeof getAssignableCoaches === 'function') ? getAssignableCoaches() : ((typeof getCoaches === 'function') ? getCoaches() : []);
         var appList = (typeof getAcademyApplicants === 'function') ? getAcademyApplicants() : [];
+        var activeTrainees = appList.filter(function(a) { return a && a.stage !== '수료완료'; }).length;
         var elCatCoach = document.getElementById('cockpitCatCount_coach');
-        if (elCatCoach) elCatCoach.innerText = (coachList.length || 0) + '명 · 지원 ' + (appList.length || 0);
+        if (elCatCoach) elCatCoach.innerText = '공인 ' + (coachList.length || 0) + '명 · 수강 ' + activeTrainees + '명';
 
         // 4. 현장완료 업무카드 검수 · 송금 정산 & 비즈니스 완료 마감 보드 (현장완료 건만 집중 표시!)
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
@@ -6651,7 +6709,11 @@
     var currentConsultFilter = 'all';
 
     function classifyConsultBusiness(item) {
-      var text = ((item && item.category) || '') + ' ' + ((item && (item.note || item.memo)) || '');
+      var text = ((item && item.category) || '') + ' ' + ((item && item.role) || '') + ' ' + ((item && (item.note || item.memo)) || '');
+      // 06. 코치 아카데미 수강신청은 트랙명(뷰티·옷장·자서전 등)과 무관하게 최우선 판별
+      if (text.indexOf('아카데미') !== -1 || text.indexOf('수강신청') !== -1 || text.indexOf('예비 코치') !== -1 || text.indexOf('코치 지원') !== -1 || text.indexOf('입학') !== -1) {
+        return { key: 'academy', label: '06. 코치 아카데미', color: '#245b8e', bg: '#eef3f9', border: '#bfd3ea' };
+      }
       if (text.indexOf('뷰티') !== -1 || text.indexOf('메이크업') !== -1 || text.indexOf('웰니스') !== -1) {
         return { key: 'beauty', label: '3-1. 뷰티케어', color: '#b83354', bg: '#fff0f3', border: '#f8c8d2' };
       }
@@ -6669,9 +6731,6 @@
       }
       if (text.indexOf('서재') !== -1 || text.indexOf('아카이브') !== -1 || text.indexOf('전시관') !== -1) {
         return { key: 'archive', label: '05. 나의 고유한 서재', color: '#8c6610', bg: '#fef9e7', border: '#ead496' };
-      }
-      if (text.indexOf('아카데미') !== -1 || text.indexOf('코치 지원') !== -1 || text.indexOf('입학') !== -1) {
-        return { key: 'academy', label: '06. 코치 아카데미', color: '#245b8e', bg: '#eef3f9', border: '#bfd3ea' };
       }
       return { key: 'wardrobe', label: '3-2. 옷장·공간', color: '#2b7a4b', bg: '#edf7f1', border: '#c6e7d2' };
     }
@@ -13765,69 +13824,452 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     }
 
-    // ================= 5. 아카데미 지원자 명단 관리 =================
-    const ACADEMY_KEY = 'yebaek_academy_consult_v1';
+    // ================= 5. 🎓 06. 코치 아카데미 수강 진행 · 수료 & 공인 코치 등재 엔진 =================
+    const ACADEMY_ENROLL_KEY = 'yebaek_academy_enrollments_v1';
+    let currentAcademyFilter = 'all';
+    let currentAcademySearch = '';
 
-    function getAcademyRequests() {
-      const saved = localStorage.getItem(ACADEMY_KEY);
-      if (saved) {
-        try { return JSON.parse(saved); } catch (e) { return []; }
-      }
-      return [
-        { id: 'a1', name: '박선영 님', phone: '010-4491-0023', track: '뷰티 웰니스 코치', memo: '시니어 헤어/메이크업 방문 코치 1기 지원 상담', date: '2026.09.25', status: '상담완료' },
-        { id: 'a2', name: '최진우 님', phone: '010-7712-4499', track: '생전정리 & 엔딩 플래너', memo: '종활 및 유품 정리 전문 자격과정 수강료 문의', date: '2026.09.24', status: '대기' }
-      ];
+    // 트랙명 → 공인 코치 전문 분야 표준 매핑
+    function normalizeAcademySpecialty(trackText) {
+      const t = String(trackText || '');
+      if (t.includes('뷰티') || t.includes('웰니스')) return '💄 웰니스 & 시니어 뷰티';
+      if (t.includes('옷장') || t.includes('공간') || t.includes('비움')) return '👗 옷장 비움 & 공간 코칭';
+      if (t.includes('자서전') || t.includes('구술') || t.includes('회고록')) return '✍️ 디지털 자서전 구술 코칭';
+      if (t.includes('유품') || t.includes('생전') || t.includes('엔딩')) return '📦 오래된 짐 & 유품 정리';
+      if (t.includes('서재') || t.includes('아카이빙')) return '🏛️ 나의 서재 아카이빙';
+      return t || '💄 웰니스 & 시니어 뷰티';
     }
 
-    function saveAcademyRequests(list) {
-      localStorage.setItem(ACADEMY_KEY, JSON.stringify(list));
+    // 상담완료된 아카데미 수강신청 1건 → 수강 진행 목록 등록/업데이트
+    function upsertAcademyEnrollmentFromConsult(consultItem) {
+      if (!consultItem) return { ok: false, recordId: '' };
+      let list = [];
+      try {
+        const raw = localStorage.getItem(ACADEMY_ENROLL_KEY);
+        if (raw) list = JSON.parse(raw);
+      } catch (e) {}
+      if (!Array.isArray(list)) list = [];
+
+      const normPhone = String(consultItem.phone || '').replace(/[^0-9]/g, '');
+      let existing = list.find(x =>
+        (x.sourceConsultId && x.sourceConsultId === consultItem.id) ||
+        (normPhone && x.phone && String(x.phone).replace(/[^0-9]/g, '') === normPhone)
+      );
+
+      if (existing) {
+        if (consultItem.counselMemo) existing.counselMemo = consultItem.counselMemo;
+        localStorage.setItem(ACADEMY_ENROLL_KEY, JSON.stringify(list));
+        return { ok: true, recordId: existing.id, alreadyExisted: true };
+      }
+
+      // 지원자 성함·트랙·지역 파싱
+      let parsedName = (consultItem.name || '').trim();
+      if (!parsedName && consultItem.role) {
+        parsedName = String(consultItem.role).replace(/\(예비 코치\)|예비 코치 지원자|님/g, '').trim();
+      }
+      if (!parsedName && consultItem.note) {
+        const m = String(consultItem.note).match(/지원자:\s*([^\(\n\/]+)/);
+        if (m && m[1]) parsedName = m[1].trim();
+      }
+      if (!parsedName) parsedName = '수강생';
+
+      let parsedTrack = (consultItem.track || '').trim();
+      if (!parsedTrack && consultItem.category) {
+        parsedTrack = String(consultItem.category).replace(/🎓\s*\[[^\]]+\]\s*/g, '').trim();
+      }
+      if (!parsedTrack) parsedTrack = '시니어 웰니스 & 뷰티 코치';
+
+      let parsedRegion = (consultItem.region || '').trim();
+      if (!parsedRegion && consultItem.note) {
+        const rm = String(consultItem.note).match(/지역:\s*([^\/\n]+)/);
+        if (rm && rm[1]) parsedRegion = rm[1].trim();
+      }
+
+      const newRec = {
+        id: 'enr_' + Date.now() + '_' + Math.floor(Math.random() * 100),
+        sourceConsultId: consultItem.id || '',
+        name: parsedName,
+        phone: consultItem.phone || '',
+        track: parsedTrack,
+        region: parsedRegion || '서울 / 수도권',
+        schedule: consultItem.schedule || '상담 확정 일정',
+        cohort: '1기',
+        stage: '수강대기',
+        progress: 0,
+        counselMemo: consultItem.counselMemo || consultItem.note || '입학 상담 완료 · 개강 대기',
+        certifiedCoachId: '',
+        enrolledAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+        completedAt: ''
+      };
+      list.unshift(newRec);
+      localStorage.setItem(ACADEMY_ENROLL_KEY, JSON.stringify(list));
+      return { ok: true, recordId: newRec.id, alreadyExisted: false };
+    }
+    window.upsertAcademyEnrollmentFromConsult = upsertAcademyEnrollmentFromConsult;
+
+    // 통합 고객 접수·상담함(reset_consult_list)의 [✓ 완료] 아카데미 건과 1:1 동기화
+    function getAcademyEnrollments() {
+      let list = [];
+      let changed = false;
+      try {
+        const raw = localStorage.getItem(ACADEMY_ENROLL_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) list = parsed;
+        }
+      } catch (e) {}
+
+      try {
+        const consults = (typeof getDiagReservations === 'function') ? getDiagReservations() : [];
+        const completedAcadMap = {};
+        consults.forEach(c => {
+          if (!c || c.status !== '완료') return;
+          const biz = (typeof classifyConsultBusiness === 'function') ? classifyConsultBusiness(c) : null;
+          if (biz && biz.key === 'academy') {
+            completedAcadMap[c.id] = c;
+          }
+        });
+
+        // 미수료 상태에서 상담완료가 취소/삭제된 이관 건은 목록에서 제외
+        const beforeLen = list.length;
+        list = list.filter(item => {
+          if (!item) return false;
+          if (item.sourceConsultId && item.stage !== '수료완료' && !completedAcadMap[item.sourceConsultId]) {
+            return false;
+          }
+          return true;
+        });
+        if (list.length !== beforeLen) changed = true;
+
+        // 상담완료된 아카데미 건이 누락되어 있으면 자동 추가
+        Object.keys(completedAcadMap).forEach(cid => {
+          const c = completedAcadMap[cid];
+          const normPhone = String(c.phone || '').replace(/[^0-9]/g, '');
+          const exists = list.some(x =>
+            (x.sourceConsultId && x.sourceConsultId === cid) ||
+            (normPhone && x.phone && String(x.phone).replace(/[^0-9]/g, '') === normPhone)
+          );
+          if (!exists) {
+            let pName = (c.name || '').trim() || String(c.role || '').replace(/\(예비 코치\)|예비 코치 지원자|님/g, '').trim() || '수강생';
+            let pTrack = (c.track || '').trim() || String(c.category || '').replace(/🎓\s*\[[^\]]+\]\s*/g, '').trim() || '시니어 웰니스 & 뷰티 코치';
+            list.unshift({
+              id: 'enr_c_' + cid,
+              sourceConsultId: cid,
+              name: pName,
+              phone: c.phone || '',
+              track: pTrack,
+              region: c.region || '서울 / 수도권',
+              schedule: c.schedule || '상담 확정 일정',
+              cohort: '1기',
+              stage: '수강대기',
+              progress: 0,
+              counselMemo: c.counselMemo || c.note || '입학 상담 완료',
+              certifiedCoachId: '',
+              enrolledAt: (c.createdAt ? String(c.createdAt).slice(0, 10) : new Date().toISOString().slice(0, 10).replace(/-/g, '.')),
+              completedAt: ''
+            });
+            changed = true;
+          }
+        });
+      } catch (e) {}
+
+      if (changed) {
+        try { localStorage.setItem(ACADEMY_ENROLL_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+      return list;
+    }
+
+    function saveAcademyEnrollments(list) {
+      localStorage.setItem(ACADEMY_ENROLL_KEY, JSON.stringify(list));
+      renderAcademyTable();
+      if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
+    }
+
+    // 하위 호환 별칭 (refreshCockpitStats · switchTab · switchCoachSubTab 연동)
+    function getAcademyRequests() { return getAcademyEnrollments(); }
+    function getAcademyApplicants() { return getAcademyEnrollments(); }
+    window.getAcademyEnrollments = getAcademyEnrollments;
+    window.getAcademyApplicants = getAcademyApplicants;
+
+    function filterAcademyEnrollments(stageFilter) {
+      currentAcademyFilter = stageFilter || 'all';
       renderAcademyTable();
     }
+    window.filterAcademyEnrollments = filterAcademyEnrollments;
+
+    function handleAcademySearch(val) {
+      currentAcademySearch = val ? val.trim() : '';
+      renderAcademyTable();
+    }
+    window.handleAcademySearch = handleAcademySearch;
 
     function renderAcademyTable() {
-      const list = getAcademyRequests();
+      const list = getAcademyEnrollments();
       const tbody = document.getElementById('academyTableBody');
       if (!tbody) return;
 
-      if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color:#94a3b8;">지원자 내역이 없습니다.</td></tr>';
+      const coaches = (typeof getCoaches === 'function') ? getCoaches() : [];
+      const cntWait = list.filter(a => !a.stage || a.stage === '수강대기').length;
+      const cntProg = list.filter(a => a.stage === '수강진행').length;
+      const cntDone = list.filter(a => a.stage === '수료완료').length;
+
+      const elW = document.getElementById('statAcadWait');
+      const elP = document.getElementById('statAcadProgress');
+      const elD = document.getElementById('statAcadDone');
+      const elAll = document.getElementById('cntAcadAll');
+      if (elW) elW.textContent = cntWait + '명';
+      if (elP) elP.textContent = cntProg + '명';
+      if (elD) elD.textContent = cntDone + '명';
+      if (elAll) elAll.textContent = list.length;
+
+      const cardMap = {
+        '수강대기': document.getElementById('acadKpiCard_wait'),
+        '수강진행': document.getElementById('acadKpiCard_progress'),
+        '수료완료': document.getElementById('acadKpiCard_done')
+      };
+      Object.keys(cardMap).forEach(k => {
+        if (cardMap[k]) cardMap[k].classList.toggle('active', currentAcademyFilter === k);
+      });
+      const btnAll = document.getElementById('acadFilterBtnAll');
+      if (btnAll) btnAll.classList.toggle('active', currentAcademyFilter === 'all');
+
+      const lbl = document.getElementById('acadCurrentViewLabel');
+      if (lbl) {
+        const texts = {
+          all: '통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 수강생만 표시됩니다. (위 카드 클릭 시 단계별 필터)',
+          '수강대기': '<strong>① 수강 대기</strong> 수강생만 필터링 중입니다. [▶ 수강 시작]을 눌러 교육을 개시하세요.',
+          '수강진행': '<strong>② 수강 진행중</strong> 수강생만 필터링 중입니다. 과정 완료 시 [🎓 수료 확정 · 코치 등재]를 누르세요.',
+          '수료완료': '<strong>③ 수료 완료</strong> 수강생 목록입니다. 6-2 공인 코칭스태프 명단에 등재되어 배정이 가능합니다.'
+        };
+        lbl.innerHTML = texts[currentAcademyFilter] || texts.all;
+      }
+
+      const filtered = list.filter(a => {
+        const st = a.stage || '수강대기';
+        if (currentAcademyFilter !== 'all' && st !== currentAcademyFilter) return false;
+        if (currentAcademySearch) {
+          const q = currentAcademySearch.toLowerCase();
+          const hit = (a.name || '').toLowerCase().includes(q) ||
+                      (a.track || '').toLowerCase().includes(q) ||
+                      (a.region || '').toLowerCase().includes(q) ||
+                      (a.phone || '').toLowerCase().includes(q);
+          if (!hit) return false;
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align:center; padding: 38px 20px; color:#64748b;">
+              <div style="font-size: 1.5rem; margin-bottom: 6px;">🎓</div>
+              <div style="font-weight: 850; color: var(--text-main); margin-bottom: 4px;">
+                ${currentAcademyFilter === 'all' ? '상담 완료·이관된 아카데미 수강생이 없습니다.' : '선택한 단계에 해당하는 수강생이 없습니다.'}
+              </div>
+              <div style="font-size: 0.8rem; margin-bottom: 12px;">
+                아카데미 수강신청 접수 후 <strong>[통합 고객 접수 · 상담]</strong>에서 <strong>[✓ 완료]</strong> 처리하면 이곳에 자동 등록됩니다.
+              </div>
+              <div style="display:inline-flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+                <button type="button" onclick="switchTab('tabConsult')" style="padding: 7px 14px; border-radius: 999px; border: 1.2px solid #cbd5e1; background: #fff; color: #1e293b; font-size: 0.8rem; font-weight: 850; cursor: pointer;">📋 통합 상담함 이동 ➔</button>
+                <a href="academy.html" target="_blank" style="padding: 7px 14px; border-radius: 999px; border: 1.2px solid #bfd3ea; background: #eef3f9; color: #245b8e; font-size: 0.8rem; font-weight: 850; text-decoration: none;">🎓 수강신청 페이지 열기 ↗</a>
+              </div>
+            </td>
+          </tr>
+        `;
         return;
       }
 
-      tbody.innerHTML = list.map(a => `
-        <tr>
-          <td style="font-weight: 800;">${escapeHtml(a.name)}</td>
-          <td><a href="tel:${a.phone}" style="color:var(--accent); font-weight:700;">${escapeHtml(a.phone)}</a></td>
-          <td><span style="padding:3px 8px; border-radius:6px; background:#eff6ff; color:#1e40af; font-size:0.8rem; font-weight:750;">${escapeHtml(a.track || '전체')}</span></td>
-          <td>${escapeHtml(a.memo || '')}</td>
-          <td style="text-align: center;">
-            <button class="badge-pin ${a.status === '상담완료' ? 'pinned' : 'unpinned'}" onclick="toggleAcademyStatus('${a.id}')">
-              ${a.status || '대기'}
-            </button>
-          </td>
-          <td style="text-align: center;">
-            <button class="btn-action-sm del" onclick="deleteAcademyRequest('${a.id}')">삭제</button>
-          </td>
-        </tr>
-      `).join('');
-    }
+      tbody.innerHTML = filtered.map(a => {
+        const stage = a.stage || '수강대기';
+        const prog = Number(a.progress) || (stage === '수료완료' ? 100 : (stage === '수강진행' ? 25 : 0));
+        const stageBadge = stage === '수료완료'
+          ? '<span style="display:inline-block; padding:4px 10px; border-radius:999px; background:#ecfdf5; color:#047857; font-size:0.74rem; font-weight:850;">③ 수료 완료</span>'
+          : (stage === '수강진행'
+            ? '<span style="display:inline-block; padding:4px 10px; border-radius:999px; background:#fffbeb; color:#b45309; font-size:0.74rem; font-weight:850;">② 수강 진행중</span>'
+            : '<span style="display:inline-block; padding:4px 10px; border-radius:999px; background:#f0f9ff; color:#0369a1; font-size:0.74rem; font-weight:850;">① 수강 대기</span>');
 
-    function toggleAcademyStatus(id) {
-      const list = getAcademyRequests();
+        const normPhone = String(a.phone || '').replace(/[^0-9]/g, '');
+        const cleanName = String(a.name || '').replace(/\s+|코치$|님$/g, '');
+        const registeredCoach = coaches.find(c =>
+          (a.certifiedCoachId && c.id === a.certifiedCoachId) ||
+          (c.sourceEnrollmentId && c.sourceEnrollmentId === a.id) ||
+          (cleanName && c.name && c.name.replace(/\s+|코치$/g, '') === cleanName && (!normPhone || String(c.phone || '').replace(/[^0-9]/g, '') === normPhone))
+        );
+
+        let progressCell = '';
+        if (stage === '수강대기') {
+          progressCell = `
+            <div style="font-size:0.78rem; font-weight:800; color:#475569;">${escapeHtml(a.cohort || '1기')} · 개강 대기</div>
+            <div style="font-size:0.72rem; color:#94a3b8; margin-top:2px;">📅 ${escapeHtml(a.schedule || '일정 협의')}</div>
+          `;
+        } else if (stage === '수강진행') {
+          progressCell = `
+            <select onchange="updateAcademyProgress('${a.id}', this.value)" style="width:100%; padding:4px 6px; border-radius:6px; border:1px solid #fcd34d; background:#fffbeb; color:#92400e; font-size:0.77rem; font-weight:800; cursor:pointer;">
+              <option value="25" ${prog <= 25 ? 'selected' : ''}>1주차 이수 (25%)</option>
+              <option value="50" ${prog > 25 && prog <= 50 ? 'selected' : ''}>2주차 이수 (50%)</option>
+              <option value="75" ${prog > 50 && prog < 100 ? 'selected' : ''}>3주차 이수 (75%)</option>
+              <option value="100" ${prog >= 100 ? 'selected' : ''}>4주차·실습 완료 (100%)</option>
+            </select>
+            <div style="width:100%; height:5px; background:#e2e8f0; border-radius:999px; overflow:hidden; margin-top:5px;">
+              <div style="height:100%; width:${prog}%; background:linear-gradient(90deg, #f59e0b, #059669);"></div>
+            </div>
+          `;
+        } else {
+          progressCell = `
+            <div style="font-size:0.78rem; font-weight:850; color:#047857;">✅ ${escapeHtml(a.cohort || '1기')} 전 과정 수료 (100%)</div>
+            <div style="font-size:0.72rem; color:#64748b; margin-top:2px;">수료일: ${escapeHtml(a.completedAt || '-')}</div>
+          `;
+        }
+
+        let actionHtml = '';
+        if (stage === '수강대기') {
+          actionHtml = `
+            <button type="button" onclick="startAcademyCourse('${a.id}')" style="background:#0284c7; color:#fff; border:none; padding:6px 12px; border-radius:7px; font-size:0.76rem; font-weight:850; cursor:pointer; white-space:nowrap;">▶ 수강 시작 ➔</button>
+          `;
+        } else if (stage === '수강진행') {
+          actionHtml = `
+            <button type="button" onclick="graduateAndRegisterCoach('${a.id}')" style="background:linear-gradient(135deg, #1e4d35 0%, #059669 100%); color:#fff; border:none; padding:6px 11px; border-radius:7px; font-size:0.76rem; font-weight:850; cursor:pointer; white-space:nowrap;" title="수료를 확정하고 6-2 공인 코칭스태프 명단에 자동 등재합니다">🎓 수료 확정 · 코치 등재 ➔</button>
+          `;
+        } else {
+          if (registeredCoach) {
+            actionHtml = `
+              <button type="button" onclick="selectCoachSubFromSidebar('pool')" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:5px 10px; border-radius:7px; font-size:0.75rem; font-weight:850; cursor:pointer; white-space:nowrap;">🏅 공인 코치 등재됨 ➔</button>
+            `;
+          } else {
+            actionHtml = `
+              <button type="button" onclick="graduateAndRegisterCoach('${a.id}')" style="background:#1e4d35; color:#f6e7c1; border:none; padding:6px 11px; border-radius:7px; font-size:0.75rem; font-weight:850; cursor:pointer; white-space:nowrap;">🏅 공인 코치 재등재</button>
+            `;
+          }
+        }
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:850; color:var(--text-main); font-size:0.9rem;">${escapeHtml(a.name)}</div>
+              <a href="tel:${escapeHtml(a.phone)}" style="color:var(--accent); font-weight:700; font-size:0.78rem; text-decoration:none;">📞 ${escapeHtml(a.phone || '-')}</a>
+            </td>
+            <td>
+              <span style="display:inline-block; padding:3px 8px; border-radius:6px; background:#eff6ff; color:#1e40af; font-size:0.77rem; font-weight:800;">${escapeHtml(a.track || '전체 트랙')}</span>
+              <div style="font-size:0.74rem; color:var(--text-muted); margin-top:3px;">📍 ${escapeHtml(a.region || '전국')}</div>
+            </td>
+            <td>${progressCell}</td>
+            <td style="text-align:center;">${stageBadge}</td>
+            <td style="font-size:0.8rem; color:var(--text-main); line-height:1.45; max-width:250px;">
+              <div style="cursor:pointer;" onclick="editAcademyEnrollMemo('${a.id}')" title="클릭하여 수강 메모 수정">
+                ${escapeHtml(a.counselMemo || '(메모 입력)')} <span style="font-size:0.72rem; color:var(--accent);">✏️</span>
+              </div>
+            </td>
+            <td style="text-align:center;">
+              <div style="display:inline-flex; gap:5px; align-items:center; justify-content:center; flex-wrap:nowrap;">
+                ${actionHtml}
+                <button type="button" class="btn-action-sm del" onclick="deleteAcademyRequest('${a.id}')" title="수강 내역 삭제" style="padding:5px 7px;">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+    function renderAcademyApplicantsTable() { renderAcademyTable(); }
+    window.renderAcademyTable = renderAcademyTable;
+    window.renderAcademyApplicantsTable = renderAcademyApplicantsTable;
+
+    function startAcademyCourse(id) {
+      const list = getAcademyEnrollments();
       const target = list.find(a => a.id === id);
-      if (target) {
-        target.status = target.status === '상담완료' ? '대기' : '상담완료';
-        saveAcademyRequests(list);
+      if (!target) return;
+      target.stage = '수강진행';
+      target.progress = Math.max(Number(target.progress) || 0, 25);
+      saveAcademyEnrollments(list);
+      alert(`▶ [${target.name}] 수강생의 교육 과정이 시작되었습니다!\n\n주차별 진도를 관리한 뒤, 과정을 마치면 [🎓 수료 확정 · 코치 등재 ➔] 버튼을 눌러 공인 코치로 등록하세요.`);
+    }
+    window.startAcademyCourse = startAcademyCourse;
+
+    function updateAcademyProgress(id, pctVal) {
+      const list = getAcademyEnrollments();
+      const target = list.find(a => a.id === id);
+      if (!target) return;
+      target.progress = parseInt(pctVal, 10) || 25;
+      saveAcademyEnrollments(list);
+    }
+    window.updateAcademyProgress = updateAcademyProgress;
+
+    function editAcademyEnrollMemo(id) {
+      const list = getAcademyEnrollments();
+      const target = list.find(a => a.id === id);
+      if (!target) return;
+      const next = prompt(`[${target.name}] 수강생 교육·상담 메모 수정:`, target.counselMemo || '');
+      if (next !== null) {
+        target.counselMemo = next.trim();
+        saveAcademyEnrollments(list);
       }
     }
+    window.editAcademyEnrollMemo = editAcademyEnrollMemo;
+
+    // 🎓 수료 확정 ➔ 6-2 공인 코칭스태프 명단 자동 등재 (등재 즉시 전 비즈니스 배정 명단 노출!)
+    function graduateAndRegisterCoach(id) {
+      const list = getAcademyEnrollments();
+      const target = list.find(a => a.id === id);
+      if (!target) return;
+
+      const cleanName = String(target.name || '').replace(/\s*님$/g, '').trim();
+      if (!confirm(`🎓 [${cleanName}] 수강생의 아카데미 수료를 확정하고\n[6-2. 공인 코칭스태프 명단]에 공식 등재하시겠습니까?\n\n등재 즉시 03. 웰라이프 · 04. 디지털 자서전의 코치 배정 목록에 노출됩니다.`)) {
+        return;
+      }
+
+      const today = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
+      target.stage = '수료완료';
+      target.progress = 100;
+      target.completedAt = today;
+
+      // 6-2 공인 코칭스태프 명단(yebaek_certified_coaches_v1) 중복 체크 후 자동 등재
+      const coaches = (typeof getCoaches === 'function') ? getCoaches() : [];
+      const normPhone = String(target.phone || '').replace(/[^0-9]/g, '');
+      let existingCoach = coaches.find(c =>
+        (target.certifiedCoachId && c.id === target.certifiedCoachId) ||
+        (c.sourceEnrollmentId && c.sourceEnrollmentId === target.id) ||
+        (cleanName && c.name && c.name.replace(/\s+|코치$/g, '') === cleanName.replace(/\s+|코치$/g, '') && (!normPhone || String(c.phone || '').replace(/[^0-9]/g, '') === normPhone))
+      );
+
+      if (!existingCoach) {
+        const newCoach = {
+          id: 'coach_' + Date.now(),
+          sourceEnrollmentId: target.id,
+          name: cleanName.replace(/\s*코치$/g, '').trim(),
+          cohort: (target.cohort || '1기') + ' 수료',
+          specialty: normalizeAcademySpecialty(target.track),
+          phone: (typeof formatPhoneNumber === 'function') ? formatPhoneNumber(target.phone || '') : (target.phone || ''),
+          region: target.region || '서울 / 수도권',
+          rating: '5.0',
+          status: '활동중',
+          intro: `${target.cohort || '1기'} 아카데미 정규 과정 수료 (${today} 등재)`
+        };
+        coaches.unshift(newCoach);
+        target.certifiedCoachId = newCoach.id;
+      } else {
+        if (existingCoach.status === '휴식중') existingCoach.status = '활동중';
+        target.certifiedCoachId = existingCoach.id;
+      }
+
+      localStorage.setItem(ACADEMY_ENROLL_KEY, JSON.stringify(list));
+      if (typeof saveCoaches === 'function') {
+        saveCoaches(coaches);
+      }
+
+      const goPool = confirm(`🏅 축하합니다! [${cleanName}] 님이 수료 완료되어 공인 코치로 공식 등재되었습니다!\n\n이제 03. 웰라이프 · 04. 디지털 자서전에서 바로 코치 배정이 가능합니다.\n\n[6-2. 공인 코칭스태프 명단]으로 이동해 확인하시겠습니까?`);
+      if (goPool && typeof selectCoachSubFromSidebar === 'function') {
+        selectCoachSubFromSidebar('pool');
+      }
+    }
+    window.graduateAndRegisterCoach = graduateAndRegisterCoach;
 
     function deleteAcademyRequest(id) {
-      if (confirm('지원 내역을 삭제하시겠습니까?')) {
-        let list = getAcademyRequests();
+      if (confirm('해당 아카데미 수강 내역을 삭제하시겠습니까?')) {
+        let list = getAcademyEnrollments();
         list = list.filter(a => a.id !== id);
-        saveAcademyRequests(list);
+        saveAcademyEnrollments(list);
       }
     }
+    window.deleteAcademyRequest = deleteAcademyRequest;
 
     // ================= 6. 1:1 방문 맞춤 상담 명단 관리 =================
     const CONSULT_KEY = 'yebaek_consult_requests_v1';
@@ -13926,12 +14368,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     }
 
     function exportAcademyCSV() {
-      const list = getAcademyRequests();
-      let csv = "지원자성함,연락처,관심트랙,지원동기,처리상태,접수일시\n";
+      const list = getAcademyEnrollments();
+      let csv = "\uFEFF수강생성함,연락처,신청트랙,활동지역,기수,수강진도,진행단계,상담및교육메모,이관일,수료일\n";
       list.forEach(a => {
-        csv += `"${a.name}","${a.phone}","${a.track || ''}","${a.memo || ''}","${a.status || '대기'}","${a.date || ''}"\n`;
+        csv += `"${a.name || ''}","${a.phone || ''}","${a.track || ''}","${a.region || ''}","${a.cohort || '1기'}","${a.progress || 0}%","${a.stage || '수강대기'}","${(a.counselMemo || '').replace(/"/g, '""')}","${a.enrolledAt || ''}","${a.completedAt || ''}"\n`;
       });
-      downloadCSV(`여백과결_코치아카데미지원자명단_${dateStr}.csv`, csv);
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+      downloadCSV(`여백과결_코치아카데미수강생명단_${stamp}.csv`, csv);
     }
 
     function escapeHtml(str) {
@@ -14171,6 +14614,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
         if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
         if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
+        if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       }
     }
     window.setDiagReservationStatus = setDiagReservationStatus;
@@ -14271,6 +14715,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
             result = { ok: true, recordId: existing.id, alreadyExisted: true };
           }
         }
+      } else if (biz.key === 'academy') {
+        // 06. 코치 아카데미 > 6-1 수강 진행 · 수료 관리로 자동 이관
+        if (typeof upsertAcademyEnrollmentFromConsult === 'function') {
+          result = upsertAcademyEnrollmentFromConsult(item);
+          if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+        }
       }
 
       item.handedOffBiz = biz.key;
@@ -14281,11 +14731,14 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       saveDiagReservations(list);
 
       if (askNavigate) {
+        const nextActionText = (biz.key === 'academy')
+          ? '지금 바로 [06. 코치 아카데미 > 6-1 수강·수료 관리] 화면으로 이동하여 수강 진행을 시작하시겠습니까?'
+          : `지금 바로 [${biz.label}] 화면으로 이동하여 코치를 배정하시겠습니까?`;
         const msg =
           `✅ [상담 완료 & 자동 이관 완료]\n\n` +
-          `[${item.role || item.name || '고객'}] 고객님의 상담이 완료되어\n` +
+          `[${item.role || item.name || '고객'}] 님의 상담이 완료되어\n` +
           `👉 [${biz.label}] 파이프라인으로 자동 이관되었습니다.\n\n` +
-          `지금 바로 [${biz.label}] 화면으로 이동하여 코치를 배정하시겠습니까?`;
+          nextActionText;
         if (confirm(msg)) {
           goToHandedOffBusiness(biz.key);
         }
@@ -14350,6 +14803,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
         if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
         if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
+        if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       }
     }
 
@@ -14669,86 +15123,56 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     }
 
     // =========================================================================
-    // 11. 🎓 교육 이수 공인 코치(Coach) 명단 및 활동 관리 엔진
+    // 11. 🎓 교육 이수 공인 코치(Coach) 명단 및 배정 풀 단일 원천 엔진
+    //     ※ 이곳에 등재([활동중]/[배정대기])된 코치만 모든 비즈니스 배정 목록에 노출됩니다!
     // =========================================================================
     const COACHES_STORAGE_KEY = 'yebaek_certified_coaches_v1';
-    const DEFAULT_COACHES = [
-      {
-        id: 'coach_1',
-        name: '김민희',
-        cohort: '1기 수료 (수석)',
-        specialty: '💄 웰니스 & 시니어 뷰티',
-        phone: '010-1111-2222',
-        region: '서울 강남 / 서초 / 송파',
-        rating: '4.95',
-        status: '활동중',
-        intro: '15년 뷰티 스타일리스트 경력, 시니어 맞춤 퍼스널 컬러 및 품격 메이크업 코디'
-      },
-      {
-        id: 'coach_2',
-        name: '정우성',
-        cohort: '1기 수료',
-        specialty: '👗 옷장 비움 & 공간 코칭',
-        phone: '010-5512-8871',
-        region: '경기 성남 / 분당 / 판교',
-        rating: '5.0',
-        status: '활동중',
-        intro: '공간 정리 수납 전문가 1급, 무리한 버림이 아닌 질서와 안전 중심의 비움 코칭'
-      },
-      {
-        id: 'coach_3',
-        name: '이선영',
-        cohort: '1기 수료',
-        specialty: '✍️ 디지털 자서전 구술 코칭',
-        phone: '010-3333-4444',
-        region: '서울 전지역 / 경기 북부',
-        rating: '4.9',
-        status: '활동중',
-        intro: '방송 작가 및 출판 기획 12년 경력, 어르신 생애 구술 인터뷰 및 양장본 출판 전담'
-      },
-      {
-        id: 'coach_4',
-        name: '박준혁',
-        cohort: '1기 수료',
-        specialty: '📦 오래된 짐 & 유품 정리',
-        phone: '010-9943-1288',
-        region: '수도권 (서울/경기/인천)',
-        rating: '4.85',
-        status: '배정대기',
-        intro: '장례지도사 자격 및 사전 엔딩 노트 컨설팅, 존엄한 생전 정리를 돕는 안심 코치'
-      },
-      {
-        id: 'coach_5',
-        name: '한지은',
-        cohort: '2기 수료 예정',
-        specialty: '🏛️ 나의 서재 아카이빙',
-        phone: '010-6321-8902',
-        region: '서울 마포 / 용산 / 여의도',
-        rating: '4.9',
-        status: '배정대기',
-        intro: '기록 관리학 전공, 옛 사진 고해상도 디지털 복원 및 생애 디지털 금고 전담'
-      }
-    ];
+    const COACHES_DATA_VER_KEY = 'coachesDataVer';
+    const COACHES_DATA_VER = '20261122_v6_academy_strict';
+    const LEGACY_DEMO_COACH_IDS = ['coach_1', 'coach_2', 'coach_3', 'coach_4', 'coach_5'];
+    const DEFAULT_COACHES = [];
 
     function getCoaches() {
+      let list = [];
+      let changed = false;
       const saved = localStorage.getItem(COACHES_STORAGE_KEY);
-      if (saved) {
+      if (saved !== null) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) list = parsed;
         } catch (e) {
           console.error('코치 목록 파싱 오류:', e);
         }
       }
-      localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(DEFAULT_COACHES));
-      return DEFAULT_COACHES;
+
+      // 1회 마이그레이션: 과거 하드코딩 데모 코치(coach_1~coach_5) 정리 (실제 등재·수료 코치는 100% 보존)
+      if (localStorage.getItem(COACHES_DATA_VER_KEY) !== COACHES_DATA_VER) {
+        list = list.filter(c => c && !LEGACY_DEMO_COACH_IDS.includes(c.id));
+        localStorage.setItem(COACHES_DATA_VER_KEY, COACHES_DATA_VER);
+        changed = true;
+      }
+
+      if (changed || saved === null) {
+        try { localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+      return list;
     }
+
+    // 🌟 모든 비즈니스(03. 웰라이프 · 04. 디지털 자서전 · 파견 모달) 공용: 배정 가능한 등재 공인 코치만 반환
+    function getAssignableCoaches() {
+      return getCoaches().filter(c => c && c.name && c.status !== '휴식중');
+    }
+    window.getCoaches = getCoaches;
+    window.getAssignableCoaches = getAssignableCoaches;
 
     function saveCoaches(list) {
       localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(list));
       renderCoachesTable();
-      renderDispatchesTable();
-      updateAcademyStats();
+      if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
+      if (typeof renderDispatchesTable === 'function') renderDispatchesTable();
+      if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
+      if (typeof updateAcademyStats === 'function') updateAcademyStats();
+      if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
     }
 
     function countCoachDispatches(coachId) {
@@ -14762,7 +15186,22 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
       const coaches = getCoaches();
       if (coaches.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding: 24px; color:#94a3b8;">등록된 공인 코칭스태프가 없습니다. [신규 수료 코치 등록] 버튼을 눌러 등록하세요.</td></tr>';
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" style="text-align:center; padding: 36px 20px; color:#64748b;">
+              <div style="font-size: 1.45rem; margin-bottom: 6px;">🏅</div>
+              <div style="font-weight: 850; color: var(--text-main); margin-bottom: 4px;">아직 등재된 공인 코칭스태프가 없습니다.</div>
+              <div style="font-size: 0.8rem; margin-bottom: 12px;">
+                <strong>[6-1. 아카데미 수강 · 수료 관리]</strong>에서 수강 완료 후 <strong>[🎓 수료 확정 · 코치 등재]</strong>하거나,<br>
+                기존 수료 코치는 상단 <strong>[➕ 기존 수료 코치 직접 등재]</strong>로 등록해야 모든 비즈니스 코치 배정 목록에 표시됩니다.
+              </div>
+              <div style="display:inline-flex; gap:8px; flex-wrap:wrap; justify-content:center;">
+                <button type="button" onclick="selectCoachSubFromSidebar('academy')" style="padding: 7px 14px; border-radius: 999px; border: 1.2px solid #bfd3ea; background: #eef3f9; color: #245b8e; font-size: 0.8rem; font-weight: 850; cursor: pointer;">🎓 6-1 수강·수료 관리로 이동 ➔</button>
+                <button type="button" onclick="openCoachModal()" style="padding: 7px 14px; border-radius: 999px; border: none; background: #1e4d35; color: #fff; font-size: 0.8rem; font-weight: 850; cursor: pointer;">➕ 기존 수료 코치 직접 등재</button>
+              </div>
+            </td>
+          </tr>
+        `;
         return;
       }
 
@@ -16321,10 +16760,14 @@ ${coachAppUrl}
 
       const coachSelect = document.getElementById('selectDispCoach');
       if (coachSelect) {
-        const coaches = getCoaches();
-        coachSelect.innerHTML = '<option value="">⚠️ 미배정 (코치를 선택하세요)</option>' + coaches.map(c => `
-          <option value="${c.name} 코치">${escapeHtml(c.name)} 코치 (${c.specialty.replace(/^[^\s]+ /, '')}) [${c.status}]</option>
-        `).join('');
+        const coaches = (typeof getAssignableCoaches === 'function') ? getAssignableCoaches() : getCoaches();
+        if (coaches.length === 0) {
+          coachSelect.innerHTML = '<option value="">⚠️ 등재된 공인 코치 없음 (06. 아카데미 수료·등재 필요)</option>';
+        } else {
+          coachSelect.innerHTML = '<option value="">⚠️ 미배정 (공인 코치를 선택하세요)</option>' + coaches.map(c => `
+            <option value="${escapeHtml(c.name)} 코치">${escapeHtml(c.name)} 코치 (${escapeHtml((c.specialty || '').replace(/^[^\s]+ /, ''))}) [${escapeHtml(c.status || '활동중')}]</option>
+          `).join('');
+        }
       }
 
       const titleEl = document.getElementById('dispatchModalTitle');
@@ -17287,16 +17730,14 @@ ${coachAppUrl}
       if (btnSettled) btnSettled.innerHTML = `💰 송금 완료 <span style="background:rgba(22,163,74,0.15); padding:1px 6px; border-radius:999px; font-size:0.75rem;">${settledCount}</span>`;
       if (btnReady) btnReady.innerHTML = `⏳ 배정완료 <span style="background:rgba(71,85,105,0.15); padding:1px 6px; border-radius:999px; font-size:0.75rem;">${readyCount}</span>`;
 
-      // 코치 필터 셀렉트박스 채우기
+      // 코치 필터 셀렉트박스 최신 공인 코치 명단으로 실시간 동기화
       const coachSelect = document.getElementById('selectControlCoachFilter');
-      if (coachSelect && coachSelect.options.length <= 1) {
-        const coachNames = [...new Set(coaches.map(c => c.name))];
-        coachNames.forEach(name => {
-          const opt = document.createElement('option');
-          opt.value = name;
-          opt.textContent = `${name} 코치`;
-          coachSelect.appendChild(opt);
-        });
+      if (coachSelect) {
+        const prevVal = currentControlCoachFilter || coachSelect.value || 'all';
+        const coachNames = [...new Set(coaches.map(c => c.name).filter(Boolean))];
+        coachSelect.innerHTML = '<option value="all">전체 코치</option>' + coachNames.map(name =>
+          `<option value="${escapeHtml(name)}" ${prevVal === name ? 'selected' : ''}>${escapeHtml(name)} 코치</option>`
+        ).join('');
       }
 
       if (!tbody) return;
@@ -18765,51 +19206,42 @@ ${coachAppUrl}
     if (feeInput) feeInput.value = p.fee || 150000;
     if (notesInput) notesInput.value = p.notes || (p.clientName + ' 어르신 생애 구술 인터뷰 20문항 녹취 및 사진 수집');
 
-    // 공인 코치 풀(getCoaches) 동적 로드 및 셀렉트 박스 채우기
+    // 공인 코치 풀(6-2 공인 코칭스태프 명단 · 활동 가능 코치만 엄격 로드!)
     if (coachSelect) {
-      coachSelect.innerHTML = '<option value="">-- 공인 코치를 선택하세요 --</option>';
-      var coaches = (typeof getCoaches === 'function') ? getCoaches() : [];
-
-      // 자서전 전문 코치가 목록에 없는 경우 자동 보강
-      var hasMemoirCoach = coaches.some(function(c) {
-        return (c.specialty && c.specialty.includes('자서전')) || c.name.includes('이선영') || c.name.includes('김은영');
-      });
-      if (!hasMemoirCoach) {
-        coaches.push({
-          id: 'coach_memoir_spec',
-          name: '이선영 코치',
-          phone: '010-3333-4444',
-          specialty: '✍️ 디지털 자서전 구술 코칭',
-          region: '수도권 전지역',
-          rating: '4.95'
-        });
-      }
-
-      var defaultSelectedCoach = '';
-      coaches.forEach(function(c) {
-        var opt = document.createElement('option');
-        var cleanName = c.name.endsWith('코치') ? c.name : c.name + ' 코치';
-        opt.value = cleanName;
-        opt.textContent = cleanName + ' (' + (c.specialty || '라이프케어 코칭') + ' · ' + (c.phone || '-') + ')';
-        opt.setAttribute('data-phone', c.phone || '010-3333-4444');
-        opt.setAttribute('data-specialty', c.specialty || '✍️ 디지털 자서전 전문 코칭');
-
-        // 이미 배정된 코치가 있거나 자서전 전문 코치 우선 선택
-        if (p.coachName && (p.coachName.includes(c.name) || c.name.includes(p.coachName))) {
-          opt.selected = true;
-          defaultSelectedCoach = cleanName;
-        } else if (!defaultSelectedCoach && (c.specialty && c.specialty.includes('자서전'))) {
-          opt.selected = true;
-          defaultSelectedCoach = cleanName;
+      var coaches = (typeof getAssignableCoaches === 'function') ? getAssignableCoaches() : [];
+      if (coaches.length === 0) {
+        coachSelect.innerHTML = '<option value="">⚠️ 등재된 공인 코치 없음 (06. 코치 아카데미에서 수료·등재 필요)</option>';
+        var previewEmpty = document.getElementById('memoirAssignCoachPreview');
+        if (previewEmpty) {
+          previewEmpty.innerHTML = '⚠️ <strong>[06. 코치 아카데미 &gt; 6-2 공인 코칭스태프 명단]</strong>에 등재된 활동 코치가 없습니다. 아카데미 수료 확정 및 코치 등재 후 배정할 수 있습니다.';
         }
-        coachSelect.appendChild(opt);
-      });
+      } else {
+        coachSelect.innerHTML = '<option value="">-- 공인 코치를 선택하세요 --</option>';
+        var defaultSelectedCoach = '';
+        coaches.forEach(function(c) {
+          var opt = document.createElement('option');
+          var cleanName = c.name.endsWith('코치') ? c.name : c.name + ' 코치';
+          opt.value = cleanName;
+          opt.textContent = cleanName + ' (' + (c.specialty || '라이프케어 코칭') + ' · ' + (c.phone || '-') + ')';
+          opt.setAttribute('data-phone', c.phone || '');
+          opt.setAttribute('data-specialty', c.specialty || '✍️ 디지털 자서전 구술 코칭');
 
-      if (!defaultSelectedCoach && coachSelect.options.length > 1) {
-        coachSelect.options[1].selected = true;
-        defaultSelectedCoach = coachSelect.options[1].value;
+          if (p.coachName && (p.coachName.includes(c.name) || c.name.includes(p.coachName))) {
+            opt.selected = true;
+            defaultSelectedCoach = cleanName;
+          } else if (!defaultSelectedCoach && (c.specialty && c.specialty.includes('자서전'))) {
+            opt.selected = true;
+            defaultSelectedCoach = cleanName;
+          }
+          coachSelect.appendChild(opt);
+        });
+
+        if (!defaultSelectedCoach && coachSelect.options.length > 1) {
+          coachSelect.options[1].selected = true;
+          defaultSelectedCoach = coachSelect.options[1].value;
+        }
+        onMemoirCoachSelectChange(defaultSelectedCoach);
       }
-      onMemoirCoachSelectChange(defaultSelectedCoach);
     }
 
     modal.style.display = 'flex';
@@ -18898,7 +19330,18 @@ ${coachAppUrl}
     var notesVal = document.getElementById('memoirAssignNotes')?.value || '';
 
     if (!projId || !coachName) {
-      alert('배정할 공인 코치를 선택해 주세요.');
+      alert('⚠️ 배정할 공인 코치를 선택해 주세요.\n\n목록에 코치가 없다면 [06. 코치 아카데미 > 6-1 수강·수료 관리]에서 수료 확정 후 코치로 등재해 주세요.');
+      return;
+    }
+
+    // 6-2 공인 코칭스태프 명단 등재 여부 최종 검증
+    var certifiedList = (typeof getAssignableCoaches === 'function') ? getAssignableCoaches() : [];
+    var cleanSelName = coachName.replace(/\s+|코치$/g, '');
+    var isCertified = certifiedList.some(function(c) {
+      return c && c.name && c.name.replace(/\s+|코치$/g, '') === cleanSelName;
+    });
+    if (!isCertified) {
+      alert('⚠️ [06. 코치 아카데미 > 6-2 공인 코칭스태프 명단]에 등재된 활동 코치만 배정할 수 있습니다.');
       return;
     }
 
@@ -19820,6 +20263,14 @@ ${coachAppUrl}
   // 새 프로젝트 등록 모달 제어
   // ==========================================
   function openMemoirProjectCreateModal() {
+    var sel = document.getElementById('newMemoirCoachSelect');
+    if (sel) {
+      var coaches = (typeof getAssignableCoaches === 'function') ? getAssignableCoaches() : [];
+      sel.innerHTML = '<option value="배정 대기">배정 대기 (추후 공인 코치 배정)</option>' + coaches.map(function(c) {
+        var cname = c.name.endsWith('코치') ? c.name : (c.name + ' 코치');
+        return '<option value="' + escapeHtml(cname) + '">' + escapeHtml(cname) + ' (' + escapeHtml(c.specialty || '공인 코치') + ')</option>';
+      }).join('');
+    }
     var modal = document.getElementById('memoirProjectCreateModal');
     if (modal) {
       modal.style.display = 'flex';
@@ -19850,7 +20301,7 @@ ${coachAppUrl}
     var elPkg = document.getElementById('newMemoirPackageType');
     var pkgType = (elPkg && elPkg.value) ? elPkg.value : 'masterpiece';
     var elCoach = document.getElementById('newMemoirCoachSelect');
-    var coachName = (elCoach && elCoach.value) ? elCoach.value : '김은영 수석코치';
+    var coachName = (elCoach && elCoach.value) ? elCoach.value : '배정 대기';
     var elRegion = document.getElementById('newMemoirRegion');
     var region = (elRegion && elRegion.value.trim()) ? elRegion.value.trim() : '서울시';
     var elNotes = document.getElementById('newMemoirNotes');
