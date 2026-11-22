@@ -2519,13 +2519,7 @@
           </span>
         </div>
         <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;" id="currentDateDisplay"></span>
-          <button type="button" onclick="openAiArticleGeneratorModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-size: 0.82rem; padding: 7px 12px; font-weight: 800; border-radius: 8px; cursor: pointer;">
-            <span>🪄 AI 글쓰기</span>
-          </button>
-          <a href="index.html" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.82rem; padding: 7px 13px; background: #ffffff; color: #1e4d35; border: 1.2px solid #cbd5e1; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
-            <span>메인 사이트 ↗</span>
-          </a>
+          <span style="font-size: 0.82rem; color: #64748b; font-weight: 700;" id="currentDateDisplay"></span>
         </div>
       </div>
 
@@ -2795,28 +2789,30 @@
             <div class="panel-title-wrap">
               <span class="panel-icon">📋</span>
               <div>
-                <h2 class="panel-title">📋 통합 고객 접수 &amp; 맞춤 상담함</h2>
+                <h2 class="panel-title">통합 고객 접수 &amp; 맞춤 상담함</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  웰라이프·디지털 자서전·나의 서재 등 모든 온라인 창구로 접수된 <strong>1:1 방문 상담 및 사전 문의</strong>를 통합 관리합니다. 상담 완료 후 즉시 전담 코치를 배정할 수 있습니다.
+                  웰라이프·디지털 자서전·나의 서재 등 모든 온라인 창구의 상담을 <strong>대기 → 진행 → 완료</strong>까지 전담 관리합니다. 상담을 <strong>[✓ 완료]</strong> 처리하면 해당 비즈니스 파이프라인으로 자동 이관되어 코치 배정이 진행됩니다.
                 </p>
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button class="btn-save-setting" onclick="openDispatchModal()" style="background: var(--accent); color: #ffffff;">
-                <span>🤝</span> 상담 완료 건 코치 배정하기
-              </button>
-              <button class="btn-save-setting" onclick="exportDiagReservationsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+              <button type="button" class="btn-save-setting" onclick="exportDiagReservationsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
                 <span>📥</span> 상담 내역(CSV) 다운로드
               </button>
             </div>
           </div>
 
-          <!-- 상태 필터 바 -->
-          <div style="display: flex; gap: 6px; flex-wrap: wrap; margin: 16px 0;">
-            <button class="btn-action-sm active" id="filterConsult_all" onclick="filterConsultList('all', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">전체 보기 (<span id="consultCountAll">0</span>)</button>
-            <button class="btn-action-sm" id="filterConsult_pending" onclick="filterConsultList('대기', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px; background:#fffbeb; color:#b45309; border:1.5px solid #fde68a;">⏳ 상담 대기</button>
-            <button class="btn-action-sm" id="filterConsult_progress" onclick="filterConsultList('진행', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">📞 상담 진행중</button>
-            <button class="btn-action-sm" id="filterConsult_done" onclick="filterConsultList('완료', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">✓ 상담 완료/확정</button>
+          <!-- 상담 진행 상태 필터 바 -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 16px 0;">
+            <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+              <button type="button" class="btn-action-sm active" id="filterConsult_all" onclick="filterConsultList('all', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">전체 보기 (<span id="consultCountAll">0</span>)</button>
+              <button type="button" class="btn-action-sm" id="filterConsult_pending" onclick="filterConsultList('대기', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px; background:#fffbeb; color:#b45309; border:1.5px solid #fde68a;">⏳ 상담 대기 (<span id="consultCountPending">0</span>)</button>
+              <button type="button" class="btn-action-sm" id="filterConsult_progress" onclick="filterConsultList('진행', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">📞 상담 진행중 (<span id="consultCountProgress">0</span>)</button>
+              <button type="button" class="btn-action-sm" id="filterConsult_done" onclick="filterConsultList('완료', this)" style="padding: 6px 14px; font-weight: 800; border-radius: 20px;">✓ 상담 완료 · 이관됨 (<span id="consultCountDone">0</span>)</button>
+            </div>
+            <span style="font-size: 0.78rem; color: #0f5132; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 999px; font-weight: 750;">
+              💡 상담 완료 시 해당 비즈니스 ① 코치 배정 단계로 자동 이관
+            </span>
           </div>
 
           <!-- 1:1 방문 상담 예약자 현황 테이블 -->
@@ -2824,13 +2820,13 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th style="width: 130px;">진단 주제 / 분야</th>
-                  <th style="width: 90px;">구분</th>
+                  <th style="width: 175px;">신청 분야 · 이관 대상</th>
+                  <th style="width: 115px;">구분 / 성함</th>
                   <th style="width: 120px;">연락처</th>
-                  <th>상담 요청 메모</th>
+                  <th>상담 요청 · 상담 결과 메모</th>
                   <th style="width: 110px;">접수 일시</th>
-                  <th style="width: 100px; text-align: center;">처리 상태</th>
-                  <th style="width: 120px; text-align: center;">관리 / 연계</th>
+                  <th style="width: 115px; text-align: center;">상담 상태</th>
+                  <th style="width: 175px; text-align: center;">비즈니스 이관 · 관리</th>
                 </tr>
               </thead>
               <tbody id="diagReservationTableBody">
@@ -3183,18 +3179,18 @@
           <button id="bizTabBtn_party"></button>
           <button id="bizTabBtn_memoir"></button>
         </div>
-        <!-- 2. 상단 비즈니스 메타 헤더 & 4대 파이프라인 KPI 카드 -->
-        <div class="panel-card" style="margin-top: 0; border-top: 4px solid #d1516e;">
+        <!-- 2. 상단 비즈니스 메타 헤더 & 3단계 실행 파이프라인 KPI 카드 (상담 완료·확정 고객 전용) -->
+        <div class="panel-card" id="bizMainPanelCard" style="margin-top: 0; border-top: 4px solid #b83354;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon" id="currentBizIcon" style="font-size: 1.8rem;">🌟</span>
+              <span class="panel-icon" id="currentBizIcon" style="font-size: 1.7rem;">💄</span>
               <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <h2 class="panel-title" id="currentBizTitle" style="margin: 0;">💄 1호 시니어 뷰티 라이프케어</h2>
+                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                  <h2 class="panel-title" id="currentBizTitle" style="margin: 0;">1호 시니어 뷰티 라이프케어</h2>
                   <span class="badge" id="currentBizBadge" style="background: #fff0f3; color: #b83354; border: 1px solid #b83354; font-size: 0.75rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">180분 SOP 시그니처</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;" id="currentBizDesc">
-                  ‘특별한 날, 화려한 외출’ 180분 표준 프로토콜(SOP) 맞춤 케어 및 사후 리텐션 관리
+                  ‘특별한 날, 화려한 외출’ 상담 확정 고객 대상 180분 표준 프로토콜(SOP) 코치 배정·현장 케어·사후 리텐션 관리
                 </p>
               </div>
             </div>
@@ -3211,63 +3207,56 @@
             </div>
           </div>
 
-          <!-- 4대 핵심 원스톱 파이프라인 KPI 카드 (클릭 시 하위 필터로 즉시 연동) -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin: 18px 0 22px;">
-            <div id="bizKpiCard_step1" class="kpi-filter-card" onclick="switchPipelineStep('step1')" style="border-left: 4px solid #d1516e;" title="클릭 시 ① 고객 상담 접수(Lead) 단계로 필터링합니다">
+          <!-- 3대 핵심 실행 파이프라인 KPI 카드 (상담 완료·이관 고객 전용, 클릭 시 필터링) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 18px 0 20px;">
+            <div id="bizKpiCard_step2" class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7;" title="클릭 시 ① 코치 배정 (상담완료 이관) 단계로 필터링합니다">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 고객 상담 접수 (Lead)</div>
-                <span style="font-size: 0.72rem; color: #b83354; background: #fff0f3; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
-              </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #b83354; margin-top: 4px;" id="bizKpi_lead">1건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">신규 문의 및 예약</div>
-            </div>
-            <div id="bizKpiCard_step2" class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7;" title="클릭 시 ② 공인 코치 배정 완료 단계로 필터링합니다">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 공인 코치 배정 완료</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 코치 배정 (상담완료 이관)</div>
                 <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">1건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">전담 매칭 완료율 100%</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">상담 완료 확정 · 전담 매칭</div>
             </div>
-            <div id="bizKpiCard_step3" class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ③ 180분/현장케어 완료 단계로 필터링합니다">
+            <div id="bizKpiCard_step3" class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ② 현장 케어 · 수행/일지 단계로 필터링합니다">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ 180분/현장케어 완료</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 현장 케어 · 수행/일지</div>
                 <span style="font-size: 0.72rem; color: #2b7a4b; background: #f0fdf4; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">1건</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">0건</div>
               <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP &amp; 사진 검수</div>
             </div>
-            <div id="bizKpiCard_step4" class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #8b5cf6;" title="클릭 시 ④ CRM 사후관리 &amp; 리텐션 단계로 필터링합니다">
+            <div id="bizKpiCard_step4" class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #8b5cf6;" title="클릭 시 ③ CRM 사후관리 &amp; 리텐션 단계로 필터링합니다">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">④ CRM 사후관리 &amp; 리텐션</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ CRM 사후관리 &amp; 리텐션</div>
                 <span style="font-size: 0.72rem; color: #7c3aed; background: #faf5ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">1건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 &amp; AGAIN180</div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 &amp; 재이용 리텐션</div>
             </div>
           </div>
 
-          <!-- 4단계 파이프라인 진행 상태 필터 바 (단계별 순차 흐름 인디케이터) -->
-          <div class="pipeline-step-bar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 18px 0 20px;">
-            <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">파이프라인 단계:</span>
-            <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">
-              전체보기 <span class="pipeline-step-badge" id="pipelineStepBadge_all">4</span>
-            </button>
-            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step1" onclick="switchPipelineStep('step1')">
-              ① 상담신청 접수 <span class="pipeline-step-badge" id="pipelineStepBadge_step1">1</span>
-            </button>
-            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">
-              ② 코치 배정 <span class="pipeline-step-badge" id="pipelineStepBadge_step2">1</span>
-            </button>
-            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">
-              ③ 현장케어/일지 <span class="pipeline-step-badge" id="pipelineStepBadge_step3">1</span>
-            </button>
-            <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-            <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">
-              ④ CRM 사후 리텐션 <span class="pipeline-step-badge" id="pipelineStepBadge_step4">1</span>
+          <!-- 3단계 실행 파이프라인 필터 바 + 통합 상담함 바로가기 -->
+          <div class="pipeline-step-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 16px 0 18px;">
+            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+              <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">실행 파이프라인:</span>
+              <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">
+                전체보기 <span class="pipeline-step-badge" id="pipelineStepBadge_all">0</span>
+              </button>
+              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
+              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">
+                ① 코치 배정 <span class="pipeline-step-badge" id="pipelineStepBadge_step2">0</span>
+              </button>
+              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
+              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">
+                ② 현장케어/일지 <span class="pipeline-step-badge" id="pipelineStepBadge_step3">0</span>
+              </button>
+              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
+              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">
+                ③ CRM 사후 리텐션 <span class="pipeline-step-badge" id="pipelineStepBadge_step4">0</span>
+              </button>
+            </div>
+            <button type="button" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; cursor: pointer; white-space: nowrap;" title="신규 상담 접수·진행·완료 처리는 통합 고객 접수·상담함에서 전담합니다">
+              📋 신규 상담은 통합 상담함에서 완료 시 자동 이관 ➔
             </button>
           </div>
 
@@ -6454,20 +6443,27 @@
     /* 📊 01. 종합 관제 홈 실시간 데이터 집계 및 렌더링 함수 */
     function refreshCockpitStats() {
       try {
-        // 1. 고객 상담 접수 대기 건수
+        // 1. 고객 상담 접수 대기·진행 건수 (통합 고객 접수·상담함 기준)
         var diagList = (typeof getDiagReservations === 'function') ? getDiagReservations() : [];
         var pendingDiag = diagList.filter(function(item) {
           return !item.status || item.status === '대기' || item.status === '진행';
         }).length;
-        var inqCount = pendingDiag || diagList.length || 0;
+        var inqCount = pendingDiag;
         var inqElem = document.getElementById('cockpitInquiryCount');
         if (inqElem) inqElem.innerText = inqCount + '건';
 
         var consultBadge = document.getElementById('consultPendingBadge');
-        if (consultBadge) consultBadge.innerText = inqCount > 0 ? (inqCount + '건') : '신규';
+        if (consultBadge) consultBadge.innerText = inqCount > 0 ? (inqCount + '건') : '완료';
 
         var consultAllElem = document.getElementById('consultCountAll');
         if (consultAllElem) consultAllElem.innerText = diagList.length;
+
+        // 03. 웰라이프 상담완료 확정 진행 건수 동기화
+        if (typeof getWellnessActiveCounts === 'function') {
+          var wlCounts = getWellnessActiveCounts();
+          var elWl = document.getElementById('cockpitBizCount_beauty');
+          if (elWl) elWl.innerText = wlCounts.total + '건 진행중';
+        }
 
         // 2. 코치 배정 대기 및 현장 검수·송금 대기 건수 (실제 필드 coach / step 정확 매핑)
         var dispList = (typeof getDispatches === 'function') ? getDispatches() : [];
@@ -6589,65 +6585,142 @@
       }
     }
 
-    /* 📋 02. 고객 상담 필터 함수 */
+    /* 📋 02. 통합 고객 접수 & 상담 필터 · 자동 이관 통합 렌더러 */
+    var currentConsultFilter = 'all';
+
+    function classifyConsultBusiness(item) {
+      var text = ((item && item.category) || '') + ' ' + ((item && (item.note || item.memo)) || '');
+      if (text.indexOf('뷰티') !== -1 || text.indexOf('메이크업') !== -1 || text.indexOf('웰니스') !== -1) {
+        return { key: 'beauty', label: '3-1. 뷰티케어', color: '#b83354', bg: '#fff0f3', border: '#f8c8d2' };
+      }
+      if (text.indexOf('옷장') !== -1 || text.indexOf('공간') !== -1 || text.indexOf('수납') !== -1 || text.indexOf('비움의 미학') !== -1) {
+        return { key: 'wardrobe', label: '3-2. 옷장·공간', color: '#2b7a4b', bg: '#edf7f1', border: '#c6e7d2' };
+      }
+      if (text.indexOf('유품') !== -1 || text.indexOf('오래된 짐') !== -1 || text.indexOf('기억의 계승') !== -1 || text.indexOf('생전정리') !== -1) {
+        return { key: 'legacy', label: '3-3. 유품·짐', color: '#9a6528', bg: '#fdf6ed', border: '#ebd2b2' };
+      }
+      if (text.indexOf('엔딩') !== -1 || text.indexOf('파티') !== -1 || text.indexOf('마침표') !== -1) {
+        return { key: 'party', label: '3-4. 엔딩파티', color: '#7a3594', bg: '#f9f0fd', border: '#e7c7f7' };
+      }
+      if (text.indexOf('자서전') !== -1 || text.indexOf('회고록') !== -1 || text.indexOf('생애') !== -1 || text.indexOf('워크북') !== -1) {
+        return { key: 'memoir', label: '04. 디지털 자서전', color: '#1d4ed8', bg: '#eff6ff', border: '#bfdbfe' };
+      }
+      if (text.indexOf('서재') !== -1 || text.indexOf('아카이브') !== -1 || text.indexOf('전시관') !== -1) {
+        return { key: 'archive', label: '05. 나의 고유한 서재', color: '#8c6610', bg: '#fef9e7', border: '#ead496' };
+      }
+      if (text.indexOf('아카데미') !== -1 || text.indexOf('코치 지원') !== -1 || text.indexOf('입학') !== -1) {
+        return { key: 'academy', label: '06. 코치 아카데미', color: '#245b8e', bg: '#eef3f9', border: '#bfd3ea' };
+      }
+      return { key: 'wardrobe', label: '3-2. 옷장·공간', color: '#2b7a4b', bg: '#edf7f1', border: '#c6e7d2' };
+    }
+    window.classifyConsultBusiness = classifyConsultBusiness;
+
     function filterConsultList(status, btn) {
+      currentConsultFilter = status || 'all';
       var btns = document.querySelectorAll('[id^="filterConsult_"]');
       btns.forEach(function(b) { b.classList.remove('active'); });
-      if (btn) btn.classList.add('active');
+      if (btn) {
+        btn.classList.add('active');
+      } else {
+        var btnIdMap = { all: 'filterConsult_all', '대기': 'filterConsult_pending', '진행': 'filterConsult_progress', '완료': 'filterConsult_done' };
+        var autoBtn = document.getElementById(btnIdMap[currentConsultFilter] || 'filterConsult_all');
+        if (autoBtn) autoBtn.classList.add('active');
+      }
 
       var tbody = document.getElementById('diagReservationTableBody');
       if (!tbody || typeof getDiagReservations !== 'function') return;
 
-      var list = getDiagReservations();
-      if (status !== 'all') {
-        list = list.filter(function(item) {
-          if (status === '대기') return !item.status || item.status === '대기';
-          return item.status === status;
+      var allList = getDiagReservations();
+
+      // 상태별 카운트 배지 실시간 동기화
+      var cntAll = allList.length;
+      var cntPending = allList.filter(function(i) { return !i.status || i.status === '대기'; }).length;
+      var cntProgress = allList.filter(function(i) { return i.status === '진행'; }).length;
+      var cntDone = allList.filter(function(i) { return i.status === '완료'; }).length;
+      var elAll = document.getElementById('consultCountAll');
+      var elPending = document.getElementById('consultCountPending');
+      var elProgress = document.getElementById('consultCountProgress');
+      var elDone = document.getElementById('consultCountDone');
+      if (elAll) elAll.textContent = cntAll;
+      if (elPending) elPending.textContent = cntPending;
+      if (elProgress) elProgress.textContent = cntProgress;
+      if (elDone) elDone.textContent = cntDone;
+
+      var list = allList;
+      if (currentConsultFilter !== 'all') {
+        list = allList.filter(function(item) {
+          if (currentConsultFilter === '대기') return !item.status || item.status === '대기';
+          return item.status === currentConsultFilter;
         });
       }
 
       if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color:#94a3b8;">선택한 상태의 상담 내역이 없습니다.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 28px; color:#94a3b8;">선택한 상태의 상담 내역이 없습니다.</td></tr>';
         return;
       }
 
       tbody.innerHTML = list.map(function(item) {
-        var cat = item.category || '진단 일반';
+        var cat = item.category || '맞춤 상담';
         var role = item.role || item.name || '본인';
         var phone = item.phone || '-';
         var note = item.note || item.memo || '-';
+        var counselMemo = item.counselMemo || '';
         var date = item.createdAt || item.date || '-';
         var itemStatus = item.status || '대기';
+        var safeId = String(item.id || '').replace(/'/g, '');
+        var biz = classifyConsultBusiness(item);
 
-        var statusBadgeHtml = '';
+        // 상담 상태 선택 드롭다운 (대기 → 진행 → 완료 선택 시 자동 이관)
+        var statusBg = itemStatus === '완료' ? '#dcfce7' : (itemStatus === '진행' ? '#e0f2fe' : '#fffbeb');
+        var statusColor = itemStatus === '완료' ? '#15803d' : (itemStatus === '진행' ? '#0284c7' : '#b45309');
+        var statusBorder = itemStatus === '완료' ? '#86efac' : (itemStatus === '진행' ? '#7dd3fc' : '#fde68a');
+        var statusSelectHtml =
+          '<select onchange="setDiagReservationStatus(\'' + safeId + '\', this.value)" style="padding:5px 8px; border-radius:999px; font-size:0.78rem; font-weight:850; cursor:pointer; background:' + statusBg + '; color:' + statusColor + '; border:1.2px solid ' + statusBorder + '; outline:none;" title="상태를 [✓ 상담 완료]로 변경하면 해당 비즈니스 파이프라인으로 자동 이관됩니다">' +
+            '<option value="대기" ' + (itemStatus === '대기' ? 'selected' : '') + '>⏳ 상담 대기</option>' +
+            '<option value="진행" ' + (itemStatus === '진행' ? 'selected' : '') + '>📞 상담 진행중</option>' +
+            '<option value="완료" ' + (itemStatus === '완료' ? 'selected' : '') + '>✓ 상담 완료</option>' +
+          '</select>';
+
+        // 상태별 비즈니스 이관 · 액션 버튼 (코치 배정은 이관된 각 비즈니스 파이프라인에서 수행)
+        var actionHtml = '';
         if (itemStatus === '완료') {
-          statusBadgeHtml = '<button class="badge-pin" style="background:#dcfce7; color:#15803d; border:1.2px solid #86efac; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 완료 (클릭하여 상태 변경)">✓ 완료</button>';
+          var targetKey = item.handedOffBiz || biz.key;
+          var targetLabel = item.handedOffLabel || biz.label;
+          if (item.handedOffBiz) {
+            actionHtml =
+              '<button type="button" class="btn-action-sm" onclick="goToHandedOffBusiness(\'' + targetKey + '\')" style="background:' + biz.bg + '; color:' + biz.color + '; border:1px solid ' + biz.border + '; padding:4px 9px; border-radius:6px; font-weight:850; font-size:0.74rem; cursor:pointer; white-space:nowrap;" title="이관된 비즈니스 파이프라인(① 코치 배정)으로 이동합니다">✓ ' + escapeHtml(targetLabel) + ' 이동 ➔</button>';
+          } else {
+            actionHtml =
+              '<button type="button" class="btn-action-sm" onclick="handoffConsultToBusiness(\'' + safeId + '\', true)" style="background:#059669; color:#fff; border:none; padding:4px 9px; border-radius:6px; font-weight:850; font-size:0.74rem; cursor:pointer; white-space:nowrap;" title="해당 비즈니스 파이프라인으로 즉시 이관합니다">🚀 ' + escapeHtml(biz.label) + ' 이관</button>';
+          }
         } else if (itemStatus === '진행') {
-          statusBadgeHtml = '<button class="badge-pin" style="background:#e0f2fe; color:#0284c7; border:1.2px solid #7dd3fc; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 진행중 (클릭하여 상태 변경)">📞 진행중</button>';
+          actionHtml =
+            '<button type="button" class="btn-action-sm" onclick="handoffConsultToBusiness(\'' + safeId + '\', true)" style="background:#1e4d35; color:#fff; border:none; padding:4px 9px; border-radius:6px; font-weight:850; font-size:0.74rem; cursor:pointer; white-space:nowrap;" title="상담 완료 확정 후 해당 비즈니스로 자동 이관합니다">✓ 완료 · 이관 ➔</button>';
         } else {
-          statusBadgeHtml = '<button class="badge-pin" style="background:#fffbeb; color:#b45309; border:1.2px solid #fde68a; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus(\'' + item.id + '\')" title="상담 대기 (클릭하여 상태 변경)">⏳ 대기</button>';
-        }
-
-        var isMemoir = cat.indexOf('자서전') !== -1;
-        var assignBtnHtml = '';
-        if (isMemoir) {
-          var targetMemoirId = item.memoirProjectId || 'mem_demo_consult_1';
-          assignBtnHtml = '<button type="button" class="btn-action-sm" onclick="connectConsultToMemoirAssign(\'' + targetMemoirId + '\')" style="background:#8b5cf6; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="자서전 전담 코치 배정 모달 열기">🤝 코치배정</button>';
-        } else {
-          assignBtnHtml = '<button type="button" class="btn-action-sm" onclick="openDispatchModal()" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="현장 코치 파견 배정">🤝 코치배정</button>';
+          actionHtml =
+            '<button type="button" class="btn-action-sm" onclick="setDiagReservationStatus(\'' + safeId + '\', \'진행\')" style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; padding:4px 9px; border-radius:6px; font-weight:850; font-size:0.74rem; cursor:pointer; white-space:nowrap;" title="상담을 진행중 상태로 변경합니다">📞 상담 시작</button>';
         }
 
         return '<tr>' +
-          '<td><span style="display:inline-block; padding:3px 8px; border-radius:6px; background:rgba(43,90,66,0.08); color:var(--accent); font-size:0.8rem; font-weight:800;">' + escapeHtml(cat) + '</span></td>' +
-          '<td style="font-weight:700;">' + escapeHtml(role) + '</td>' +
-          '<td><a href="tel:' + escapeHtml(phone) + '" style="color:var(--accent); font-weight:700;">' + escapeHtml(phone) + '</a></td>' +
-          '<td style="max-width:280px; font-size:0.85rem; color:var(--text-sub);">' + escapeHtml(note) + '</td>' +
-          '<td style="font-size:0.82rem; color:var(--text-muted);">' + escapeHtml(date) + '</td>' +
-          '<td style="text-align:center;">' + statusBadgeHtml + '</td>' +
+          '<td>' +
+            '<div style="display:inline-block; padding:3px 8px; border-radius:6px; background:rgba(43,90,66,0.08); color:var(--accent); font-size:0.79rem; font-weight:800;">' + escapeHtml(cat) + '</div>' +
+            '<div style="margin-top:4px; font-size:0.72rem; font-weight:800; color:' + biz.color + ';">➔ 이관: ' + escapeHtml(biz.label) + '</div>' +
+          '</td>' +
+          '<td style="font-weight:750; font-size:0.86rem;">' + escapeHtml(role) + '</td>' +
+          '<td><a href="tel:' + escapeHtml(phone) + '" style="color:var(--accent); font-weight:750; white-space:nowrap;">' + escapeHtml(phone) + '</a></td>' +
+          '<td style="max-width:300px; font-size:0.84rem; color:var(--text-sub); line-height:1.45;">' +
+            '<div>' + escapeHtml(note) + '</div>' +
+            (counselMemo
+              ? '<div style="margin-top:4px; padding:4px 7px; background:#f8fafc; border:1px solid #e2e8f0; border-radius:5px; font-size:0.76rem; color:#334155;">📝 ' + escapeHtml(counselMemo) + '</div>'
+              : '') +
+            '<button type="button" onclick="editDiagConsultMemo(\'' + safeId + '\')" style="margin-top:4px; padding:1px 6px; font-size:0.71rem; background:#fff; color:#64748b; border:1px solid #cbd5e1; border-radius:4px; cursor:pointer; font-weight:700;">✏️ 상담메모</button>' +
+          '</td>' +
+          '<td style="font-size:0.81rem; color:var(--text-muted); white-space:nowrap;">' + escapeHtml(date) + '</td>' +
+          '<td style="text-align:center;">' + statusSelectHtml + '</td>' +
           '<td style="text-align:center;">' +
-            '<div style="display:flex; gap:4px; justify-content:center; align-items:center;">' +
-              assignBtnHtml +
-              '<button class="btn-action-sm del" onclick="deleteDiagReservation(\'' + item.id + '\')" title="상담 내역 삭제">삭제</button>' +
+            '<div style="display:flex; gap:5px; justify-content:center; align-items:center; flex-wrap:nowrap;">' +
+              actionHtml +
+              '<button type="button" class="btn-action-sm del" onclick="deleteDiagReservation(\'' + safeId + '\')" style="white-space:nowrap;" title="상담 내역 삭제">삭제</button>' +
             '</div>' +
           '</td>' +
         '</tr>';
@@ -13893,129 +13966,290 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       alert('맞춤 리셋 진단 5대 테마별 관련 여백 칼럼 연결 링크가 성공적으로 저장되었습니다.\n메인 화면 쇼케이스 카드 및 진단 결과창에서 [관련 여백 칼럼 읽기]를 클릭하면 지정한 링크로 즉시 이동합니다.');
     }
 
-    // ================= 8. 맞춤 리셋 진단 1:1 방문 상담 예약자 현황 관리 =================
+    // ================= 8. 통합 고객 접수 & 상담 관리 (완료 시 각 비즈니스 자동 이관) =================
     const DIAG_RESERVATION_KEY = 'reset_consult_list';
 
     function getDiagReservations() {
+      let list = [];
+      let needsSave = false;
       const saved = localStorage.getItem(DIAG_RESERVATION_KEY);
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            list = parsed;
+          }
         } catch (e) {
           console.error('진단 예약자 파싱 실패:', e);
         }
       }
-      // 기본 샘플 데이터
-      const defaultSamples = [
-        {
-          id: 'cs_diag_1',
-          category: '💄 웰니스 & 뷰티 케어',
-          role: '본인 어르신',
-          phone: '010-3841-9210',
-          note: '거동이 다소 불편하여 집으로 찾아오는 메이크업 코디 상담 희망',
-          status: '대기',
-          createdAt: '2026.09.25 14:20'
-        },
-        {
-          id: 'cs_diag_2',
-          category: '👗 일상과 비움의 미학',
-          role: '자녀 / 가족 대리',
-          phone: '010-8271-6453',
-          note: '어머니 댁 옷장 정리 및 수납 코칭 문의 (따님이 대신 신청)',
-          status: '진행',
-          createdAt: '2026.09.25 11:05'
-        },
-        {
-          id: 'cs_diag_3',
-          category: '📦 오래된 짐 및 유품 정리',
-          role: '본인 어르신',
-          phone: '010-5192-3301',
-          note: '서재 오래된 책과 서류들 비우기 방문 견적 요청',
-          status: '대기',
-          createdAt: '2026.09.24 16:40'
-        },
-        {
-          id: 'cs_diag_4',
-          category: '✍️ 내 인생의 디지털 자서전',
-          role: '본인 어르신',
-          phone: '010-9944-1234',
-          note: '30일 서사 워크북 및 가족 기념 자서전 출판 상담 희망',
-          status: '완료',
-          createdAt: '2026.09.24 10:15'
+
+      if (list.length === 0) {
+        // 기본 샘플 데이터
+        list = [
+          {
+            id: 'cs_diag_1',
+            category: '💄 웰니스 & 뷰티 케어',
+            role: '본인 어르신',
+            phone: '010-3841-9210',
+            note: '거동이 다소 불편하여 집으로 찾아오는 메이크업 코디 상담 희망',
+            status: '대기',
+            createdAt: '2026.09.25 14:20'
+          },
+          {
+            id: 'cs_diag_2',
+            category: '👗 일상과 비움의 미학',
+            role: '자녀 / 가족 대리',
+            phone: '010-8271-6453',
+            note: '어머니 댁 옷장 정리 및 수납 코칭 문의 (따님이 대신 신청)',
+            status: '진행',
+            createdAt: '2026.09.25 11:05'
+          },
+          {
+            id: 'cs_diag_3',
+            category: '📦 오래된 짐 및 유품 정리',
+            role: '본인 어르신',
+            phone: '010-5192-3301',
+            note: '서재 오래된 책과 서류들 비우기 방문 견적 요청',
+            status: '대기',
+            createdAt: '2026.09.24 16:40'
+          },
+          {
+            id: 'cs_diag_4',
+            category: '✍️ 내 인생의 디지털 자서전',
+            role: '본인 어르신',
+            phone: '010-9944-1234',
+            note: '30일 서사 워크북 및 가족 기념 자서전 출판 상담 희망',
+            status: '완료',
+            handedOffBiz: 'memoir',
+            handedOffLabel: '04. 디지털 자서전',
+            createdAt: '2026.09.24 10:15'
+          }
+        ];
+        needsSave = true;
+      }
+
+      // 기존 완료 샘플(cs_diag_4)에 이관 메타가 비어 있으면 보정
+      list.forEach(item => {
+        if (item && item.id === 'cs_diag_4' && item.status === '완료' && !item.handedOffBiz) {
+          item.handedOffBiz = 'memoir';
+          item.handedOffLabel = '04. 디지털 자서전';
+          needsSave = true;
         }
-      ];
-      localStorage.setItem(DIAG_RESERVATION_KEY, JSON.stringify(defaultSamples));
-      return defaultSamples;
+      });
+
+      // 메인 사이트 자서전 상담(yebaek_diag_reservations) 신규 접수분 자동 통합 흡수
+      try {
+        const rawMemoirDiag = localStorage.getItem('yebaek_diag_reservations');
+        if (rawMemoirDiag) {
+          const mList = JSON.parse(rawMemoirDiag);
+          if (Array.isArray(mList)) {
+            mList.forEach(m => {
+              if (!m || !m.id) return;
+              const exists = list.some(x => x.id === m.id || (m.memoirProjectId && x.memoirProjectId === m.memoirProjectId));
+              if (!exists) {
+                list.unshift(m);
+                needsSave = true;
+              }
+            });
+          }
+        }
+      } catch (e) {}
+
+      if (needsSave) {
+        try { localStorage.setItem(DIAG_RESERVATION_KEY, JSON.stringify(list)); } catch (e) {}
+      }
+      return list;
     }
 
     function saveDiagReservations(list) {
       localStorage.setItem(DIAG_RESERVATION_KEY, JSON.stringify(list));
       renderDiagReservationTable();
+      if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
     }
 
+    // 중복 렌더러 제거: filterConsultList 단일 렌더러로 통일
     function renderDiagReservationTable() {
-      const tbody = document.getElementById('diagReservationTableBody');
-      if (!tbody) return;
+      if (typeof filterConsultList === 'function') {
+        filterConsultList(typeof currentConsultFilter !== 'undefined' ? currentConsultFilter : 'all');
+      }
+    }
 
+    // 상담 결과 메모 입력/수정
+    function editDiagConsultMemo(id) {
       const list = getDiagReservations();
-      if (list.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color:#94a3b8;">맞춤 리셋 진단에서 접수된 상담 예약 내역이 없습니다.</td></tr>';
+      const target = list.find(item => item.id === id);
+      if (!target) return;
+      const cur = target.counselMemo || '';
+      const next = prompt(`[${target.role || '고객'}] 유선·방문 상담 결과 메모를 입력하세요:`, cur);
+      if (next !== null) {
+        target.counselMemo = next.trim();
+        if (target.status === '대기' && target.counselMemo) {
+          target.status = '진행';
+        }
+        saveDiagReservations(list);
+      }
+    }
+    window.editDiagConsultMemo = editDiagConsultMemo;
+
+    // 상담 상태 변경 (완료 선택 시 각 비즈니스 파이프라인으로 자동 이관)
+    function setDiagReservationStatus(id, newStatus) {
+      if (newStatus === '완료') {
+        handoffConsultToBusiness(id, true);
         return;
       }
-
-      tbody.innerHTML = list.map(item => {
-        const cat = item.category || '진단 일반';
-        const role = item.role || item.name || '본인';
-        const phone = item.phone || '-';
-        const note = item.note || item.memo || '-';
-        const date = item.createdAt || item.date || '-';
-        const status = item.status || '대기';
-        let statusBadgeHtml = '';
-        if (status === '완료') {
-          statusBadgeHtml = `<button class="badge-pin" style="background:#dcfce7; color:#15803d; border:1.2px solid #86efac; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 완료 (클릭하여 상태 변경)">✓ 완료</button>`;
-        } else if (status === '진행') {
-          statusBadgeHtml = `<button class="badge-pin" style="background:#e0f2fe; color:#0284c7; border:1.2px solid #7dd3fc; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 진행중 (클릭하여 상태 변경)">📞 진행중</button>`;
-        } else {
-          statusBadgeHtml = `<button class="badge-pin" style="background:#fffbeb; color:#b45309; border:1.2px solid #fde68a; font-weight:800; cursor:pointer;" onclick="toggleDiagReservationStatus('${item.id}')" title="상담 대기 (클릭하여 상태 변경)">⏳ 대기</button>`;
-        }
-
-        // 분야별 코치 배정 연계 버튼
-        let assignBtnHtml = '';
-        const isMemoir = cat.indexOf('자서전') !== -1;
-        if (isMemoir) {
-          const targetMemoirId = item.memoirProjectId || 'mem_demo_consult_1';
-          assignBtnHtml = `<button type="button" class="btn-action-sm" onclick="connectConsultToMemoirAssign('${targetMemoirId}')" style="background:#8b5cf6; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="자서전 전담 코치 배정 모달 열기">🤝 코치배정</button>`;
-        } else {
-          assignBtnHtml = `<button type="button" class="btn-action-sm" onclick="openDispatchModal()" style="background:#0284c7; color:#fff; border:none; padding:4px 8px; border-radius:5px; font-weight:800; font-size:0.75rem; cursor:pointer; display:inline-flex; align-items:center; gap:2px;" title="현장 코치 파견 배정">🤝 코치배정</button>`;
-        }
-
-        return `
-          <tr>
-            <td>
-              <span style="display:inline-block; padding:3px 8px; border-radius:6px; background:rgba(43,90,66,0.08); color:var(--accent); font-size:0.8rem; font-weight:800;">
-                ${escapeHtml(cat)}
-              </span>
-            </td>
-            <td style="font-weight:700;">${escapeHtml(role)}</td>
-            <td><a href="tel:${escapeHtml(phone)}" style="color:var(--accent); font-weight:700;">${escapeHtml(phone)}</a></td>
-            <td style="max-width:280px; line-height:1.4; font-size:0.88rem;">${escapeHtml(note)}</td>
-            <td style="color:var(--text-muted); font-size:0.85rem;">${escapeHtml(date)}</td>
-            <td style="text-align:center;">
-              ${statusBadgeHtml}
-            </td>
-            <td style="text-align:center;">
-              <div style="display:flex; gap:4px; justify-content:center; align-items:center;">
-                ${assignBtnHtml}
-                <button class="btn-action-sm del" onclick="deleteDiagReservation('${item.id}')" title="상담 내역 삭제">삭제</button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
+      const list = getDiagReservations();
+      const target = list.find(item => item.id === id);
+      if (target) {
+        target.status = newStatus || '대기';
+        saveDiagReservations(list);
+      }
     }
+    window.setDiagReservationStatus = setDiagReservationStatus;
 
-    // 02번 탭에서 자서전 코치 배정 연계 함수
+    // 상담 완료 확정 + 해당 비즈니스 파이프라인 자동 이관 실행기
+    function handoffConsultToBusiness(id, askNavigate) {
+      const list = getDiagReservations();
+      const item = list.find(x => x.id === id);
+      if (!item) return;
+
+      const biz = (typeof classifyConsultBusiness === 'function')
+        ? classifyConsultBusiness(item)
+        : { key: 'wardrobe', label: '3-2. 옷장·공간' };
+
+      item.status = '완료';
+      let result = { ok: true, recordId: '', alreadyExisted: false };
+
+      if (biz.key === 'beauty' || biz.key === 'wardrobe' || biz.key === 'legacy' || biz.key === 'party') {
+        // 03. 웰라이프 4대 비즈니스 ① 코치 배정 단계로 자동 이관
+        if (typeof window.handoffConsultToWellnessBusiness === 'function') {
+          result = window.handoffConsultToWellnessBusiness(item, biz.key);
+        }
+      } else if (biz.key === 'memoir') {
+        // 04. 디지털 자서전 출판 프로젝트로 자동 이관/승격
+        if (typeof getMemoirProjects === 'function' && typeof saveMemoirProjects === 'function') {
+          const projects = getMemoirProjects();
+          const normPhone = String(item.phone || '').replace(/[^0-9]/g, '');
+          let existing = projects.find(p =>
+            (item.memoirProjectId && p.id === item.memoirProjectId) ||
+            (p.sourceConsultId && p.sourceConsultId === item.id) ||
+            (normPhone && p.applicantPhone && String(p.applicantPhone).replace(/[^0-9]/g, '') === normPhone)
+          );
+          if (existing) {
+            if (existing.status === 'consult_pending' || existing.status === 'consult_contacted' || existing.status === 'consult_hold') {
+              existing.status = 'consult_done';
+              existing.statusLabel = '상담완료 · 코치배정대기';
+            }
+            if (item.counselMemo) existing.consultLog = item.counselMemo;
+            result = { ok: true, recordId: existing.id, alreadyExisted: true };
+          } else {
+            const newId = 'mem_' + Date.now();
+            const roleText = item.role || '고객 어르신';
+            projects.unshift({
+              id: newId,
+              sourceConsultId: item.id,
+              clientName: roleText.split('(')[0].trim() || '어르신',
+              clientAge: '70대',
+              region: '지역 협의',
+              applicantName: item.name || roleText,
+              applicantPhone: item.phone || '',
+              relation: '본인/가족',
+              packageType: 'masterpiece',
+              packageLabel: '인생 마스터피스 (시그니처)',
+              coachName: '배정 대기',
+              coachPhone: '-',
+              status: 'consult_done',
+              statusLabel: '상담완료 · 코치배정대기',
+              preferredDate: '방문일정 협의',
+              recordingsCount: 0,
+              photosCount: 0,
+              notes: item.note || '통합 상담함에서 상담 완료 후 이관',
+              consultLog: item.counselMemo || '통합 상담 완료 확정',
+              familyFeedback: '',
+              createdAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+              updatedAt: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+              chapters: []
+            });
+            item.memoirProjectId = newId;
+            result = { ok: true, recordId: newId, alreadyExisted: false };
+          }
+          saveMemoirProjects(projects);
+          if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        }
+      } else if (biz.key === 'archive') {
+        // 05. 나의 고유한 서재 고객 목록으로 자동 이관
+        if (typeof getArchiveClients === 'function' && typeof saveArchiveClients === 'function') {
+          const clients = getArchiveClients();
+          const normPhone = String(item.phone || '').replace(/[^0-9]/g, '');
+          let existing = clients.find(c =>
+            (c.sourceConsultId && c.sourceConsultId === item.id) ||
+            (normPhone && c.phone && String(c.phone).replace(/[^0-9]/g, '') === normPhone)
+          );
+          if (!existing) {
+            const newId = 'arc_' + Date.now();
+            clients.unshift({
+              id: newId,
+              sourceConsultId: item.id,
+              name: item.name || (item.role || '고객').split('(')[0].trim(),
+              phone: item.phone || '-',
+              category: item.category || '서재 구축',
+              memo: (item.counselMemo ? '[상담완료] ' + item.counselMemo + ' / ' : '') + (item.note || ''),
+              date: new Date().toISOString().slice(0, 10).replace(/-/g, '.'),
+              stage: '진행중'
+            });
+            saveArchiveClients(clients);
+            result = { ok: true, recordId: newId, alreadyExisted: false };
+          } else {
+            result = { ok: true, recordId: existing.id, alreadyExisted: true };
+          }
+        }
+      }
+
+      item.handedOffBiz = biz.key;
+      item.handedOffLabel = biz.label;
+      item.handedOffAt = new Date().toISOString();
+      if (result && result.recordId) item.handedOffRecordId = result.recordId;
+
+      saveDiagReservations(list);
+
+      if (askNavigate) {
+        const msg =
+          `✅ [상담 완료 & 자동 이관 완료]\n\n` +
+          `[${item.role || item.name || '고객'}] 고객님의 상담이 완료되어\n` +
+          `👉 [${biz.label}] 파이프라인으로 자동 이관되었습니다.\n\n` +
+          `지금 바로 [${biz.label}] 화면으로 이동하여 코치를 배정하시겠습니까?`;
+        if (confirm(msg)) {
+          goToHandedOffBusiness(biz.key);
+        }
+      }
+    }
+    window.handoffConsultToBusiness = handoffConsultToBusiness;
+
+    // 이관된 비즈니스 파이프라인(① 코치 배정)으로 즉시 점프
+    function goToHandedOffBusiness(bizKey) {
+      if (bizKey === 'beauty' || bizKey === 'wardrobe' || bizKey === 'legacy' || bizKey === 'party') {
+        switchTab('tabBusinessMaster');
+        if (typeof switchBusinessMasterTab === 'function') {
+          switchBusinessMasterTab(bizKey);
+        }
+        if (typeof switchPipelineStep === 'function') {
+          switchPipelineStep('step2');
+        }
+      } else if (bizKey === 'memoir') {
+        switchTab('tabMemoirDashboard');
+      } else if (bizKey === 'archive') {
+        switchTab('tabArchive');
+      } else if (bizKey === 'academy') {
+        if (typeof selectCoachSubFromSidebar === 'function') {
+          selectCoachSubFromSidebar('academy');
+        } else {
+          switchTab('tabCoachControl');
+        }
+      }
+    }
+    window.goToHandedOffBusiness = goToHandedOffBusiness;
+
+    // 하위 호환 래퍼
     function connectConsultToMemoirAssign(memoirProjectId) {
       if (typeof openMemoirCoachAssignModal === 'function') {
         openMemoirCoachAssignModal(memoirProjectId);
@@ -14028,16 +14262,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     function toggleDiagReservationStatus(id) {
       const list = getDiagReservations();
       const target = list.find(item => item.id === id);
-      if (target) {
-        if (target.status === '대기') target.status = '진행';
-        else if (target.status === '진행') target.status = '완료';
-        else target.status = '대기';
-        saveDiagReservations(list);
-      }
+      if (!target) return;
+      const next = (!target.status || target.status === '대기') ? '진행' : (target.status === '진행' ? '완료' : '진행');
+      setDiagReservationStatus(id, next);
     }
 
     function deleteDiagReservation(id) {
-      if (confirm('해당 진단 예약 내역을 삭제하시겠습니까?')) {
+      if (confirm('해당 상담 접수 내역을 삭제하시겠습니까?')) {
         let list = getDiagReservations();
         list = list.filter(item => item.id !== id);
         saveDiagReservations(list);
@@ -14046,12 +14277,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
 
     function exportDiagReservationsCSV() {
       const list = getDiagReservations();
-      let csv = "진단주제,신청구분,연락처,상담요청메모,접수일시,처리상태\n";
+      let csv = "\uFEFF신청분야,이관대상비즈니스,신청구분,연락처,상담요청메모,상담결과메모,접수일시,처리상태,이관여부\n";
       list.forEach(item => {
-        csv += `"${item.category || ''}","${item.role || item.name || ''}","${item.phone || ''}","${(item.note || item.memo || '').replace(/"/g, '""')}","${item.createdAt || item.date || ''}","${item.status || '대기'}"\n`;
+        const biz = (typeof classifyConsultBusiness === 'function') ? classifyConsultBusiness(item) : { label: '' };
+        csv += `"${item.category || ''}","${item.handedOffLabel || biz.label}","${item.role || item.name || ''}","${item.phone || ''}","${(item.note || item.memo || '').replace(/"/g, '""')}","${(item.counselMemo || '').replace(/"/g, '""')}","${item.createdAt || item.date || ''}","${item.status || '대기'}","${item.handedOffBiz ? '이관완료' : '미이관'}"\n`;
       });
       const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, '');
-      downloadCSV(`여백과결_맞춤리셋진단예약명단_${stamp}.csv`, csv);
+      downloadCSV(`여백과결_통합고객상담명단_${stamp}.csv`, csv);
     }
 
     // ================= 9. 디지털 자서전 CTA 배너 설정 관리 =================
@@ -17173,7 +17405,7 @@ ${coachAppUrl}
       }
     });
   </script>
-  <script src="beauty-crm.js?v=20261115_v2"></script>
+  <script src="beauty-crm.js?v=20261122_v3"></script>
 
   <!-- ==========================================================
        [NEW] 04. Memoir Publication Control Center & AI Engine

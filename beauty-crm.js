@@ -1,21 +1,18 @@
 // =========================================================================
-// 여백과결 - 4대 비즈니스 통합 관제 센터 & CRM 시스템 (beauty-crm.js)
-// 1호 시니어 뷰티 라이프케어 180분 원스톱 파이프라인 (상담 ➔ 배정 ➔ 현장 ➔ CRM)
-// 2호 옷장 정리 / 3호 유품 정리 / 4호 엔딩 파티 / 5호 디지털 자서전 통합 관제
-// 단계별 특화 화면 & 라이프사이클 순환 이관 시스템 (상담 ➔ 배정 ➔ 현장 ➔ CRM ➔ 재상담)
+// 여백과결 - 03. 웰라이프 4대 방문 케어 통합 관제 & CRM 시스템 (beauty-crm.js)
+// 통합 고객 접수·상담함에서 '상담 완료' 확정·이관된 고객만 전담 관리합니다.
+// 3단계 실행 파이프라인: ① 코치 배정 ➔ ② 현장 케어/일지 ➔ ③ CRM 사후관리
 // =========================================================================
 
-let currentBusinessTab = 'beauty'; // 'beauty', 'wardrobe', 'legacy', 'party', 'memoir'
-let currentPipelineStep = 'all';    // 'all', 'step1', 'step2', 'step3', 'step4'
+let currentBusinessTab = 'beauty'; // 'beauty', 'wardrobe', 'legacy', 'party'
+let currentPipelineStep = 'all';    // 'all', 'step2'(①코치배정), 'step3'(②현장케어), 'step4'(③CRM사후관리)
 let currentSubFilter = 'all';       // 각 단계 내부 하위 필터
 
-// 🌟 데이터 버전 관리 (단계별 특화 화면용 신규 데이터 동기화 보장)
-const BEAUTY_CRM_DATA_VER = '20261115_v2';
+// 🌟 데이터 버전 관리 (기존 고객 데이터를 유실 없이 보존하며 버전만 기록)
+const BEAUTY_CRM_DATA_VER = '20261122_v3';
 try {
   if (localStorage.getItem('beautyCrmDataVer') !== BEAUTY_CRM_DATA_VER) {
     localStorage.setItem('beautyCrmDataVer', BEAUTY_CRM_DATA_VER);
-    localStorage.removeItem('seniorBeautyBookings');
-    localStorage.removeItem('seniorConsultList');
   }
 } catch(e) {}
 
@@ -25,74 +22,15 @@ function getStoredBeautyBookings() {
     const raw = localStorage.getItem('seniorBeautyBookings');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length >= 6) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch(e) {
     console.error('예약 데이터 파싱 실패:', e);
   }
 
-  // 기본 견본 데이터 (1단계~4단계 전 단계 및 세부 상태 완벽 시연용)
+  // 기본 견본 데이터 (통합 상담함에서 상담 완료·이관된 확정 고객 1~3단계 시연용)
   const defaultList = [
-    // ---------------- [1단계 : 고객 상담 접수 & 심사] ----------------
-    {
-      id: 'BK-202612',
-      programType: '시니어 뷰티 라이프케어',
-      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
-      role: '자녀 대리 신청 (40대)',
-      applicantName: '박지영',
-      phone: '010-8273-1920',
-      seniorName: '정순임 어르신 (76세)',
-      place: '자택 방문 1:1 케어',
-      visitDate: '2026-11-15T14:00',
-      address: '서울시 강남구 압구정로 18길 35 (현대아파트 102동)',
-      options: ['기미·주름 커버 투명 윤광 메이크업', '목·승모근 림프 이완 테라피'],
-      memo: '친정어머니 팔순 잔치를 앞두고 화사하고 자연스러운 시니어 메이크업을 받고 싶습니다.',
-      consultNote: '유선 상담 대기 중. 따님께서 오후 2시 이후 통화 희망.',
-      status: '상담대기', // '상담대기', '상담중', '보류', '상담완료'
-      assignedCoach: '미배정 (배정 대기중)',
-      coachPhone: '',
-      createdAt: '2026-11-14T09:30:00.000Z'
-    },
-    {
-      id: 'BK-202615',
-      programType: '시니어 뷰티 라이프케어',
-      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
-      role: '자녀 대리 신청 (30대)',
-      applicantName: '최민호',
-      phone: '010-4455-8822',
-      seniorName: '최갑수 어르신 (79세)',
-      place: '자택 방문 1:1 케어',
-      visitDate: '2026-11-17T11:00',
-      address: '서울시 서초구 서초중앙로 45 (래미안 103동)',
-      options: ['목·승모근 림프 이완 테라피', '헤어 볼륨 스타일링'],
-      memo: '부모님 결혼 50주년 기념 가족 사진 촬영 전 단정한 헤어·피부 정돈 희망.',
-      consultNote: '1차 유선 상담 진행 중. 피부가 얇고 건조하시어 순한 천연 앰플 위주 사용 요청.',
-      status: '상담중',
-      assignedCoach: '미배정',
-      coachPhone: '',
-      createdAt: '2026-11-14T11:20:00.000Z'
-    },
-    {
-      id: 'BK-202616',
-      programType: '시니어 뷰티 라이프케어',
-      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
-      role: '본인 어르신 신청',
-      applicantName: '이지은',
-      phone: '010-3322-9911',
-      seniorName: '윤명자 어머니 (74세)',
-      place: '자택 방문 1:1 케어',
-      visitDate: '2026-11-20T15:00',
-      address: '서울시 송파구 송파대로 22길 (잠실 엘스 305동)',
-      options: ['기미·주름 커버 투명 윤광 메이크업', '소장 의상 리스타일링'],
-      memo: '동창 모임 외출용. 일정 조율 중.',
-      consultNote: '고객 측 가족 행사 일정 미확정으로 11월 18일 재연락 요청 (보류 상태).',
-      status: '보류',
-      assignedCoach: '미배정',
-      coachPhone: '',
-      createdAt: '2026-11-13T14:10:00.000Z'
-    },
-
-    // ---------------- [2단계 : 전문 코치 배정 & 매칭] ----------------
+    // ---------------- [1단계 : 전문 코치 배정 & 매칭 (상담완료 이관)] ----------------
     {
       id: 'BK-202611',
       programType: '시니어 뷰티 라이프케어',
@@ -106,8 +44,8 @@ function getStoredBeautyBookings() {
       address: '서울시 서초구 반포대로 12길 (301호)',
       options: ['목·승모근 림프 이완 테라피', '기미·주름 커버 투명 윤광 메이크업', '주거 공간 낙상 안전 동선 점검'],
       memo: '어머니께서 오랜만에 외출하시길 무척 기대하고 계십니다.',
-      consultNote: '상담 완료! 밝고 자연스러운 피부 표현과 편안한 안면 근육 이완 선호.',
-      status: '코치배정', // 코치 매칭 대기
+      consultNote: '통합 상담 완료! 밝고 자연스러운 피부 표현과 편안한 안면 근육 이완 선호.',
+      status: '코치배정',
       assignedCoach: '김서연 전문 라이프 코치 (40대 시니어 뷰티&라이프스타일 1급)',
       coachPhone: '010-9613-5913',
       createdAt: '2026-11-13T10:00:00.000Z'
@@ -125,14 +63,14 @@ function getStoredBeautyBookings() {
       address: '서울시 마포구 독막로 15길 (마포자이 108동)',
       options: ['목·승모근 림프 이완 테라피', '인생 사진 촬영'],
       memo: '거동이 조금 불편하시어 침상 케어 및 부드러운 승모근 림프 케어 희망.',
-      consultNote: '상담 완료! 박지은 수석코치와 동선 및 시간 조율 진행 중.',
+      consultNote: '통합 상담 완료! 박지은 수석코치와 동선 및 시간 조율 진행 중.',
       status: '조율중',
       assignedCoach: '박지은 수석 코치 (시니어 뷰티&공간리셋 1급)',
       coachPhone: '010-3344-5566',
       createdAt: '2026-11-12T16:30:00.000Z'
     },
 
-    // ---------------- [3단계 : 180분 현장 케어 & 안심 관제] ----------------
+    // ---------------- [2단계 : 180분 현장 케어 & 안심 관제] ----------------
     {
       id: 'BK-202610',
       programType: '시니어 뷰티 라이프케어',
@@ -147,7 +85,7 @@ function getStoredBeautyBookings() {
       options: ['목·승모근 림프 이완 테라피', '헤어 볼륨 스타일링', '인생 사진 촬영'],
       memo: '동창 모임 가기 전 우아하고 자연스러운 스타일링 희망.',
       consultNote: '상담 완료 및 코치 배정 확정. 현장 180분 SOP 순조롭게 진행 중.',
-      status: '진행중', // 현장 진행
+      status: '진행중',
       assignedCoach: '박지은 수석 코치 (시니어 뷰티&공간리셋 1급)',
       coachPhone: '010-3344-5566',
       photoBase64: 'registered',
@@ -164,7 +102,7 @@ function getStoredBeautyBookings() {
       }
     },
 
-    // ---------------- [4단계 : CRM 사후관리 & 리텐션 루프] ----------------
+    // ---------------- [3단계 : CRM 사후관리 & 리텐션 루프] ----------------
     {
       id: 'BK-202609',
       programType: '시니어 뷰티 라이프케어',
@@ -186,7 +124,7 @@ function getStoredBeautyBookings() {
       completedAt: '2026-08-10T13:00:00.000Z',
       satisfaction: 5.0,
       photoBase64: 'registered',
-      retentionSent3m: false, // 3개월 차 알림 발송 대기
+      retentionSent3m: false,
       retentionSent6m: false,
       diagnostic: {
         moistureBefore: 24,
@@ -219,8 +157,8 @@ function getStoredBeautyBookings() {
       completedAt: '2026-05-15T17:00:00.000Z',
       satisfaction: 5.0,
       photoBase64: 'registered',
-      retentionSent3m: true, // 3개월 완료
-      retentionSent6m: false, // 6개월 쿠폰 발송 대기
+      retentionSent3m: true,
+      retentionSent6m: false,
       diagnostic: {
         moistureBefore: 22,
         moistureAfter: 68,
@@ -239,43 +177,19 @@ function getStoredBeautyBookings() {
   return defaultList;
 }
 
-// 2. 통합 일반 상담 신청 내역 조회 (자가진단 및 원터치 상담)
+// 2. 2호~4호 웰라이프 비즈니스 확정 고객 데이터 조회 (상담 완료 후 이관된 건 관리)
 function getStoredGeneralConsults() {
   try {
     const raw = localStorage.getItem('seniorConsultList');
     if (raw) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length >= 10) return parsed;
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch(e) {}
 
-  // 기본 견본 데이터 (2호~4호 비즈니스별 1단계~4단계 완벽 시연용)
+  // 기본 견본 데이터 (2호~4호 비즈니스별 상담완료 이관 1~3단계 시연용)
   const defaultConsults = [
     // 👗 2호 일상과 비움의 미학 (옷장/공간)
-    {
-      id: 'CS-101',
-      category: '👗 일상과 비움의 미학 (옷장/공간)',
-      role: '자녀 대리',
-      name: '이지현',
-      phone: '010-3344-5566',
-      date: '2026-11-14 오전 10:15',
-      message: '어머니 댁 옷장 정리 및 겨울 외출복 동선 수납 컨설팅을 희망합니다.',
-      consultNote: '유선 상담 대기. 어머니 안방 옷장과 계절 수납 선별 요청.',
-      status: '상담대기',
-      assignedCoach: '미배정'
-    },
-    {
-      id: 'CS-104',
-      category: '👗 일상과 비움의 미학 (옷장/공간)',
-      role: '자녀 대리',
-      name: '정수진',
-      phone: '010-4499-1122',
-      date: '2026-11-14 오후 13:40',
-      message: '부모님 댁 주방과 서재 수납 정리 일정 조율 중입니다.',
-      consultNote: '유선 상담 진행 중. 견적 및 코치 방문 일정 조율.',
-      status: '상담중',
-      assignedCoach: '미배정'
-    },
     {
       id: 'CS-105',
       category: '👗 일상과 비움의 미학 (옷장/공간)',
@@ -284,7 +198,7 @@ function getStoredGeneralConsults() {
       phone: '010-2233-4455',
       date: '2026-11-13 오후 14:00',
       message: '안방 붙박이장과 서랍장 옷장 수납 최적화 코칭을 요청합니다.',
-      consultNote: '상담 완료! 박지은 수석코치 전담 매칭 확정 대기.',
+      consultNote: '통합 상담 완료! 박지은 수석코치 전담 매칭 확정 대기.',
       status: '코치배정',
       assignedCoach: '박지은 수석 코치'
     },
@@ -316,18 +230,6 @@ function getStoredGeneralConsults() {
 
     // 📦 3호 기억의 계승 (유품/생전정리)
     {
-      id: 'CS-108',
-      category: '📦 기억의 계승 (유품/생전정리)',
-      role: '자녀 대리',
-      name: '윤서진',
-      phone: '010-8899-1122',
-      date: '2026-11-14 오후 13:20',
-      message: '부모님 댁 오래된 서책과 옛 가재도구 정돈 및 유품 보관 상담을 신청합니다.',
-      consultNote: '상담 신청 접수. 오래된 서책 아카이빙 견적 문의.',
-      status: '상담대기',
-      assignedCoach: '미배정'
-    },
-    {
       id: 'CS-102',
       category: '📦 기억의 계승 (유품/생전정리)',
       role: '본인 어르신',
@@ -335,7 +237,7 @@ function getStoredGeneralConsults() {
       phone: '010-7788-9900',
       date: '2026-11-13 오전 10:30',
       message: '서재에 오래 쌓인 책과 소장품을 후대에 전할 유품으로 우아하게 정돈하고 싶습니다.',
-      consultNote: '상담 완료! 이은영 전문 코치 배정 일정 조율.',
+      consultNote: '통합 상담 완료! 이은영 전문 코치 배정 일정 조율.',
       status: '코치배정',
       assignedCoach: '이은영 전문 코치'
     },
@@ -367,18 +269,6 @@ function getStoredGeneralConsults() {
 
     // 💌 4호 아름다운 마침표 (생전 엔딩 파티)
     {
-      id: 'CS-111',
-      category: '💌 아름다운 마침표 (생전 엔딩 파티)',
-      role: '본인 어르신',
-      name: '조경호 어르신',
-      phone: '010-3344-7788',
-      date: '2026-11-14 오전 11:00',
-      message: '팔순을 맞아 평생 고마웠던 옛 친구들과 은사님을 모시는 감사 파티 기획을 상담받고 싶습니다.',
-      consultNote: '유선 상담 접수. 감사 파티 장소 및 초대 인원(20명) 상담 희망.',
-      status: '상담대기',
-      assignedCoach: '미배정'
-    },
-    {
       id: 'CS-112',
       category: '💌 아름다운 마침표 (생전 엔딩 파티)',
       role: '자녀 대리',
@@ -386,7 +276,7 @@ function getStoredGeneralConsults() {
       phone: '010-4455-8899',
       date: '2026-11-13 오후 15:40',
       message: '어머니 은퇴 및 생애 감사 엔딩 파티 전담 코치 배정 및 식순 협의 요청.',
-      consultNote: '상담 완료! 김서연 코치 배정.',
+      consultNote: '통합 상담 완료! 김서연 코치 배정.',
       status: '코치배정',
       assignedCoach: '김서연 전문 라이프 코치'
     },
@@ -423,46 +313,67 @@ function getStoredGeneralConsults() {
   return defaultConsults;
 }
 
-// 3. 4대 비즈니스 탭 전환
+// 3. 4대 비즈니스 탭 전환 (사이드바·브레드크럼·테마 색상 일괄 동기화)
 function switchBusinessMasterTab(biz) {
-  currentBusinessTab = biz;
+  if (biz === 'memoir') {
+    if (typeof switchTab === 'function') switchTab('tabMemoirDashboard');
+    return;
+  }
+  currentBusinessTab = biz || 'beauty';
   currentSubFilter = 'all';
-  
-  // 버튼 스타일 업데이트
-  const tabs = ['beauty', 'wardrobe', 'legacy', 'party', 'memoir'];
+
+  const sel = document.getElementById('bizProgramSelector');
+  if (sel) sel.value = currentBusinessTab;
+
+  const tabs = ['beauty', 'wardrobe', 'legacy', 'party'];
   tabs.forEach(t => {
     const btn = document.getElementById(`bizTabBtn_${t}`);
-    if (btn) btn.classList.toggle('active', t === biz);
+    if (btn) btn.classList.toggle('active', t === currentBusinessTab);
     const card = document.getElementById(`bizCard_${t}`);
-    if (card) card.classList.toggle('active', t === biz);
+    if (card) card.classList.toggle('active', t === currentBusinessTab);
+    const subEl = document.getElementById(`sideSub_${t}`);
+    if (subEl) subEl.classList.toggle('active', t === currentBusinessTab);
+    const pill = document.getElementById(`bizPill_${t}`);
+    if (pill) pill.classList.toggle('active', t === currentBusinessTab);
   });
 
   // 비즈니스 설정 카드 표시 제어
   const diagLinkCard = document.getElementById('bizDiagLinksCard');
-  const memoirBannerCard = document.getElementById('bizMemoirBannerCard');
   if (diagLinkCard) {
-    diagLinkCard.style.display = (biz === 'beauty' || biz === 'wardrobe' || biz === 'legacy' || biz === 'party') ? 'block' : 'none';
+    diagLinkCard.style.display = 'block';
   }
-  if (memoirBannerCard) {
-    memoirBannerCard.style.display = (biz === 'memoir') ? 'block' : 'none';
+
+  // 상단 브레드크럼 동기화 (03. 웰라이프 탭이 활성화된 경우)
+  const bizPanel = document.getElementById('tabBusinessMaster');
+  const breadcrumbTabBadge = document.getElementById('headerCurrentTabBadge');
+  if (bizPanel && bizPanel.classList.contains('active') && breadcrumbTabBadge) {
+    const bizNames = {
+      beauty: '<span>💄</span> 03. 웰라이프 > 3-1. 뷰티케어 (180분)',
+      wardrobe: '<span>👗</span> 03. 웰라이프 > 3-2. 옷장 &amp; 공간 비움',
+      legacy: '<span>📦</span> 03. 웰라이프 > 3-3. 유품 &amp; 짐 아카이빙',
+      party: '<span>💌</span> 03. 웰라이프 > 3-4. 생전 엔딩 파티'
+    };
+    if (bizNames[currentBusinessTab]) {
+      breadcrumbTabBadge.innerHTML = bizNames[currentBusinessTab];
+    }
   }
 
   renderBusinessMasterDashboard();
 }
 
-// 4. 파이프라인 단계 전환 (전체, ①상담, ②코치배정, ③현장케어, ④CRM리텐션)
+// 4. 파이프라인 단계 전환 (전체, ①코치배정(step2), ②현장케어(step3), ③CRM리텐션(step4))
 function switchPipelineStep(step) {
-  currentPipelineStep = step;
+  currentPipelineStep = (step === 'step1') ? 'step2' : (step || 'all');
   currentSubFilter = 'all';
 
-  const steps = ['all', 'step1', 'step2', 'step3', 'step4'];
+  const steps = ['all', 'step2', 'step3', 'step4'];
   steps.forEach(s => {
     const btn = document.getElementById(`pipelineStepBtn_${s}`);
-    if (btn) btn.classList.toggle('active', s === step);
+    if (btn) btn.classList.toggle('active', s === currentPipelineStep);
   });
 
-  // 상단 4대 KPI 카드 하이라이트 동기화
-  const cardSteps = ['step1', 'step2', 'step3', 'step4'];
+  // 상단 3대 KPI 카드 하이라이트 동기화
+  const cardSteps = ['step2', 'step3', 'step4'];
   cardSteps.forEach(s => {
     const card = document.getElementById(`bizKpiCard_${s}`);
     if (card) card.classList.toggle('active', currentPipelineStep === s);
@@ -471,138 +382,116 @@ function switchPipelineStep(step) {
   renderBusinessMasterDashboard();
 }
 
-// 4-1. 단계 내부 세부 필터 (상담대기, 상담중, 보류 등) 전환
+// 4-1. 단계 내부 세부 필터 전환
 function switchSubFilter(filterVal) {
   currentSubFilter = filterVal;
   renderBusinessMasterDashboard();
 }
 
-// 4-2. 파이프라인 버튼 텍스트 및 실시간 건수 뱃지 갱신
+// 4-2. 파이프라인 버튼 텍스트 및 실시간 건수 뱃지 갱신 (3단계 실행 파이프라인)
 function updatePipelineStepButtons(counts, bizType) {
   const btnAll = document.getElementById('pipelineStepBtn_all');
-  const btnStep1 = document.getElementById('pipelineStepBtn_step1');
   const btnStep2 = document.getElementById('pipelineStepBtn_step2');
   const btnStep3 = document.getElementById('pipelineStepBtn_step3');
   const btnStep4 = document.getElementById('pipelineStepBtn_step4');
 
   if (btnAll) btnAll.innerHTML = `전체보기 <span class="pipeline-step-badge">${counts.all}</span>`;
-  if (btnStep1) btnStep1.innerHTML = `① 상담신청 접수 <span class="pipeline-step-badge">${counts.step1}</span>`;
-  if (btnStep2) btnStep2.innerHTML = `② 코치 배정 <span class="pipeline-step-badge">${counts.step2}</span>`;
+  if (btnStep2) btnStep2.innerHTML = `① 코치 배정 <span class="pipeline-step-badge">${counts.step2}</span>`;
   if (btnStep3) {
     btnStep3.innerHTML = (bizType === 'beauty')
-      ? `③ 현장케어/일지 <span class="pipeline-step-badge">${counts.step3}</span>`
-      : `③ 현장진행 <span class="pipeline-step-badge">${counts.step3}</span>`;
+      ? `② 현장케어/일지 <span class="pipeline-step-badge">${counts.step3}</span>`
+      : `② 현장진행 <span class="pipeline-step-badge">${counts.step3}</span>`;
   }
   if (btnStep4) {
     btnStep4.innerHTML = (bizType === 'beauty')
-      ? `④ CRM 사후 리텐션 <span class="pipeline-step-badge">${counts.step4}</span>`
-      : `④ CRM 사후관리 <span class="pipeline-step-badge">${counts.step4}</span>`;
+      ? `③ CRM 사후 리텐션 <span class="pipeline-step-badge">${counts.step4}</span>`
+      : `③ CRM 사후관리 <span class="pipeline-step-badge">${counts.step4}</span>`;
   }
 
   // 상단 KPI 카드 클래스 동기화
-  const cardSteps = ['step1', 'step2', 'step3', 'step4'];
+  const cardSteps = ['step2', 'step3', 'step4'];
   cardSteps.forEach(s => {
     const card = document.getElementById(`bizKpiCard_${s}`);
     if (card) card.classList.toggle('active', currentPipelineStep === s);
   });
 }
 
-// 4-3. 단계 판별 헬퍼
+// 4-3. 단계 판별 헬퍼 (step1은 통합 상담함 전용 미확정 리드, step2~step4가 웰라이프 실행 단계)
 function resolveItemStep(item) {
+  if (!item) return 'step1';
   if (item.completedAt || item.status === '케어완료' || item.status === '완료') {
     return 'step4';
   }
   if (item.status === '진행중' || item.status === '현장진행' || item.status === '출동대기' || item.status === '검수대기') {
     return 'step3';
   }
-  if (item.status === '코치배정' || item.status === '배정대기' || item.status === '조율중' || item.status === '배정보류' || item.status === '배정완료') {
+  if (item.status === '코치배정' || item.status === '배정대기' || item.status === '조율중' || item.status === '배정보류' || item.status === '배정완료' || item.status === '상담완료') {
     return 'step2';
   }
-  // 기본은 1단계
   return 'step1';
 }
 
-// 5. 비즈니스 메타 정의
+// 5. 비즈니스 메타 정의 (상담 완료 이후 3단계 실행 파이프라인)
 const BIZ_META = {
   beauty: {
-    name: '💄 1호 시니어 뷰티 라이프케어',
-    desc: '‘특별한 날, 화려한 외출’ 180분 표준 프로토콜(SOP) 맞춤 케어 및 사후 리텐션 관리',
+    icon: '💄',
+    name: '1호 시니어 뷰티 라이프케어',
+    desc: '‘특별한 날, 화려한 외출’ 상담 확정 고객 대상 180분 표준 프로토콜(SOP) 코치 배정·현장 케어·사후 리텐션 관리',
     badge: '180분 SOP 시그니처',
     themeColor: '#b83354',
     bgLight: '#fff0f3',
     borderColor: '#f8c8d2',
-    step1Title: '📞 1단계: 고객 상담 접수 & 예약 심사 관제',
-    step1Desc: '신규 신청 고객과의 유선 상담을 진행하고 상담 결과를 등록합니다. 상담이 완료되면 [코치 배정] 단계로 자동 이관됩니다.',
-    step2Title: '🤝 2단계: 공인 라이프 코치 배정 & 일정 매칭',
-    step2Desc: '상담 완료된 고객에게 1:1 맞춤 전담 라이프 코치를 지정하고 일정을 확정합니다. 배정 완료 시 [현장 케어] 단계로 이관됩니다.',
-    step3Title: '📸 3단계: 180분 현장 케어 실행 & 실시간 안심 관제',
-    step3Desc: '코치가 현장에 방문하여 180분 표준 프로토콜(SOP)을 실행 중입니다. 현장 사진 3종 및 코칭 진단 일지를 검수하고 승인합니다.',
-    step4Title: '🔄 4단계: CRM 사후관리 & 선순환 리텐션 루프',
-    step4Desc: '케어가 완료된 고객을 위한 전용 관리 공간입니다. 3개월 무료 재진단 알림톡 및 6개월 AGAIN180 감사 할인 쿠폰을 자동 발송합니다.'
+    step2Title: '🤝 1단계: 공인 라이프 코치 배정 & 일정 매칭 (상담완료 이관)',
+    step2Desc: '통합 상담함에서 상담이 완료·확정된 고객에게 1:1 전담 라이프 코치를 지정하고 방문 일정을 확정합니다. 배정 완료 시 [② 현장 케어] 단계로 이관됩니다.',
+    step3Title: '📸 2단계: 180분 현장 케어 실행 & 실시간 안심 관제',
+    step3Desc: '배정된 코치가 현장에서 180분 표준 프로토콜(SOP)을 실행 중입니다. 현장 사진 3종 및 코칭 진단 일지를 검수하고 승인합니다.',
+    step4Title: '🔄 3단계: CRM 사후관리 & 선순환 리텐션 루프',
+    step4Desc: '케어가 완료된 고객을 위한 전용 관리 공간입니다. 3개월 무료 재진단 알림톡 및 6개월 AGAIN180 감사 할인 쿠폰을 발송하고, 재이용 희망 시 통합 상담함으로 재상담을 등록합니다.'
   },
   wardrobe: {
-    name: '👗 2호 일상과 비움의 미학',
-    desc: '삶의 흔적을 정돈하고 일상복과 외출복의 아름다운 구분, 인체공학적 동선 수납 컨설팅',
+    icon: '👗',
+    name: '2호 일상과 비움의 미학',
+    desc: '상담 확정 고객의 옷장·주거 공간 정돈 및 인체공학적 동선 수납 코칭 실행 관제',
     badge: '공간 리셋 & 수납',
     themeColor: '#2b7a4b',
     bgLight: '#edf7f1',
     borderColor: '#c6e7d2',
-    step1Title: '📞 1단계: 옷장·공간 정리 상담 접수 및 진단',
-    step1Desc: '고객의 주거 공간 및 옷장 정리 상담을 진행합니다. 상담 완료 시 전담 공간 코치 배정으로 자동 이관됩니다.',
-    step2Title: '🤝 2단계: 공간 정리 수석 코치 배정',
-    step2Desc: '공간 정리 및 비움 전문 코치를 매칭하고 방문 일정을 확정합니다.',
-    step3Title: '📸 3단계: 현장 공간 리셋 & 수납 동선 비움 진행',
+    step2Title: '🤝 1단계: 공간 정리 수석 코치 배정 (상담완료 이관)',
+    step2Desc: '상담이 완료된 고객에게 공간 정리 및 비움 전문 코치를 매칭하고 방문 일정을 확정합니다.',
+    step3Title: '📸 2단계: 현장 공간 리셋 & 수납 동선 비움 진행',
     step3Desc: '현장 방문 수납 컨설팅 및 공간 비움 작업을 진행하고 전후 사진을 검수합니다.',
-    step4Title: '🔄 4단계: 정기 공간 유지 점검 & 사후관리',
+    step4Title: '🔄 3단계: 정기 공간 유지 점검 & 사후관리',
     step4Desc: '계절별 옷장 점검 및 정기 공간 유지보수 케어를 제공합니다.'
   },
   legacy: {
-    name: '📦 3호 기억의 계승',
-    desc: '오래된 짐과 세월의 흔적을 비우고, 의미 있는 유품으로 정돈하여 후대에 전하는 안심 동행',
+    icon: '📦',
+    name: '3호 기억의 계승',
+    desc: '상담 확정 고객의 오래된 짐과 소장품을 의미 있는 유품으로 정돈·아카이빙하는 안심 동행',
     badge: '유품 아카이빙',
     themeColor: '#9a6528',
     bgLight: '#fdf6ed',
     borderColor: '#ebd2b2',
-    step1Title: '📞 1단계: 유품·소장품 정리 상담 접수',
-    step1Desc: '소장품의 가치 보존과 유품 정돈을 위한 심층 상담을 진행합니다.',
-    step2Title: '🤝 2단계: 유품 아카이빙 전문 코치 배정',
-    step2Desc: '기록과 선별을 전담할 전문 코치를 배정하고 방문 일정을 조율합니다.',
-    step3Title: '📸 3단계: 현장 소장품 선별 & 디지털 아카이빙',
+    step2Title: '🤝 1단계: 유품 아카이빙 전문 코치 배정 (상담완료 이관)',
+    step2Desc: '상담이 완료된 고객의 소장품 선별과 기록을 전담할 전문 코치를 배정하고 방문 일정을 조율합니다.',
+    step3Title: '📸 2단계: 현장 소장품 선별 & 디지털 아카이빙',
     step3Desc: '현장에서 소장품을 선별하고 유품 도록 제작용 사진 촬영 및 기록을 진행합니다.',
-    step4Title: '🔄 4단계: 유품 도록 보관 & 가족 감사 사후관리',
+    step4Title: '🔄 3단계: 유품 도록 보관 & 가족 감사 사후관리',
     step4Desc: '제작된 유품 도록 양장본 전달 및 후대 계승 아카이빙을 영구 관리합니다.'
   },
   party: {
-    name: '💌 4호 아름다운 마침표와 감사',
-    desc: '고마운 사람들을 초대해 감사를 전하는 생전 엔딩 파티 및 따뜻한 인생 감사 서사 기획',
+    icon: '💌',
+    name: '4호 아름다운 마침표와 감사',
+    desc: '상담 확정 고객의 생전 엔딩 파티 기획·연출·기념 기록 실행 관제',
     badge: '생전 엔딩 파티',
     themeColor: '#7a3594',
     bgLight: '#f9f0fd',
     borderColor: '#e7c7f7',
-    step1Title: '📞 1단계: 생전 엔딩 파티 기획 상담 접수',
-    step1Desc: '인생의 소중한 인연들과 함께할 감사 회고 파티 콘셉트와 규모를 상담합니다.',
-    step2Title: '🤝 2단계: 파티 디렉터 및 라이프 코치 배정',
-    step2Desc: '파티 식순과 공간 연출을 총괄할 전담 디렉터를 배정합니다.',
-    step3Title: '📸 3단계: 엔딩 파티 현장 실행 & 감사 회고 진행',
+    step2Title: '🤝 1단계: 파티 디렉터 및 라이프 코치 배정 (상담완료 이관)',
+    step2Desc: '상담이 완료된 고객의 파티 식순과 공간 연출을 총괄할 전담 디렉터를 배정합니다.',
+    step3Title: '📸 2단계: 엔딩 파티 현장 실행 & 감사 회고 진행',
     step3Desc: '감사 영상 상영, 회고 편지 낭독, 축하 연회를 현장에서 감동적으로 연출합니다.',
-    step4Title: '🔄 4단계: 파티 기념 앨범 전달 & 가족 안심 사후관리',
+    step4Title: '🔄 3단계: 파티 기념 앨범 전달 & 가족 안심 사후관리',
     step4Desc: '파티 기념 포토북 전달 및 가족들과의 감동적인 사후 서사를 영구 보관합니다.'
-  },
-  memoir: {
-    name: '✍️ 5호 내 인생의 서사, 디지털 자서전',
-    desc: '찾아가는 1:1 구술 채록과 옛 사진 복원으로 삶의 궤적을 명작 회고록과 양장본으로 기록',
-    badge: '생애사 출판',
-    themeColor: '#1d4ed8',
-    bgLight: '#eff6ff',
-    borderColor: '#bfdbfe',
-    step1Title: '📞 1단계: 구술 자서전 출판 상담 접수',
-    step1Desc: '자서전 출판 분량 및 구술 인터뷰 일정을 상담합니다.',
-    step2Title: '🤝 2단계: 전문 구술 작가 및 코치 배정',
-    step2Desc: '삶의 이야기를 아름답게 채록할 전문 작가를 매칭합니다.',
-    step3Title: '📸 3단계: 1:1 구술 채록 및 옛 사진 디지털 복원',
-    step3Desc: '찾아가는 인터뷰와 흑백 사진 복원 작업을 진행합니다.',
-    step4Title: '🔄 4단계: 양장본 출판 기념 & 헌정 사후관리',
-    step4Desc: '양장본 회고록 인쇄 및 가족 헌정식을 관리합니다.'
   }
 };
 
@@ -610,12 +499,16 @@ const BIZ_META = {
 function renderBusinessMasterDashboard() {
   const meta = BIZ_META[currentBusinessTab] || BIZ_META.beauty;
 
-  // 헤더 정보 업데이트
+  // 헤더 정보 & 테마 컬러 업데이트 (중복 아이콘 제거)
+  const iconEl = document.getElementById('currentBizIcon');
   const titleEl = document.getElementById('currentBizTitle');
   const descEl = document.getElementById('currentBizDesc');
   const badgeEl = document.getElementById('currentBizBadge');
+  const mainCard = document.getElementById('bizMainPanelCard');
+  if (iconEl) iconEl.textContent = meta.icon;
   if (titleEl) titleEl.textContent = meta.name;
   if (descEl) descEl.textContent = meta.desc;
+  if (mainCard) mainCard.style.borderTopColor = meta.themeColor;
   if (badgeEl) {
     badgeEl.textContent = meta.badge;
     badgeEl.style.color = meta.themeColor;
@@ -632,33 +525,29 @@ function renderBusinessMasterDashboard() {
   }
 }
 
-// 7. 🌟 뷰티 라이프케어 4단계 파이프라인 렌더링 (단계별 특화 화면 시스템)
+// 7. 🌟 뷰티 라이프케어 3단계 실행 파이프라인 렌더링 (상담 완료·이관 건만 표시)
 function renderBeautyPipeline(list, meta) {
-  // 실시간 건수 계산
-  const total = list.length;
-  const step1List = list.filter(i => resolveItemStep(i) === 'step1');
-  const step2List = list.filter(i => resolveItemStep(i) === 'step2');
-  const step3List = list.filter(i => resolveItemStep(i) === 'step3');
-  const step4List = list.filter(i => resolveItemStep(i) === 'step4');
+  // 상담 미완료(step1) 건은 통합 고객 접수·상담함에서 관리하므로 제외
+  const confirmedList = list.filter(i => resolveItemStep(i) !== 'step1');
+  const total = confirmedList.length;
+  const step2List = confirmedList.filter(i => resolveItemStep(i) === 'step2');
+  const step3List = confirmedList.filter(i => resolveItemStep(i) === 'step3');
+  const step4List = confirmedList.filter(i => resolveItemStep(i) === 'step4');
 
-  const step1Count = step1List.length;
   const step2Count = step2List.length;
   const step3Count = step3List.length;
   const step4Count = step4List.length;
 
-  // 상단 KPI 카드 숫자 업데이트
-  const kpi1 = document.getElementById('bizKpi_lead');
+  // 상단 3대 KPI 카드 숫자 업데이트
   const kpi2 = document.getElementById('bizKpi_assigned');
   const kpi3 = document.getElementById('bizKpi_done');
   const kpi4 = document.getElementById('bizKpi_retention');
-  if (kpi1) kpi1.textContent = `${step1Count}건`;
   if (kpi2) kpi2.textContent = `${step2Count}건`;
   if (kpi3) kpi3.textContent = `${step3Count}건`;
   if (kpi4) kpi4.textContent = `${step4Count}건`;
 
   updatePipelineStepButtons({
     all: total,
-    step1: step1Count,
     step2: step2Count,
     step3: step3Count,
     step4: step4Count
@@ -671,9 +560,8 @@ function renderBeautyPipeline(list, meta) {
 
   // 현재 파이프라인 단계에 따른 전용 화면 HTML 생성 및 주입
   if (beautyWrap) {
-    beautyWrap.innerHTML = generateBeautyStepViewHtml(list, currentPipelineStep, meta, {
+    beautyWrap.innerHTML = generateBeautyStepViewHtml(confirmedList, currentPipelineStep, meta, {
       all: total,
-      step1: step1Count,
       step2: step2Count,
       step3: step3Count,
       step4: step4Count
@@ -681,7 +569,7 @@ function renderBeautyPipeline(list, meta) {
   }
 }
 
-// 7-1. 뷰티 단계별 전용 HTML 생성기
+// 7-1. 뷰티 단계별 전용 HTML 생성기 (상담 완료 이후 3단계 실행 파이프라인)
 function generateBeautyStepViewHtml(list, step, meta, counts) {
   let html = '';
 
@@ -690,8 +578,8 @@ function generateBeautyStepViewHtml(list, step, meta, counts) {
     <div style="background: ${meta.bgLight}; border: 1.5px solid ${meta.borderColor}; border-radius: 14px; padding: 16px 20px; margin: 18px 0 16px;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <h3 style="font-size: 1.08rem; font-weight: 850; color: ${meta.themeColor}; margin: 0;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <h3 style="font-size: 1.06rem; font-weight: 850; color: ${meta.themeColor}; margin: 0;">
               ${getStepBannerTitle(step, meta)}
             </h3>
             <span class="badge" style="background: #ffffff; color: ${meta.themeColor}; border: 1px solid ${meta.themeColor}; font-size: 0.76rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">
@@ -702,151 +590,30 @@ function generateBeautyStepViewHtml(list, step, meta, counts) {
             ${getStepBannerDesc(step, meta)}
           </p>
         </div>
-        <div style="display: flex; gap: 6px; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">선순환 흐름:</span>
-          <span style="font-size: 0.78rem; background: #ffffff; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-secondary);">
-            ① 상담접수 ➔ ② 코치배정 ➔ ③ 현장케어 ➔ ④ CRM 사후관리 ➔ 🔄 재상담
+        <div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">
+          <span style="font-size: 0.78rem; background: #ffffff; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700;">
+            상담완료(접수함) ➔ ① 코치배정 ➔ ② 현장케어 ➔ ③ CRM 사후관리
           </span>
         </div>
       </div>
     </div>
   `;
 
-  // 2) 단계별 본문 화면 분기
-  if (step === 'step1') {
-    // 📞 [1단계: 상담 신청 & 심사 화면]
-    html += generateStep1BeautyView(list, meta);
-  } else if (step === 'step2') {
-    // 🤝 [2단계: 코치 배정 화면]
+  // 2) 단계별 본문 화면 분기 (step1 제거 — step2/step3/step4/all)
+  if (step === 'step2' || step === 'step1') {
     html += generateStep2BeautyView(list, meta);
   } else if (step === 'step3') {
-    // 📸 [3단계: 현장 케어 / 일지 화면]
     html += generateStep3BeautyView(list, meta);
   } else if (step === 'step4') {
-    // 🔄 [4단계: CRM 사후 리텐션 화면]
     html += generateStep4BeautyView(list, meta);
   } else {
-    // 🌐 [전체보기: 종합 마스터 파이프라인 보드]
     html += generateStepAllBeautyView(list, meta, counts);
   }
 
   return html;
 }
 
-// 7-2. [1단계: 상담 신청 & 심사 화면] 생성기
-function generateStep1BeautyView(list, meta) {
-  // 1단계에 해당하는 건 추출
-  let stepItems = list.filter(i => resolveItemStep(i) === 'step1');
-
-  // 내부 서브 필터 적용
-  if (currentSubFilter !== 'all') {
-    stepItems = stepItems.filter(i => i.status === currentSubFilter);
-  }
-
-  const cntAll = list.filter(i => resolveItemStep(i) === 'step1').length;
-  const cntWait = list.filter(i => resolveItemStep(i) === 'step1' && (i.status === '상담대기' || i.status === '접수완료')).length;
-  const cntIng = list.filter(i => resolveItemStep(i) === 'step1' && i.status === '상담중').length;
-  const cntHold = list.filter(i => resolveItemStep(i) === 'step1' && i.status === '보류').length;
-
-  return `
-    <!-- 서브 상태 필터 칩 -->
-    <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
-      <span style="font-size: 0.82rem; font-weight: 800; color: var(--text-muted);">상담 상태 필터:</span>
-      <button type="button" class="pipeline-step-btn ${currentSubFilter === 'all' ? 'active' : ''}" onclick="switchSubFilter('all')" style="padding: 4px 12px; font-size: 0.8rem;">
-        전체 (${cntAll})
-      </button>
-      <button type="button" class="pipeline-step-btn ${currentSubFilter === '상담대기' || currentSubFilter === '접수완료' ? 'active' : ''}" onclick="switchSubFilter('상담대기')" style="padding: 4px 12px; font-size: 0.8rem;">
-        ⏳ 상담대기 (${cntWait})
-      </button>
-      <button type="button" class="pipeline-step-btn ${currentSubFilter === '상담중' ? 'active' : ''}" onclick="switchSubFilter('상담중')" style="padding: 4px 12px; font-size: 0.8rem;">
-        📞 상담진행중 (${cntIng})
-      </button>
-      <button type="button" class="pipeline-step-btn ${currentSubFilter === '보류' ? 'active' : ''}" onclick="switchSubFilter('보류')" style="padding: 4px 12px; font-size: 0.8rem;">
-        ⏸️ 상담보류 (${cntHold})
-      </button>
-    </div>
-
-    <!-- 1단계 전용 테이블 -->
-    <div class="admin-table-wrap">
-      <table class="admin-table">
-        <thead>
-          <tr>
-            <th style="width: 105px;">접수 ID</th>
-            <th style="width: 130px;">신청인 (관계)</th>
-            <th style="width: 130px;">대상 어르신</th>
-            <th style="width: 120px;">연락처</th>
-            <th>희망일시 &amp; 거주지역</th>
-            <th style="width: 170px;">신청 내용 &amp; 선택옵션</th>
-            <th style="width: 170px;">상담 일지 &amp; 메모</th>
-            <th style="width: 110px; text-align: center;">상담 처리 상태</th>
-            <th style="width: 160px; text-align: center;">상담 액션 및 이관</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${stepItems.length === 0 ? `
-            <tr><td colspan="9" style="text-align:center; padding:36px; color:var(--text-muted);">
-              해당 상태의 상담 신청 건이 없습니다.
-            </td></tr>
-          ` : stepItems.map(item => `
-            <tr>
-              <td><strong style="color: ${meta.themeColor};">${escapeHtml(item.id)}</strong></td>
-              <td>
-                <strong>${escapeHtml(item.applicantName)}</strong>
-                <div style="font-size:0.75rem; color:var(--text-muted);">${escapeHtml(item.role || '신청인')}</div>
-              </td>
-              <td><strong>${escapeHtml(item.seniorName)}</strong></td>
-              <td>
-                <a href="tel:${escapeHtml(item.phone)}" style="color:var(--accent); font-weight:750;">${escapeHtml(item.phone)}</a>
-                <div style="margin-top:2px;">
-                  <button type="button" onclick="quickCall('${escapeHtml(item.phone)}', '${escapeHtml(item.applicantName)}')" style="padding:1px 6px; font-size:0.72rem; border-radius:4px; border:1px solid #d1d5db; background:#fff; cursor:pointer;">📞 전화</button>
-                </div>
-              </td>
-              <td>
-                <span style="font-weight:750;">${escapeHtml((item.visitDate || '').replace('T', ' '))}</span>
-                <div style="font-size:0.78rem; color:var(--text-muted);">${escapeHtml(item.place)} - ${escapeHtml(item.address || '')}</div>
-              </td>
-              <td>
-                <div style="font-size:0.82rem; color:var(--text-primary); line-height:1.4;">
-                  ${item.options && item.options.length ? item.options.map(o => `<span class="badge" style="background:#f3f4f6; color:#374151; font-size:0.72rem; padding:1px 5px; margin:1px 0; display:inline-block;">${escapeHtml(o)}</span>`).join(' ') : '기본 케어'}
-                </div>
-                <div style="font-size:0.76rem; color:var(--text-secondary); margin-top:3px;">${escapeHtml(item.memo || '')}</div>
-              </td>
-              <td>
-                <div style="background: #fafafa; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px; font-size: 0.78rem; color: #374151; min-height: 44px;">
-                  ${escapeHtml(item.consultNote || '상담 기록 없음')}
-                </div>
-                <button type="button" onclick="editConsultNotePrompt('${item.id}', 'beauty')" style="margin-top:4px; padding:2px 6px; font-size:0.74rem; background:#fff; border:1px solid #d1d5db; border-radius:4px; cursor:pointer; font-weight:750;">
-                  ✏️ 상담 메모 작성
-                </button>
-              </td>
-              <td style="text-align: center;">
-                <select class="setting-input" style="padding:4px 6px; font-size:0.82rem; font-weight:800; color: ${item.status === '상담완료' ? '#2e7d32' : (item.status === '보류' ? '#c2410c' : meta.themeColor)};" onchange="updateStep1Status('${item.id}', this.value, 'beauty')">
-                  <option value="상담대기" ${item.status === '상담대기' || item.status === '접수완료' ? 'selected' : ''}>⏳ 상담대기</option>
-                  <option value="상담중" ${item.status === '상담중' ? 'selected' : ''}>📞 상담진행</option>
-                  <option value="보류" ${item.status === '보류' ? 'selected' : ''}>⏸️ 상담보류</option>
-                  <option value="상담완료" ${item.status === '상담완료' ? 'selected' : ''}>✅ 상담완료</option>
-                </select>
-              </td>
-              <td style="text-align: center; white-space: nowrap;">
-                <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                  <button type="button" class="btn-save-setting" onclick="transferStep1ToStep2('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #0284c7; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(2,132,199,0.3); border-radius: 6px; width: 100%;" title="상담 완료 처리 후 2단계 코치 배정 화면으로 이관합니다">
-                    <span>✅</span> 코치배정으로 이관 ➔
-                  </button>
-                  <div style="display: flex; gap: 4px; width: 100%;">
-                    <button type="button" onclick="updateStep1Status('${item.id}', '상담중', 'beauty')" style="flex:1; padding:3px; font-size:0.74rem; background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; border-radius:4px; cursor:pointer;">통화중</button>
-                    <button type="button" onclick="updateStep1Status('${item.id}', '보류', 'beauty')" style="flex:1; padding:3px; font-size:0.74rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; border-radius:4px; cursor:pointer;">보류</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-// 7-3. [2단계: 코치 배정 & 매칭 화면] 생성기
+// 7-2. [1단계: 코치 배정 & 매칭 화면 (상담완료 이관 건)] 생성기
 function generateStep2BeautyView(list, meta) {
   let stepItems = list.filter(i => resolveItemStep(i) === 'step2');
 
@@ -855,7 +622,7 @@ function generateStep2BeautyView(list, meta) {
   }
 
   const cntAll = list.filter(i => resolveItemStep(i) === 'step2').length;
-  const cntWait = list.filter(i => resolveItemStep(i) === 'step2' && (i.status === '코치배정' || i.status === '배정대기')).length;
+  const cntWait = list.filter(i => resolveItemStep(i) === 'step2' && (i.status === '코치배정' || i.status === '배정대기' || i.status === '상담완료')).length;
   const cntTune = list.filter(i => resolveItemStep(i) === 'step2' && i.status === '조율중').length;
   const cntDone = list.filter(i => resolveItemStep(i) === 'step2' && i.status === '배정완료').length;
 
@@ -884,7 +651,7 @@ function generateStep2BeautyView(list, meta) {
             <th style="width: 130px;">고객 / 어르신</th>
             <th style="width: 120px;">연락처</th>
             <th>확정 일시 &amp; 장소</th>
-            <th style="width: 180px;">1단계 상담 인수인계 사항</th>
+            <th style="width: 185px;">통합상담함 인수인계 메모</th>
             <th style="width: 160px;">담당 전담 코치 지정</th>
             <th style="width: 110px; text-align: center;">배정 상태</th>
             <th style="width: 170px; text-align: center;">코치 배정 및 현장 이관</th>
@@ -893,7 +660,8 @@ function generateStep2BeautyView(list, meta) {
         <tbody>
           ${stepItems.length === 0 ? `
             <tr><td colspan="8" style="text-align:center; padding:36px; color:var(--text-muted);">
-              해당 상태의 코치 배정 건이 없습니다.
+              현재 코치 배정 대기 중인 상담완료 건이 없습니다.<br>
+              <span style="font-size:0.8rem;">[통합 고객 접수 · 상담]에서 상담을 <strong>완료</strong> 처리하면 이곳으로 자동 이관됩니다.</span>
             </td></tr>
           ` : stepItems.map(item => {
             const coach = item.assignedCoach || '미배정';
@@ -908,12 +676,12 @@ function generateStep2BeautyView(list, meta) {
                   <a href="tel:${escapeHtml(item.phone)}" style="color:var(--accent); font-weight:750;">${escapeHtml(item.phone)}</a>
                 </td>
                 <td>
-                  <span style="font-weight:750; color:#0284c7;">${escapeHtml((item.visitDate || '').replace('T', ' '))}</span>
+                  <span style="font-weight:750; color:#0284c7;">${escapeHtml((item.visitDate || '일정 협의').replace('T', ' '))}</span>
                   <div style="font-size:0.78rem; color:var(--text-muted);">${escapeHtml(item.address || item.place || '')}</div>
                 </td>
                 <td>
                   <div style="background:#f0f9ff; border:1px solid #bae6fd; border-radius:6px; padding:6px; font-size:0.78rem; color:#0369a1;">
-                    ${escapeHtml(item.consultNote || '상담 시 특이사항 없음')}
+                    ${escapeHtml(item.consultNote || item.memo || '상담 완료 후 이관됨')}
                   </div>
                 </td>
                 <td>
@@ -927,22 +695,22 @@ function generateStep2BeautyView(list, meta) {
                 </td>
                 <td style="text-align: center;">
                   <select class="setting-input" style="padding:4px 6px; font-size:0.82rem; font-weight:800; color:#0284c7;" onchange="updateStep2Status('${item.id}', this.value, 'beauty')">
-                    <option value="코치배정" ${item.status === '코치배정' || item.status === '배정대기' ? 'selected' : ''}>⏳ 배정대기</option>
+                    <option value="코치배정" ${item.status === '코치배정' || item.status === '배정대기' || item.status === '상담완료' ? 'selected' : ''}>⏳ 배정대기</option>
                     <option value="조율중" ${item.status === '조율중' ? 'selected' : ''}>🔄 일정조율</option>
                     <option value="배정완료" ${item.status === '배정완료' ? 'selected' : ''}>✅ 배정완료</option>
                   </select>
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                    <button type="button" class="btn-save-setting" onclick="transferStep2ToStep3('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #059669; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(5,150,105,0.3); border-radius: 6px; width: 100%;" title="배정 완료 후 3단계 180분 현장 케어 관제 화면으로 이관합니다">
+                    <button type="button" class="btn-save-setting" onclick="transferStep2ToStep3('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #059669; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(5,150,105,0.3); border-radius: 6px; width: 100%;" title="코치 배정 확정 후 ② 현장 케어 단계로 이관합니다">
                       <span>📸</span> 현장케어로 이관 ➔
                     </button>
                     <div style="display: flex; gap: 4px; width: 100%;">
                       <button type="button" class="btn-save-setting" onclick="openDispatchFromBeauty('${item.id}')" style="flex:1; padding:3px 6px; font-size:0.74rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; font-weight:800;" title="공식 파견센터 등록 & 알림톡">
-                        <span>🤝</span> 카톡 발송
+                        <span>🤝</span> 파견·카톡
                       </button>
-                      <button type="button" onclick="revertStep('${item.id}', 'step1', 'beauty')" style="padding:3px 6px; font-size:0.74rem; background:#fff; color:var(--text-muted); border:1px solid #d1d5db; border-radius:4px; cursor:pointer;" title="재상담 필요 시 1단계로 되돌립니다">
-                        ↩️ 반려
+                      <button type="button" onclick="returnToConsultInbox('${item.id}', 'beauty')" style="padding:3px 6px; font-size:0.74rem; background:#fff; color:var(--text-muted); border:1px solid #d1d5db; border-radius:4px; cursor:pointer;" title="추가 상담 필요 시 통합 고객 접수·상담함으로 돌려보냅니다">
+                        ↩️ 재상담
                       </button>
                     </div>
                   </div>
@@ -1051,7 +819,7 @@ function generateStep3BeautyView(list, meta) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                    <button type="button" class="btn-save-setting" onclick="transferStep3ToStep4('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #7c3aed; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(124,58,237,0.3); border-radius: 6px; width: 100%;" title="케어 완료 승인 후 4단계 CRM 사후 리텐션 화면으로 이관합니다">
+                    <button type="button" class="btn-save-setting" onclick="transferStep3ToStep4('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #7c3aed; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(124,58,237,0.3); border-radius: 6px; width: 100%;" title="케어 완료 승인 후 ③ CRM 사후 리텐션 화면으로 이관합니다">
                       <span>🎉</span> 케어완료 승인 ➔ CRM 이관
                     </button>
                     <div style="display: flex; gap: 4px; width: 100%;">
@@ -1175,8 +943,8 @@ function generateStep4BeautyView(list, meta) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                    <button type="button" class="btn-save-setting" onclick="reOrderFromRetention('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #b83354; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(184,51,84,0.3); border-radius: 6px; width: 100%;" title="이 고객을 위한 180분 정기 케어 신규 상담을 1단계에 등록하여 선순환시킵니다">
-                      <span>🔄</span> 신규 재상담 접수 (선순환)
+                    <button type="button" class="btn-save-setting" onclick="reOrderFromRetention('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #b83354; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(184,51,84,0.3); border-radius: 6px; width: 100%;" title="이 고객을 위한 180분 정기 케어 신규 재상담을 통합 고객 접수·상담함에 등록합니다">
+                      <span>🔄</span> 통합상담함 재상담 접수
                     </button>
                     <div style="display: flex; gap: 4px; width: 100%;">
                       <button type="button" onclick="sendRetentionAlert('${item.id}', '3m', 'beauty')" style="flex:1; padding:3px 6px; font-size:0.74rem; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; border-radius:4px; font-weight:800; cursor:pointer;" title="3개월 차 무료 재진단 알림톡 발송">
@@ -1197,41 +965,35 @@ function generateStep4BeautyView(list, meta) {
   `;
 }
 
-// 7-6. [전체보기: 종합 마스터 파이프라인 보드] 생성기
+// 7-5. [전체보기: 종합 3단계 실행 파이프라인 보드] 생성기 (상담 완료·확정 고객 전용)
 function generateStepAllBeautyView(list, meta, counts) {
   return `
-    <!-- 4단계 파이프라인 칸반 플로우 요약 카드 -->
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 20px;">
-      <div class="kpi-filter-card" onclick="switchPipelineStep('step1')" style="border-left: 4px solid #b83354; cursor:pointer;" title="클릭 시 1단계 상담신청 화면으로 이동">
-        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">1단계</div>
-        <div style="font-size:1.02rem; font-weight:850; color:#b83354; margin:2px 0;">📞 고객 상담 접수</div>
-        <div style="font-size:1.3rem; font-weight:900; color:#b83354;">${counts.step1}건</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">상담 ➔ 보류 ➔ 완료</div>
-      </div>
-      <div class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7; cursor:pointer;" title="클릭 시 2단계 코치배정 화면으로 이동">
-        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">2단계</div>
+    <!-- 3단계 실행 파이프라인 칸반 플로우 요약 카드 -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 20px;">
+      <div class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7; cursor:pointer;" title="클릭 시 1단계 코치배정 화면으로 이동">
+        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">1단계 · 상담완료 이관</div>
         <div style="font-size:1.02rem; font-weight:850; color:#0284c7; margin:2px 0;">🤝 공인 코치 배정</div>
         <div style="font-size:1.3rem; font-weight:900; color:#0284c7;">${counts.step2}건</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">1:1 코치 매칭 & 일정</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">1:1 코치 매칭 &amp; 방문 일정</div>
       </div>
-      <div class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #059669; cursor:pointer;" title="클릭 시 3단계 현장케어 화면으로 이동">
-        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">3단계</div>
+      <div class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #059669; cursor:pointer;" title="클릭 시 2단계 현장케어 화면으로 이동">
+        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">2단계 · 현장 수행</div>
         <div style="font-size:1.02rem; font-weight:850; color:#059669; margin:2px 0;">📸 현장 케어 / 일지</div>
         <div style="font-size:1.3rem; font-weight:900; color:#059669;">${counts.step3}건</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">180분 SOP & 사진 검수</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">180분 SOP &amp; 사진 검수</div>
       </div>
-      <div class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #7c3aed; cursor:pointer;" title="클릭 시 4단계 CRM리텐션 화면으로 이동">
-        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">4단계</div>
+      <div class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #7c3aed; cursor:pointer;" title="클릭 시 3단계 CRM리텐션 화면으로 이동">
+        <div style="font-size:0.76rem; color:var(--text-muted); font-weight:800;">3단계 · 사후 관리</div>
         <div style="font-size:1.02rem; font-weight:850; color:#7c3aed; margin:2px 0;">🔄 CRM 사후 리텐션</div>
         <div style="font-size:1.3rem; font-weight:900; color:#7c3aed;">${counts.step4}건</div>
-        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">3·6개월 루프 & AGAIN180</div>
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:2px;">3·6개월 루프 &amp; AGAIN180</div>
       </div>
     </div>
 
     <!-- 전체 마스터 테이블 -->
     <div style="display: flex; justify-content: space-between; align-items: center; margin: 18px 0 10px;">
-      <h3 style="font-size: 1.05rem; font-weight: 850; color: ${meta.themeColor}; margin: 0; display: flex; align-items: center; gap: 6px;">
-        <span>📋</span> 180분 마스터 케어 엔드투엔드 전체 파이프라인 목록
+      <h3 style="font-size: 1.04rem; font-weight: 850; color: ${meta.themeColor}; margin: 0; display: flex; align-items: center; gap: 6px;">
+        <span>📋</span> 상담 확정 고객 — 180분 케어 전체 실행 목록
       </h3>
     </div>
     <div class="admin-table-wrap">
@@ -1243,14 +1005,18 @@ function generateStepAllBeautyView(list, meta, counts) {
             <th style="width: 130px;">신청인 (관계)</th>
             <th style="width: 130px;">대상 어르신</th>
             <th style="width: 120px;">연락처</th>
-            <th>희망 일시 &amp; 장소</th>
+            <th>확정 일시 &amp; 장소</th>
             <th style="width: 140px;">배정 코치</th>
             <th style="width: 105px; text-align: center;">처리 상태</th>
             <th style="width: 145px; text-align: center;">단계별 바로가기</th>
           </tr>
         </thead>
         <tbody>
-          ${list.map(item => {
+          ${list.length === 0 ? `
+            <tr><td colspan="9" style="text-align:center; padding:36px; color:var(--text-muted);">
+              상담이 완료되어 이관된 뷰티 케어 고객이 아직 없습니다.
+            </td></tr>
+          ` : list.map(item => {
             const stepId = resolveItemStep(item);
             const stepBadge = getStepBadgeHtml(stepId);
             return `
@@ -1266,7 +1032,7 @@ function generateStepAllBeautyView(list, meta, counts) {
                   <a href="tel:${escapeHtml(item.phone)}" style="color:var(--accent); font-weight:750;">${escapeHtml(item.phone)}</a>
                 </td>
                 <td>
-                  <span style="font-weight:750;">${escapeHtml((item.visitDate || '').replace('T', ' '))}</span>
+                  <span style="font-weight:750;">${escapeHtml((item.visitDate || '일정 협의').replace('T', ' '))}</span>
                   <div style="font-size:0.78rem; color:var(--text-muted);">${escapeHtml(item.place)} - ${escapeHtml(item.address || '')}</div>
                 </td>
                 <td>
@@ -1291,7 +1057,7 @@ function generateStepAllBeautyView(list, meta, counts) {
   `;
 }
 
-// 8. 🌟 기타 비즈니스(2호 옷장 / 3호 유품 / 4호 엔딩파티) 4단계 파이프라인 렌더링
+// 8. 🌟 기타 웰라이프 비즈니스(2호 옷장 / 3호 유품 / 4호 엔딩파티) 3단계 실행 파이프라인 렌더링
 function renderGeneralBusinessPipeline(biz, consults, meta) {
   const beautyWrap = document.getElementById('beautyPipelineWrap');
   const generalWrap = document.getElementById('generalBusinessWrap');
@@ -1300,40 +1066,37 @@ function renderGeneralBusinessPipeline(biz, consults, meta) {
 
   const BIZ_KEYS = {
     wardrobe: ['옷장', '수납', '공간', 'wardrobe'],
-    legacy: ['유품', '오래된', '짐', 'legacy', '생전'],
-    party: ['엔딩', '파티', 'party', '마침표'],
-    memoir: ['자서전', '회고록', '생애사', 'memoir']
+    legacy: ['유품', '오래된', '짐', 'legacy', '생전정리'],
+    party: ['엔딩', '파티', 'party', '마침표']
   };
 
   const keys = BIZ_KEYS[biz] || [];
+  // 상담 완료 이후(step2~step4) 확정 고객만 표시 (상담 미완료 step1은 통합 상담함에서 전담)
   const list = consults.filter(c => {
+    if (resolveItemStep(c) === 'step1') return false;
+    if (c.bizType && c.bizType === biz) return true;
     const text = (c.category || '') + ' ' + (c.message || '');
     return keys.some(k => text.includes(k));
   });
 
   const total = list.length;
-  const step1List = list.filter(i => resolveItemStep(i) === 'step1');
   const step2List = list.filter(i => resolveItemStep(i) === 'step2');
   const step3List = list.filter(i => resolveItemStep(i) === 'step3');
   const step4List = list.filter(i => resolveItemStep(i) === 'step4');
 
-  const step1Count = step1List.length;
   const step2Count = step2List.length;
   const step3Count = step3List.length;
   const step4Count = step4List.length;
 
-  const kpi1 = document.getElementById('bizKpi_lead');
   const kpi2 = document.getElementById('bizKpi_assigned');
   const kpi3 = document.getElementById('bizKpi_done');
   const kpi4 = document.getElementById('bizKpi_retention');
-  if (kpi1) kpi1.textContent = `${step1Count}건`;
   if (kpi2) kpi2.textContent = `${step2Count}건`;
   if (kpi3) kpi3.textContent = `${step3Count}건`;
   if (kpi4) kpi4.textContent = `${step4Count}건`;
 
   updatePipelineStepButtons({
     all: total,
-    step1: step1Count,
     step2: step2Count,
     step3: step3Count,
     step4: step4Count
@@ -1342,7 +1105,6 @@ function renderGeneralBusinessPipeline(biz, consults, meta) {
   if (generalWrap) {
     generalWrap.innerHTML = generateGeneralStepViewHtml(list, currentPipelineStep, meta, biz, {
       all: total,
-      step1: step1Count,
       step2: step2Count,
       step3: step3Count,
       step4: step4Count
@@ -1350,14 +1112,14 @@ function renderGeneralBusinessPipeline(biz, consults, meta) {
   }
 }
 
-// 8-1. 일반 비즈니스 단계별 HTML 생성기
+// 8-1. 일반 비즈니스 3단계 실행 파이프라인 HTML 생성기
 function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
   let html = `
     <div style="background: ${meta.bgLight}; border: 1.5px solid ${meta.borderColor}; border-radius: 14px; padding: 16px 20px; margin: 18px 0 16px;">
       <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <h3 style="font-size: 1.08rem; font-weight: 850; color: ${meta.themeColor}; margin: 0;">
+          <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <h3 style="font-size: 1.06rem; font-weight: 850; color: ${meta.themeColor}; margin: 0;">
               ${getStepBannerTitle(step, meta)}
             </h3>
             <span class="badge" style="background: #ffffff; color: ${meta.themeColor}; border: 1px solid ${meta.themeColor}; font-size: 0.76rem; font-weight: 800; padding: 2px 8px; border-radius: 999px;">
@@ -1369,9 +1131,8 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
           </p>
         </div>
         <div style="display: flex; gap: 6px; align-items: center;">
-          <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">순환 관리:</span>
-          <span style="font-size: 0.78rem; background: #ffffff; padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border-color); color: var(--text-secondary);">
-            ① 상담접수 ➔ ② 코치배정 ➔ ③ 현장진행 ➔ ④ CRM 사후관리
+          <span style="font-size: 0.78rem; background: #ffffff; padding: 5px 10px; border-radius: 8px; border: 1px solid var(--border-color); color: var(--text-secondary); font-weight: 700;">
+            상담완료(접수함) ➔ ① 코치배정 ➔ ② 현장진행 ➔ ③ CRM 사후관리
           </span>
         </div>
       </div>
@@ -1379,9 +1140,7 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
   `;
 
   let filtered = list;
-  if (step === 'step1') {
-    filtered = list.filter(i => resolveItemStep(i) === 'step1');
-  } else if (step === 'step2') {
+  if (step === 'step2' || step === 'step1') {
     filtered = list.filter(i => resolveItemStep(i) === 'step2');
   } else if (step === 'step3') {
     filtered = list.filter(i => resolveItemStep(i) === 'step3');
@@ -1394,20 +1153,21 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
       <table class="admin-table">
         <thead>
           <tr>
-            <th style="width: 95px;">접수 ID</th>
+            <th style="width: 95px;">관리 ID</th>
             <th style="width: 110px; text-align: center;">진행 단계</th>
             <th style="width: 120px;">고객 성함 (구분)</th>
             <th style="width: 120px;">연락처</th>
-            <th>상담 내용 / 특이사항 메모</th>
+            <th>상담 인수인계 내용 / 메모</th>
             <th style="width: 150px;">담당 배정 코치</th>
-            <th style="width: 110px; text-align: center;">진행 상태</th>
+            <th style="width: 105px; text-align: center;">진행 상태</th>
             <th style="width: 165px; text-align: center;">단계별 액션 &amp; 이관</th>
           </tr>
         </thead>
         <tbody>
           ${filtered.length === 0 ? `
             <tr><td colspan="8" style="text-align:center; padding:36px; color:var(--text-muted);">
-              현재 [${getStepBadgeText(step)}] 단계에 해당하는 건이 없습니다.
+              현재 [${getStepBadgeText(step)}] 단계에 해당하는 상담완료 건이 없습니다.<br>
+              <span style="font-size:0.8rem;">[통합 고객 접수 · 상담]에서 상담 상태를 <strong>✓ 완료</strong>로 변경하면 이곳으로 자동 이관됩니다.</span>
             </td></tr>
           ` : filtered.map(item => {
             const itemStep = resolveItemStep(item);
@@ -1425,7 +1185,7 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
                 </td>
                 <td>
                   <div style="font-size:0.86rem; color:var(--text-primary); line-height:1.45;">${escapeHtml(item.message)}</div>
-                  <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">접수일: ${escapeHtml(item.date)}</div>
+                  <div style="font-size:0.75rem; color:var(--text-muted); margin-top:3px;">이관일: ${escapeHtml(item.date)}</div>
                   ${item.consultNote ? `
                     <div style="background:#f9fafb; border:1px solid #e5e7eb; border-radius:4px; padding:4px 6px; font-size:0.76rem; color:#4b5563; margin-top:4px;">
                       📝 ${escapeHtml(item.consultNote)}
@@ -1459,23 +1219,22 @@ function generateGeneralStepViewHtml(list, step, meta, biz, counts) {
   return html;
 }
 
-// 8-2. 일반 비즈니스 단계별 액션 버튼 생성기
+// 8-2. 일반 비즈니스 단계별 액션 버튼 생성기 (3단계 실행 전용)
 function getGeneralStepActionHtml(item, step, biz) {
-  if (step === 'step1') {
-    return `
-      <button type="button" class="btn-save-setting" onclick="transferGeneralStep1ToStep2('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: #0284c7; color: #fff; border: none; font-weight: 850; border-radius: 6px; width: 100%;">
-        ✅ 코치배정 이관 ➔
-      </button>
-    `;
-  } else if (step === 'step2') {
+  if (step === 'step2') {
     return `
       <div style="display: flex; flex-direction: column; gap: 4px;">
         <button type="button" class="btn-save-setting" onclick="transferGeneralStep2ToStep3('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: #059669; color: #fff; border: none; font-weight: 850; border-radius: 6px;">
           📸 현장진행 이관 ➔
         </button>
-        <button type="button" class="btn-save-setting" onclick="openDispatchFromGeneral('${item.id}')" style="padding: 3px 6px; font-size: 0.74rem; background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; font-weight: 800;">
-          🤝 카톡 발송
-        </button>
+        <div style="display: flex; gap: 4px;">
+          <button type="button" class="btn-save-setting" onclick="openDispatchFromGeneral('${item.id}')" style="flex:1; padding: 3px 6px; font-size: 0.74rem; background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; font-weight: 800;">
+            🤝 파견·카톡
+          </button>
+          <button type="button" onclick="returnToConsultInbox('${item.id}', '${biz}')" style="padding: 3px 6px; font-size: 0.74rem; background: #fff; color: var(--text-muted); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;" title="추가 상담 필요 시 통합 상담함으로 돌려보냅니다">
+            ↩️ 재상담
+          </button>
+        </div>
       </div>
     `;
   } else if (step === 'step3') {
@@ -1491,38 +1250,199 @@ function getGeneralStepActionHtml(item, step, biz) {
     `;
   } else {
     return `
-      <button type="button" class="btn-save-setting" onclick="reOrderFromGeneralRetention('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: var(--accent); color: #fff; border: none; font-weight: 850; border-radius: 6px; width: 100%;">
-        🔄 신규 재상담 접수
+      <button type="button" class="btn-save-setting" onclick="reOrderFromGeneralRetention('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: var(--accent); color: #fff; border: none; font-weight: 850; border-radius: 6px; width: 100%;" title="통합 고객 접수·상담함에 신규 재상담 건을 등록합니다">
+        🔄 통합상담함 재상담 접수
       </button>
     `;
   }
 }
 
-// 9. 🌟 단계 간 자동 이관(Transition) 인터랙션 함수들
+// 9. 🌟 단계 간 자동 이관(Transition) 및 통합상담함 양방향 연동 함수들
 
-// [1단계 ➔ 2단계 이관]
-function transferStep1ToStep2(id, bizType) {
+// [통합 고객 접수·상담함 ➔ 03. 웰라이프 자동 이관 API]
+function handoffConsultToWellnessBusiness(consultItem, bizKey) {
+  if (!consultItem) return { ok: false };
+  const targetBiz = bizKey || 'beauty';
+  const nowStr = new Date().toISOString();
+  const displayDate = new Date().toLocaleDateString('ko-KR') + ' 상담완료 이관';
+  const cleanNote = consultItem.counselMemo
+    ? `[상담결과] ${consultItem.counselMemo}` + (consultItem.note ? ` / 요청: ${consultItem.note}` : '')
+    : (consultItem.note || consultItem.memo || '통합 고객 접수·상담함에서 상담 완료 후 자동 이관됨');
+
+  if (targetBiz === 'beauty') {
+    const list = getStoredBeautyBookings();
+    // 1) 이미 이관된 건 또는 원본 예약 ID가 있으면 중복 생성 대신 상태만 코치배정으로 승격
+    let existing = list.find(x =>
+      (x.sourceConsultId && x.sourceConsultId === consultItem.id) ||
+      (consultItem.sourceBookingId && x.id === consultItem.sourceBookingId)
+    );
+    if (existing) {
+      if (resolveItemStep(existing) === 'step1') {
+        existing.status = '코치배정';
+      }
+      existing.consultNote = cleanNote;
+      localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
+      renderBusinessMasterDashboard();
+      return { ok: true, recordId: existing.id, alreadyExisted: true };
+    }
+
+    const newId = 'BK-' + String(Date.now()).slice(-6);
+    const roleText = consultItem.role || '고객 신청';
+    const nameMatch = roleText.split('(')[0].trim();
+    const newRecord = {
+      id: newId,
+      sourceConsultId: consultItem.id,
+      programType: '시니어 뷰티 라이프케어',
+      programTitle: '특별한 날, 화려한 외출 (180분 SOP)',
+      role: roleText,
+      applicantName: consultItem.name || nameMatch || '고객',
+      phone: consultItem.phone || '-',
+      seniorName: consultItem.seniorName || nameMatch || '어르신',
+      place: '자택 방문 1:1 케어',
+      visitDate: consultItem.preferredDate || '방문 일정 협의',
+      address: consultItem.address || '상담 시 확인 주소',
+      options: ['180분 시니어 뷰티 맞춤 케어'],
+      memo: consultItem.note || consultItem.memo || '',
+      consultNote: cleanNote,
+      status: '코치배정',
+      assignedCoach: '미배정',
+      coachPhone: '',
+      createdAt: nowStr
+    };
+    list.unshift(newRecord);
+    localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
+    renderBusinessMasterDashboard();
+    return { ok: true, recordId: newId, alreadyExisted: false };
+  }
+
+  // 2호(옷장) / 3호(유품) / 4호(엔딩파티)
+  const catMap = {
+    wardrobe: '👗 일상과 비움의 미학 (옷장/공간)',
+    legacy: '📦 기억의 계승 (유품/생전정리)',
+    party: '💌 아름다운 마침표 (생전 엔딩 파티)'
+  };
+  const list = getStoredGeneralConsults();
+  let existing = list.find(x => x.sourceConsultId && x.sourceConsultId === consultItem.id);
+  if (existing) {
+    if (resolveItemStep(existing) === 'step1') {
+      existing.status = '코치배정';
+    }
+    existing.consultNote = cleanNote;
+    existing.bizType = targetBiz;
+    localStorage.setItem('seniorConsultList', JSON.stringify(list));
+    renderBusinessMasterDashboard();
+    return { ok: true, recordId: existing.id, alreadyExisted: true };
+  }
+
+  const newId = 'WL-' + String(Date.now()).slice(-5);
+  const roleText = consultItem.role || '고객 신청';
+  const newRecord = {
+    id: newId,
+    sourceConsultId: consultItem.id,
+    bizType: targetBiz,
+    category: catMap[targetBiz] || consultItem.category || '👗 일상과 비움의 미학 (옷장/공간)',
+    role: roleText,
+    name: consultItem.name || roleText.split('(')[0].trim() || '고객',
+    phone: consultItem.phone || '-',
+    date: displayDate,
+    message: consultItem.note || consultItem.memo || '통합 상담함에서 상담 완료 후 이관된 고객입니다.',
+    consultNote: cleanNote,
+    status: '코치배정',
+    assignedCoach: '미배정'
+  };
+  list.unshift(newRecord);
+  localStorage.setItem('seniorConsultList', JSON.stringify(list));
+  renderBusinessMasterDashboard();
+  return { ok: true, recordId: newId, alreadyExisted: false };
+}
+window.handoffConsultToWellnessBusiness = handoffConsultToWellnessBusiness;
+
+// [03. 웰라이프 ➔ 통합 고객 접수·상담함 재상담 반려]
+function returnToConsultInbox(id, bizType) {
+  if (!confirm('추가 상담이 필요하여 이 건을 [통합 고객 접수 · 상담]함으로 되돌려 보내시겠습니까?\n(현재 비즈니스 코치 배정 대기 목록에서는 제외됩니다.)')) {
+    return;
+  }
+  let targetItem = null;
   if (bizType === 'beauty') {
     const list = getStoredBeautyBookings();
     const item = list.find(x => x.id === id);
     if (!item) return;
-
-    item.status = '코치배정';
-    if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
-      item.assignedCoach = '김서연 전문 라이프 코치 (40대 시니어 뷰티&라이프스타일 1급)';
-      item.coachPhone = '010-9613-5913';
-    }
+    item.status = '상담중';
+    targetItem = {
+      sourceId: item.sourceConsultId || ('re_' + item.id),
+      category: '💄 웰니스 & 뷰티 케어',
+      role: item.seniorName || item.applicantName || item.role || '고객',
+      phone: item.phone || '-',
+      note: '[재상담 요청] ' + (item.consultNote || item.memo || '코치 배정 전 추가 상담 필요')
+    };
     localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-    renderBusinessMasterDashboard();
+  } else {
+    const list = getStoredGeneralConsults();
+    const item = list.find(x => x.id === id);
+    if (!item) return;
+    item.status = '상담중';
+    targetItem = {
+      sourceId: item.sourceConsultId || ('re_' + item.id),
+      category: item.category || '👗 일상과 비움의 미학',
+      role: item.name || item.role || '고객',
+      phone: item.phone || '-',
+      note: '[재상담 요청] ' + (item.consultNote || item.message || '코치 배정 전 추가 상담 필요')
+    };
+    localStorage.setItem('seniorConsultList', JSON.stringify(list));
+  }
 
-    const doMove = confirm(`✅ [상담 완료]\n\n[${item.applicantName}] 고객님의 상담이 완료되어\n[② 코치 배정] 단계로 성공적으로 이관되었습니다!\n\n지금 [② 코치 배정] 화면으로 이동하시겠습니까?`);
-    if (doMove) {
-      switchPipelineStep('step2');
+  // 통합 고객 접수·상담함(reset_consult_list)에 재오픈 반영
+  try {
+    const raw = localStorage.getItem('reset_consult_list');
+    let inbox = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(inbox)) inbox = [];
+    const found = inbox.find(c => c.id === targetItem.sourceId);
+    if (found) {
+      found.status = '진행';
+      found.handedOffBiz = '';
+      found.handedOffLabel = '';
+    } else {
+      const now = new Date();
+      const stamp = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      inbox.unshift({
+        id: targetItem.sourceId,
+        category: targetItem.category,
+        role: targetItem.role,
+        phone: targetItem.phone,
+        note: targetItem.note,
+        status: '진행',
+        createdAt: stamp
+      });
     }
+    localStorage.setItem('reset_consult_list', JSON.stringify(inbox));
+  } catch (e) {}
+
+  renderBusinessMasterDashboard();
+  if (typeof renderDiagReservationTable === 'function') renderDiagReservationTable();
+  if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
+
+  if (confirm('↩️ [통합 고객 접수 · 상담]함으로 재상담 이관되었습니다.\n지금 통합 상담함으로 이동하시겠습니까?')) {
+    if (typeof switchTab === 'function') switchTab('tabConsult');
   }
 }
+window.returnToConsultInbox = returnToConsultInbox;
 
-// [2단계 ➔ 3단계 이관]
+// [실시간 웰라이프 확정/진행 건수 집계 (통합관제 홈 연동)]
+function getWellnessActiveCounts() {
+  const bList = getStoredBeautyBookings().filter(i => resolveItemStep(i) !== 'step1');
+  const gList = getStoredGeneralConsults().filter(i => resolveItemStep(i) !== 'step1');
+  const waitingCoach = bList.filter(i => resolveItemStep(i) === 'step2').length +
+                       gList.filter(i => resolveItemStep(i) === 'step2').length;
+  return {
+    total: bList.length + gList.length,
+    beauty: bList.length,
+    general: gList.length,
+    waitingCoach: waitingCoach
+  };
+}
+window.getWellnessActiveCounts = getWellnessActiveCounts;
+
+// [1단계 코치배정 ➔ 2단계 현장케어 이관]
 function transferStep2ToStep3(id, bizType) {
   if (bizType === 'beauty') {
     const list = getStoredBeautyBookings();
@@ -1534,14 +1454,14 @@ function transferStep2ToStep3(id, bizType) {
     localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
     renderBusinessMasterDashboard();
 
-    const doMove = confirm(`🤝 [코치 배정 완료]\n\n[${item.seniorName}] 건의 담당 코치(${item.assignedCoach}) 배정이 확정되어\n[③ 현장케어/일지] 단계로 성공적으로 이관되었습니다!\n\n지금 [③ 현장케어/일지] 관제 화면으로 이동하시겠습니까?`);
+    const doMove = confirm(`🤝 [코치 배정 완료]\n\n[${item.seniorName}] 건의 담당 코치(${item.assignedCoach}) 배정이 확정되어\n[② 현장케어/일지] 단계로 성공적으로 이관되었습니다!\n\n지금 [② 현장케어/일지] 관제 화면으로 이동하시겠습니까?`);
     if (doMove) {
       switchPipelineStep('step3');
     }
   }
 }
 
-// [3단계 ➔ 4단계 이관]
+// [2단계 현장케어 ➔ 3단계 CRM 사후관리 이관]
 function transferStep3ToStep4(id, bizType) {
   if (bizType === 'beauty') {
     const list = getStoredBeautyBookings();
@@ -1553,84 +1473,51 @@ function transferStep3ToStep4(id, bizType) {
     localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
     renderBusinessMasterDashboard();
 
-    const doMove = confirm(`🎉 [180분 케어 완료 승인]\n\n[${item.seniorName}] 어르신의 180분 현장 케어가 감동 속에 성공적으로 완료되어\n[④ CRM 사후 리텐션] 루프로 이관되었습니다!\n\n지금 [④ CRM 사후 리텐션] 화면으로 이동하시겠습니까?`);
+    const doMove = confirm(`🎉 [180분 케어 완료 승인]\n\n[${item.seniorName}] 어르신의 180분 현장 케어가 감동 속에 성공적으로 완료되어\n[③ CRM 사후 리텐션] 루프로 이관되었습니다!\n\n지금 [③ CRM 사후 리텐션] 화면으로 이동하시겠습니까?`);
     if (doMove) {
       switchPipelineStep('step4');
     }
   }
 }
 
-// [4단계 ➔ 1단계 선순환 재상담 접수 등록]
+// [3단계 CRM 리텐션 ➔ 통합 고객 접수·상담함 신규 재상담 접수 (선순환)]
 function reOrderFromRetention(id, bizType) {
   if (bizType === 'beauty') {
     const list = getStoredBeautyBookings();
     const item = list.find(x => x.id === id);
     if (!item) return;
 
-    const newId = 'BK-' + Math.floor(202618 + Math.random() * 100);
-    const newLead = {
-      ...item,
-      id: newId,
-      status: '상담대기',
-      consultNote: `[AGAIN 선순환 재신청] 기존 케어(완료일: ${item.completedAt ? item.completedAt.slice(0,10) : ''}) 이후 정기 리케어 상담 접수.`,
-      assignedCoach: '미배정 (배정 대기중)',
-      sopProgress: '',
-      photoBase64: '',
-      completedAt: null,
-      createdAt: new Date().toISOString()
-    };
+    const newConsultId = 'cs_re_' + Date.now();
+    const now = new Date();
+    const stamp = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    try {
+      const raw = localStorage.getItem('reset_consult_list');
+      const inbox = raw ? JSON.parse(raw) : [];
+      inbox.unshift({
+        id: newConsultId,
+        category: '💄 웰니스 & 뷰티 케어 (AGAIN180 재상담)',
+        role: `${item.seniorName || item.applicantName} (기존 고객 재이용)`,
+        name: item.applicantName || item.seniorName,
+        seniorName: item.seniorName || '',
+        phone: item.phone || '-',
+        note: `[AGAIN 선순환 재상담] 이전 케어 완료(${item.completedAt ? item.completedAt.slice(0, 10) : '최근'}) 고객 정기 리케어 상담 요청.`,
+        status: '대기',
+        createdAt: stamp
+      });
+      localStorage.setItem('reset_consult_list', JSON.stringify(inbox));
+    } catch (e) {}
 
-    list.unshift(newLead);
-    localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-    renderBusinessMasterDashboard();
+    if (typeof renderDiagReservationTable === 'function') renderDiagReservationTable();
+    if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-    const doMove = confirm(`🔄 [선순환 재상담 등록 완료]\n\n[${item.seniorName}] 어르신의 정기 180분 리케어 상담(예약ID: ${newId})이\n[① 상담신청 접수] 단계에 신규 등록되었습니다!\n\n지금 [① 상담신청 접수] 화면으로 이동하시겠습니까?`);
-    if (doMove) {
-      switchPipelineStep('step1');
-    }
-  }
-}
-
-// [이전 단계로 반려/복귀]
-function revertStep(id, targetStep, bizType) {
-  if (bizType === 'beauty') {
-    const list = getStoredBeautyBookings();
-    const item = list.find(x => x.id === id);
-    if (!item) return;
-
-    if (targetStep === 'step1') {
-      item.status = '상담대기';
-      alert(`[${item.id}] 건이 [① 상담신청 접수] 단계로 반려되었습니다.`);
-      localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-      renderBusinessMasterDashboard();
-      switchPipelineStep('step1');
-    } else if (targetStep === 'step2') {
-      item.status = '코치배정';
-      alert(`[${item.id}] 건이 [② 코치 배정] 단계로 되돌려졌습니다.`);
-      localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-      renderBusinessMasterDashboard();
-      switchPipelineStep('step2');
+    const doMove = confirm(`🔄 [선순환 재상담 접수 완료]\n\n[${item.seniorName}] 어르신의 정기 180분 리케어 재상담 건이\n[통합 고객 접수 · 상담]함에 신규 등록되었습니다!\n\n지금 [통합 고객 접수 · 상담] 화면으로 이동하시겠습니까?`);
+    if (doMove && typeof switchTab === 'function') {
+      switchTab('tabConsult');
     }
   }
 }
 
 // 9-1. 일반 비즈니스 이관 함수들
-function transferGeneralStep1ToStep2(id) {
-  const list = getStoredGeneralConsults();
-  const item = list.find(x => x.id === id);
-  if (!item) return;
-
-  item.status = '코치배정';
-  if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
-    item.assignedCoach = '박지은 수석 코치';
-  }
-  localStorage.setItem('seniorConsultList', JSON.stringify(list));
-  renderBusinessMasterDashboard();
-
-  const doMove = confirm(`✅ [상담 완료]\n\n[${item.name}] 고객님의 상담이 완료되어\n[② 코치 배정] 단계로 이관되었습니다!\n\n지금 [② 코치 배정] 화면으로 이동하시겠습니까?`);
-  if (doMove) switchPipelineStep('step2');
-}
-
 function transferGeneralStep2ToStep3(id) {
   const list = getStoredGeneralConsults();
   const item = list.find(x => x.id === id);
@@ -1640,7 +1527,7 @@ function transferGeneralStep2ToStep3(id) {
   localStorage.setItem('seniorConsultList', JSON.stringify(list));
   renderBusinessMasterDashboard();
 
-  const doMove = confirm(`🤝 [코치 배정 완료]\n\n[${item.name}] 고객 건이 [③ 현장진행] 단계로 이관되었습니다!\n\n지금 현장진행 화면으로 이동하시겠습니까?`);
+  const doMove = confirm(`🤝 [코치 배정 완료]\n\n[${item.name}] 고객 건이 [② 현장진행] 단계로 이관되었습니다!\n\n지금 현장진행 화면으로 이동하시겠습니까?`);
   if (doMove) switchPipelineStep('step3');
 }
 
@@ -1654,7 +1541,7 @@ function transferGeneralStep3ToStep4(id) {
   localStorage.setItem('seniorConsultList', JSON.stringify(list));
   renderBusinessMasterDashboard();
 
-  const doMove = confirm(`🎉 [완료 승인]\n\n[${item.name}] 고객 건이 [④ CRM 사후관리] 단계로 이관되었습니다!\n\n지금 사후관리 화면으로 이동하시겠습니까?`);
+  const doMove = confirm(`🎉 [완료 승인]\n\n[${item.name}] 고객 건이 [③ CRM 사후관리] 단계로 이관되었습니다!\n\n지금 사후관리 화면으로 이동하시겠습니까?`);
   if (doMove) switchPipelineStep('step4');
 }
 
@@ -1663,42 +1550,35 @@ function reOrderFromGeneralRetention(id) {
   const item = list.find(x => x.id === id);
   if (!item) return;
 
-  const newId = 'CS-' + Math.floor(200 + Math.random() * 100);
-  const newLead = {
-    ...item,
-    id: newId,
-    status: '상담대기',
-    consultNote: `[선순환 재신청] 기존 서비스 완료 후 신규 케어 신청 접수.`,
-    assignedCoach: '미배정',
-    completedAt: null,
-    date: new Date().toLocaleDateString('ko-KR') + ' 오전 10:00'
-  };
+  const newConsultId = 'cs_re_' + Date.now();
+  const now = new Date();
+  const stamp = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  try {
+    const raw = localStorage.getItem('reset_consult_list');
+    const inbox = raw ? JSON.parse(raw) : [];
+    inbox.unshift({
+      id: newConsultId,
+      category: item.category || '👗 일상과 비움의 미학',
+      role: `${item.name} (기존 고객 재이용)`,
+      name: item.name,
+      phone: item.phone || '-',
+      note: `[선순환 재상담] 기존 서비스 완료 후 정기 점검·추가 케어 재상담 요청.`,
+      status: '대기',
+      createdAt: stamp
+    });
+    localStorage.setItem('reset_consult_list', JSON.stringify(inbox));
+  } catch (e) {}
 
-  list.unshift(newLead);
-  localStorage.setItem('seniorConsultList', JSON.stringify(list));
-  renderBusinessMasterDashboard();
+  if (typeof renderDiagReservationTable === 'function') renderDiagReservationTable();
+  if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-  const doMove = confirm(`🔄 [선순환 재상담 접수 완료]\n\n[${item.name}] 고객님의 신규 상담 건(ID: ${newId})이\n[① 상담신청 접수] 단계에 등록되었습니다!\n\n지금 상담 접수 화면으로 이동하시겠습니까?`);
-  if (doMove) switchPipelineStep('step1');
-}
-
-// 10. 상태 업데이트 및 보조 함수들
-function updateStep1Status(id, newStatus, bizType) {
-  if (bizType === 'beauty') {
-    const list = getStoredBeautyBookings();
-    const item = list.find(x => x.id === id);
-    if (!item) return;
-
-    item.status = newStatus;
-    localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
-    renderBusinessMasterDashboard();
-
-    if (newStatus === '상담완료') {
-      transferStep1ToStep2(id, 'beauty');
-    }
+  const doMove = confirm(`🔄 [선순환 재상담 접수 완료]\n\n[${item.name}] 고객님의 신규 재상담 건이\n[통합 고객 접수 · 상담]함에 등록되었습니다!\n\n지금 [통합 고객 접수 · 상담] 화면으로 이동하시겠습니까?`);
+  if (doMove && typeof switchTab === 'function') {
+    switchTab('tabConsult');
   }
 }
 
+// 10. 상태 업데이트 및 보조 함수들
 function updateStep2Status(id, newStatus, bizType) {
   if (bizType === 'beauty') {
     const list = getStoredBeautyBookings();
@@ -1722,17 +1602,13 @@ function editConsultNotePrompt(id, bizType) {
     if (!item) return;
 
     const cur = item.consultNote || '';
-    const note = prompt(`[${item.applicantName}] 고객 상담 일지 / 메모 입력:`, cur);
+    const note = prompt(`[${item.applicantName}] 고객 인수인계 메모 수정:`, cur);
     if (note !== null) {
       item.consultNote = note;
       localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
       renderBusinessMasterDashboard();
     }
   }
-}
-
-function quickCall(phone, name) {
-  alert(`[${name}] 고객님 (${phone})으로 유선 연결을 진행합니다.\n(상담 완료 후 상담 상태를 [상담완료]로 변경하시면 코치 배정 단계로 자동 이관됩니다.)`);
 }
 
 function sendRetentionAlert(id, type, bizType) {
@@ -1861,14 +1737,14 @@ function saveBeautyCoachingLog(e) {
   localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
   closeBeautyCoachingModal();
   renderBusinessMasterDashboard();
-  alert('180분 현장 코칭일지가 저장되었으며, 4단계 CRM 사후 리텐션으로 즉시 이관되었습니다!');
+  alert('180분 현장 코칭일지가 저장되었으며, ③ CRM 사후 리텐션으로 즉시 이관되었습니다!');
 }
 
-// 13. 엑셀(CSV) 다운로드
+// 13. 엑셀(CSV) 다운로드 (상담 완료 확정 고객 대상)
 function exportBusinessCSV() {
   if (currentBusinessTab === 'beauty') {
-    const list = getStoredBeautyBookings();
-    let csv = '\uFEFF예약ID,현재단계,신청인,관계,어르신성함,연락처,방문일시,진행장소,주소,상담메모,배정코치,처리상태,수분전,수분후,탄력,엔딩노트\n';
+    const list = getStoredBeautyBookings().filter(i => resolveItemStep(i) !== 'step1');
+    let csv = '\uFEFF예약ID,현재단계,신청인,관계,어르신성함,연락처,방문일시,진행장소,주소,상담인수인계메모,배정코치,처리상태,수분전,수분후,탄력,엔딩노트\n';
     list.forEach(i => {
       const diag = i.diagnostic || {};
       const stepName = getStepBadgeText(resolveItemStep(i));
@@ -1876,8 +1752,8 @@ function exportBusinessCSV() {
     });
     downloadCSVFile(csv, `senior_beauty_crm_${new Date().toISOString().slice(0,10)}.csv`);
   } else {
-    const consults = getStoredGeneralConsults();
-    let csv = '\uFEFF상담ID,신청분야,현재단계,신청자,연락처,접수일시,상담요청,상담메모,배정코치,처리상태\n';
+    const consults = getStoredGeneralConsults().filter(i => resolveItemStep(i) !== 'step1');
+    let csv = '\uFEFF관리ID,신청분야,현재단계,신청자,연락처,이관일시,요청내용,인수인계메모,배정코치,처리상태\n';
     consults.forEach(i => {
       const stepName = getStepBadgeText(resolveItemStep(i));
       csv += `"${i.id}","${i.category}","${stepName}","${i.name}","${i.phone}","${i.date}","${(i.message || '').replace(/"/g, '""')}","${(i.consultNote || '').replace(/"/g, '""')}","${i.assignedCoach || ''}","${i.status}"\n`;
@@ -1911,7 +1787,7 @@ function openDispatchFromBeauty(id) {
       notes: `[뷰티 180분 예약 연동] 신청인: ${item.applicantName}(${item.role}), 어르신: ${item.seniorName}, 예약ID: ${item.id}`
     });
   } else if (typeof switchTab === 'function') {
-    switchTab('tabAcademy');
+    switchTab('tabCoachControl');
     if (typeof openDispatchModal === 'function') openDispatchModal();
   }
 }
@@ -1929,10 +1805,10 @@ function openDispatchFromGeneral(id) {
       address: '고객 자택 (상담 후 확정)',
       coach: item.assignedCoach || '',
       fee: 150000,
-      notes: `[4대 비즈니스 상담 연동] 접수ID: ${item.id} / 내용: ${item.message || ''}`
+      notes: `[웰라이프 상담완료 이관 연동] 관리ID: ${item.id} / 내용: ${item.message || ''}`
     });
   } else if (typeof switchTab === 'function') {
-    switchTab('tabAcademy');
+    switchTab('tabCoachControl');
     if (typeof openDispatchModal === 'function') openDispatchModal();
   }
 }
@@ -1955,40 +1831,35 @@ function goToCoachControlForClient(name) {
   }
 }
 
-// 15. 유틸리티 & 라벨 헬퍼
+// 15. 유틸리티 & 라벨 헬퍼 (3단계 실행 파이프라인 기준)
 function getStepBannerTitle(step, meta) {
-  if (step === 'step1') return meta.step1Title;
-  if (step === 'step2') return meta.step2Title;
+  if (step === 'step2' || step === 'step1') return meta.step2Title;
   if (step === 'step3') return meta.step3Title;
   if (step === 'step4') return meta.step4Title;
-  return `📋 ${meta.name} - 통합 4대 마스터 파이프라인 관제`;
+  return `${meta.icon || '🌿'} ${meta.name} — 상담완료 확정 고객 실행 파이프라인`;
 }
 
 function getStepBannerDesc(step, meta) {
-  if (step === 'step1') return meta.step1Desc;
-  if (step === 'step2') return meta.step2Desc;
+  if (step === 'step2' || step === 'step1') return meta.step2Desc;
   if (step === 'step3') return meta.step3Desc;
   if (step === 'step4') return meta.step4Desc;
-  return '상담 접수부터 코치 배정, 현장 케어 실행, CRM 사후 리텐션까지 전 단계를 한눈에 관제합니다.';
+  return '통합 고객 접수·상담함에서 상담 완료·확정된 고객만 이관되어 ① 코치 배정 → ② 현장 케어 → ③ CRM 사후관리까지 전담 운영합니다.';
 }
 
 function getStepBadgeText(step) {
-  if (step === 'step1') return '1단계: 상담접수';
-  if (step === 'step2') return '2단계: 코치배정';
-  if (step === 'step3') return '3단계: 현장케어';
-  if (step === 'step4') return '4단계: CRM리텐션';
-  return '통합 마스터';
+  if (step === 'step2' || step === 'step1') return '1단계: 코치배정';
+  if (step === 'step3') return '2단계: 현장케어';
+  if (step === 'step4') return '3단계: CRM리텐션';
+  return '3단계 통합 관제';
 }
 
 function getStepBadgeHtml(step) {
-  if (step === 'step1') {
-    return `<span class="badge" style="background:#fff0f3; color:#b83354; border:1px solid #f8c8d2; font-size:0.75rem; font-weight:800; padding:2px 6px;">① 상담접수</span>`;
-  } else if (step === 'step2') {
-    return `<span class="badge" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-size:0.75rem; font-weight:800; padding:2px 6px;">② 코치배정</span>`;
+  if (step === 'step2' || step === 'step1') {
+    return `<span class="badge" style="background:#f0f9ff; color:#0284c7; border:1px solid #bae6fd; font-size:0.75rem; font-weight:800; padding:2px 6px;">① 코치배정</span>`;
   } else if (step === 'step3') {
-    return `<span class="badge" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; font-size:0.75rem; font-weight:800; padding:2px 6px;">③ 현장케어</span>`;
+    return `<span class="badge" style="background:#f0fdf4; color:#15803d; border:1px solid #bbf7d0; font-size:0.75rem; font-weight:800; padding:2px 6px;">② 현장케어</span>`;
   } else if (step === 'step4') {
-    return `<span class="badge" style="background:#faf5ff; color:#7c3aed; border:1px solid #e9d5ff; font-size:0.75rem; font-weight:800; padding:2px 6px;">④ CRM사후</span>`;
+    return `<span class="badge" style="background:#faf5ff; color:#7c3aed; border:1px solid #e9d5ff; font-size:0.75rem; font-weight:800; padding:2px 6px;">③ CRM사후</span>`;
   }
   return `<span class="badge" style="background:#f3f4f6; color:#4b5563; font-size:0.75rem;">전체</span>`;
 }

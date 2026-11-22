@@ -10181,6 +10181,28 @@
           status: '상담대기'
         });
         localStorage.setItem('seniorConsultList', JSON.stringify(consultList));
+
+        // 3) 통합 고객 접수·상담함(reset_consult_list) 단일 창구 등록 (상담 완료 시 3-1 뷰티케어로 자동 이관)
+        let unifiedList = [];
+        const rawUnified = localStorage.getItem('reset_consult_list');
+        if (rawUnified) unifiedList = JSON.parse(rawUnified);
+        const nowB = new Date();
+        const stampB = `${nowB.getFullYear()}.${String(nowB.getMonth()+1).padStart(2,'0')}.${String(nowB.getDate()).padStart(2,'0')} ${String(nowB.getHours()).padStart(2,'0')}:${String(nowB.getMinutes()).padStart(2,'0')}`;
+        unifiedList.unshift({
+          id: 'cs_beauty_' + bookingId,
+          sourceBookingId: bookingId,
+          category: '💄 시니어 뷰티 라이프케어',
+          role: `${seniorName} (${applicantName} · ${role})`,
+          name: applicantName,
+          seniorName: seniorName,
+          phone: phone,
+          address: address,
+          preferredDate: visitDate,
+          note: `${place} / 희망일: ${visitDate} / 옵션: ${selectedOptions.join(', ')}${memo ? ' / ' + memo : ''}`,
+          status: '대기',
+          createdAt: stampB
+        });
+        localStorage.setItem('reset_consult_list', JSON.stringify(unifiedList));
       } catch (err) {
         console.error('상담 신청 데이터 저장 오류:', err);
       }
@@ -10607,22 +10629,30 @@
         localProjects.unshift(projectData);
         localStorage.setItem('yebaek_memoir_projects', JSON.stringify(localProjects));
 
-        // 1-2. 02. 고객 접수 & 맞춤 상담 파이프라인(yebaek_diag_reservations) 동시 등록
+        // 1-2. 02. 통합 고객 접수·상담함(reset_consult_list + yebaek_diag_reservations) 동시 등록
         try {
-          var diagList = [];
-          var rawDiag = localStorage.getItem('yebaek_diag_reservations');
-          if (rawDiag) diagList = JSON.parse(rawDiag);
-          diagList.unshift({
+          var diagPayload = {
             id: 'cs_diag_' + projectId,
             memoirProjectId: projectId,
             category: '✍️ 내 인생의 디지털 자서전',
             role: seniorName + ' 어르신 (' + relation + ' ' + applicantName + ' 신청)',
+            name: applicantName,
             phone: applicantPhone,
             note: '[' + pkgLabel + '] ' + (region ? '지역: ' + region + ' / ' : '') + notes,
             status: '대기',
             createdAt: dateStr + ' ' + String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0')
-          });
+          };
+          var diagList = [];
+          var rawDiag = localStorage.getItem('yebaek_diag_reservations');
+          if (rawDiag) diagList = JSON.parse(rawDiag);
+          diagList.unshift(diagPayload);
           localStorage.setItem('yebaek_diag_reservations', JSON.stringify(diagList));
+
+          var unifiedMList = [];
+          var rawUnifiedM = localStorage.getItem('reset_consult_list');
+          if (rawUnifiedM) unifiedMList = JSON.parse(rawUnifiedM);
+          unifiedMList.unshift(diagPayload);
+          localStorage.setItem('reset_consult_list', JSON.stringify(unifiedMList));
         } catch(diagErr) {
           console.warn('[Memoir] 진단 상담 목록 연동:', diagErr);
         }
