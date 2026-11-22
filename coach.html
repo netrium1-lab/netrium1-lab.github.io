@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <!-- 🌟 Firebase SDK (v10 Compat: 코치 스마트폰 ↔ 본사 관리자 PC 실시간 양방향 동기화) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
   <style>
     :root {
@@ -1603,6 +1606,80 @@
     }
 
     // -------------------------------------------------------------
+    // ☁️ Firebase Firestore 실시간 양방향 클라우드 동기화 (코치앱 ↔ 본사 통합관제)
+    // -------------------------------------------------------------
+    const COACH_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyB97-Jn6faTYXjpyH5PrSeMZ8MaVStnLtc",
+      authDomain: "yebaek-bfa2c.firebaseapp.com",
+      databaseURL: "https://yebaek-bfa2c-default-rtdb.firebaseio.com",
+      projectId: "yebaek-bfa2c",
+      storageBucket: "yebaek-bfa2c.firebasestorage.app",
+      messagingSenderId: "450270290519",
+      appId: "1:450270290519:web:0fbc1abf869f51e7797912",
+      measurementId: "G-BF3TQWGRWH"
+    };
+
+    let coachFbDb = null;
+    try {
+      if (typeof firebase !== 'undefined') {
+        if (!firebase.apps || !firebase.apps.length) {
+          firebase.initializeApp(COACH_FIREBASE_CONFIG);
+        }
+        coachFbDb = firebase.firestore();
+      }
+    } catch (e) {
+      console.warn('[Coach Firebase Init]', e);
+    }
+
+    function syncMissionToCloud(mission) {
+      if (!coachFbDb || !mission || !mission.id) return;
+      try {
+        const payload = Object.assign({}, mission, { updatedAt: Date.now() });
+        coachFbDb.collection('coach_dispatches').doc(String(mission.id)).set(payload, { merge: true }).catch(err => {
+          console.warn('[Coach Cloud Upload Warn]', err);
+        });
+      } catch (e) {}
+    }
+
+    function initCoachCloudListener() {
+      if (!coachFbDb) return;
+      try {
+        coachFbDb.collection('coach_dispatches').onSnapshot((snapshot) => {
+          if (!snapshot || snapshot.empty) return;
+          const localList = getDispatches();
+          let changed = false;
+
+          snapshot.forEach(doc => {
+            const remote = doc.data();
+            if (!remote || !remote.id) return;
+            const idx = localList.findIndex(m => m.id === remote.id);
+            if (idx === -1) {
+              localList.unshift(remote);
+              changed = true;
+            } else {
+              const cur = localList[idx];
+              const remoteUpdated = Number(remote.updatedAt) || 0;
+              const localUpdated = Number(cur.updatedAt) || 0;
+              if (remoteUpdated > localUpdated || (remote.step === '정산완료' && cur.step !== '정산완료')) {
+                localList[idx] = Object.assign({}, cur, remote);
+                changed = true;
+              }
+            }
+          });
+
+          if (changed) {
+            saveDispatches(localList);
+            if (typeof currentCoach !== 'undefined' && currentCoach && typeof renderAllTabs === 'function') {
+              renderAllTabs();
+            }
+          }
+        }, (err) => {
+          console.warn('[Coach Cloud Listener Warn]', err);
+        });
+      } catch (e) {}
+    }
+
+    // -------------------------------------------------------------
     // 🔗 URL 배정 파라미터 수신 및 스마트 동기화 엔진
     // -------------------------------------------------------------
     function parseMissionFromUrl() {
@@ -2193,14 +2270,17 @@
         activeMission.step = '진행중';
       }
 
-      // 저장
+      // 저장 (로컬 + 본사 클라우드 실시간 동기화)
+      activeMission.updatedAt = Date.now();
       const all = getDispatches();
       const idx = all.findIndex(m => m.id === activeMission.id);
       if (idx !== -1) {
         all[idx].arrivalStamp = timeStr;
         all[idx].step = activeMission.step;
+        all[idx].updatedAt = activeMission.updatedAt;
         saveDispatches(all);
       }
+      syncMissionToCloud(activeMission);
 
       updateArrivalAreaDisplay();
       alert(`📍 현장 도착이 정상 기록되었습니다! (${timeStr})\n\n본사 시스템에 실시간으로 전송되었습니다.\n이제 아래 [1️⃣ 작업 전 (Before)] 박스의 [+ 사진 촬영]을 터치하여 현장 사진을 촬영해 주세요. (최대 3장까지 등록 가능)`);
@@ -2309,7 +2389,7 @@
       const file = input.files[0];
 
       try {
-        const dataUrl = await resizeImageCanvas(file, 800, 0.7);
+        const dataUrl = await resizeImageCanvas(file, 640, 0.65);
         if (!uploadedPhotos[type]) uploadedPhotos[type] = [];
         if (uploadedPhotos[type].length < 3) {
           uploadedPhotos[type].push(dataUrl);
@@ -2352,12 +2432,14 @@
         activeMission.step = '진행중';
       }
 
+      activeMission.updatedAt = Date.now();
       const all = getDispatches();
       const idx = all.findIndex(m => m.id === activeMission.id);
       if (idx !== -1) {
         all[idx] = activeMission;
         saveDispatches(all);
       }
+      syncMissionToCloud(activeMission);
     }
 
     // 사진 9장 등록 수 카운터 뱃지 갱신
@@ -2413,17 +2495,19 @@
       activeMission.processPhoto = uploadedPhotos.process[0] || '';
       activeMission.afterPhoto = uploadedPhotos.after[0] || '';
       activeMission.coachReport = memo;
+      activeMission.updatedAt = Date.now();
 
-      // 전체 저장소 갱신
+      // 전체 저장소 갱신 (로컬 + 본사 통합관제 클라우드 즉시 전송)
       const all = getDispatches();
       const idx = all.findIndex(m => m.id === activeMission.id);
       if (idx !== -1) {
         all[idx] = activeMission;
         saveDispatches(all);
       }
+      syncMissionToCloud(activeMission);
 
       closeExecutionModal();
-      alert(`🎉 [${activeMission.customerName}] 현장 케어가 완벽하게 완료 제출되었습니다!\n\n• 등록 사진: 총 ${totalCount}장 전송 완료 (작업전 ${bCount}장 · 진행 ${pCount}장 · 완료 ${aCount}장)\n• 본사 관리자 화면으로 도착시간, 완료시간, 현장 사진이 실시간 전송되었습니다.\n• 본사 검수 확인 후 코치님 계좌로 활동비(${(activeMission.fee || 150000).toLocaleString()}원)가 송금됩니다.\n\n수고 많으셨습니다!`);
+      alert(`🎉 [${activeMission.customerName}] 현장 케어가 완벽하게 완료 제출되었습니다!\n\n• 등록 사진: 총 ${totalCount}장 전송 완료 (작업전 ${bCount}장 · 진행 ${pCount}장 · 완료 ${aCount}장)\n• 본사 통합관제 [현장완료 · 송금대기] 보드로 실시간 전송되었습니다.\n• 본사 업무카드 검수 후 코치님 계좌로 활동비(${(activeMission.fee || 150000).toLocaleString()}원)가 송금되며, 정산완료 시 [정산/수익] 탭에 자동 반영됩니다.\n\n수고 많으셨습니다!`);
     }
 
     // 본사 관리자(admin.html) 변경 사항 실시간 수신 (동기화)
@@ -2443,9 +2527,10 @@
       }
     });
 
-    // 페이지 로드 시 카카오톡 공유 링크 수신 및 배정 데이터 자동 동기화
+    // 페이지 로드 시 카카오톡 공유 링크 수신 및 클라우드 실시간 동기화 가동
     window.addEventListener('DOMContentLoaded', function() {
       initIncomingMissionView();
+      initCoachCloudListener();
     });
   </script>
 </body>

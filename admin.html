@@ -2548,49 +2548,50 @@
           </div>
         </div>
 
-        <!-- 🚨 오늘의 긴급 처리 업무 (4대 Action KPI) -->
+        <!-- 🚨 통합관제 핵심 마감 큐 (상담완료 ➔ 현장완료 검수·송금 ➔ 비즈니스 완료) -->
         <div style="margin-bottom: 22px;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
             <h3 style="font-size: 1rem; font-weight: 850; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 6px;">
-              <span>🚨</span> 오늘의 우선 처리 업무 (Action Queue)
+              <span>🚨</span> 통합관제 마감 처리 현황 (상담 완료 · 현장완료 송금 · 비즈니스 완료)
             </h3>
-            <span style="font-size: 0.8rem; color: var(--text-muted);">카드를 클릭하면 해당 처리 화면으로 바로 이동합니다</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted);">상담→배정→현장은 각 비즈니스에서 진행, <strong>현장완료 후 최종 검수·송금·완료</strong>는 이곳에서 원스톱 마감</span>
           </div>
 
           <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
             <div onclick="switchTab('tabConsult')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #0284c7; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.8rem; font-weight: 800; color: #0284c7;">신규 고객 접수 · 상담</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #0284c7;">① 상담 접수 · 완료 처리</span>
                 <span style="font-size: 1.2rem;">📋</span>
               </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: var(--text-main); margin: 6px 0 3px;" id="cockpitInquiryCount">0건</div>
               <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
-                <span>전 채널 상담 대기</span>
+                <span>완료 시 비즈니스 자동이관</span>
                 <span style="font-weight: 800; color: #0284c7;">상담함 ➔</span>
               </div>
             </div>
 
-            <div onclick="selectCoachSubFromSidebar('ops')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #d97706; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+            <div onclick="focusCockpitSettlementQueue('pending')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #b83354; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.8rem; font-weight: 800; color: #d97706;">코치 배정 대기</span>
-                <span style="font-size: 1.2rem;">⏳</span>
-              </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #d97706; margin: 6px 0 3px;" id="cockpitPendingDispatch">0건</div>
-              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
-                <span>방문 서비스 매칭</span>
-                <span style="font-weight: 800; color: #d97706;">배정 관제 ➔</span>
-              </div>
-            </div>
-
-            <div onclick="selectCoachSubFromSidebar('ops')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #b83354; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.8rem; font-weight: 800; color: #b83354;">현장 검수 · 정산 대기</span>
-                <span style="font-size: 1.2rem;">📸</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #b83354;">② 현장완료 · 송금 정산 대기</span>
+                <span style="font-size: 1.2rem;">⚡</span>
               </div>
               <div style="font-size: 1.7rem; font-weight: 900; color: #b83354; margin: 6px 0 3px;" id="cockpitPendingSettlement">0건</div>
               <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
-                <span>사진 3종 검수·송금</span>
-                <span style="font-weight: 800; color: #b83354;">정산 센터 ➔</span>
+                <span id="cockpitPendingAmountSub">업무카드 검수 · 송금</span>
+                <span style="font-weight: 800; color: #b83354;">바로 정산 ➔</span>
+              </div>
+            </div>
+
+            <div onclick="focusCockpitSettlementQueue('settled')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #059669; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 0.8rem; font-weight: 800; color: #059669;">③ 송금 · 비즈니스 완료 누적</span>
+                <span style="font-size: 1.2rem;">✅</span>
+              </div>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #059669; margin: 6px 0 3px;" id="cockpitCompletedBizCount">0건</div>
+              <span id="cockpitPendingDispatch" style="display:none;">0건</span>
+              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span id="cockpitSettledAmountSub">정산·CRM 이관 마감</span>
+                <span style="font-weight: 800; color: #059669;">완료 이력 ➔</span>
               </div>
             </div>
 
@@ -2665,7 +2666,7 @@
                 </div>
                 <div class="cockpit-cat-metric" id="cockpitBizCount_beauty" style="font-size: 0.92rem;">4대 SOP 관제</div>
               </div>
-              <p class="cockpit-cat-desc">뷰티·옷장비움·유품정리·엔딩파티 4대 핵심 서비스의 4단계 매뉴얼(접수→배정→케어→CRM) 운영</p>
+              <p class="cockpit-cat-desc">상담완료 이관 건의 3단계 파이프라인(① 코치배정 → ② 현장케어 → ③ CRM 사후관리) 전담 운영</p>
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="selectBusinessFromSidebar('beauty')">💄 뷰티</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectBusinessFromSidebar('wardrobe')">👗 옷장</button>
@@ -2747,17 +2748,25 @@
           </div>
         </div>
 
-        <!-- 🏃 최근 현장 파견 및 활동 피드 미리보기 -->
-        <div class="panel-card">
+        <!-- 🏁 현장완료 업무카드 검수 · 송금 정산 & 비즈니스 최종 마감 보드 -->
+        <div class="panel-card" id="cockpitSettlementQueueCard">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon">🏃</span>
+              <span class="panel-icon" style="background:#fef3c7; color:#b45309;">🏁</span>
               <div>
-                <h3 class="panel-title">실시간 코치 현장수행 &amp; 파견 현황</h3>
+                <h3 class="panel-title">현장완료 업무카드 검수 · 송금 정산 &amp; 비즈니스 완료</h3>
                 <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
-                  파견된 코치의 실제 서비스·진행 단계·현장 도착/완료 스탬프·사진 첨부 현황을 상세하게 표시합니다. <strong>각 행을 클릭하면 해당 신청 건의 진행결과(사진·소감·송금)만 바로 열립니다.</strong>
+                  각 비즈니스에서 배정·진행 후 <strong>코치가 [현장완료] 제출한 건만</strong> 표시합니다. 업무카드(사진·소감)를 확인하고 <strong>[송금·비즈니스완료]</strong>를 누르면 정산과 해당 비즈니스 완료(CRM 이관)가 한 번에 마감됩니다.
                 </p>
               </div>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
+              <button type="button" class="btn-action-sm active" id="btnCockpitClosing_pending" onclick="switchCockpitClosingTab('pending')" style="padding: 6px 12px; font-weight: 850; border-radius: 999px; font-size: 0.8rem;">
+                ⚡ 현장완료 · 송금대기 (<span id="cockpitQueuePendingCnt">0</span>)
+              </button>
+              <button type="button" class="btn-action-sm" id="btnCockpitClosing_settled" onclick="switchCockpitClosingTab('settled')" style="padding: 6px 12px; font-weight: 800; border-radius: 999px; font-size: 0.8rem;">
+                ✓ 송금 · 비즈니스완료 (<span id="cockpitQueueSettledCnt">0</span>)
+              </button>
             </div>
           </div>
 
@@ -2765,17 +2774,16 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th style="width: 115px;">고객 성함</th>
-                  <th style="width: 175px;">신청 서비스 · 지역</th>
-                  <th style="width: 110px;">담당 코치</th>
-                  <th style="width: 105px; text-align: center;">진행 상태</th>
-                  <th style="width: 155px;">방문일시 · 스탬프</th>
-                  <th>현장 수행 내역 (사진 · 소감 · 활동비)</th>
-                  <th style="width: 96px; text-align: center;">진행 결과</th>
+                  <th style="width: 175px;">고객 · 비즈니스 분야</th>
+                  <th style="width: 115px;">담당 코치</th>
+                  <th style="width: 155px;">현장 완료 스탬프</th>
+                  <th>현장 업무카드 요약 (사진 · 코치 소감)</th>
+                  <th style="width: 105px; text-align: right;">활동비</th>
+                  <th style="width: 185px; text-align: center;">업무카드 검수 · 마감 처리</th>
                 </tr>
               </thead>
               <tbody id="cockpitRecentDispatchTableBody">
-                <!-- JS 동적 렌더링 -->
+                <!-- JS 동적 렌더링 (현장완료 건만 집중 표시) -->
               </tbody>
             </table>
           </div>
@@ -5837,7 +5845,7 @@
             닫기
           </button>
           <button type="button" class="btn-save-setting" id="btnApproveSettlement" onclick="approveCoachSettlement()" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #ffffff; box-shadow: 0 4px 14px rgba(5,150,105,0.3); font-weight: 850;">
-            <span>💰</span> 송금 확인 및 정산 완료 승인
+            <span>💰</span> 송금 완료 &amp; 비즈니스 최종 완료
           </button>
         </div>
       </div>
@@ -6440,7 +6448,29 @@
     }
     window.selectCoachSubFromSidebar = selectCoachSubFromSidebar;
 
-    /* 📊 01. 종합 관제 홈 실시간 데이터 집계 및 렌더링 함수 */
+    /* 📊 00. 통합 관제 홈 마감 탭 전환 & 스크롤 이동 */
+    var currentCockpitClosingTab = 'pending';
+
+    function switchCockpitClosingTab(mode) {
+      currentCockpitClosingTab = (mode === 'settled') ? 'settled' : 'pending';
+      var btnP = document.getElementById('btnCockpitClosing_pending');
+      var btnS = document.getElementById('btnCockpitClosing_settled');
+      if (btnP) btnP.classList.toggle('active', currentCockpitClosingTab === 'pending');
+      if (btnS) btnS.classList.toggle('active', currentCockpitClosingTab === 'settled');
+      refreshCockpitStats();
+    }
+    window.switchCockpitClosingTab = switchCockpitClosingTab;
+
+    function focusCockpitSettlementQueue(mode) {
+      switchCockpitClosingTab(mode || 'pending');
+      var card = document.getElementById('cockpitSettlementQueueCard');
+      if (card) {
+        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+    window.focusCockpitSettlementQueue = focusCockpitSettlementQueue;
+
+    /* 📊 01. 종합 관제 홈 실시간 데이터 집계 및 현장완료 마감 보드 렌더링 */
     function refreshCockpitStats() {
       try {
         // 1. 고객 상담 접수 대기·진행 건수 (통합 고객 접수·상담함 기준)
@@ -6465,23 +6495,42 @@
           if (elWl) elWl.innerText = wlCounts.total + '건 진행중';
         }
 
-        // 2. 코치 배정 대기 및 현장 검수·송금 대기 건수 (실제 필드 coach / step 정확 매핑)
+        // 2. 현장완료(검수·송금 대기) 및 송금·비즈니스완료 집계
         var dispList = (typeof getDispatches === 'function') ? getDispatches() : [];
         var pendingDisp = dispList.filter(function(d) {
           var c = (d.coach || d.coachName || '').trim();
           var st = d.step || d.status || '';
-          return !c || c === '미배정' || st === '배정대기' || st === '대기';
+          return !c || c === '미배정' || st === '배정대기';
         }).length;
-        var pendingSettle = dispList.filter(function(d) {
+        var pendingSettleList = dispList.filter(function(d) {
           var st = d.step || d.status || '';
-          return st === '서비스완료' || d.isCompleted;
-        }).length;
+          return st === '서비스완료';
+        });
+        var settledList = dispList.filter(function(d) {
+          var st = d.step || d.status || '';
+          return st === '정산완료';
+        });
+
+        var pendingSum = pendingSettleList.reduce(function(acc, d) { return acc + (Number(d.fee) || 150000); }, 0);
+        var settledSum = settledList.reduce(function(acc, d) { return acc + (Number(d.fee) || 150000); }, 0);
 
         var dispElem = document.getElementById('cockpitPendingDispatch');
         if (dispElem) dispElem.innerText = pendingDisp + '건';
 
         var settleElem = document.getElementById('cockpitPendingSettlement');
-        if (settleElem) settleElem.innerText = pendingSettle + '건';
+        if (settleElem) settleElem.innerText = pendingSettleList.length + '건';
+        var pendingSub = document.getElementById('cockpitPendingAmountSub');
+        if (pendingSub) pendingSub.innerText = pendingSum > 0 ? ('송금예정 ' + pendingSum.toLocaleString() + '원') : '모두 정산 완료';
+
+        var compElem = document.getElementById('cockpitCompletedBizCount');
+        if (compElem) compElem.innerText = settledList.length + '건';
+        var settledSub = document.getElementById('cockpitSettledAmountSub');
+        if (settledSub) settledSub.innerText = settledSum > 0 ? ('누적 ' + settledSum.toLocaleString() + '원 정산') : '정산·CRM 이관 마감';
+
+        var qPendingCnt = document.getElementById('cockpitQueuePendingCnt');
+        if (qPendingCnt) qPendingCnt.innerText = pendingSettleList.length;
+        var qSettledCnt = document.getElementById('cockpitQueueSettledCnt');
+        if (qSettledCnt) qSettledCnt.innerText = settledList.length;
 
         // 3. 자서전 출판 프로젝트 수
         var memoirList = (typeof getMemoirProjects === 'function') ? getMemoirProjects() : [];
@@ -6510,72 +6559,71 @@
         var elCatCoach = document.getElementById('cockpitCatCount_coach');
         if (elCatCoach) elCatCoach.innerText = (coachList.length || 0) + '명 · 지원 ' + (appList.length || 0);
 
-        // 4. 최근 현장 파견/활동 상세 현황 렌더링 (실제 데이터 매핑 + 해당 신청 건 진행결과 모달 직결)
+        // 4. 현장완료 업무카드 검수 · 송금 정산 & 비즈니스 완료 마감 보드 (현장완료 건만 집중 표시!)
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
         if (recentTbody) {
-          if (dispList.length === 0) {
-            recentTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#94a3b8;">최근 현장 배정 내역이 없습니다.</td></tr>';
+          var isSettledMode = currentCockpitClosingTab === 'settled';
+          var targetList = isSettledMode ? settledList : pendingSettleList;
+
+          if (targetList.length === 0) {
+            recentTbody.innerHTML = isSettledMode
+              ? '<tr><td colspan="6" style="text-align:center; padding:28px; color:#94a3b8;">아직 송금·비즈니스 완료 마감된 내역이 없습니다.</td></tr>'
+              : '<tr><td colspan="6" style="text-align:center; padding:28px; color:#059669; font-weight:750;">🎉 현재 송금 정산 대기 중인 현장완료 건이 없습니다. 모든 현장완료 비즈니스가 마감되었습니다!</td></tr>';
           } else {
-            var top8 = dispList.slice(0, 8);
-            recentTbody.innerHTML = top8.map(function(d) {
-              var step = d.step || d.status || '배정완료';
-              var coachLabel = (d.coach || d.coachName || '').trim() || '미배정';
-              var svcLabel = d.serviceType || d.serviceName || d.serviceCategory || '라이프케어';
-              var addrShort = (d.address || '').split(' ').slice(0, 2).join(' ');
-              var feeNum = Number(d.fee) || 0;
-              var feeText = feeNum > 0 ? (feeNum.toLocaleString() + '원') : '';
+            recentTbody.innerHTML = targetList.map(function(d) {
+              var coachLabel = (d.coach || d.coachName || '').trim() || '담당 코치';
+              var svcLabel = d.serviceType || d.serviceName || '라이프케어';
+              var feeNum = Number(d.fee) || 150000;
+              var feeText = feeNum.toLocaleString() + '원';
 
               var photoCount =
                 (Array.isArray(d.beforePhotos) ? d.beforePhotos.length : (d.beforePhoto ? 1 : 0)) +
                 (Array.isArray(d.processPhotos) ? d.processPhotos.length : (d.processPhoto ? 1 : 0)) +
                 (Array.isArray(d.afterPhotos) ? d.afterPhotos.length : (d.afterPhoto ? 1 : 0));
 
-              var sBadge = step === '정산완료'
-                ? '<span class="status-badge" style="background:#dcfce7; color:#15803d; white-space:nowrap;">✓ 정산완료</span>'
-                : (step === '서비스완료'
-                  ? '<span class="status-badge" style="background:#fef3c7; color:#b45309; white-space:nowrap;">⚡ 검수대기</span>'
-                  : (step === '진행중'
-                    ? '<span class="status-badge" style="background:#e0f2fe; color:#0369a1; white-space:nowrap;">🏃 진행중</span>'
-                    : '<span class="status-badge" style="background:#f1f5f9; color:#475569; white-space:nowrap;">⏳ 배정완료</span>'));
-
-              var scheduleLine = escapeHtml(d.preferredDate || d.scheduledDate || d.visitDate || '-');
-              var stampParts = [];
-              if (d.arrivalStamp) stampParts.push('📍도착 ' + escapeHtml(d.arrivalStamp));
-              if (d.completionDate) stampParts.push('✓완료 ' + escapeHtml(d.completionDate));
-              var stampHtml = stampParts.length
-                ? '<div style="font-size:0.74rem; color:#0369a1; font-weight:700; margin-top:2px;">' + stampParts.join(' · ') + '</div>'
-                : '<div style="font-size:0.73rem; color:#94a3b8; margin-top:2px;">스탬프 대기</div>';
+              var stampLines = [];
+              if (d.arrivalStamp) stampLines.push('<div style="color:#0369a1; font-weight:750;">📍 도착: ' + escapeHtml(d.arrivalStamp) + '</div>');
+              if (d.completionDate) stampLines.push('<div style="color:#047857; font-weight:850;">🏁 완료: ' + escapeHtml(d.completionDate) + '</div>');
+              if (stampLines.length === 0) {
+                stampLines.push('<div style="color:#64748b;">' + escapeHtml(d.preferredDate || '현장 완료 제출') + '</div>');
+              }
 
               var summaryText = (d.coachReport && d.coachReport.trim())
                 ? ('💬 ' + d.coachReport.trim())
-                : (d.notes || d.specialNotes || '특이사항 없음');
-
-              var metaBadges = [];
-              if (photoCount > 0) {
-                metaBadges.push('<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">📷 사진 ' + photoCount + '장</span>');
-              }
-              if (feeText) {
-                metaBadges.push('<span style="background:#fef9e7; color:#8c6610; border:1px solid #ead496; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">💰 ' + feeText + '</span>');
-              }
+                : (d.notes || '현장 수행 완료 보고');
 
               var safeId = String(d.id || '').replace(/'/g, '');
-              return '<tr style="cursor:pointer;" onclick="openDispatchReportModal(\'' + safeId + '\')" title="클릭하여 해당 신청 건의 진행결과(사진·소감·정산)를 확인합니다">' +
-                '<td><div style="font-weight:850; color:#0f172a; white-space:nowrap;">' + escapeHtml(d.customerName || '고객') + '</div>' +
-                  (d.phone ? '<div style="font-size:0.73rem; color:#64748b; margin-top:2px;">' + escapeHtml(d.phone) + '</div>' : '') +
+              var actionCellHtml = isSettledMode
+                ? '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
+                    '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#f8fafc; color:#334155; border:1px solid #cbd5e1;">📸 업무카드</button>' +
+                    '<button type="button" class="btn-action-sm" onclick="sendSettlementKakaoDirect(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:850; white-space:nowrap; background:#fef01b; color:#181600; border:1px solid #e5d800;" title="코치님께 입금완료 카톡 알림 재전송">💬 입금톡</button>' +
+                  '</div>'
+                : '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
+                    '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#eef3f9; color:#245b8e; border:1px solid #bfd3ea;" title="현장 사진과 코치 소감을 검수합니다">📸 업무카드</button>' +
+                    '<button type="button" class="btn-action-sm" onclick="approveCoachSettlementFromCard(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.75rem; font-weight:850; white-space:nowrap; background:#059669; color:#ffffff; border:none; border-radius:6px; box-shadow:0 2px 6px rgba(5,150,105,0.28);" title="활동비 송금 승인 및 연결 비즈니스 완료(CRM 이관) 일괄 마감">💰 송금·완료</button>' +
+                  '</div>';
+
+              return '<tr style="cursor:pointer;" onclick="openDispatchReportModal(\'' + safeId + '\')" title="클릭하여 현장 업무카드(사진·소감·송금)를 검수합니다">' +
+                '<td>' +
+                  '<div style="font-weight:850; color:#0f172a; white-space:nowrap;">' + escapeHtml(d.customerName || '고객') + '</div>' +
+                  '<div style="font-size:0.75rem; color:var(--accent); font-weight:750; margin-top:2px;">' + escapeHtml(svcLabel) + '</div>' +
                 '</td>' +
-                '<td><div style="font-weight:750; color:var(--accent); font-size:0.84rem;">' + escapeHtml(svcLabel) + '</div>' +
-                  (addrShort ? '<div style="font-size:0.73rem; color:#64748b; margin-top:2px;">📍 ' + escapeHtml(addrShort) + '</div>' : '') +
+                '<td>' +
+                  '<div style="font-weight:800; color:#0284c7; white-space:nowrap;">' + escapeHtml(coachLabel) + '</div>' +
+                  (d.coachPhone ? '<div style="font-size:0.72rem; color:#64748b; margin-top:2px;">' + escapeHtml(d.coachPhone) + '</div>' : '') +
                 '</td>' +
-                '<td><span style="font-weight:800; color:' + (coachLabel === '미배정' ? '#dc2626' : '#0284c7') + '; white-space:nowrap;">' + escapeHtml(coachLabel) + '</span></td>' +
-                '<td style="text-align:center;">' + sBadge + '</td>' +
-                '<td style="font-size:0.80rem; color:#334155;"><div>' + scheduleLine + '</div>' + stampHtml + '</td>' +
-                '<td style="font-size:0.82rem; color:var(--text-sub); max-width:260px;">' +
-                  (metaBadges.length ? '<div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px;">' + metaBadges.join('') + '</div>' : '') +
+                '<td style="font-size:0.77rem; line-height:1.45;">' + stampLines.join('') + '</td>' +
+                '<td style="font-size:0.82rem; color:var(--text-sub); max-width:270px;">' +
+                  '<div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px;">' +
+                    '<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">📷 현장사진 ' + photoCount + '장</span>' +
+                    (isSettledMode
+                      ? '<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">✓ 비즈니스완료 · CRM이관</span>'
+                      : '<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">⚡ 현장완료 · 송금대기</span>') +
+                  '</div>' +
                   '<div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(summaryText) + '</div>' +
                 '</td>' +
-                '<td style="text-align:center;">' +
-                  '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.77rem; font-weight:800; white-space:nowrap; background:#eef3f9; color:#245b8e; border:1px solid #bfd3ea;">진행결과</button>' +
-                '</td>' +
+                '<td style="text-align:right; font-weight:900; color:#b45309; white-space:nowrap; font-size:0.9rem;">' + feeText + '</td>' +
+                '<td style="text-align:center;" onclick="event.stopPropagation()">' + actionCellHtml + '</td>' +
               '</tr>';
             }).join('');
           }
@@ -7094,6 +7142,7 @@
         setTimeout(() => {
           if (typeof initAdminFirebaseArticleListener === 'function') initAdminFirebaseArticleListener();
           if (typeof initAdminMemoirListener === 'function') initAdminMemoirListener();
+          if (typeof initAdminDispatchFirebaseListener === 'function') initAdminDispatchFirebaseListener();
         }, 300);
       }
     } catch (fbErr) {
@@ -15006,43 +15055,43 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     ];
 
-    // 데이터 가져오기 및 구버전 호환 정규화
+    // 데이터 가져오기 및 구버전 호환 정규화 (다중 사진 배열 + 비즈니스 연동 메타데이터 완전 보존)
     function getDispatches() {
       const saved = localStorage.getItem(DISPATCH_STORAGE_KEY) || localStorage.getItem('yebaek_service_dispatches_v1');
       if (saved) {
         try {
           const parsed = JSON.parse(saved);
-          if (Array.isArray(parsed) && parsed.length >= 8) {
-            // 💡 자서전 파견 건 누락 방지 자동 보강
-            const hasMemoirDisp = parsed.some(d => (d.serviceType || '').includes('자서전'));
-            if (!hasMemoirDisp) {
-              const defMemoir = DEFAULT_DISPATCHES.find(d => (d.serviceType || '').includes('자서전'));
-              if (defMemoir) {
-                parsed.push(defMemoir);
-                localStorage.setItem(DISPATCH_STORAGE_KEY, JSON.stringify(parsed));
-              }
-            }
-            // 필드 호환 정규화
-            return parsed.map(d => ({
-              id: d.id || 'disp_' + Date.now(),
-              customerName: d.customerName || d.clientName || '고객',
-              phone: d.phone || d.clientPhone || '',
-              serviceType: d.serviceType || '💄 화려한 외출 (시니어 메이크업)',
-              preferredDate: d.preferredDate || d.schedule || '',
-              address: d.address || d.location || '',
-              coach: d.coach || (d.coachName ? d.coachName + (d.coachName.endsWith('코치') ? '' : ' 코치') : (d.customerName && d.customerName.includes('최순자') ? '박지은 코치' : '')),
-              coachPhone: d.coachPhone || (d.customerName && d.customerName.includes('최순자') ? '010-3344-5566' : ''),
-              coachId: d.coachId || '',
-              step: d.step || d.status || '배정대기',
-              fee: Number(d.fee) || 150000,
-              notes: d.notes || d.memo || '',
-              arrivalStamp: d.arrivalStamp || '',
-              completionDate: d.completionDate || '',
-              beforePhoto: d.beforePhoto || '',
-              processPhoto: d.processPhoto || '',
-              afterPhoto: d.afterPhoto || '',
-              coachReport: d.coachReport || ''
-            }));
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            // 필드 호환 정규화 (기존 확장 필드 sourceBizType/sourceBizId/beforePhotos 등 누락 없이 보존!)
+            return parsed.map(d => {
+              const bArr = Array.isArray(d.beforePhotos) ? d.beforePhotos : (d.beforePhoto ? [d.beforePhoto] : []);
+              const pArr = Array.isArray(d.processPhotos) ? d.processPhotos : (d.processPhoto ? [d.processPhoto] : []);
+              const aArr = Array.isArray(d.afterPhotos) ? d.afterPhotos : (d.afterPhoto ? [d.afterPhoto] : []);
+              return {
+                ...d,
+                id: d.id || 'disp_' + Date.now(),
+                customerName: d.customerName || d.clientName || '고객',
+                phone: d.phone || d.clientPhone || '',
+                serviceType: d.serviceType || '💄 화려한 외출 (시니어 메이크업)',
+                preferredDate: d.preferredDate || d.schedule || '',
+                address: d.address || d.location || '',
+                coach: d.coach || (d.coachName ? d.coachName + (d.coachName.endsWith('코치') ? '' : ' 코치') : (d.customerName && d.customerName.includes('최순자') ? '박지은 코치' : '')),
+                coachPhone: d.coachPhone || (d.customerName && d.customerName.includes('최순자') ? '010-3344-5566' : ''),
+                coachId: d.coachId || '',
+                step: d.step || d.status || '배정대기',
+                fee: Number(d.fee) || 150000,
+                notes: d.notes || d.memo || '',
+                arrivalStamp: d.arrivalStamp || '',
+                completionDate: d.completionDate || '',
+                beforePhotos: bArr,
+                processPhotos: pArr,
+                afterPhotos: aArr,
+                beforePhoto: bArr[0] || d.beforePhoto || '',
+                processPhoto: pArr[0] || d.processPhoto || '',
+                afterPhoto: aArr[0] || d.afterPhoto || '',
+                coachReport: d.coachReport || ''
+              };
+            });
           }
         } catch (e) {
           console.error('배정 데이터 파싱 오류:', e);
@@ -15052,15 +15101,271 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       return DEFAULT_DISPATCHES;
     }
 
-    function saveDispatches(list) {
+    function syncSingleDispatchToFirestore(item) {
+      if (!fbDb || !item || !item.id) return;
+      try {
+        const cleanDoc = Object.assign({}, item, { updatedAt: Date.now() });
+        fbDb.collection('coach_dispatches').doc(String(item.id)).set(cleanDoc, { merge: true }).catch(err => {
+          console.warn('[Firestore Dispatch Sync Warning]', err);
+        });
+      } catch (e) {}
+    }
+
+    function saveDispatches(list, skipCloudSync) {
       localStorage.setItem(DISPATCH_STORAGE_KEY, JSON.stringify(list));
+      if (!skipCloudSync && fbDb && Array.isArray(list)) {
+        list.forEach(item => syncSingleDispatchToFirestore(item));
+      }
       renderDispatchesTable(currentDispatchFilter);
       renderCoachesTable();
       updateAcademyStats();
       if (typeof renderCoachControlCenter === 'function') {
         renderCoachControlCenter();
       }
+      if (typeof refreshCockpitStats === 'function') {
+        refreshCockpitStats();
+      }
     }
+
+    // 🌟 코치 현장앱(coach.html) ↔ 본사 관리자(admin.html) 실시간 Firestore 양방향 동기화 리스너
+    let adminDispatchListenerStarted = false;
+    function initAdminDispatchFirebaseListener() {
+      if (!fbDb || adminDispatchListenerStarted) return;
+      adminDispatchListenerStarted = true;
+      try {
+        fbDb.collection('coach_dispatches').onSnapshot((snapshot) => {
+          if (!snapshot || snapshot.empty) return;
+          const localList = getDispatches();
+          let changed = false;
+
+          snapshot.forEach(doc => {
+            const remote = doc.data();
+            if (!remote || !remote.id) return;
+            const idx = localList.findIndex(d => d.id === remote.id);
+            if (idx === -1) {
+              localList.unshift(remote);
+              changed = true;
+              if (remote.step === '서비스완료') {
+                syncDispatchToLinkedBusiness(remote, 'field_done');
+              } else if (remote.step === '정산완료') {
+                syncDispatchToLinkedBusiness(remote, 'business_done');
+              }
+            } else {
+              const cur = localList[idx];
+              const remoteUpdated = Number(remote.updatedAt) || 0;
+              const localUpdated = Number(cur.updatedAt) || 0;
+              const remoteHasNewer =
+                remoteUpdated > localUpdated ||
+                (remote.step && remote.step !== cur.step && remote.step === '서비스완료' && cur.step !== '정산완료') ||
+                (remote.arrivalStamp && !cur.arrivalStamp) ||
+                (remote.completionDate && !cur.completionDate) ||
+                (remote.coachReport && remote.coachReport !== cur.coachReport);
+              if (remoteHasNewer) {
+                localList[idx] = Object.assign({}, cur, remote);
+                changed = true;
+                if (remote.step === '서비스완료' && cur.step !== '서비스완료') {
+                  syncDispatchToLinkedBusiness(localList[idx], 'field_done');
+                } else if (remote.step === '정산완료' && cur.step !== '정산완료') {
+                  syncDispatchToLinkedBusiness(localList[idx], 'business_done');
+                }
+              }
+            }
+          });
+
+          if (changed) {
+            saveDispatches(localList, true);
+            if (activeReportMissionId) {
+              openDispatchReportModal(activeReportMissionId);
+            }
+          }
+        }, (err) => {
+          console.warn('[Firestore Dispatch Listener Warning]', err);
+        });
+      } catch (e) {
+        console.warn('[Firestore Dispatch Listener Error]', e);
+      }
+    }
+    window.initAdminDispatchFirebaseListener = initAdminDispatchFirebaseListener;
+
+    // 🌟 파견 상태(현장완료 / 송금·비즈니스완료) ➔ 연결된 원본 비즈니스(03. 웰라이프 / 04. 자서전) 자동 동기화
+    function syncDispatchToLinkedBusiness(dispatchItem, targetStage) {
+      if (!dispatchItem) return false;
+      let synced = false;
+      const normPhone = String(dispatchItem.phone || '').replace(/[^0-9]/g, '');
+      const cleanCust = String(dispatchItem.customerName || '').replace(/\s*\([^)]*\)/g, '').replace(/어르신|어머니|모친|님/g, '').trim();
+      const svcText = String(dispatchItem.serviceType || '');
+      const nowIso = new Date().toISOString();
+
+      // 1) 3-1 시니어 뷰티 라이프케어 동기화
+      if (dispatchItem.sourceBizType === 'beauty' || svcText.includes('뷰티') || svcText.includes('메이크업') || svcText.includes('외출')) {
+        try {
+          const rawB = localStorage.getItem('seniorBeautyBookings');
+          if (rawB) {
+            const bList = JSON.parse(rawB);
+            if (Array.isArray(bList)) {
+              const target = bList.find(b =>
+                (dispatchItem.sourceBizId && b.id === dispatchItem.sourceBizId) ||
+                (b.linkedDispatchId && b.linkedDispatchId === dispatchItem.id) ||
+                (normPhone && String(b.phone || '').replace(/[^0-9]/g, '') === normPhone) ||
+                (cleanCust && ((b.seniorName && b.seniorName.includes(cleanCust)) || (b.applicantName && b.applicantName.includes(cleanCust))))
+              );
+              if (target) {
+                target.linkedDispatchId = dispatchItem.id;
+                if (targetStage === 'field_done' && target.status !== '케어완료') {
+                  target.status = '검수대기';
+                  target.sopProgress = '현장 완료 제출 · 통합관제 송금 검수대기';
+                  if (dispatchItem.afterPhoto || (dispatchItem.afterPhotos && dispatchItem.afterPhotos.length)) {
+                    target.photoBase64 = 'registered';
+                  }
+                } else if (targetStage === 'business_done') {
+                  target.status = '케어완료';
+                  target.completedAt = target.completedAt || nowIso;
+                  target.settledAt = nowIso;
+                  target.sopProgress = '송금 정산 · 비즈니스 최종 완료 (CRM 이관)';
+                } else if (targetStage === 'revert_field_done') {
+                  target.status = '검수대기';
+                  target.completedAt = null;
+                }
+                localStorage.setItem('seniorBeautyBookings', JSON.stringify(bList));
+                synced = true;
+              }
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 2) 3-2 옷장 / 3-3 유품 / 3-4 엔딩파티 동기화
+      if (!synced && (['wardrobe', 'legacy', 'party'].includes(dispatchItem.sourceBizType) || svcText.includes('옷장') || svcText.includes('공간') || svcText.includes('유품') || svcText.includes('짐') || svcText.includes('파티') || svcText.includes('엔딩'))) {
+        try {
+          const rawG = localStorage.getItem('seniorConsultList');
+          if (rawG) {
+            const gList = JSON.parse(rawG);
+            if (Array.isArray(gList)) {
+              const target = gList.find(g =>
+                (dispatchItem.sourceBizId && g.id === dispatchItem.sourceBizId) ||
+                (g.linkedDispatchId && g.linkedDispatchId === dispatchItem.id) ||
+                (normPhone && String(g.phone || '').replace(/[^0-9]/g, '') === normPhone) ||
+                (cleanCust && g.name && g.name.includes(cleanCust))
+              );
+              if (target) {
+                target.linkedDispatchId = dispatchItem.id;
+                if (targetStage === 'field_done' && target.status !== '완료') {
+                  target.status = '검수대기';
+                } else if (targetStage === 'business_done') {
+                  target.status = '완료';
+                  target.completedAt = target.completedAt || nowIso;
+                  target.settledAt = nowIso;
+                } else if (targetStage === 'revert_field_done') {
+                  target.status = '검수대기';
+                  target.completedAt = null;
+                }
+                localStorage.setItem('seniorConsultList', JSON.stringify(gList));
+                synced = true;
+              }
+            }
+          }
+        } catch (e) {}
+      }
+
+      // 3) 04. 디지털 자서전 동기화
+      if (dispatchItem.memoirProjectId || dispatchItem.sourceBizType === 'memoir' || svcText.includes('자서전')) {
+        try {
+          if (typeof getMemoirProjects === 'function' && typeof saveMemoirProjects === 'function') {
+            const mList = getMemoirProjects();
+            const target = mList.find(p =>
+              (dispatchItem.memoirProjectId && p.id === dispatchItem.memoirProjectId) ||
+              (dispatchItem.sourceBizId && p.id === dispatchItem.sourceBizId) ||
+              (normPhone && String(p.applicantPhone || '').replace(/[^0-9]/g, '') === normPhone)
+            );
+            if (target) {
+              if (targetStage === 'business_done') {
+                target.coachSettled = true;
+                target.settledAt = nowIso;
+                if (target.status === 'coach_assigned' || target.status === 'interview_pending') {
+                  target.status = 'interview_done';
+                  target.statusLabel = '현장 구술완료 · 정산마감';
+                }
+                saveMemoirProjects(mList);
+                if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+                synced = true;
+              }
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (synced && typeof renderBusinessMasterDashboard === 'function') {
+        renderBusinessMasterDashboard();
+      }
+      return synced;
+    }
+    window.syncDispatchToLinkedBusiness = syncDispatchToLinkedBusiness;
+
+    // 🌟 각 비즈니스 파이프라인에서 제자리 원스톱 [코치 배정 등록 + 클라우드 동기화 + 카톡 알림 발송]
+    function dispatchAndNotifyFromBusiness(bizPayload) {
+      if (!bizPayload) return null;
+      const dispatches = getDispatches();
+      const coaches = (typeof getCoaches === 'function') ? getCoaches() : [];
+      const rawCoach = String(bizPayload.coach || '').trim();
+      const cleanCName = rawCoach.split('(')[0].replace(/전문|수석|라이프|코치/g, '').trim();
+      const matchedC = coaches.find(c => c.name && cleanCName && (c.name.includes(cleanCName) || cleanCName.includes(c.name.replace(/코치/g, '').trim())));
+      const shortCoachLabel = matchedC ? (matchedC.name.endsWith('코치') ? matchedC.name : matchedC.name + ' 코치') : (cleanCName ? cleanCName + ' 코치' : rawCoach);
+      const coachPhone = bizPayload.coachPhone || (matchedC ? matchedC.phone : '');
+      const coachId = matchedC ? matchedC.id : '';
+
+      let target = dispatches.find(d =>
+        (bizPayload.sourceBizId && d.sourceBizId === bizPayload.sourceBizId && d.sourceBizType === bizPayload.sourceBizType)
+      );
+
+      const nowIso = new Date().toISOString();
+      if (target) {
+        target.coach = shortCoachLabel;
+        target.coachPhone = coachPhone || target.coachPhone || '';
+        target.coachId = coachId || target.coachId || '';
+        target.preferredDate = bizPayload.date || target.preferredDate || '방문 일정 협의';
+        target.address = bizPayload.address || target.address || '고객 자택';
+        target.fee = Number(bizPayload.fee) || target.fee || 150000;
+        target.notes = bizPayload.notes || target.notes || '';
+        if (target.step === '배정대기') target.step = '배정완료';
+        target.kakaoSentAt = nowIso;
+        target.updatedAt = Date.now();
+      } else {
+        target = {
+          id: 'disp_' + (bizPayload.sourceBizType || 'biz') + '_' + (bizPayload.sourceBizId || Date.now()),
+          sourceBizType: bizPayload.sourceBizType || '',
+          sourceBizId: bizPayload.sourceBizId || '',
+          customerName: bizPayload.name || '고객',
+          phone: bizPayload.phone || '',
+          serviceType: bizPayload.service || '현장 케어 서비스',
+          preferredDate: bizPayload.date || '방문 일정 협의',
+          address: bizPayload.address || '고객 자택',
+          coach: shortCoachLabel,
+          coachPhone: coachPhone,
+          coachId: coachId,
+          fee: Number(bizPayload.fee) || 150000,
+          step: '배정완료',
+          notes: bizPayload.notes || '',
+          arrivalStamp: '',
+          completionDate: '',
+          beforePhotos: [],
+          processPhotos: [],
+          afterPhotos: [],
+          beforePhoto: '',
+          processPhoto: '',
+          afterPhoto: '',
+          coachReport: '',
+          kakaoSentAt: nowIso,
+          updatedAt: Date.now()
+        };
+        dispatches.unshift(target);
+      }
+
+      saveDispatches(dispatches);
+      // 즉시 코치앱 배정 카카오톡 알림 발송 (SDK + 클립보드 자동 복사)
+      sendCoachKakaoDirect(target.id);
+      return target;
+    }
+    window.dispatchAndNotifyFromBusiness = dispatchAndNotifyFromBusiness;
 
     function filterDispatches(category, btnEl) {
       currentDispatchFilter = category;
@@ -15316,12 +15621,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const revertBtn = document.getElementById('btnRevertSettlement');
       if (approveBtn) {
         if (target.step === '정산완료') {
-          approveBtn.innerHTML = '<span>✓</span> 송금 및 정산 승인 완료됨';
+          approveBtn.innerHTML = '<span>✓</span> 송금 · 비즈니스 최종 완료됨';
           approveBtn.style.background = '#64748b';
           approveBtn.disabled = true;
           if (revertBtn) revertBtn.style.display = 'inline-flex';
         } else {
-          approveBtn.innerHTML = `<span>💰</span> 활동비 ${(Number(target.fee) || 150000).toLocaleString()}원 송금 확인 및 정산 완료 승인`;
+          approveBtn.innerHTML = `<span>💰</span> 활동비 ${(Number(target.fee) || 150000).toLocaleString()}원 송금 완료 &amp; 비즈니스 최종 완료`;
           approveBtn.style.background = 'linear-gradient(135deg, #059669 0%, #047857 100%)';
           approveBtn.disabled = false;
           if (revertBtn) revertBtn.style.display = 'none';
@@ -15377,7 +15682,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (e.target.id === 'dispatchReportModal') closeDispatchReportModal();
     }
 
-    // 본사 관리자가 활동비 송금 후 정산 승인
+    // 본사 관리자가 활동비 송금 완료 & 연결 비즈니스 최종 완료(CRM 이관) 일괄 마감
     function approveCoachSettlement() {
       if (!activeReportMissionId) return;
       const dispatches = getDispatches();
@@ -15385,13 +15690,17 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (!target) return;
 
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
-      if (confirm(`[${target.coach || '담당 코치'}] 님께 활동비 (${feeStr}원)를 송금하셨습니까?\n\n[확인]을 누르면 상태가 '정산완료'로 변경되며,\n코치 파트너스 앱의 [정산/수익] 탭에도 실시간 '송금완료'로 표기됩니다.`)) {
+      if (confirm(`[${target.coach || '담당 코치'}] 님께 활동비 (${feeStr}원) 송금을 완료하고 비즈니스를 최종 마감하시겠습니까?\n\n[확인]을 누르면:\n① 정산 상태가 '송금완료'로 변경되어 코치앱 [정산/수익] 탭에 실시간 반영됩니다.\n② 연결된 비즈니스(웰라이프·자서전)도 자동으로 '비즈니스 완료(CRM 사후관리)'로 마감됩니다.`)) {
         target.step = '정산완료';
+        target.settledAt = new Date().toISOString();
+        target.updatedAt = Date.now();
         saveDispatches(dispatches);
-        renderCoachControlCenter();
-        renderDispatchesTable();
+        syncDispatchToLinkedBusiness(target, 'business_done');
         openDispatchReportModal(activeReportMissionId);
-        alert(`🎉 [${target.customerName}] 건의 코치 활동비(${feeStr}원) 정산이 최종 승인되었습니다!\n\n하단의 [💬 입금완료 카톡 복사]를 눌러 코치님께 안내 메시지를 전송하실 수 있습니다.`);
+
+        if (confirm(`🎉 [${target.customerName}] 건의 활동비(${feeStr}원) 송금 및 비즈니스 완료 처리가 모두 마감되었습니다!\n\n지금 바로 코치님께 [💬 활동비 입금완료 카톡 알림]을 전송하시겠습니까?`)) {
+          sendSettlementKakaoDirect(target.id);
+        }
       }
     }
 
@@ -15401,11 +15710,12 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const target = dispatches.find(d => d.id === activeReportMissionId);
       if (!target) return;
 
-      if (!confirm(`[${target.customerName}] 건의 정산 완료 상태를 취소하고 [검수대기] 상태로 되돌리시겠습니까?`)) return;
+      if (!confirm(`[${target.customerName}] 건의 송금·비즈니스 완료 상태를 취소하고 [현장완료·송금대기] 상태로 되돌리시겠습니까?`)) return;
       target.step = '서비스완료';
+      target.settledAt = '';
+      target.updatedAt = Date.now();
       saveDispatches(dispatches);
-      renderCoachControlCenter();
-      renderDispatchesTable();
+      syncDispatchToLinkedBusiness(target, 'revert_field_done');
       openDispatchReportModal(activeReportMissionId);
     }
 
@@ -15993,13 +16303,26 @@ ${coachAppUrl}
       if (e.target.id === 'dispatchFormModal') closeDispatchModal();
     }
 
-    // 🌟 특정 고객(4대 비즈니스 상담/뷰티 예약 등) 정보를 채워 코치 배정 모달 바로 열기
+    // 🌟 특정 고객(웰라이프·자서전 등) 정보를 채워 현재 화면을 떠나지 않고 제자리에서 코치 배정 모달 열기
+    let pendingDispatchBizLink = null;
+
     function openDispatchModalForClient(clientData) {
-      if (typeof switchTab === 'function') {
-        switchTab('tabAcademy');
-      }
+      pendingDispatchBizLink = (clientData && (clientData.sourceBizType || clientData.sourceBizId))
+        ? { sourceBizType: clientData.sourceBizType || '', sourceBizId: clientData.sourceBizId || '' }
+        : null;
+
       openDispatchModal();
       if (!clientData) return;
+
+      // 이미 연결된 파견 레코드가 있으면 수정 모드로 연결
+      if (pendingDispatchBizLink && pendingDispatchBizLink.sourceBizId) {
+        const existingDisp = getDispatches().find(d =>
+          d.sourceBizId === pendingDispatchBizLink.sourceBizId &&
+          d.sourceBizType === pendingDispatchBizLink.sourceBizType
+        );
+        const idInput = document.getElementById('dispatchFormId');
+        if (existingDisp && idInput) idInput.value = existingDisp.id;
+      }
 
       const titleEl = document.getElementById('dispatchModalTitle');
       const nameInput = document.getElementById('inputDispClientName');
@@ -16038,8 +16361,9 @@ ${coachAppUrl}
       if (memoInput && clientData.notes) memoInput.value = clientData.notes;
       if (statusInput) statusInput.value = '배정완료';
       if (coachSelect && clientData.coach) {
+        const cleanKeyword = String(clientData.coach).split('(')[0].replace(/전문|수석|라이프|코치/g, '').trim();
         for (let i = 0; i < coachSelect.options.length; i++) {
-          if (coachSelect.options[i].value.includes(clientData.coach)) {
+          if (coachSelect.options[i].value.includes(clientData.coach) || (cleanKeyword && coachSelect.options[i].value.includes(cleanKeyword))) {
             coachSelect.selectedIndex = i;
             break;
           }
@@ -16090,6 +16414,7 @@ ${coachAppUrl}
         }
       }
 
+      let savedId = existingId;
       if (existingId) {
         const target = list.find(d => d.id === existingId);
         if (target) {
@@ -16104,10 +16429,18 @@ ${coachAppUrl}
           target.fee = feeInput ? Number(feeInput.value) || 150000 : 150000;
           target.step = statusInput && statusInput.value ? statusInput.value : (coachName ? '배정완료' : '배정대기');
           target.notes = memoInput ? memoInput.value.trim() : '';
+          if (pendingDispatchBizLink) {
+            target.sourceBizType = pendingDispatchBizLink.sourceBizType || target.sourceBizType || '';
+            target.sourceBizId = pendingDispatchBizLink.sourceBizId || target.sourceBizId || '';
+          }
+          target.updatedAt = Date.now();
         }
       } else {
+        savedId = 'disp_' + Date.now();
         const newDisp = {
-          id: 'disp_' + Date.now(),
+          id: savedId,
+          sourceBizType: pendingDispatchBizLink ? pendingDispatchBizLink.sourceBizType : '',
+          sourceBizId: pendingDispatchBizLink ? pendingDispatchBizLink.sourceBizId : '',
           customerName: customerName,
           phone: formattedPhone,
           serviceType: serviceSelect ? serviceSelect.value : '💄 화려한 외출 (시니어 메이크업)',
@@ -16127,14 +16460,53 @@ ${coachAppUrl}
           beforePhoto: '',
           processPhoto: '',
           afterPhoto: '',
-          coachReport: ''
+          coachReport: '',
+          updatedAt: Date.now()
         };
         list.unshift(newDisp);
       }
 
+      // 연결된 웰라이프 비즈니스 원본에도 코치 배정·현장진행 상태 반영
+      if (pendingDispatchBizLink && pendingDispatchBizLink.sourceBizId && coachName) {
+        try {
+          if (pendingDispatchBizLink.sourceBizType === 'beauty') {
+            const bList = JSON.parse(localStorage.getItem('seniorBeautyBookings') || '[]');
+            const bItem = bList.find(x => x.id === pendingDispatchBizLink.sourceBizId);
+            if (bItem) {
+              bItem.assignedCoach = coachName;
+              bItem.coachPhone = coachPhone || bItem.coachPhone || '';
+              bItem.visitDate = schedule;
+              bItem.address = fullAddress;
+              bItem.linkedDispatchId = savedId;
+              bItem.status = '진행중';
+              bItem.sopProgress = '코치 배정·카톡 알림 완료 (현장 방문 대기)';
+              localStorage.setItem('seniorBeautyBookings', JSON.stringify(bList));
+            }
+          } else if (['wardrobe', 'legacy', 'party'].includes(pendingDispatchBizLink.sourceBizType)) {
+            const gList = JSON.parse(localStorage.getItem('seniorConsultList') || '[]');
+            const gItem = gList.find(x => x.id === pendingDispatchBizLink.sourceBizId);
+            if (gItem) {
+              gItem.assignedCoach = coachName;
+              gItem.linkedDispatchId = savedId;
+              gItem.status = '진행중';
+              localStorage.setItem('seniorConsultList', JSON.stringify(gList));
+            }
+          }
+          if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
+        } catch (err) {}
+      }
+      pendingDispatchBizLink = null;
+
       saveDispatches(list);
       closeDispatchModal();
-      alert(`✅ 신규 서비스 신청 정보가 성공적으로 저장되었습니다.\n\n리스트에 [⚠️ 미배정]으로 올라왔습니다. 리스트 테이블에서 적합한 전담 코치를 선택하여 [🤝 배정완료]로 변경하시고, [💬 카톡 전송]을 눌러 코치님께 알림을 전송해 주세요.`);
+
+      if (coachName) {
+        if (confirm(`✅ [${customerName}] 건에 [${coachName}] 배정이 완료되어 클라우드에 등록되었습니다.\n\n지금 바로 코치님께 [💬 코치앱 배정 카카오톡 알림]을 전송하시겠습니까?`)) {
+          sendCoachKakaoDirect(savedId);
+        }
+      } else {
+        alert(`✅ [${customerName}] 서비스 정보가 배정대기로 저장되었습니다.\n코치 지정 후 카카오톡 배정 알림을 전송해 주세요.`);
+      }
     }
 
     function deleteDispatch(dispId) {
@@ -16942,15 +17314,15 @@ ${coachAppUrl}
           settlementStatusHtml = `<span style="color:#94a3b8; font-size:0.78rem;">배정 완료 (대기)</span>`;
         }
 
-        // 7) 정산 승인 & 입금 알림 액션 버튼
+        // 7) 정산 승인 & 입금 알림 액션 버튼 (입금 알림톡은 sendSettlementKakaoDirect 정확 연결)
         let settlementActionHtml = '';
         if (isPending) {
           settlementActionHtml = `
             <div style="display:flex; flex-direction:column; gap:4px; align-items:center;">
-              <button type="button" class="btn-save-setting" onclick="approveCoachSettlementFromCard('${d.id}'); event.stopPropagation();" style="padding:4px 10px; font-size:0.78rem; background:#059669; color:#fff; border:none; font-weight:850; border-radius:6px; width:100%; box-shadow:0 2px 6px rgba(5,150,105,0.25); cursor:pointer;" title="활동비 송금을 승인하고 정산완료 처리합니다">
-                <span>💰</span> 송금 승인
+              <button type="button" class="btn-save-setting" onclick="approveCoachSettlementFromCard('${d.id}'); event.stopPropagation();" style="padding:4px 10px; font-size:0.78rem; background:#059669; color:#fff; border:none; font-weight:850; border-radius:6px; width:100%; box-shadow:0 2px 6px rgba(5,150,105,0.25); cursor:pointer;" title="활동비 송금 완료 및 연결 비즈니스 최종 완료(CRM 이관) 일괄 처리">
+                <span>💰</span> 송금·비즈니스완료
               </button>
-              <button type="button" onclick="sendCoachKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:3px 8px; font-size:0.73rem; background:#fef01b; color:#181600; border:1px solid #e5d800; border-radius:6px; font-weight:800; width:100%; cursor:pointer;" title="코치님께 입금 완료 카톡 메시지 발송">
+              <button type="button" onclick="sendSettlementKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:3px 8px; font-size:0.73rem; background:#fef01b; color:#181600; border:1px solid #e5d800; border-radius:6px; font-weight:800; width:100%; cursor:pointer;" title="코치님께 활동비 입금 완료 카톡 알림 발송">
                 <span>💬</span> 입금 알림톡
               </button>
             </div>
@@ -16958,14 +17330,14 @@ ${coachAppUrl}
         } else if (isSettled) {
           settlementActionHtml = `
             <div style="display:flex; flex-direction:column; gap:3px; align-items:center;">
-              <span style="color:#16a34a; font-weight:850; font-size:0.78rem;">정산 승인 완료 ✓</span>
-              <button type="button" onclick="sendCoachKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:2px 6px; font-size:0.72rem; background:#fff; color:#475569; border:1px solid #cbd5e1; border-radius:4px; font-weight:750; cursor:pointer;" title="입금 확인 카톡 메시지 재전송">
-                💬 알림톡 재전송
+              <span style="color:#16a34a; font-weight:850; font-size:0.78rem;">송금·비즈니스완료 ✓</span>
+              <button type="button" onclick="sendSettlementKakaoDirect('${d.id}'); event.stopPropagation();" style="padding:2px 6px; font-size:0.72rem; background:#fff; color:#475569; border:1px solid #cbd5e1; border-radius:4px; font-weight:750; cursor:pointer;" title="활동비 입금 완료 카톡 알림 재전송">
+                💬 입금톡 재전송
               </button>
             </div>
           `;
         } else {
-          settlementActionHtml = `<span style="color:var(--text-muted); font-size:0.76rem;">케어 완료 후 정산</span>`;
+          settlementActionHtml = `<span style="color:var(--text-muted); font-size:0.76rem;">현장 완료 후 정산</span>`;
         }
 
         return `
@@ -17067,24 +17439,29 @@ ${coachAppUrl}
       if (!target) return;
 
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
-      if (confirm(`[${target.coach || '담당 코치'}] 님께 활동비 (${feeStr}원)를 송금하셨습니까?\n\n[확인]을 누르면 상태가 '정산완료'로 변경되며,\n코치 파트너스 앱의 [정산/수익] 탭에도 실시간 '송금완료'로 표기됩니다.`)) {
+      if (confirm(`[${target.coach || '담당 코치'}] 님께 활동비 (${feeStr}원) 송금을 완료하고 비즈니스를 최종 마감하시겠습니까?\n\n[확인]을 누르면:\n① 정산 상태가 '송금완료'로 변경되어 코치앱 [정산/수익] 탭에 실시간 반영됩니다.\n② 연결된 비즈니스(웰라이프·자서전)도 자동으로 '비즈니스 완료(CRM 사후관리)'로 마감됩니다.`)) {
         target.step = '정산완료';
+        target.settledAt = new Date().toISOString();
+        target.updatedAt = Date.now();
         saveDispatches(dispatches);
-        renderCoachControlCenter();
-        renderDispatchesTable();
-        alert(`🎉 [${target.customerName}] 건의 활동비(${feeStr}원) 정산이 최종 완료되었습니다!\n\n코치 앱에 실시간 반영되었으며, [💬 입금완료 카톡 복사]를 눌러 코치님께 안내 메시지를 보내실 수 있습니다.`);
+        syncDispatchToLinkedBusiness(target, 'business_done');
+
+        if (confirm(`🎉 [${target.customerName}] 건의 활동비(${feeStr}원) 송금 및 비즈니스 완료가 마감되었습니다!\n\n지금 바로 코치님께 [💬 입금완료 카톡 알림]을 전송하시겠습니까?`)) {
+          sendSettlementKakaoDirect(target.id);
+        }
       }
     }
 
     function revertCoachSettlementFromCard(dispId) {
-      if (!confirm('정산 완료 상태를 취소하고 [검수대기] 상태로 되돌리시겠습니까?')) return;
+      if (!confirm('송금·비즈니스 완료 상태를 취소하고 [현장완료·송금대기] 상태로 되돌리시겠습니까?')) return;
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
       if (target) {
         target.step = '서비스완료';
+        target.settledAt = '';
+        target.updatedAt = Date.now();
         saveDispatches(dispatches);
-        renderCoachControlCenter();
-        renderDispatchesTable();
+        syncDispatchToLinkedBusiness(target, 'revert_field_done');
       }
     }
 
@@ -17391,13 +17768,21 @@ ${coachAppUrl}
       checkAuth();
     });
 
-    // 🌟 코치 파트너 앱(coach.html)과의 실시간 양방향 동기화 수신
+    // 🌟 코치 파트너 앱(coach.html)과의 실시간 양방향 동기화 수신 (동일 브라우저 + 클라우드)
     window.addEventListener('storage', (e) => {
       if (e.key === DISPATCH_STORAGE_KEY) {
+        const list = getDispatches();
+        list.forEach(d => {
+          if (d.step === '서비스완료') syncDispatchToLinkedBusiness(d, 'field_done');
+          else if (d.step === '정산완료') syncDispatchToLinkedBusiness(d, 'business_done');
+        });
         renderDispatchesTable(currentDispatchFilter || 'all');
         updateAcademyStats();
         if (typeof renderCoachControlCenter === 'function') {
           renderCoachControlCenter();
+        }
+        if (typeof refreshCockpitStats === 'function') {
+          refreshCockpitStats();
         }
         if (activeReportMissionId) {
           openDispatchReportModal(activeReportMissionId);
@@ -17405,7 +17790,7 @@ ${coachAppUrl}
       }
     });
   </script>
-  <script src="beauty-crm.js?v=20261122_v3"></script>
+  <script src="beauty-crm.js?v=20261122_v4"></script>
 
   <!-- ==========================================================
        [NEW] 04. Memoir Publication Control Center & AI Engine

@@ -702,14 +702,14 @@ function generateStep2BeautyView(list, meta) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                    <button type="button" class="btn-save-setting" onclick="transferStep2ToStep3('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #059669; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(5,150,105,0.3); border-radius: 6px; width: 100%;" title="코치 배정 확정 후 ② 현장 케어 단계로 이관합니다">
-                      <span>📸</span> 현장케어로 이관 ➔
+                    <button type="button" class="btn-save-setting" onclick="dispatchAndNotifyBeauty('${item.id}')" style="padding: 5px 10px; font-size: 0.78rem; background: #1e4d35; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(30,77,53,0.28); border-radius: 6px; width: 100%;" title="선택한 코치로 공식 배정 등록 + 코치앱 카카오톡 알림 발송 후 ② 현장케어 단계로 자동 이관합니다">
+                      <span>💬</span> 배정확정 · 카톡알림 ➔
                     </button>
                     <div style="display: flex; gap: 4px; width: 100%;">
-                      <button type="button" class="btn-save-setting" onclick="openDispatchFromBeauty('${item.id}')" style="flex:1; padding:3px 6px; font-size:0.74rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; font-weight:800;" title="공식 파견센터 등록 & 알림톡">
-                        <span>🤝</span> 파견·카톡
+                      <button type="button" class="btn-save-setting" onclick="openDispatchFromBeauty('${item.id}')" style="flex:1; padding:3px 6px; font-size:0.73rem; background:#fff7ed; color:#c2410c; border:1px solid #fdba74; font-weight:800;" title="방문일시·주소·활동비 세부 입력 후 배정합니다">
+                        <span>⚙️</span> 상세배정
                       </button>
-                      <button type="button" onclick="returnToConsultInbox('${item.id}', 'beauty')" style="padding:3px 6px; font-size:0.74rem; background:#fff; color:var(--text-muted); border:1px solid #d1d5db; border-radius:4px; cursor:pointer;" title="추가 상담 필요 시 통합 고객 접수·상담함으로 돌려보냅니다">
+                      <button type="button" onclick="returnToConsultInbox('${item.id}', 'beauty')" style="padding:3px 6px; font-size:0.73rem; background:#fff; color:var(--text-muted); border:1px solid #d1d5db; border-radius:4px; cursor:pointer;" title="추가 상담 필요 시 통합 고객 접수·상담함으로 돌려보냅니다">
                         ↩️ 재상담
                       </button>
                     </div>
@@ -819,15 +819,15 @@ function generateStep3BeautyView(list, meta) {
                 </td>
                 <td style="text-align: center; white-space: nowrap;">
                   <div style="display: flex; flex-direction: column; gap: 4px; align-items: center;">
-                    <button type="button" class="btn-save-setting" onclick="transferStep3ToStep4('${item.id}', 'beauty')" style="padding: 5px 10px; font-size: 0.8rem; background: #7c3aed; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(124,58,237,0.3); border-radius: 6px; width: 100%;" title="케어 완료 승인 후 ③ CRM 사후 리텐션 화면으로 이관합니다">
-                      <span>🎉</span> 케어완료 승인 ➔ CRM 이관
+                    <button type="button" class="btn-save-setting" onclick="openLinkedReportOrCockpit('${escapeHtml(item.linkedDispatchId || '')}', '${escapeHtml(item.seniorName)}')" style="padding: 5px 10px; font-size: 0.78rem; background: ${item.status === '검수대기' ? '#b83354' : '#245b8e'}; color: #fff; border: none; font-weight: 850; box-shadow: 0 2px 6px rgba(36,91,142,0.25); border-radius: 6px; width: 100%;" title="현장 업무카드 확인 및 통합관제 송금·비즈니스완료 처리를 진행합니다">
+                      <span>${item.status === '검수대기' ? '⚡' : '🏁'}</span> ${item.status === '검수대기' ? '통합관제 송금·마감 ➔' : '업무카드 · 송금마감'}
                     </button>
                     <div style="display: flex; gap: 4px; width: 100%;">
-                      <button type="button" class="btn-save-setting" onclick="openBeautyCoachingModal('${item.id}')" style="flex:1; padding:3px 6px; font-size:0.74rem; background:#fee7ec; color:#b83354; border:1px solid #f8c8d2; font-weight:800;" title="180분 현장 코칭일지 작성/수정">
+                      <button type="button" class="btn-save-setting" onclick="openBeautyCoachingModal('${item.id}')" style="flex:1; padding:3px 6px; font-size:0.73rem; background:#fee7ec; color:#b83354; border:1px solid #f8c8d2; font-weight:800;" title="180분 현장 코칭일지 작성/수정">
                         📝 일지
                       </button>
-                      <button type="button" class="btn-save-setting" onclick="goToCoachControlForClient('${escapeHtml(item.seniorName)}')" style="flex:1; padding:3px 6px; font-size:0.74rem; background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; font-weight:800;" title="현장관제&정산센터 이동">
-                        📸 관제
+                      <button type="button" class="btn-save-setting" onclick="transferStep3ToStep4('${item.id}', 'beauty')" style="flex:1; padding:3px 6px; font-size:0.73rem; background:#faf5ff; color:#7c3aed; border:1px solid #e9d5ff; font-weight:800;" title="수동으로 케어완료(CRM 이관) 처리합니다">
+                        🎉 CRM완료
                       </button>
                     </div>
                   </div>
@@ -1224,14 +1224,14 @@ function getGeneralStepActionHtml(item, step, biz) {
   if (step === 'step2') {
     return `
       <div style="display: flex; flex-direction: column; gap: 4px;">
-        <button type="button" class="btn-save-setting" onclick="transferGeneralStep2ToStep3('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: #059669; color: #fff; border: none; font-weight: 850; border-radius: 6px;">
-          📸 현장진행 이관 ➔
+        <button type="button" class="btn-save-setting" onclick="dispatchAndNotifyGeneral('${item.id}', '${biz}')" style="padding: 4px 8px; font-size: 0.77rem; background: #1e4d35; color: #fff; border: none; font-weight: 850; border-radius: 6px;" title="코치 배정 등록 + 코치앱 카톡 알림 발송 후 ② 현장진행으로 자동 이관합니다">
+          💬 배정확정 · 카톡알림 ➔
         </button>
         <div style="display: flex; gap: 4px;">
-          <button type="button" class="btn-save-setting" onclick="openDispatchFromGeneral('${item.id}')" style="flex:1; padding: 3px 6px; font-size: 0.74rem; background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; font-weight: 800;">
-            🤝 파견·카톡
+          <button type="button" class="btn-save-setting" onclick="openDispatchFromGeneral('${item.id}', '${biz}')" style="flex:1; padding: 3px 6px; font-size: 0.73rem; background: #fff7ed; color: #c2410c; border: 1px solid #fdba74; font-weight: 800;">
+            ⚙️ 상세배정
           </button>
-          <button type="button" onclick="returnToConsultInbox('${item.id}', '${biz}')" style="padding: 3px 6px; font-size: 0.74rem; background: #fff; color: var(--text-muted); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;" title="추가 상담 필요 시 통합 상담함으로 돌려보냅니다">
+          <button type="button" onclick="returnToConsultInbox('${item.id}', '${biz}')" style="padding: 3px 6px; font-size: 0.73rem; background: #fff; color: var(--text-muted); border: 1px solid #d1d5db; border-radius: 4px; cursor: pointer;" title="추가 상담 필요 시 통합 상담함으로 돌려보냅니다">
             ↩️ 재상담
           </button>
         </div>
@@ -1240,11 +1240,11 @@ function getGeneralStepActionHtml(item, step, biz) {
   } else if (step === 'step3') {
     return `
       <div style="display: flex; flex-direction: column; gap: 4px;">
-        <button type="button" class="btn-save-setting" onclick="transferGeneralStep3ToStep4('${item.id}')" style="padding: 4px 8px; font-size: 0.78rem; background: #7c3aed; color: #fff; border: none; font-weight: 850; border-radius: 6px;">
-          🎉 완료 승인 ➔ CRM 이관
+        <button type="button" class="btn-save-setting" onclick="openLinkedReportOrCockpit('${escapeHtml(item.linkedDispatchId || '')}', '${escapeHtml(item.name)}')" style="padding: 4px 8px; font-size: 0.77rem; background: ${item.status === '검수대기' ? '#b83354' : '#245b8e'}; color: #fff; border: none; font-weight: 850; border-radius: 6px;" title="현장 업무카드 확인 및 통합관제 송금·비즈니스완료 처리를 진행합니다">
+          ${item.status === '검수대기' ? '⚡ 통합관제 송금·마감 ➔' : '🏁 업무카드 · 송금마감'}
         </button>
-        <button type="button" class="btn-save-setting" onclick="goToCoachControlForClient('${escapeHtml(item.name)}')" style="padding: 3px 6px; font-size: 0.74rem; background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-weight: 800;">
-          📸 현장관제
+        <button type="button" class="btn-save-setting" onclick="transferGeneralStep3ToStep4('${item.id}')" style="padding: 3px 6px; font-size: 0.73rem; background: #faf5ff; color: #7c3aed; border: 1px solid #e9d5ff; font-weight: 800;">
+          🎉 수동 CRM완료
         </button>
       </div>
     `;
@@ -1770,21 +1770,92 @@ function downloadCSVFile(csv, filename) {
   link.click();
 }
 
-// 14. 공식 코치 배정 & 현장관제 연동
+// 14. 공식 코치 배정 · 카톡 알림 · 통합관제 마감 원스톱 연동
+function dispatchAndNotifyBeauty(id) {
+  const list = getStoredBeautyBookings();
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+
+  if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
+    alert('먼저 좌측 [담당 전담 코치 지정] 드롭다운에서 배정할 코치를 선택해 주세요.');
+    return;
+  }
+
+  let linked = null;
+  if (typeof window.dispatchAndNotifyFromBusiness === 'function') {
+    linked = window.dispatchAndNotifyFromBusiness({
+      sourceBizType: 'beauty',
+      sourceBizId: item.id,
+      name: item.seniorName || item.applicantName,
+      phone: item.phone,
+      service: '💄 화려한 외출 (시니어 메이크업)',
+      date: (item.visitDate || '방문 일정 협의').replace('T', ' '),
+      address: (item.address || item.place || '고객 자택'),
+      coach: item.assignedCoach,
+      coachPhone: item.coachPhone || '',
+      fee: 150000,
+      notes: item.consultNote || item.memo || `[뷰티 180분] ${item.applicantName}(${item.role})`
+    });
+  }
+
+  item.status = '진행중';
+  item.sopProgress = '코치 배정·카톡 알림 완료 (코치 현장 수행 대기)';
+  if (linked && linked.id) item.linkedDispatchId = linked.id;
+  localStorage.setItem('seniorBeautyBookings', JSON.stringify(list));
+  renderBusinessMasterDashboard();
+}
+window.dispatchAndNotifyBeauty = dispatchAndNotifyBeauty;
+
+function dispatchAndNotifyGeneral(id, biz) {
+  const list = getStoredGeneralConsults();
+  const item = list.find(x => x.id === id);
+  if (!item) return;
+
+  if (!item.assignedCoach || item.assignedCoach.includes('미배정')) {
+    alert('먼저 [담당 배정 코치] 드롭다운에서 배정할 코치를 선택해 주세요.');
+    return;
+  }
+
+  const bizKey = biz || item.bizType || currentBusinessTab || 'wardrobe';
+  let linked = null;
+  if (typeof window.dispatchAndNotifyFromBusiness === 'function') {
+    linked = window.dispatchAndNotifyFromBusiness({
+      sourceBizType: bizKey,
+      sourceBizId: item.id,
+      name: item.name,
+      phone: item.phone,
+      service: item.category || (BIZ_META[bizKey] ? `${BIZ_META[bizKey].icon} ${BIZ_META[bizKey].name}` : '웰라이프 방문 케어'),
+      date: item.date || '방문 일정 협의',
+      address: item.address || '고객 자택 (상담 확정)',
+      coach: item.assignedCoach,
+      fee: 150000,
+      notes: item.consultNote || item.message || ''
+    });
+  }
+
+  item.status = '진행중';
+  if (linked && linked.id) item.linkedDispatchId = linked.id;
+  localStorage.setItem('seniorConsultList', JSON.stringify(list));
+  renderBusinessMasterDashboard();
+}
+window.dispatchAndNotifyGeneral = dispatchAndNotifyGeneral;
+
 function openDispatchFromBeauty(id) {
   const list = getStoredBeautyBookings();
   const item = list.find(x => x.id === id);
   if (!item) return;
   if (typeof openDispatchModalForClient === 'function') {
     openDispatchModalForClient({
+      sourceBizType: 'beauty',
+      sourceBizId: item.id,
       name: item.seniorName || item.applicantName,
       phone: item.phone,
       service: '💄 화려한 외출 (시니어 메이크업)',
       date: item.visitDate || '',
-      address: (item.place || '') + (item.address ? ' ' + item.address : ''),
+      address: (item.address || item.place || ''),
       coach: item.assignedCoach || '',
       fee: 150000,
-      notes: `[뷰티 180분 예약 연동] 신청인: ${item.applicantName}(${item.role}), 어르신: ${item.seniorName}, 예약ID: ${item.id}`
+      notes: item.consultNote || item.memo || `[뷰티 180분 예약 연동] 신청인: ${item.applicantName}(${item.role}), 어르신: ${item.seniorName}, 예약ID: ${item.id}`
     });
   } else if (typeof switchTab === 'function') {
     switchTab('tabCoachControl');
@@ -1792,26 +1863,52 @@ function openDispatchFromBeauty(id) {
   }
 }
 
-function openDispatchFromGeneral(id) {
+function openDispatchFromGeneral(id, biz) {
   const list = getStoredGeneralConsults();
   const item = list.find(x => x.id === id);
   if (!item) return;
+  const bizKey = biz || item.bizType || currentBusinessTab || 'wardrobe';
   if (typeof openDispatchModalForClient === 'function') {
     openDispatchModalForClient({
+      sourceBizType: bizKey,
+      sourceBizId: item.id,
       name: item.name,
       phone: item.phone,
       service: item.category || '👗 2호 일상과 비움의 미학 (옷장&서재 정리)',
       date: item.date || '',
-      address: '고객 자택 (상담 후 확정)',
+      address: item.address || '고객 자택 (상담 후 확정)',
       coach: item.assignedCoach || '',
       fee: 150000,
-      notes: `[웰라이프 상담완료 이관 연동] 관리ID: ${item.id} / 내용: ${item.message || ''}`
+      notes: item.consultNote || `[웰라이프 상담완료 이관 연동] 관리ID: ${item.id} / 내용: ${item.message || ''}`
     });
   } else if (typeof switchTab === 'function') {
     switchTab('tabCoachControl');
     if (typeof openDispatchModal === 'function') openDispatchModal();
   }
 }
+
+// 현장 업무카드 모달 바로 열기 (없으면 통합관제 마감 보드로 이동)
+function openLinkedReportOrCockpit(linkedDispId, clientName) {
+  if (typeof getDispatches === 'function' && typeof openDispatchReportModal === 'function') {
+    const dispatches = getDispatches();
+    let found = linkedDispId ? dispatches.find(d => d.id === linkedDispId) : null;
+    if (!found && clientName) {
+      const kw = String(clientName).replace(/\s*\([^)]*\)/g, '').replace(/어머니|어르신|님|모친/g, '').trim();
+      if (kw) found = dispatches.find(d => d.customerName && d.customerName.includes(kw));
+    }
+    if (found) {
+      openDispatchReportModal(found.id);
+      return;
+    }
+  }
+  if (typeof switchTab === 'function') {
+    switchTab('tabCockpit');
+    if (typeof focusCockpitSettlementQueue === 'function') {
+      focusCockpitSettlementQueue('pending');
+    }
+  }
+}
+window.openLinkedReportOrCockpit = openLinkedReportOrCockpit;
 
 function goToCoachControlForClient(name) {
   if (typeof switchTab === 'function') {
