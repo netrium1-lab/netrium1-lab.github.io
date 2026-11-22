@@ -258,7 +258,7 @@
     .nav-tab-btn {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 9px;
       width: 100%;
       padding: 9px 12px;
       border-radius: 10px;
@@ -272,6 +272,21 @@
       transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
       position: relative;
+      white-space: nowrap;
+    }
+    .nav-tab-btn > span {
+      white-space: nowrap;
+    }
+    .nav-tab-chevron {
+      margin-left: auto;
+      font-size: 0.72rem;
+      color: #7c9b8c;
+      transition: transform 0.2s ease;
+      flex-shrink: 0;
+    }
+    .nav-tab-btn.active .nav-tab-chevron {
+      color: #f6e09e;
+      transform: rotate(180deg);
     }
     .nav-tab-btn:hover {
       background: rgba(255, 255, 255, 0.06);
@@ -2342,13 +2357,12 @@
         <button class="nav-tab-btn active" onclick="switchTab('tabCockpit', this)" id="navBtnCockpit">
           <span class="nav-tab-icon">📊</span>
           <span>00. 통합 관제 홈</span>
-          <span id="cockpitTodayBadge" style="background: rgba(16, 185, 129, 0.2); color:#6ee7b7; border: 1px solid rgba(16, 185, 129, 0.35); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">LIVE</span>
         </button>
 
         <button class="nav-tab-btn" onclick="switchTab('tabConsult', this)" id="navBtnConsult">
           <span class="nav-tab-icon">📋</span>
           <span>통합 고객 접수 · 상담</span>
-          <span id="consultPendingBadge" style="background: rgba(14, 165, 233, 0.2); color:#7dd3fc; border: 1px solid rgba(14, 165, 233, 0.35); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">신규</span>
+          <span id="consultPendingBadge" style="background: rgba(14, 165, 233, 0.2); color:#7dd3fc; border: 1px solid rgba(14, 165, 233, 0.35); font-size:0.68rem; font-weight:900; padding:1px 7px; border-radius:999px; margin-left:auto; white-space:nowrap; flex-shrink:0;">신규</span>
         </button>
 
         <!-- MAIN 6 CATEGORIES (메인 사이트 6대 카테고리 순서 1:1 일치) -->
@@ -2376,7 +2390,7 @@
           <span class="nav-cat-dot"></span>
           <span class="nav-tab-icon">🌿</span>
           <span>03. 웰라이프</span>
-          <span id="businessMasterBadge" style="background: rgba(142, 165, 132, 0.22); color:#c9dec0; border: 1px solid rgba(142, 165, 132, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">4대 케어</span>
+          <span class="nav-tab-chevron">▾</span>
         </button>
         <div class="sidebar-subnav" id="sidebarSubnavBusiness">
           <button type="button" class="subnav-link active" id="sideSub_beauty" onclick="selectBusinessFromSidebar('beauty')">
@@ -2402,7 +2416,7 @@
           <span class="nav-cat-dot"></span>
           <span class="nav-tab-icon">✍️</span>
           <span>04. 디지털 자서전</span>
-          <span id="memoirDashboardBadge" style="background: rgba(224, 123, 105, 0.22); color:#fca5a5; border: 1px solid rgba(224, 123, 105, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">스튜디오</span>
+          <span class="nav-tab-chevron">▾</span>
         </button>
         <div class="sidebar-subnav" id="sidebarSubnavMemoir">
           <button type="button" class="subnav-link active" id="sideSub_memoir_projects" onclick="selectMemoirFromSidebar('projects')">
@@ -2439,7 +2453,8 @@
           <span class="nav-cat-dot"></span>
           <span class="nav-tab-icon">🎓</span>
           <span>06. 코치 아카데미·파견</span>
-          <span id="sidebarPendingBadge" style="background: rgba(106, 167, 224, 0.22); color:#93c5fd; border: 1px solid rgba(106, 167, 224, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">파견·정산</span>
+          <span id="sidebarPendingBadge" style="display:none; background: rgba(239, 68, 68, 0.25); color:#fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto; white-space:nowrap; flex-shrink:0;"></span>
+          <span class="nav-tab-chevron">▾</span>
         </button>
         <div class="sidebar-subnav" id="sidebarSubnavCoach">
           <button type="button" class="subnav-link active" id="sideSub_coach_ops" onclick="selectCoachSubFromSidebar('ops')">
