@@ -24,6 +24,7 @@
   <!-- 📷 300 DPI 인쇄용 순수 벡터(SVG) QR 생성기 & 여백과 결 공용 미디어 모듈 -->
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <script src="heritage-media.js"></script>
+  <script src="academy-courses-data.js?v=20261122"></script>
   <style>
     :root {
       --bg-body: #f1f5f9;
@@ -2465,6 +2466,10 @@
             <span class="subnav-icon">🏅</span>
             <span>6-2. 공인 코치 명단 (배정 풀)</span>
           </button>
+          <button type="button" class="subnav-link" id="sideSub_coach_pricing" onclick="selectCoachSubFromSidebar('pricing')">
+            <span class="subnav-icon">💰</span>
+            <span>6-3. 과정 수강료 · 예상수익</span>
+          </button>
         </div>
 
         <!-- SYSTEM -->
@@ -2721,6 +2726,7 @@
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료 관리 ➔</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치 명단</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pricing')">💰 가격·수익 설정</button>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
             </div>
@@ -3838,6 +3844,78 @@
             </table>
           </div>
         </div>
+        </div>
+
+        <!-- 💰 6-3. 5대 비즈니스 4주 정규과정 수강료 · 코치 예상수익 실시간 관리 (academy.html 클라우드 직결) -->
+        <div id="coachSubPanel_pricing" style="display: none;">
+          <div class="panel-card" id="academyPricingConfigSection" style="margin-top: 0; border-top: 4px solid #b88e2f;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon" style="background: #fef9e7; color: #9a6d12; font-size: 1.5rem;">💰</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h2 class="panel-title" style="margin: 0;">6-3. 과정별 수강료 · 코치 예상수익 설정</h2>
+                    <span class="badge" style="background: #fef9e7; color: #9a6d12; border: 1px solid #ead496; font-size: 0.74rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">academy.html 실시간 클라우드 반영</span>
+                  </div>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                    4대 웰라이프 + 디지털 자서전 <strong>5개 4주 단일 정규과정</strong>의 정상가·특가·건당 코치 예상수익·모집 상태를 수정하면 <strong>아카데미 사이트(PC·모바일)와 월 수익 시뮬레이터</strong>에 즉시 반영됩니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <a href="academy.html" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
+                  <span>🎓</span> 아카데미 라이브 확인 ↗
+                </a>
+                <button type="button" class="btn-save-setting" onclick="resetAcademyCoursePricingSettings()" style="background: #ffffff; color: var(--text-main); border: 1.2px solid var(--border-color); font-weight: 750;">
+                  <span>🔄</span> 표준 기본값 복원
+                </button>
+                <button type="button" class="btn-save-setting" onclick="saveAcademyCoursePricingSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; cursor: pointer;">
+                  <span>💾</span> 저장 &amp; 사이트 즉시 반영
+                </button>
+              </div>
+            </div>
+
+            <!-- 공통 모집 배너 & 예상수익 공개 설정 -->
+            <div style="background: #faf9f5; border: 1.3px solid #e5dfd0; border-radius: 14px; padding: 14px 16px; margin: 16px 0;">
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+                <strong style="font-size: 0.88rem; color: #14281f;">📢 아카데미 공통 모집 문구 &amp; 예상수익 공개 옵션</strong>
+                <label style="display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 850; color: #1e4d35; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 5px 12px; border-radius: 999px; cursor: pointer;">
+                  <input type="checkbox" id="cfgAcadShowRevenue" checked style="width: 15px; height: 15px; accent-color: #1e4d35;">
+                  <span>💰 사이트에 코치 예상수익 &amp; 수익 시뮬레이터 공개</span>
+                </label>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px;">
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">모집 기수 타이틀</label>
+                  <input type="text" id="cfgAcadCohortLabel" class="setting-input" placeholder="예: 2026년 1기 창립 파운더스" style="background:#fff; font-size:0.84rem;">
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">모집 정원 안내</label>
+                  <input type="text" id="cfgAcadCapacityNote" class="setting-input" placeholder="예: 과정별 소수정예 선착순 15명 마감" style="background:#fff; font-size:0.84rem;">
+                </div>
+                <div>
+                  <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">개강 일정 요약</label>
+                  <input type="text" id="cfgAcadOpeningDate" class="setting-input" placeholder="예: 매월 첫째 주 개강 (평일반 / 주말반)" style="background:#fff; font-size:0.84rem;">
+                </div>
+              </div>
+              <div style="margin-top: 10px;">
+                <label style="display: block; font-size: 0.76rem; font-weight: 800; color: #475569; margin-bottom: 4px;">예상 수익 하단 고지 문구 (법적 안내)</label>
+                <input type="text" id="cfgAcadDisclaimer" class="setting-input" style="background:#fff; font-size:0.82rem;">
+              </div>
+            </div>
+
+            <!-- 5대 비즈니스 4주 정규과정 개별 가격 · 수익 편집 리스트 -->
+            <div id="academyCoursePricingList" style="display: flex; flex-direction: column; gap: 12px;">
+              <!-- JS 동적 렌더링 -->
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+              <span id="academyPricingLastSaved" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;"></span>
+              <button type="button" class="btn-save-setting" onclick="saveAcademyCoursePricingSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; padding: 10px 22px; cursor: pointer;">
+                <span>💾</span> 5대 과정 수강료 · 예상수익 저장 및 즉시 반영
+              </button>
+            </div>
+          </div>
         </div>
 
         <!-- 현장수행 검수 · 송금 정산 관제는 00. 통합 관제 홈으로 일원화되었습니다 -->
@@ -6366,13 +6444,14 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool') ? 'pool' : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing') ? subKey : 'academy';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
 
       var map = {
         academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강생 · 수료 관리' },
-        pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코치 명단 (배정 풀)' }
+        pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코치 명단 (배정 풀)' },
+        pricing: { panel: 'coachSubPanel_pricing', btn: 'sideSub_coach_pricing', label: '<span>💰</span> 06. 코치 아카데미 · 6-3 과정 수강료 · 예상수익 설정' }
       };
 
       Object.keys(map).forEach(function(k) {
@@ -6389,6 +6468,7 @@
 
       if (currentCoachSubTab === 'academy' && typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
+      if (currentCoachSubTab === 'pricing' && typeof renderAcademyCoursePricingEditor === 'function') renderAcademyCoursePricingEditor();
 
       var mainEl = document.querySelector('.admin-main');
       if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6401,7 +6481,7 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool') ? 'pool' : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing') ? subKey : 'academy';
       switchTab('tabCoachControl');
       switchCoachSubTab(currentCoachSubTab);
     }
@@ -7126,6 +7206,7 @@
           if (typeof initAdminFirebaseArticleListener === 'function') initAdminFirebaseArticleListener();
           if (typeof initAdminMemoirListener === 'function') initAdminMemoirListener();
           if (typeof initAdminDispatchFirebaseListener === 'function') initAdminDispatchFirebaseListener();
+          if (typeof initAdminAcademyCloudSync === 'function') initAdminAcademyCloudSync();
         }, 300);
       }
     } catch (fbErr) {
@@ -14180,6 +14261,191 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       }
     }
     window.deleteAcademyRequest = deleteAcademyRequest;
+
+    // ================= 5-2. 💰 6-3 과정 수강료 · 예상수익 실시간 관리 엔진 =================
+    let _adminAcademyCloudBound = false;
+    function initAdminAcademyCloudSync() {
+      if (_adminAcademyCloudBound || typeof fbDb === 'undefined' || !fbDb) return;
+      _adminAcademyCloudBound = true;
+
+      // 1) 과정 가격·수익 설정 클라우드 실시간 수신
+      if (window.YebaekAcademyConfig) {
+        window.YebaekAcademyConfig.loadFromCloud(fbDb, function () {
+          if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'pricing') {
+            renderAcademyCoursePricingEditor();
+          }
+        });
+      }
+
+      // 2) 스마트폰 등 외부 기기에서 academy.html로 접수된 수강신청(senior_consults) 실시간 통합 상담함 흡수
+      try {
+        fbDb.collection('senior_consults').where('recordType', '==', 'academy_apply').onSnapshot(function (snapshot) {
+          if (!snapshot || snapshot.empty) return;
+          const list = (typeof getDiagReservations === 'function') ? getDiagReservations() : [];
+          let added = false;
+          snapshot.forEach(function (doc) {
+            const d = doc.data();
+            if (!d) return;
+            const cid = d.id || doc.id;
+            const exists = list.some(x => x && (x.id === cid || (x.cloudDocId && x.cloudDocId === doc.id)));
+            if (!exists) {
+              list.unshift({
+                id: cid,
+                cloudDocId: doc.id,
+                category: d.category || ('🎓 [아카데미 수강신청] ' + (d.track || '4주 정규과정')),
+                name: d.name || '',
+                role: d.role || ((d.name || '지원자') + ' (예비 코치)'),
+                phone: d.phone || '',
+                track: d.track || '',
+                courseId: d.courseId || '',
+                schedule: d.schedule || '',
+                region: d.region || '전국',
+                motivation: d.motivation || '',
+                note: d.note || '',
+                status: d.status || '대기',
+                createdAt: d.createdAt || new Date().toISOString().slice(0, 16).replace('T', ' ')
+              });
+              added = true;
+            }
+          });
+          if (added && typeof saveDiagReservations === 'function') {
+            saveDiagReservations(list);
+          }
+        }, function (err) {
+          console.warn('[Admin Academy Consult Sync]', err);
+        });
+      } catch (e) {}
+    }
+    window.initAdminAcademyCloudSync = initAdminAcademyCloudSync;
+
+    function renderAcademyCoursePricingEditor() {
+      if (!window.YebaekAcademyConfig) return;
+      const cfg = window.YebaekAcademyConfig.getConfig();
+
+      const elShow = document.getElementById('cfgAcadShowRevenue');
+      const elCohort = document.getElementById('cfgAcadCohortLabel');
+      const elCap = document.getElementById('cfgAcadCapacityNote');
+      const elOpen = document.getElementById('cfgAcadOpeningDate');
+      const elDisc = document.getElementById('cfgAcadDisclaimer');
+      const elSaved = document.getElementById('academyPricingLastSaved');
+      if (elShow) elShow.checked = cfg.showRevenuePublic !== false;
+      if (elCohort) elCohort.value = cfg.cohortLabel || '';
+      if (elCap) elCap.value = cfg.capacityNote || '';
+      if (elOpen) elOpen.value = cfg.nextOpeningDate || '';
+      if (elDisc) elDisc.value = cfg.revenueDisclaimer || '';
+      if (elSaved) elSaved.textContent = cfg.updatedAt ? ('마지막 저장: ' + cfg.updatedAt) : '기본 표준 설정 사용 중';
+
+      const wrap = document.getElementById('academyCoursePricingList');
+      if (!wrap) return;
+
+      wrap.innerHTML = cfg.courses.map(function (c, idx) {
+        const discPct = window.YebaekAcademyConfig.calcDiscountPercent(c.regularPrice, c.salePrice);
+        const payback = window.YebaekAcademyConfig.calcPaybackCount(c.salePrice, c.coachFeePerCase);
+        const estMonth = (Number(c.coachFeePerCase) || 0) * (Number(c.recommendedMonthlyCount) || 1);
+        return `
+          <div style="background: #ffffff; border: 1.5px solid #e2e8f0; border-left: 5px solid ${escapeHtml(c.accentColor || '#1e4d35')}; border-radius: 14px; padding: 15px 18px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px dashed #e2e8f0;">
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span style="display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 8px; background: ${escapeHtml(c.softBg || '#f1f5f9')}; font-size: 1rem;">${escapeHtml(c.icon || '🎓')}</span>
+                <strong style="font-size: 0.98rem; color: #0f172a;">${escapeHtml(c.code)}. ${escapeHtml(c.title)}</strong>
+                <span style="font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px; background: ${escapeHtml(c.softBg || '#f1f5f9')}; color: ${escapeHtml(c.accentColor || '#1e4d35')};">4주 단일 정규과정</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                <span id="acadCalcSummary_${idx}" style="font-size: 0.78rem; font-weight: 850; color: #047857; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 4px 10px; border-radius: 999px;">
+                  ${discPct > 0 ? discPct + '% 할인 · ' : ''}예상 월수익 ${estMonth.toLocaleString()}원 · ${payback > 0 ? '약 ' + payback + '회 활동 시 수강료 회수' : '회수 계산'}
+                </span>
+                <select id="acadCourseStatus_${idx}" style="padding: 5px 10px; border-radius: 8px; border: 1.2px solid #cbd5e1; font-size: 0.78rem; font-weight: 850; background: #fff;">
+                  <option value="모집중" ${(c.status || '모집중') === '모집중' ? 'selected' : ''}>🟢 모집중</option>
+                  <option value="마감임박" ${c.status === '마감임박' ? 'selected' : ''}>🟠 마감임박</option>
+                  <option value="모집마감" ${c.status === '모집마감' ? 'selected' : ''}>⚫ 모집마감</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+              <div>
+                <label style="display:block; font-size:0.75rem; font-weight:800; color:#64748b; margin-bottom:4px;">정상 수강료 (원)</label>
+                <input type="number" id="acadCourseReg_${idx}" value="${Number(c.regularPrice) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:800; font-size:0.88rem;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.75rem; font-weight:800; color:#b83354; margin-bottom:4px;">1기 특별 수강료 (원)</label>
+                <input type="number" id="acadCourseSale_${idx}" value="${Number(c.salePrice) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:900; font-size:0.88rem; border-color:#f5c6be; color:#b83354;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.75rem; font-weight:800; color:#1e4d35; margin-bottom:4px;">건당 코치 예상수익 (원)</label>
+                <input type="number" id="acadCourseFee_${idx}" value="${Number(c.coachFeePerCase) || 0}" step="10000" min="0" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:900; font-size:0.88rem; border-color:#a7f3d0; color:#1e4d35;">
+              </div>
+              <div>
+                <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">월 권장 활동 건수 (회)</label>
+                <input type="number" id="acadCourseMonthly_${idx}" value="${Number(c.recommendedMonthlyCount) || 2}" step="1" min="1" max="30" oninput="updateAcademyCourseCalcPreview(${idx})" class="setting-input" style="font-weight:800; font-size:0.88rem;">
+              </div>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <label style="display:block; font-size:0.74rem; font-weight:800; color:#64748b; margin-bottom:3px;">예상 수익 설명 문구 (아카데미 페이지 노출)</label>
+              <input type="text" id="acadCourseFeeNote_${idx}" value="${escapeHtml(c.coachFeeNote || '')}" class="setting-input" style="font-size:0.82rem; background:#f8fafc;">
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+    window.renderAcademyCoursePricingEditor = renderAcademyCoursePricingEditor;
+
+    function updateAcademyCourseCalcPreview(idx) {
+      if (!window.YebaekAcademyConfig) return;
+      const reg = Number(document.getElementById('acadCourseReg_' + idx)?.value) || 0;
+      const sale = Number(document.getElementById('acadCourseSale_' + idx)?.value) || 0;
+      const fee = Number(document.getElementById('acadCourseFee_' + idx)?.value) || 0;
+      const mon = Math.max(1, Number(document.getElementById('acadCourseMonthly_' + idx)?.value) || 1);
+      const disc = window.YebaekAcademyConfig.calcDiscountPercent(reg, sale);
+      const payback = window.YebaekAcademyConfig.calcPaybackCount(sale, fee);
+      const estMonth = fee * mon;
+      const badge = document.getElementById('acadCalcSummary_' + idx);
+      if (badge) {
+        badge.textContent = (disc > 0 ? disc + '% 할인 · ' : '') + '예상 월수익 ' + estMonth.toLocaleString() + '원' + (payback > 0 ? ' · 약 ' + payback + '회 활동 시 수강료 회수' : '');
+      }
+    }
+    window.updateAcademyCourseCalcPreview = updateAcademyCourseCalcPreview;
+
+    async function saveAcademyCoursePricingSettings() {
+      if (!window.YebaekAcademyConfig) return;
+      const cfg = window.YebaekAcademyConfig.getConfig();
+      cfg.showRevenuePublic = document.getElementById('cfgAcadShowRevenue')?.checked !== false;
+      cfg.cohortLabel = document.getElementById('cfgAcadCohortLabel')?.value.trim() || cfg.cohortLabel;
+      cfg.capacityNote = document.getElementById('cfgAcadCapacityNote')?.value.trim() || cfg.capacityNote;
+      cfg.nextOpeningDate = document.getElementById('cfgAcadOpeningDate')?.value.trim() || cfg.nextOpeningDate;
+      cfg.revenueDisclaimer = document.getElementById('cfgAcadDisclaimer')?.value.trim() || cfg.revenueDisclaimer;
+
+      cfg.courses = cfg.courses.map(function (c, idx) {
+        return Object.assign({}, c, {
+          regularPrice: Math.max(0, Number(document.getElementById('acadCourseReg_' + idx)?.value) || 0),
+          salePrice: Math.max(0, Number(document.getElementById('acadCourseSale_' + idx)?.value) || 0),
+          coachFeePerCase: Math.max(0, Number(document.getElementById('acadCourseFee_' + idx)?.value) || 0),
+          recommendedMonthlyCount: Math.max(1, Number(document.getElementById('acadCourseMonthly_' + idx)?.value) || 1),
+          coachFeeNote: document.getElementById('acadCourseFeeNote_' + idx)?.value.trim() || c.coachFeeNote,
+          status: document.getElementById('acadCourseStatus_' + idx)?.value || '모집중'
+        });
+      });
+
+      const res = await window.YebaekAcademyConfig.saveConfig(cfg, typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAcademyCoursePricingEditor();
+      alert(
+        '✅ 5대 4주 정규과정의 수강료 및 코치 예상수익 설정이 저장되었습니다!\n\n' +
+        (res.cloudSaved
+          ? '☁️ Firebase 클라우드 동기화 완료 — 아카데미 사이트(PC·모바일)에 즉시 반영됩니다.'
+          : '💾 로컬 저장 완료 — 같은 브라우저의 아카데미 사이트에 즉시 반영됩니다.')
+      );
+    }
+    window.saveAcademyCoursePricingSettings = saveAcademyCoursePricingSettings;
+
+    async function resetAcademyCoursePricingSettings() {
+      if (!window.YebaekAcademyConfig) return;
+      if (!confirm('5대 4주 정규과정의 수강료 및 코치 예상수익을 표준 기본값으로 복원하시겠습니까?')) return;
+      await window.YebaekAcademyConfig.resetDefault(typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAcademyCoursePricingEditor();
+      alert('🔄 표준 기본 수강료·예상수익으로 복원되었습니다.');
+    }
+    window.resetAcademyCoursePricingSettings = resetAcademyCoursePricingSettings;
 
     // ================= 6. 1:1 방문 맞춤 상담 명단 관리 =================
     const CONSULT_KEY = 'yebaek_consult_requests_v1';
