@@ -174,31 +174,31 @@
       background: #f8fafc;
     }
 
-    /* 좌측 사이드바 (안티그래비티 다크 프로페셔널) */
+    /* 좌측 사이드바 (여백과 결 Executive Forest & Champagne Gold 테마) */
     .admin-sidebar {
-      width: 280px;
-      background: linear-gradient(180deg, #0b1329 0%, #0f172a 100%);
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      width: 284px;
+      background: linear-gradient(180deg, #0d1f18 0%, #132a21 60%, #0e2019 100%);
+      border-right: 1px solid rgba(201, 162, 75, 0.18);
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       height: 100vh;
       overflow-y: auto;
       z-index: 100;
-      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
+      box-shadow: 4px 0 28px rgba(10, 24, 18, 0.22);
     }
     .admin-sidebar::-webkit-scrollbar {
       width: 4px;
     }
     .admin-sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.12);
+      background: rgba(201, 162, 75, 0.28);
       border-radius: 999px;
     }
 
     .sidebar-header {
-      padding: 24px 20px 18px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(11, 19, 41, 0.6);
+      padding: 22px 20px 16px;
+      border-bottom: 1px solid rgba(201, 162, 75, 0.16);
+      background: rgba(9, 22, 17, 0.55);
       backdrop-filter: blur(8px);
     }
 
@@ -213,22 +213,22 @@
     .sidebar-brand-bar {
       width: 4px;
       height: 22px;
-      background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+      background: linear-gradient(180deg, #e5c36a 0%, #b88b26 100%);
       border-radius: 999px;
-      box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+      box-shadow: 0 0 10px rgba(201, 162, 75, 0.55);
     }
 
     .sidebar-brand-text {
       font-family: 'Noto Serif KR', serif;
-      font-size: 1.25rem;
+      font-size: 1.24rem;
       font-weight: 900;
-      color: #f8fafc;
+      color: #faf5e8;
       letter-spacing: -0.3px;
     }
 
     .sidebar-sub {
-      font-size: 0.72rem;
-      color: #94a3b8;
+      font-size: 0.70rem;
+      color: #9ab3a6;
       margin-top: 4px;
       padding-left: 14px;
       font-weight: 700;
@@ -236,80 +236,105 @@
     }
 
     .sidebar-nav {
-      padding: 16px 12px;
+      padding: 14px 12px;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 3px;
       flex: 1;
+    }
+
+    .sidebar-group-label {
+      font-size: 0.66rem;
+      font-weight: 850;
+      color: #7c9b8c;
+      padding: 10px 12px 4px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
     .nav-tab-btn {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 10px;
       width: 100%;
-      padding: 10px 14px;
+      padding: 9px 12px;
       border-radius: 10px;
       border: 1px solid transparent;
       background: transparent;
-      color: #94a3b8;
-      font-size: 0.90rem;
+      color: #b7c9bf;
+      font-size: 0.87rem;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
-      transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
       font-family: inherit;
       position: relative;
     }
     .nav-tab-btn:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.06);
       color: #ffffff;
       transform: translateX(2px);
     }
     .nav-tab-btn.active {
-      background: rgba(30, 41, 59, 0.85);
-      color: #ffffff;
+      background: rgba(201, 162, 75, 0.16);
+      color: #fffdf6;
       font-weight: 850;
-      border-color: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+      border-color: rgba(201, 162, 75, 0.35);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
     }
     .nav-tab-btn.active::before {
       content: '';
       position: absolute;
       left: 0;
-      top: 8px;
-      bottom: 8px;
+      top: 7px;
+      bottom: 7px;
       width: 3.5px;
       border-radius: 4px;
-      background: linear-gradient(180deg, #f59e0b, #d97706);
+      background: var(--cat-dot, linear-gradient(180deg, #e5c36a, #c29b38));
+    }
+
+    .nav-cat-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: var(--cat-dot, #c9a24b);
+      box-shadow: 0 0 6px var(--cat-dot, rgba(201,162,75,0.5));
     }
 
     .nav-tab-icon {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       line-height: 1;
-      width: 22px;
+      width: 20px;
       text-align: center;
+      flex-shrink: 0;
     }
 
-    /* 사이드바 서브메뉴 트리 (좌측에서 원클릭 비즈니스 직속 전환) */
+    /* 사이드바 서브메뉴 트리 (활성 카테고리 아코디언 자동 펼침) */
     .sidebar-subnav {
-      display: flex;
+      display: none;
       flex-direction: column;
-      gap: 3px;
-      margin: 4px 0 6px 20px;
-      padding-left: 12px;
-      border-left: 1.5px solid rgba(255, 255, 255, 0.12);
+      gap: 2px;
+      margin: 2px 0 6px 20px;
+      padding-left: 11px;
+      border-left: 1.5px solid rgba(201, 162, 75, 0.28);
+    }
+    .sidebar-subnav.open {
+      display: flex;
     }
     .subnav-link {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 7px 10px;
+      gap: 7px;
+      padding: 6px 10px;
       border-radius: 8px;
       border: 1px solid transparent;
       background: transparent;
-      color: #94a3b8;
-      font-size: 0.82rem;
+      color: #9ab3a6;
+      font-size: 0.80rem;
       font-weight: 700;
       text-align: left;
       cursor: pointer;
@@ -320,30 +345,122 @@
     .subnav-link:hover {
       background: rgba(255, 255, 255, 0.06);
       color: #ffffff;
-      transform: translateX(2px);
     }
     .subnav-link.active {
-      background: rgba(217, 119, 6, 0.18);
-      color: #fbbf24;
+      background: rgba(201, 162, 75, 0.18);
+      color: #fce79a;
+      border-color: rgba(201, 162, 75, 0.35);
       font-weight: 850;
-      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    /* 통합 대시보드 6대 카테고리 관제 카드 */
+    .cockpit-cat-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .cockpit-cat-card {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      border-top: 4px solid var(--cc-color, #235a3f);
+      border-radius: 16px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .cockpit-cat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    }
+    .cockpit-cat-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .cockpit-cat-num {
+      display: inline-block;
+      font-size: 0.70rem;
+      font-weight: 900;
+      color: #fff;
+      background: var(--cc-color, #235a3f);
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-bottom: 5px;
+    }
+    .cockpit-cat-title {
+      font-family: 'Noto Serif KR', serif;
+      font-size: 1.06rem;
+      font-weight: 900;
+      color: #0f172a;
+      margin: 0;
+    }
+    .cockpit-cat-metric {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--cc-color, #235a3f);
+      white-space: nowrap;
+    }
+    .cockpit-cat-desc {
+      font-size: 0.81rem;
+      color: #64748b;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .cockpit-cat-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+      padding-top: 4px;
+    }
+    .cockpit-cat-chip {
+      padding: 5px 10px;
+      border-radius: 8px;
+      font-size: 0.76rem;
+      font-weight: 800;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #334155;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.15s;
+    }
+    .cockpit-cat-chip:hover {
+      background: var(--cc-color, #235a3f);
+      color: #ffffff;
+      border-color: var(--cc-color, #235a3f);
+    }
+    .cockpit-cat-chip.primary {
+      background: var(--cc-color, #235a3f);
+      color: #ffffff;
+      border-color: var(--cc-color, #235a3f);
+    }
+    .cockpit-cat-chip.primary:hover {
+      opacity: 0.9;
     }
     .subnav-link.active .subnav-icon {
-      transform: scale(1.15);
+      transform: scale(1.12);
     }
     .subnav-icon {
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       line-height: 1;
       transition: transform 0.15s ease;
     }
 
     .sidebar-footer {
-      padding: 14px 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 12px 14px;
+      border-top: 1px solid rgba(201, 162, 75, 0.18);
       display: flex;
       flex-direction: column;
       gap: 6px;
-      background: #080e1e;
+      background: #091712;
     }
 
     .sidebar-link-btn {
@@ -2207,134 +2324,161 @@
             <div class="sidebar-brand-bar"></div>
             <div class="sidebar-brand-text">여백과 결</div>
           </a>
-          <span style="font-size: 0.65rem; font-weight: 900; background: rgba(16, 185, 129, 0.15); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.35); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.05em; display: inline-flex; align-items: center; gap: 4px;">
-            <span style="width: 5px; height: 5px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-            PRO v2.5
+          <span style="font-size: 0.64rem; font-weight: 900; background: rgba(201, 162, 75, 0.2); color: #f6e09e; border: 1px solid rgba(201, 162, 75, 0.45); padding: 2px 7px; border-radius: 999px; letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 4px;">
+            <span style="width: 5px; height: 5px; border-radius: 50%; background: #34d399; display: inline-block;"></span>
+            PRO v3.0
           </span>
         </div>
-        <div class="sidebar-sub">ANTIGRAVITY BUSINESS CONSOLE</div>
+        <div class="sidebar-sub">YEBAEKARCHIVE.KR CONSOLE</div>
       </div>
 
       <nav class="sidebar-nav">
-        <!-- AI 자동 글쓰기 스튜디오 전용 퀵 버튼 -->
-        <div style="padding: 0 4px 8px;">
-          <button type="button" onclick="openAiArticleGeneratorModal()" style="width: 100%; padding: 10px 14px; border-radius: 10px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-size: 0.86rem; font-weight: 850; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4); transition: transform 0.15s ease;">
-            <span>🪄 AI 자동 글쓰기</span>
-          </button>
+        <!-- COMMAND CENTER -->
+        <div class="sidebar-group-label">
+          <span>COMMAND CENTER</span>
+          <span>관제</span>
         </div>
 
-        <div style="font-size: 0.68rem; font-weight: 850; color: #64748b; padding: 6px 12px 3px; letter-spacing: 0.08em;">
-          CORE OPERATIONS
-        </div>
-
-        <!-- 📊 01. 종합 관제 홈 (Today Cockpit) -->
         <button class="nav-tab-btn active" onclick="switchTab('tabCockpit', this)" id="navBtnCockpit">
           <span class="nav-tab-icon">📊</span>
-          <span>01. 종합 관제 홈</span>
-          <span id="cockpitTodayBadge" style="background: rgba(16, 185, 129, 0.2); color:#34d399; border: 1px solid rgba(16, 185, 129, 0.3); font-size:0.68rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">오늘</span>
+          <span>00. 통합 관제 홈</span>
+          <span id="cockpitTodayBadge" style="background: rgba(16, 185, 129, 0.2); color:#6ee7b7; border: 1px solid rgba(16, 185, 129, 0.35); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">LIVE</span>
         </button>
 
-        <!-- 📋 02. 고객 접수 & 상담 센터 (Leads & Consult) -->
         <button class="nav-tab-btn" onclick="switchTab('tabConsult', this)" id="navBtnConsult">
           <span class="nav-tab-icon">📋</span>
-          <span>02. 고객 접수 &amp; 상담</span>
-          <span id="consultPendingBadge" style="background: rgba(14, 165, 233, 0.2); color:#38bdf8; border: 1px solid rgba(14, 165, 233, 0.3); font-size:0.68rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">신규</span>
+          <span>통합 고객 접수 · 상담</span>
+          <span id="consultPendingBadge" style="background: rgba(14, 165, 233, 0.2); color:#7dd3fc; border: 1px solid rgba(14, 165, 233, 0.35); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">신규</span>
         </button>
 
-        <!-- 🌟 03. 4대 비즈니스 관제 (4 Core Offline Services) -->
-        <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster">
-          <span class="nav-tab-icon">🌟</span>
-          <span>03. 4대 비즈니스 관제</span>
-          <span id="businessMasterBadge" style="background: rgba(244, 63, 94, 0.2); color:#fb7185; border: 1px solid rgba(244, 63, 94, 0.3); font-size:0.68rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">1호~4호</span>
+        <!-- MAIN 6 CATEGORIES (메인 사이트 6대 카테고리 순서 1:1 일치) -->
+        <div class="sidebar-group-label" style="margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+          <span>MAIN 6 CATEGORIES</span>
+          <span>메인 순서 일치</span>
+        </div>
+
+        <!-- 01. 📖 여백의 서재 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabMagazine', this)" id="navBtnMagazine" style="--cat-dot: #38a169;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">📖</span>
+          <span>01. 여백의 서재</span>
         </button>
 
-        <!-- 🌟 4대 비즈니스 좌측 직속 서브메뉴 트리 (화면을 올릴 필요 없이 좌측에서 원클릭 전환!) -->
+        <!-- 02. 💬 비움 한 줄 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabLounge', this)" id="navBtnLounge" style="--cat-dot: #d69356;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">💬</span>
+          <span>02. 비움 한 줄</span>
+        </button>
+
+        <!-- 03. 🌿 웰라이프 (4대 라이프케어) -->
+        <button class="nav-tab-btn" onclick="switchTab('tabBusinessMaster', this)" id="navBtnBusinessMaster" style="--cat-dot: #8ea584;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">🌿</span>
+          <span>03. 웰라이프</span>
+          <span id="businessMasterBadge" style="background: rgba(142, 165, 132, 0.22); color:#c9dec0; border: 1px solid rgba(142, 165, 132, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">4대 케어</span>
+        </button>
         <div class="sidebar-subnav" id="sidebarSubnavBusiness">
           <button type="button" class="subnav-link active" id="sideSub_beauty" onclick="selectBusinessFromSidebar('beauty')">
             <span class="subnav-icon">💄</span>
-            <span>01 뷰티케어 (180분)</span>
+            <span>3-1. 뷰티케어 (180분)</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_wardrobe" onclick="selectBusinessFromSidebar('wardrobe')">
             <span class="subnav-icon">👗</span>
-            <span>02 옷장 &amp; 공간 비움</span>
+            <span>3-2. 옷장 &amp; 공간 비움</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_legacy" onclick="selectBusinessFromSidebar('legacy')">
             <span class="subnav-icon">📦</span>
-            <span>03 유품 &amp; 짐 아카이빙</span>
+            <span>3-3. 유품 &amp; 짐 아카이빙</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_party" onclick="selectBusinessFromSidebar('party')">
             <span class="subnav-icon">💌</span>
-            <span>04 생전 엔딩 파티</span>
+            <span>3-4. 생전 엔딩 파티</span>
           </button>
         </div>
 
-        <!-- 📖 04. [독립 분리] 디지털 자서전 출판 관제 -->
-        <button class="nav-tab-btn" onclick="switchTab('tabMemoirDashboard', this)" id="navBtnMemoirDashboard">
-          <span class="nav-tab-icon">📖</span>
-          <span>04. 자서전 출판 관제</span>
-          <span id="memoirDashboardBadge" style="background: rgba(217, 119, 6, 0.2); color:#fbbf24; border: 1px solid rgba(217, 119, 6, 0.3); font-size:0.68rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">스튜디오</span>
+        <!-- 04. ✍️ 디지털 자서전 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabMemoirDashboard', this)" id="navBtnMemoirDashboard" style="--cat-dot: #e07b69;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">✍️</span>
+          <span>04. 디지털 자서전</span>
+          <span id="memoirDashboardBadge" style="background: rgba(224, 123, 105, 0.22); color:#fca5a5; border: 1px solid rgba(224, 123, 105, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">스튜디오</span>
         </button>
-
-        <!-- 📖 자서전 출판 좌측 직속 서브메뉴 트리 -->
         <div class="sidebar-subnav" id="sidebarSubnavMemoir">
           <button type="button" class="subnav-link active" id="sideSub_memoir_projects" onclick="selectMemoirFromSidebar('projects')">
             <span class="subnav-icon">✍️</span>
-            <span>1. 출판 프로젝트 &amp; AI윤문</span>
+            <span>4-1. 출판 프로젝트 &amp; AI윤문</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_webbooks" onclick="selectMemoirFromSidebar('webbooks')">
             <span class="subnav-icon">📱</span>
-            <span>2. 개인 서재 모바일 웹북 배포</span>
-          </button>
-          <button type="button" class="subnav-link" id="sideSub_memoir_published" onclick="selectMemoirFromSidebar('published')">
-            <span class="subnav-icon">📚</span>
-            <span>3. 완간 자서전 도서 &amp; PDF</span>
-          </button>
-          <button type="button" class="subnav-link" id="sideSub_memoir_banner" onclick="selectMemoirFromSidebar('banner')">
-            <span class="subnav-icon">📢</span>
-            <span>4. 메인 CTA 배너 설정</span>
+            <span>4-2. 모바일 웹북 · 오디오 · QR</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_heritage" onclick="selectMemoirFromSidebar('heritage')">
             <span class="subnav-icon">🏛️</span>
-            <span>5. VIP 가문 온라인 전시관</span>
+            <span>4-3. VIP 가문 온라인 전시관</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_memoir_cost" onclick="selectMemoirFromSidebar('cost')">
             <span class="subnav-icon">📊</span>
-            <span>6. 원가·마진 &amp; 실무 가이드</span>
+            <span>4-4. 원가·마진 &amp; 실무 가이드</span>
+          </button>
+          <button type="button" class="subnav-link" id="sideSub_memoir_banner" onclick="selectMemoirFromSidebar('banner')">
+            <span class="subnav-icon">📢</span>
+            <span>4-5. 메인 CTA 배너 설정</span>
           </button>
         </div>
 
-        <!-- 🤝 05. 코칭스태프 & 정산 센터 (Coach Ops & Settlement) -->
-        <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl">
-          <span class="nav-tab-icon">🤝</span>
-          <span>05. 코치 관제 &amp; 정산</span>
-          <span id="sidebarPendingBadge" style="background: rgba(234, 88, 12, 0.2); color:#fb923c; border: 1px solid rgba(234, 88, 12, 0.3); font-size:0.68rem; font-weight:900; padding:2px 6px; border-radius:999px; margin-left:auto;">파견·정산</span>
+        <!-- 05. 🏛️ 나의 고유한 서재 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabArchive', this)" id="navBtnArchive" style="--cat-dot: #d8b252;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">🏛️</span>
+          <span>05. 나의 고유한 서재</span>
         </button>
 
-        <div style="height: 1px; background: rgba(255, 255, 255, 0.08); margin: 8px 10px 4px;"></div>
-        <div style="font-size: 0.68rem; font-weight: 850; color: #64748b; padding: 4px 12px 3px; letter-spacing: 0.08em;">
-          CONTENT &amp; SYSTEM
+        <!-- 06. 🎓 코치 아카데미 & 파견 -->
+        <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="--cat-dot: #6aa7e0;">
+          <span class="nav-cat-dot"></span>
+          <span class="nav-tab-icon">🎓</span>
+          <span>06. 코치 아카데미·파견</span>
+          <span id="sidebarPendingBadge" style="background: rgba(106, 167, 224, 0.22); color:#93c5fd; border: 1px solid rgba(106, 167, 224, 0.38); font-size:0.65rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto;">파견·정산</span>
+        </button>
+        <div class="sidebar-subnav" id="sidebarSubnavCoach">
+          <button type="button" class="subnav-link active" id="sideSub_coach_ops" onclick="selectCoachSubFromSidebar('ops')">
+            <span class="subnav-icon">📸</span>
+            <span>6-1. 현장수행 검수 &amp; 정산</span>
+          </button>
+          <button type="button" class="subnav-link" id="sideSub_coach_pool" onclick="selectCoachSubFromSidebar('pool')">
+            <span class="subnav-icon">🏅</span>
+            <span>6-2. 공인 코칭스태프 명단</span>
+          </button>
+          <button type="button" class="subnav-link" id="sideSub_coach_academy" onclick="selectCoachSubFromSidebar('academy')">
+            <span class="subnav-icon">🎓</span>
+            <span>6-3. 아카데미 입학 지원자</span>
+          </button>
         </div>
 
-        <!-- 📚 06. 여백서재 & 아카이브 (Content & Archive) -->
-        <button class="nav-tab-btn" onclick="switchTab('tabMagazine', this)" id="navBtnMagazine">
-          <span class="nav-tab-icon">📚</span>
-          <span>06. 여백서재 &amp; 아카이브</span>
-        </button>
+        <!-- SYSTEM -->
+        <div class="sidebar-group-label" style="margin-top: 6px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 12px;">
+          <span>SYSTEM</span>
+          <span>설정</span>
+        </div>
 
-        <!-- ⚙️ 07. 환경설정 & 채널연동 (Settings & Marketing) -->
         <button class="nav-tab-btn" onclick="switchTab('tabSettings', this)" id="navBtnSettings">
           <span class="nav-tab-icon">⚙️</span>
-          <span>07. 환경설정 &amp; 채널연동</span>
+          <span>환경설정 &amp; 채널연동</span>
         </button>
 
-        <!-- Hidden anchor button for 100% backward compatibility with legacy scripts expecting navBtnAcademy -->
-        <button id="navBtnAcademy" onclick="switchTab('tabAcademy', this)" style="display:none;"></button>
+        <!-- 하위 호환 앵커 -->
+        <button id="navBtnAcademy" onclick="switchTab('tabCoachControl')" style="display:none;"></button>
       </nav>
 
       <div class="sidebar-footer">
-        <a href="index.html" class="sidebar-link-btn" title="사용자 메인 웹사이트로 이동">
+        <a href="index.html" target="_blank" class="sidebar-link-btn" title="사용자 메인 웹사이트로 이동">
           <span>🏠</span>
-          <span>메인 사이트 가기</span>
+          <span>메인 사이트 열기 ↗</span>
+        </a>
+        <a href="heritage.html?demo=1" target="_blank" class="sidebar-link-btn" style="color: #f6e09e;" title="VIP 가문 온라인 전시관 체험 페이지">
+          <span>🏛️</span>
+          <span>VIP 전시관 체험 ↗</span>
         </a>
         <button type="button" class="sidebar-link-btn logout" onclick="adminLogout()" title="관리자 로그아웃">
           <span>🔒</span>
@@ -2347,206 +2491,249 @@
     <main class="admin-main">
       <div class="top-action-bar">
         <div class="top-breadcrumb-wrap" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-          <span style="font-size: 0.80rem; font-weight: 800; color: #64748b; display: inline-flex; align-items: center; gap: 4px;">
-            <span>⚡</span> ANTIGRAVITY CONSOLE
+          <span style="font-size: 0.78rem; font-weight: 850; color: #1e4d35; display: inline-flex; align-items: center; gap: 4px;">
+            <span>🌿</span> YEBAEKARCHIVE.KR
           </span>
           <span style="color: #cbd5e1; font-size: 0.8rem;">/</span>
-          <span id="headerCurrentTabBadge" style="font-size: 0.88rem; font-weight: 850; color: #0f172a; display: inline-flex; align-items: center; gap: 6px;">
-            <span>📊</span> 01. 종합 관제 홈
+          <span id="headerCurrentTabBadge" style="font-size: 0.9rem; font-weight: 850; color: #0f172a; display: inline-flex; align-items: center; gap: 6px;">
+            <span>📊</span> 00. 통합 관제 홈
           </span>
           <span id="headerLiveStatusPill" style="display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 850; color: #059669; background: #ecfdf5; border: 1px solid #a7f3d0; padding: 2px 8px; border-radius: 999px;">
             <span style="width: 6px; height: 6px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
-            실시간 관제 중
+            실시간 클라우드 연동
           </span>
         </div>
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <span style="font-size: 0.82rem; color: #64748b; font-weight: 600;" id="currentDateDisplay"></span>
-          <button type="button" onclick="switchTab('tabSettings')" class="btn-save-setting" style="background: #1e293b; color: #ffffff; border: 1px solid #334155; font-size: 0.84rem; padding: 7px 14px; font-weight: 750; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
-            <span>⚙️ 환경설정</span>
+        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+          <span style="font-size: 0.8rem; color: #64748b; font-weight: 600;" id="currentDateDisplay"></span>
+          <button type="button" onclick="openAiArticleGeneratorModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-size: 0.82rem; padding: 7px 12px; font-weight: 800; border-radius: 8px; cursor: pointer;">
+            <span>🪄 AI 글쓰기</span>
           </button>
-          <a href="index.html" class="btn-save-setting" style="text-decoration: none; font-size: 0.84rem; padding: 7px 14px; background: #ffffff; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; font-weight: 750; display: inline-flex; align-items: center; gap: 4px;">
-            <span>메인 사이트 ➔</span>
+          <a href="index.html" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.82rem; padding: 7px 13px; background: #ffffff; color: #1e4d35; border: 1.2px solid #cbd5e1; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+            <span>메인 사이트 ↗</span>
           </a>
         </div>
       </div>
 
-      <!-- ================= 01. 📊 종합 관제 홈 (Today Cockpit) ================= -->
+      <!-- ================= 00. 📊 통합 관제 홈 (Executive Cockpit · 메인 6대 카테고리 1:1 매핑) ================= -->
       <section class="tab-panel active" id="tabCockpit">
-        <!-- 상단 환영 & 운영 모토 배너 -->
-        <div class="panel-card" style="background: linear-gradient(135deg, #1e3d2f 0%, #2b5a42 100%); color: #ffffff; padding: 22px 26px; border-radius: 18px; margin-bottom: 22px; box-shadow: 0 6px 20px rgba(30,61,47,0.25);">
+        <!-- 상단 환영 & 퀵 액션 배너 -->
+        <div class="panel-card" style="background: linear-gradient(135deg, #10261d 0%, #1d4333 65%, #163327 100%); color: #ffffff; padding: 22px 26px; border-radius: 18px; margin-bottom: 20px; border: 1.5px solid rgba(201, 162, 75, 0.45); box-shadow: 0 8px 24px rgba(16, 38, 29, 0.22);">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
             <div>
-              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: rgba(255,255,255,0.15); font-size: 0.78rem; font-weight: 800; letter-spacing: 0.05em; margin-bottom: 8px;">
-                <span>🌿</span> YEBAEK &amp; GEOL HEADQUARTERS
+              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px; background: rgba(201, 162, 75, 0.22); border: 1px solid rgba(201, 162, 75, 0.5); color: #f6e09e; font-size: 0.74rem; font-weight: 850; letter-spacing: 0.05em; margin-bottom: 8px;">
+                <span>🌿</span> YEBAEK &amp; GEOL EXECUTIVE COMMAND CENTER
               </div>
-              <h2 style="font-size: 1.45rem; font-weight: 900; margin: 0; color: #ffffff;">여백과 결 종합 비즈니스 관제 센터</h2>
-              <p style="margin: 6px 0 0; color: rgba(255,255,255,0.85); font-size: 0.9rem;">
-                고객 상담 접수부터 5대 비즈니스 수행, 공인 코치 파견 및 현장 검수·정산까지 한눈에 관제합니다.
+              <h2 style="font-family: 'Noto Serif KR', serif; font-size: 1.45rem; font-weight: 900; margin: 0; color: #ffffff;">여백과 결 통합 비즈니스 관제 대시보드</h2>
+              <p style="margin: 6px 0 0; color: rgba(246, 236, 212, 0.86); font-size: 0.88rem;">
+                메인 사이트 6대 카테고리 순서(여백의 서재 → 비움 한 줄 → 웰라이프 → 디지털 자서전 → 나의 고유한 서재 → 코치 아카데미)에 맞춰 모든 비즈니스를 원스톱으로 관제합니다.
               </p>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" onclick="refreshCockpitStats()" class="btn-save-setting" style="background: rgba(255,255,255,0.2); color: #ffffff; border: 1px solid rgba(255,255,255,0.35); font-weight: 800; padding: 8px 14px; cursor: pointer;">
-                <span>🔄</span> 관제 새로고침
+              <button type="button" onclick="refreshCockpitStats()" class="btn-save-setting" style="background: rgba(255,255,255,0.14); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); font-weight: 800; padding: 8px 14px; cursor: pointer;">
+                <span>🔄</span> 현황 새로고침
               </button>
-              <button type="button" onclick="openDispatchModal()" class="btn-save-setting" style="background: #c59b27; color: #ffffff; border: none; font-weight: 850; padding: 8px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(197,155,39,0.35);">
+              <button type="button" onclick="openDispatchModal()" class="btn-save-setting" style="background: linear-gradient(135deg, #d7b25c 0%, #b0892f 100%); color: #102018; border: none; font-weight: 900; padding: 8px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.28);">
                 <span>➕</span> 코치 즉시 배정
               </button>
             </div>
           </div>
         </div>
 
-        <!-- 🚨 오늘의 긴급 조치 파이프라인 (Action Items) -->
-        <div style="margin-bottom: 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-            <h3 style="font-size: 1.05rem; font-weight: 850; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 8px;">
-              <span>🚨</span> 오늘의 우선 처리 업무 (Action Items)
+        <!-- 🚨 오늘의 긴급 처리 업무 (4대 Action KPI) -->
+        <div style="margin-bottom: 22px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 6px;">
+            <h3 style="font-size: 1rem; font-weight: 850; color: var(--text-main); margin: 0; display: flex; align-items: center; gap: 6px;">
+              <span>🚨</span> 오늘의 우선 처리 업무 (Action Queue)
             </h3>
-            <span style="font-size: 0.82rem; color: var(--text-muted);">미처리 항목을 클릭하면 해당 업무 탭으로 즉시 이동합니다</span>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">카드를 클릭하면 해당 처리 화면으로 바로 이동합니다</span>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px;">
-            <!-- 1. 신규 상담/예약 접수 대기 -->
-            <div onclick="switchTab('tabConsult')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #0284c7; border-radius: 14px; padding: 18px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
+            <div onclick="switchTab('tabConsult')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #0284c7; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; font-weight: 800; color: #0284c7;">01. 고객 접수 &amp; 상담</span>
-                <span style="font-size: 1.3rem;">📋</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #0284c7;">신규 고객 접수 · 상담</span>
+                <span style="font-size: 1.2rem;">📋</span>
               </div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: var(--text-main); margin: 8px 0 4px;" id="cockpitInquiryCount">0건</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
-                <span>맞춤 진단 &amp; 1:1 방문 상담</span>
-                <span style="font-weight: 800; color: #0284c7;">상담 확인 ➔</span>
+              <div style="font-size: 1.7rem; font-weight: 900; color: var(--text-main); margin: 6px 0 3px;" id="cockpitInquiryCount">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>전 채널 상담 대기</span>
+                <span style="font-weight: 800; color: #0284c7;">상담함 ➔</span>
               </div>
             </div>
 
-            <!-- 2. 코치 배정 대기 -->
-            <div onclick="switchTab('tabAcademy')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #d97706; border-radius: 14px; padding: 18px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+            <div onclick="selectCoachSubFromSidebar('ops')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #d97706; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; font-weight: 800; color: #d97706;">02. 코치 배정 대기</span>
-                <span style="font-size: 1.3rem;">⏳</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #d97706;">코치 배정 대기</span>
+                <span style="font-size: 1.2rem;">⏳</span>
               </div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #d97706; margin: 8px 0 4px;" id="cockpitPendingDispatch">0건</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
-                <span>미배정 서비스 일정 매칭</span>
-                <span style="font-weight: 800; color: #d97706;">즉시 배정 ➔</span>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #d97706; margin: 6px 0 3px;" id="cockpitPendingDispatch">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>방문 서비스 매칭</span>
+                <span style="font-weight: 800; color: #d97706;">배정 관제 ➔</span>
               </div>
             </div>
 
-            <!-- 3. 현장사진 검수 및 정산 대기 -->
-            <div onclick="switchTab('tabCoachControl')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #b83354; border-radius: 14px; padding: 18px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+            <div onclick="selectCoachSubFromSidebar('ops')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #b83354; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; font-weight: 800; color: #b83354;">03. 현장 검수 &amp; 송금 대기</span>
-                <span style="font-size: 1.3rem;">📸</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #b83354;">현장 검수 · 정산 대기</span>
+                <span style="font-size: 1.2rem;">📸</span>
               </div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #b83354; margin: 8px 0 4px;" id="cockpitPendingSettlement">0건</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
-                <span>사진 3종 승인 및 활동비 지급</span>
-                <span style="font-weight: 800; color: #b83354;">검수·정산 ➔</span>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #b83354; margin: 6px 0 3px;" id="cockpitPendingSettlement">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>사진 3종 검수·송금</span>
+                <span style="font-weight: 800; color: #b83354;">정산 센터 ➔</span>
               </div>
             </div>
 
-            <!-- 4. 자서전 출판 프로젝트 진행 -->
-            <div onclick="switchTab('tabMemoirDashboard')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #c29b38; border-radius: 14px; padding: 18px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
+            <div onclick="selectMemoirFromSidebar('projects')" style="background: var(--bg-card); border: 1.5px solid var(--border-color); border-left: 4px solid #a84432; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease, box-shadow 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';" onmouseout="this.style.transform='none'; this.style.boxShadow='none';">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 0.82rem; font-weight: 800; color: #936f1c;">04. 자서전 출판 프로젝트</span>
-                <span style="font-size: 1.3rem;">📖</span>
+                <span style="font-size: 0.8rem; font-weight: 800; color: #a84432;">자서전 출판 진행</span>
+                <span style="font-size: 1.2rem;">✍️</span>
               </div>
-              <div style="font-size: 1.8rem; font-weight: 900; color: #936f1c; margin: 8px 0 4px;" id="cockpitActiveMemoirCount">0건</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); display: flex; align-items: center; justify-content: space-between;">
-                <span>구술 채록 · AI 5단계 윤문</span>
-                <span style="font-weight: 800; color: #936f1c;">출판 스튜디오 ➔</span>
+              <div style="font-size: 1.7rem; font-weight: 900; color: #a84432; margin: 6px 0 3px;" id="cockpitActiveMemoirCount">0건</div>
+              <div style="font-size: 0.76rem; color: var(--text-muted); display: flex; justify-content: space-between;">
+                <span>구술·윤문·웹북·전시관</span>
+                <span style="font-weight: 800; color: #a84432;">스튜디오 ➔</span>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 🌟 4대 오프라인 비즈니스 실시간 현황 보드 -->
-        <div class="panel-card" style="margin-bottom: 24px;">
-          <div class="panel-header">
+        <!-- 🏛️ 메인 사이트 6대 카테고리 1:1 운영 관제 보드 (메인 순서와 완벽 일치!) -->
+        <div class="panel-card" style="margin-bottom: 22px;">
+          <div class="panel-header" style="margin-bottom: 4px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon">🌟</span>
+              <span class="panel-icon" style="background:#eef4ef; color:#235a3f;">🗂️</span>
               <div>
-                <h3 class="panel-title">4대 라이프케어 비즈니스 실시간 운영 현황</h3>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  여백과 결의 4대 오프라인 시그니처 케어 서비스별 진행 상태를 한눈에 파악합니다.
+                <h3 class="panel-title">메인 사이트 6대 카테고리별 운영 관제 보드</h3>
+                <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
+                  메인 홈페이지(<code>yebaekarchive.kr</code>) 카테고리 순서 그대로 정렬되어 있습니다. 원하는 항목을 클릭해 바로 관리하세요.
                 </p>
               </div>
             </div>
-            <button type="button" class="btn-save-setting" onclick="switchTab('tabBusinessMaster')" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-              <span>4대 비즈니스 전체 관제 ➔</span>
-            </button>
           </div>
 
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 14px;">
-            <!-- 1호 뷰티케어 -->
-            <div onclick="switchTab('tabBusinessMaster'); switchBusinessMasterTab('beauty');" style="background: #fff8f9; border: 1.5px solid #f8c8d2; border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.4rem;">💄</span>
-                <span class="badge" style="background: #b83354; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px;">180분</span>
+          <div class="cockpit-cat-grid">
+            <!-- 01. 여백의 서재 -->
+            <div class="cockpit-cat-card" style="--cc-color: #235a3f;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 01</span>
+                  <h4 class="cockpit-cat-title">📖 여백의 서재</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitCatCount_magazine">0편</div>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 850; color: #b83354; margin-top: 8px;">#01 뷰티 라이프케어</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">수분·탄력·메이크업 SOP</div>
-              <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: var(--text-main);" id="cockpitBizCount_beauty">진행 관제 ➔</div>
+              <p class="cockpit-cat-desc">인사이트 칼럼 발행, AI 자동 글쓰기, 메인 전면 대표글 노출 및 네이버·티스토리 동시 배포 관리</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="switchTab('tabMagazine')">게시판 관리 ➔</button>
+                <button type="button" class="cockpit-cat-chip" onclick="openAiArticleGeneratorModal()">🪄 AI 글쓰기</button>
+                <a href="index.html#magazine" target="_blank" class="cockpit-cat-chip">라이브 ↗</a>
+              </div>
             </div>
 
-            <!-- 2호 옷장 공간 비움 -->
-            <div onclick="switchTab('tabBusinessMaster'); switchBusinessMasterTab('wardrobe');" style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.4rem;">👗</span>
-                <span class="badge" style="background: #475569; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px;">방문비움</span>
+            <!-- 02. 비움 한 줄 -->
+            <div class="cockpit-cat-card" style="--cc-color: #9a5d29;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 02</span>
+                  <h4 class="cockpit-cat-title">💬 비움 한 줄</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitCatCount_lounge">0건</div>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 850; color: var(--text-main); margin-top: 8px;">#02 옷장 &amp; 공간 비움</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">미니멀 정돈·기부 분류</div>
-              <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: var(--text-main);" id="cockpitBizCount_wardrobe">진행 관제 ➔</div>
+              <p class="cockpit-cat-desc">어르신 참여형 라운지 한 줄 글 검수, 관리자 추천 비움글 등록 및 커뮤니티 품격 유지</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="switchTab('tabLounge')">라운지 관리 ➔</button>
+                <a href="index.html#lounge" target="_blank" class="cockpit-cat-chip">라이브 ↗</a>
+              </div>
             </div>
 
-            <!-- 3호 유품 짐 아카이빙 -->
-            <div onclick="switchTab('tabBusinessMaster'); switchBusinessMasterTab('legacy');" style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.4rem;">📦</span>
-                <span class="badge" style="background: #475569; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px;">아카이빙</span>
+            <!-- 03. 웰라이프 (4대 케어) -->
+            <div class="cockpit-cat-card" style="--cc-color: #546b4c;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 03</span>
+                  <h4 class="cockpit-cat-title">🌿 웰라이프 (4대 방문 케어)</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitBizCount_beauty" style="font-size: 0.92rem;">4대 SOP 관제</div>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 850; color: var(--text-main); margin-top: 8px;">#03 유품 &amp; 짐 아카이빙</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">디지털 유품·추억 보존</div>
-              <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: var(--text-main);" id="cockpitBizCount_legacy">진행 관제 ➔</div>
+              <p class="cockpit-cat-desc">뷰티·옷장비움·유품정리·엔딩파티 4대 핵심 서비스의 4단계 매뉴얼(접수→배정→케어→CRM) 운영</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="selectBusinessFromSidebar('beauty')">💄 뷰티</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectBusinessFromSidebar('wardrobe')">👗 옷장</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectBusinessFromSidebar('legacy')">📦 유품</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectBusinessFromSidebar('party')">💌 엔딩파티</button>
+              </div>
+              <span id="cockpitBizCount_wardrobe" style="display:none;"></span>
+              <span id="cockpitBizCount_legacy" style="display:none;"></span>
+              <span id="cockpitBizCount_party" style="display:none;"></span>
             </div>
 
-            <!-- 4호 생전 엔딩 파티 -->
-            <div onclick="switchTab('tabBusinessMaster'); switchBusinessMasterTab('party');" style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 16px; cursor: pointer; transition: transform 0.15s ease;" onmouseover="this.style.transform='translateY(-2px)';" onmouseout="this.style.transform='none';">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 1.4rem;">💌</span>
-                <span class="badge" style="background: #475569; color: #fff; font-size: 0.7rem; padding: 2px 6px; border-radius: 999px;">축제형</span>
+            <!-- 04. 디지털 자서전 -->
+            <div class="cockpit-cat-card" style="--cc-color: #a84432;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 04</span>
+                  <h4 class="cockpit-cat-title">✍️ 디지털 자서전 · VIP 전시관</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitBizCount_memoir">0건 진행중</div>
               </div>
-              <div style="font-size: 0.95rem; font-weight: 850; color: var(--text-main); margin-top: 8px;">#04 생전 엔딩 파티</div>
-              <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">감사 인사·생전 장례</div>
-              <div style="margin-top: 10px; font-size: 1.05rem; font-weight: 900; color: var(--text-main);" id="cockpitBizCount_party">진행 관제 ➔</div>
+              <p class="cockpit-cat-desc">구술 채록·AI 5단계 윤문·모바일 웹북/육성 오디오 QR·VIP 가문 온라인 전시관·원가/마진 시뮬레이터</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="selectMemoirFromSidebar('projects')">출판 관제 ➔</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectMemoirFromSidebar('webbooks')">📱 웹북·QR</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectMemoirFromSidebar('heritage')">🏛️ VIP 전시관</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectMemoirFromSidebar('cost')">📊 원가·마진</button>
+              </div>
             </div>
 
+            <!-- 05. 나의 고유한 서재 -->
+            <div class="cockpit-cat-card" style="--cc-color: #a87b18;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 05</span>
+                  <h4 class="cockpit-cat-title">🏛️ 나의 고유한 서재</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitCatCount_archive">0명</div>
+              </div>
+              <p class="cockpit-cat-desc">어르신 독립 서재 구축 고객 명단, 전담 코치 상담 일지 및 김순옥 어르신 완성 샘플 서재 운영</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="switchTab('tabArchive')">서재 고객 관리 ➔</button>
+                <a href="my-room.html?mode=sample" target="_blank" class="cockpit-cat-chip">👵 샘플서재 ↗</a>
+                <a href="my-room.html" target="_blank" class="cockpit-cat-chip">내 서재 ↗</a>
+              </div>
+            </div>
+
+            <!-- 06. 코치 아카데미 & 파견 -->
+            <div class="cockpit-cat-card" style="--cc-color: #245b8e;">
+              <div class="cockpit-cat-head">
+                <div>
+                  <span class="cockpit-cat-num">CATEGORY 06</span>
+                  <h4 class="cockpit-cat-title">🎓 코치 아카데미 · 파견·정산</h4>
+                </div>
+                <div class="cockpit-cat-metric" id="cockpitCatCount_coach">0명</div>
+              </div>
+              <p class="cockpit-cat-desc">현장 수행 사진 검수·활동비 송금 정산, 수료 공인 코칭스태프 풀 관리 및 아카데미 입학 지원자 관리</p>
+              <div class="cockpit-cat-chips">
+                <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('ops')">📸 검수·정산</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 코치 명단</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('academy')">🎓 지원자</button>
+                <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- 📖 디지털 자서전 출판 & AI 스튜디오 전용 관제 배너 -->
-        <div class="panel-card" style="margin-bottom: 24px; background: linear-gradient(135deg, #fdfbf7 0%, #faf5ea 100%); border: 1.5px solid #e7d8b5; padding: 20px 24px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
-            <div style="display: flex; align-items: center; gap: 14px;">
-              <span style="font-size: 2.2rem; background: rgba(194,155,56,0.15); padding: 10px 14px; border-radius: 14px;">📖</span>
-              <div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                  <h3 style="font-size: 1.15rem; font-weight: 850; color: #936f1c; margin: 0;">04. 디지털 자서전 출판 &amp; AI 감성윤문 스튜디오</h3>
-                  <span class="badge" style="background: #c29b38; color: #fff; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">별도 독립 관제</span>
-                </div>
-                <p style="color: #785714; font-size: 0.86rem; margin: 4px 0 0;">
-                  생애 구술 채록 녹취부터 AI 5단계 감성 윤문, 스플릿뷰 에디터, 신국판 양장본 조판 및 완간 서재 연동까지 전용 파이프라인에서 관리합니다.
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-              <div style="text-align: right; margin-right: 6px;">
-                <div style="font-size: 0.78rem; color: #785714; font-weight: 700;">진행 프로젝트</div>
-                <div style="font-size: 1.35rem; font-weight: 900; color: #936f1c;" id="cockpitBizCount_memoir">0건 진행중</div>
-              </div>
-              <button type="button" class="btn-save-setting" onclick="switchTab('tabMemoirDashboard')" style="background: linear-gradient(135deg, #c29b38 0%, #aa7c11 100%); color: #ffffff; border: none; font-weight: 850; padding: 10px 18px; box-shadow: 0 4px 12px rgba(194,155,56,0.3); cursor: pointer;">
-                <span>자서전 출판 스튜디오 열기 ➔</span>
-              </button>
+        <!-- 🔗 운영 사이트 · 파트너 앱 전체 링크 빠른 점검 바 -->
+        <div class="panel-card" style="margin-bottom: 22px; padding: 14px 20px; background: #f8fafc;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+            <div style="font-size: 0.84rem; font-weight: 850; color: #1e293b;">🔗 전체 서비스 라이브 링크 (<code>yebaekarchive.kr</code> 연결 확인)</div>
+            <div style="display: flex; gap: 7px; flex-wrap: wrap;">
+              <a href="index.html" target="_blank" class="cockpit-cat-chip">🏠 메인 홈페이지 ↗</a>
+              <a href="my-room.html?mode=sample" target="_blank" class="cockpit-cat-chip">🏛️ 샘플 서재 ↗</a>
+              <a href="heritage.html?demo=1" target="_blank" class="cockpit-cat-chip">👑 VIP 전시관 ↗</a>
+              <a href="academy.html" target="_blank" class="cockpit-cat-chip">🎓 코치 아카데미 ↗</a>
+              <a href="coach.html" target="_blank" class="cockpit-cat-chip">📱 코치 현장앱 ↗</a>
+              <a href="coach-memoir.html" target="_blank" class="cockpit-cat-chip">✍️ 자서전 코치앱 ↗</a>
             </div>
           </div>
         </div>
@@ -2558,14 +2745,14 @@
               <span class="panel-icon">🏃</span>
               <div>
                 <h3 class="panel-title">실시간 코치 현장수행 &amp; 파견 현황</h3>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
+                <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
                   가장 최근에 배정되거나 현장에서 수행 중인 코치 일정 요약입니다.
                 </p>
               </div>
             </div>
             <div style="display: flex; gap: 8px;">
-              <button type="button" class="btn-save-setting" onclick="switchTab('tabCoachControl')" style="background: #ecfdf5; color: #047857; border: 1.5px solid #a7f3d0; font-weight: 850;">
-                <span>📸</span> 현장관제&amp;정산센터 전체보기 ➔
+              <button type="button" class="btn-save-setting" onclick="selectCoachSubFromSidebar('ops')" style="background: #eef3f9; color: #245b8e; border: 1.5px solid #bfd3ea; font-weight: 850;">
+                <span>📸</span> 현장관제 · 정산 전체보기 ➔
               </button>
             </div>
           </div>
@@ -2598,9 +2785,9 @@
             <div class="panel-title-wrap">
               <span class="panel-icon">📋</span>
               <div>
-                <h2 class="panel-title">02. 고객 접수 &amp; 맞춤 상담 파이프라인</h2>
+                <h2 class="panel-title">📋 통합 고객 접수 &amp; 맞춤 상담함</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  [1분 맞춤 리셋 진단] 및 온라인을 통해 접수된 고객의 <strong>1:1 방문 맞춤 상담 및 사전 문의</strong>를 통합 관리합니다. 상담 완료 후 5대 비즈니스 서비스로 즉시 전환하거나 전담 코치를 배정할 수 있습니다.
+                  웰라이프·디지털 자서전·나의 서재 등 모든 온라인 창구로 접수된 <strong>1:1 방문 상담 및 사전 문의</strong>를 통합 관리합니다. 상담 완료 후 즉시 전담 코치를 배정할 수 있습니다.
                 </p>
               </div>
             </div>
@@ -2809,54 +2996,42 @@
         </div>
       </section>
 
-      <!-- ================= 탭 2: 📝 01. 여백서재 관리 (프리미엄 게시판 & 에디터) ================= -->
+      <!-- ================= 01. 📖 여백의 서재 관리 (메인 카테고리 1번) ================= -->
       <section class="tab-panel" id="tabMagazine">
-        <!-- 여백서재 & 아카이브 서브 내비게이션 -->
-        <div style="display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 2px solid var(--border-color); padding-bottom: 12px; flex-wrap: wrap;">
-          <button type="button" class="btn-save-setting" onclick="switchTab('tabMagazine')" style="background: #2b5a42; color: #ffffff; border: none; font-weight: 850;">
-            <span>📝 1. 여백의 서재 칼럼 관리</span>
-          </button>
-          <button type="button" class="btn-save-setting" onclick="switchTab('tabLounge')" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-            <span>💬 2. 오늘의 비움 한 줄 라운지</span>
-          </button>
-          <button type="button" class="btn-save-setting" onclick="switchTab('tabArchive')" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-            <span>🏛️ 3. 보물 서재 &amp; 완간 도서 관리</span>
-          </button>
-        </div>
-        <!-- 상단 통계 및 퀵 액션 카드 -->
+        <!-- 상단 통계 카드 -->
         <div class="stat-cards-grid">
-          <div class="stat-card">
+          <div class="stat-card" style="border-top: 3px solid #235a3f;">
             <span class="stat-icon">📚</span>
             <div>
               <div class="stat-num" id="statArticleTotal">0편</div>
               <div class="stat-label">전체 등록 칼럼</div>
             </div>
           </div>
-          <div class="stat-card">
+          <div class="stat-card" style="border-top: 3px solid #c9a24b;">
             <span class="stat-icon">⭐</span>
             <div>
               <div class="stat-num" id="statArticleFeatured">0편</div>
               <div class="stat-label">메인 전면 대표글 노출 중</div>
             </div>
           </div>
-          <div class="stat-card" style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div class="stat-card" style="border-top: 3px solid #0284c7; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
             <div>
-              <div style="font-size: 0.84rem; color: #4338ca; font-weight: 750; margin-bottom: 4px;">웹·유튜브 스마트 글쓰기</div>
-              <div style="font-size: 1.05rem; font-weight: 850; color: #1e1b4b;">AI 맞춤 자동 글쓰기</div>
+              <div style="font-size: 0.78rem; color: #0369a1; font-weight: 800; margin-bottom: 3px;">브랜드 도메인 라이브</div>
+              <div style="font-size: 0.96rem; font-weight: 850; color: #0f172a;">yebaekarchive.kr</div>
             </div>
-            <button type="button" class="btn-save-setting" onclick="openAiArticleGeneratorModal()" style="padding: 10px 18px; font-size: 0.92rem; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; font-weight: 850; box-shadow: 0 4px 14px rgba(79, 70, 229, 0.35); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
-              <span>🪄</span> AI 글쓰기 시작
-            </button>
+            <a href="index.html#magazine" target="_blank" class="btn-save-setting" style="padding: 8px 14px; font-size: 0.84rem; background: #235a3f; color: #ffffff; border: none; text-decoration: none; font-weight: 800;">
+              <span>라이브 보기 ↗</span>
+            </a>
           </div>
         </div>
 
         <!-- 칼럼 목록 및 게시판 관리 카드 -->
-        <div class="panel-card">
+        <div class="panel-card" style="border-top: 4px solid #235a3f;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 14px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon">📖</span>
+              <span class="panel-icon" style="background:#eef4ef; color:#235a3f;">📖</span>
               <div>
-                <h3 class="panel-title">여백의 서재 전체 게시판 관리</h3>
+                <h3 class="panel-title">01. 여백의 서재 — 칼럼 게시판 관리</h3>
                 <p style="font-size: 0.86rem; color: var(--text-muted); margin: 2px 0 0;">
                   글을 클릭하면 본문 전문을 미리 볼 수 있으며, <strong>[⭐ 전면 노출]</strong> 버튼으로 메인 화면 전면에 띄울 대표글을 자유롭게 선택할 수 있습니다.
                 </p>
@@ -2944,17 +3119,25 @@
         </div>
       </section>
 
-      <!-- ================= 탭 3: 💬 02. 비움한줄 관리 ================= -->
+      <!-- ================= 02. 💬 비움 한 줄 라운지 관리 (메인 카테고리 2번) ================= -->
       <section class="tab-panel" id="tabLounge">
-        <div class="panel-card">
-          <div class="panel-header">
+        <div class="panel-card" style="border-top: 4px solid #9a5d29;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon">💬</span>
-              <h2 class="panel-title">02. 오늘의 비움 한 줄 라운지 관리</h2>
+              <span class="panel-icon" style="background:#fdf3e7; color:#9a5d29;">💬</span>
+              <div>
+                <h2 class="panel-title" style="margin: 0;">02. 비움 한 줄 — 어르신 참여 라운지 관리</h2>
+                <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">메인 2번 카테고리 '오늘의 비움 한 줄' 게시물 검수 및 추천글 등록</p>
+              </div>
             </div>
-            <button class="btn-save-setting" onclick="promptAddUnburden()">
-              <span>+</span> 관리자 추천 비움글 추가
-            </button>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button class="btn-save-setting" onclick="promptAddUnburden()" style="background: #9a5d29; color: #ffffff; border: none;">
+                <span>+</span> 관리자 추천 비움글 추가
+              </button>
+              <a href="index.html#lounge" target="_blank" class="btn-save-setting" style="background: #ffffff; color: #9a5d29; border: 1.5px solid #d9b896; text-decoration: none;">
+                <span>라이브 보기 ↗</span>
+              </a>
+            </div>
           </div>
           <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
             어르신들이 일상에서 가볍게 비워낸 한 줄 글 목록입니다. 부적절한 글은 삭제하거나, 감동적인 글을 메인 상단에 고정할 수 있습니다.
@@ -3015,14 +3198,14 @@
               </div>
             </div>
             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" class="btn-save-setting" onclick="resetAndGoToCoachControl()" style="background: #059669; color: #ffffff; border: none; font-weight: 850; box-shadow: 0 2px 8px rgba(5,150,105,0.25); cursor: pointer;" title="현장 사진 검수 및 코치 활동비 송금·정산 센터로 이동합니다">
-                <span>📸</span> 현장관제 &amp; 정산센터 이동 ➔
+              <button type="button" class="btn-save-setting" onclick="selectCoachSubFromSidebar('ops')" style="background: #245b8e; color: #ffffff; border: none; font-weight: 850; cursor: pointer;" title="현장 사진 검수 및 코치 활동비 송금·정산 센터로 이동합니다">
+                <span>📸</span> 현장검수 · 정산 이동 ➔
               </button>
-              <a href="my-room.html?tab=webbook" target="_blank" class="btn-save-setting" style="background: #fef7e6; color: #8c6610; border-color: #e6cf8b; text-decoration: none; font-weight: 800;">
-                <span>📱</span> 고객 모바일 웹북 보기
+              <a href="index.html#test" target="_blank" class="btn-save-setting" style="background: #eef4ef; color: #235a3f; border: 1.5px solid #bfd3c3; text-decoration: none; font-weight: 800;">
+                <span>🌿</span> 메인 웰라이프 보기 ↗
               </a>
               <button type="button" class="btn-save-setting" onclick="exportBusinessCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color); font-weight: 800;">
-                <span>📥</span> 비즈니스 데이터(CSV) 다운로드
+                <span>📥</span> 데이터(CSV) 다운로드
               </button>
             </div>
           </div>
@@ -3098,89 +3281,41 @@
           </div>
         </div>
 
-        <!-- 4. 진단 테마별 '관련 여백 칼럼' 연결 링크 설정 카드 (보존) -->
-        <div class="panel-card" id="bizDiagLinksCard" style="margin-top: 24px;">
-          <div class="panel-header">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">🔗</span>
-              <div>
-                <h2 class="panel-title">맞춤 리셋 진단 결과별 [관련 여백 칼럼] 연결 링크 관리</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  메인 화면 5대 쇼케이스 진단 카드 및 진단 결과창의 <strong>[📚 관련 여백 칼럼 읽기]</strong> 버튼을 고객이 클릭했을 때 이동할 칼럼 링크(URL 또는 앵커)를 테마별로 지정합니다.
-                </p>
-              </div>
+        <!-- 4. 고급 설정: 웰라이프 테마별 '관련 여백 칼럼' 연결 링크 (접이식 정리) -->
+        <details class="panel-card" id="bizDiagLinksCard" style="margin-top: 20px;">
+          <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; font-weight: 850; font-size: 0.96rem; color: var(--text-main);">
+            <span>🔗 [고급 설정] 웰라이프 쇼케이스 카드별 관련 칼럼 연결 링크 관리 (클릭하여 펼치기 ▾)</span>
+            <span style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;">메인 웰라이프 카드 연동</span>
+          </summary>
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: flex-end; margin-bottom: 12px;">
+              <button class="btn-save-setting" onclick="saveDiagColumnLinks()">
+                <span>💾</span> 칼럼 연결 링크 저장
+              </button>
             </div>
-            <button class="btn-save-setting" onclick="saveDiagColumnLinks()">
-              <span>💾</span> 칼럼 연결 링크 저장
-            </button>
-          </div>
-
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 14px; margin-top: 10px;">
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>💄</span>
-                <span>#01 웰니스 & 뷰티 케어 칼럼 링크</span>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px;">
+              <div class="setting-group-card">
+                <div class="setting-label-row"><span>💄</span><span>3-1. 시니어 뷰티 라이프케어 칼럼 링크</span></div>
+                <input type="text" id="adminDiagLink_beauty" class="setting-input" placeholder="#magazine 또는 https://yebaekarchive.kr/...">
               </div>
-              <p class="setting-hint">기본값: #magazine (또는 특정 칼럼 URL)</p>
-              <input type="text" id="adminDiagLink_beauty" class="setting-input" placeholder="#magazine 또는 https://...">
-            </div>
-
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>👗</span>
-                <span>#02 일상과 비움의 미학 (옷장 정리) 칼럼 링크</span>
+              <div class="setting-group-card">
+                <div class="setting-label-row"><span>👗</span><span>3-2. 옷장 &amp; 공간 비움 칼럼 링크</span></div>
+                <input type="text" id="adminDiagLink_wardrobe" class="setting-input" placeholder="#magazine 또는 https://yebaekarchive.kr/...">
               </div>
-              <p class="setting-hint">기본값: #magazine (또는 특정 칼럼 URL)</p>
-              <input type="text" id="adminDiagLink_wardrobe" class="setting-input" placeholder="#magazine 또는 https://...">
-            </div>
-
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>📦</span>
-                <span>#03 기억의 계승 (오래된 짐/유품) 칼럼 링크</span>
+              <div class="setting-group-card">
+                <div class="setting-label-row"><span>📦</span><span>3-3. 유품 &amp; 짐 아카이빙 칼럼 링크</span></div>
+                <input type="text" id="adminDiagLink_legacy" class="setting-input" placeholder="#magazine 또는 https://yebaekarchive.kr/...">
               </div>
-              <p class="setting-hint">기본값: #magazine (또는 특정 칼럼 URL)</p>
-              <input type="text" id="adminDiagLink_legacy" class="setting-input" placeholder="#magazine 또는 https://...">
-            </div>
-
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>✍️</span>
-                <span>#04 디지털 자서전 (생애사) 칼럼/서재 링크</span>
+              <div class="setting-group-card">
+                <div class="setting-label-row"><span>💌</span><span>3-4. 생전 엔딩 파티 칼럼 링크</span></div>
+                <input type="text" id="adminDiagLink_party" class="setting-input" placeholder="#magazine 또는 https://yebaekarchive.kr/...">
               </div>
-              <p class="setting-hint">기본값: my-room.html?mode=sample</p>
-              <input type="text" id="adminDiagLink_memoir" class="setting-input" placeholder="my-room.html?mode=sample 또는 https://...">
-            </div>
-
-            <div class="setting-group-card">
-              <div class="setting-label-row">
-                <span>💌</span>
-                <span>#05 아름다운 마침표 (생전 엔딩 파티) 칼럼 링크</span>
+              <div class="setting-group-card" style="display:none;">
+                <input type="text" id="adminDiagLink_memoir" class="setting-input" value="my-room.html?mode=sample">
               </div>
-              <p class="setting-hint">기본값: #magazine (또는 특정 칼럼 URL)</p>
-              <input type="text" id="adminDiagLink_party" class="setting-input" placeholder="#magazine 또는 https://...">
             </div>
           </div>
-        </div>
-
-        <!-- 5. 5호 디지털 자서전 전용 배너 및 완성 도서 PDF 관리 카드 (자서전 탭 활성 시 표시) -->
-        <!-- 맞춤 진단 고객 접수 안내 배너 -->
-        <div class="panel-card" style="margin-top: 24px; background: #f0fdf4; border: 1.5px solid #bbf7d0;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span style="font-size: 1.8rem;">📋</span>
-              <div>
-                <div style="font-weight: 850; font-size: 0.98rem; color: #166534;">신규 고객 접수 및 1:1 방문 맞춤 상담 관리</div>
-                <div style="color: #15803d; font-size: 0.86rem; margin-top: 2px;">
-                  [맞춤 리셋 진단]을 통해 접수된 고객 명단과 전화/방문 상담 예약은 <strong>[02. 고객 접수 &amp; 상담 파이프라인]</strong> 탭에서 체계적으로 관리됩니다.
-                </div>
-              </div>
-            </div>
-            <button type="button" class="btn-save-setting" onclick="switchTab('tabConsult')" style="background: #15803d; color: #ffffff; border: none; font-weight: 850;">
-              <span>고객 접수 &amp; 상담 센터 바로가기 ➔</span>
-            </button>
-          </div>
-        </div>
+        </details>
       </section>
 
       <!-- ================= 탭: 📖 04. 자서전 출판 관제센터 & AI 윤문 파이프라인 ================= -->
@@ -3328,10 +3463,10 @@
                 <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #1e4d35; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
                   개인 서재 실시간 클라우드 연동
                 </div>
-                <h2 class="panel-title" style="margin: 0;">04-2. 개인 서재 모바일 웹북 등록 · 배포 관리</h2>
+                <h2 class="panel-title" style="margin: 0;">4-2. 개인 서재 모바일 웹북 · 육성 오디오 · 300DPI QR 통합 배포</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0; line-height: 1.55;">
-                  완성된 자서전을 어르신별 <strong>개인 서재(<code>my-room.html</code> → 📱 모바일 웹북)</strong>에 직접 올리고 관리합니다.
-                  등록 즉시 클라우드(Firestore)에 저장되어 어르신이 <strong>성함(+전화번호 뒤 4자리)</strong>으로 로그인하거나 <strong>가족 전용 URL</strong>로 접속하면 바로 플립북과 음성 낭독으로 감상하실 수 있습니다.
+                  완성된 자서전 PDF와 어르신 육성 오디오(MP3)를 <strong>개인 서재(<code>my-room.html</code> → 📱 모바일 웹북)</strong>에 통합 발행합니다.
+                  등록 즉시 클라우드에 저장되어 <strong>가족 전용 URL</strong>과 <strong>300 DPI 책 인쇄용 벡터(.svg) QR</strong>이 자동 생성됩니다.
                 </p>
               </div>
             </div>
@@ -3373,7 +3508,7 @@
                 <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #14281f; color: #f6e7c1; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
                   yebaekarchive.kr/heritage.html 실시간 발행 · 유지비 0원 자체 플랫폼
                 </div>
-                <h2 class="panel-title" style="margin: 0;">04-5. VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 관리</h2>
+                <h2 class="panel-title" style="margin: 0;">4-3. VIP 가문 전용 영구 프리미엄 온라인 전시관 구축 · 관리</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0; line-height: 1.55;">
                   <strong>명문 가문 평전(VIP)</strong> 고객의 가훈·4세대 인터랙티브 가계도·옛 사진 및 훈장/유품 60점 AI 복원 전↔후 비교 도록·구술 다큐멘터리 영상관(Vimeo/YouTube/MP4)·전문 성우/육성 오디오북·후손 방명록을 한 번에 발행하고 <strong>300 DPI 책 인쇄용 벡터(.svg) QR</strong>을 내려받습니다.
                 </p>
@@ -3419,7 +3554,7 @@
                 <div style="display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border-radius: 999px; background: #8c6610; color: #fff; font-size: 0.72rem; font-weight: 850; margin-bottom: 4px;">
                   실전 수익 관리 · 외주/AI 툴 제작 매뉴얼
                 </div>
-                <h2 class="panel-title" style="margin: 0;">04-6. 상품별 제작 원가 · 외주비 · 마진 시뮬레이터 &amp; 실무 제작 가이드</h2>
+                <h2 class="panel-title" style="margin: 0;">4-4. 상품별 제작 원가 · 외주비 · 마진 시뮬레이터 &amp; 실무 제작 가이드</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 5px 0 0;">
                   <strong>인생 마스터피스</strong>와 <strong>명문 가문 평전</strong>의 판매가·외주 원가를 실시간 조정해 순수익률을 점검하고, 각 서비스의 실무 제작 툴과 납품 체크리스트를 바로 확인합니다.
                 </p>
@@ -3457,58 +3592,14 @@
           </div>
         </div>
 
-        <!-- 04-3. 완간된 디지털 자서전 도서 & PDF 파일 관리 (서재 자동 연동) -->
-        <div class="panel-card" id="publishedMemoirsSection" style="margin-top: 24px;">
-          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
-            <div class="panel-title-wrap">
-              <span class="panel-icon">📚</span>
-              <div>
-                <h2 class="panel-title">출판 완료된 디지털 자서전 도서 &amp; PDF 파일 관리 (서재 자동 연동)</h2>
-                <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  전문 구술 인터뷰와 교정을 거쳐 완간된 디지털 자서전 도서와 <strong>PDF 파일</strong>을 관리합니다. 등록된 도서는 <strong>[나의 서재(my-room.html)]</strong>에 자동 전시되어 어르신과 가족이 직접 다운로드할 수 있습니다.
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
-                <span>➕</span> 신규 완성 자서전 &amp; PDF 등록
-              </button>
-              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                <span>📥</span> 도서 목록(CSV) 다운로드
-              </button>
-            </div>
-          </div>
-
-          <div class="admin-table-wrap">
-            <table class="admin-table">
-              <thead>
-                <tr>
-                  <th style="width: 70px; text-align: center;">표지</th>
-                  <th style="width: 180px;">자서전 도서명</th>
-                  <th style="width: 100px;">저자 (어르신)</th>
-                  <th style="width: 85px; text-align: center;">총 분량</th>
-                  <th style="width: 100px;">전담 코치</th>
-                  <th style="width: 100px;">완간 일자</th>
-                  <th style="width: 220px;">자서전 PDF 파일 &amp; 다운로드</th>
-                  <th style="width: 100px; text-align: center;">서재 공개</th>
-                  <th style="width: 110px; text-align: center;">관리</th>
-                </tr>
-              </thead>
-              <tbody id="publishedMemoirsTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- 04-3. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 틀 -->
+        <!-- 4-5. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 -->
         <div id="bizMemoirBannerCard" style="display: block; margin-top: 24px;">
           <div class="panel-card">
             <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
               <div class="panel-title-wrap">
-                <span class="panel-icon">✨</span>
+                <span class="panel-icon">📢</span>
                 <div>
-                  <h2 class="panel-title">메인 화면 자서전 특별 혜택 배너 (CTA 배너) 관리 틀</h2>
+                  <h2 class="panel-title">4-5. 메인 화면 자서전 특별 혜택 배너 (CTA 배너) 설정</h2>
                   <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
                     메인 화면의 디지털 자서전 하단 배너 문구와 <strong>[📖 자서전 예시 둘러보기] 이동 링크</strong>를 자유롭게 지정합니다.
                   </p>
@@ -3583,6 +3674,44 @@
             </div>
           </div>
         </div>
+
+        <!-- 📦 [구버전 보관함 · 중복 정리] 기존 완간 도서 PDF 목록 (신규 배포는 위 4-2 통합 배포 사용) -->
+        <details class="panel-card" id="publishedMemoirsSection" style="margin-top: 20px; background: #f8fafc;">
+          <summary style="cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; font-weight: 850; font-size: 0.92rem; color: #475569;">
+            <span>📦 [구버전 보관함] 기존 완간 자서전 PDF 기록 열람 (신규 PDF·오디오·QR 배포는 위 4-2 통합 배포 사용 ▾)</span>
+            <span style="font-size: 0.76rem; background: #e2e8f0; color: #475569; padding: 2px 9px; border-radius: 999px;">중복 통합 완료</span>
+          </summary>
+          <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+            <div style="display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 12px;">
+              <button class="btn-save-setting" onclick="openPubMemoirModal()" style="background: var(--accent); color: #ffffff;">
+                <span>➕</span> 구버전 목록 추가
+              </button>
+              <button class="btn-save-setting" onclick="exportPubMemoirsCSV()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
+                <span>📥</span> 도서 목록(CSV) 다운로드
+              </button>
+            </div>
+            <div class="admin-table-wrap">
+              <table class="admin-table">
+                <thead>
+                  <tr>
+                    <th style="width: 70px; text-align: center;">표지</th>
+                    <th style="width: 180px;">자서전 도서명</th>
+                    <th style="width: 100px;">저자 (어르신)</th>
+                    <th style="width: 85px; text-align: center;">총 분량</th>
+                    <th style="width: 100px;">전담 코치</th>
+                    <th style="width: 100px;">완간 일자</th>
+                    <th style="width: 220px;">자서전 PDF 파일 &amp; 다운로드</th>
+                    <th style="width: 100px; text-align: center;">서재 공개</th>
+                    <th style="width: 110px; text-align: center;">관리</th>
+                  </tr>
+                </thead>
+                <tbody id="publishedMemoirsTableBody">
+                  <!-- JS 동적 렌더링 -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </details>
       </section>
 
       <!-- ================= 탭 1: 🎓 01. 코치 아카데미 & 코치 배정 관리 ================= -->
@@ -3602,15 +3731,15 @@
       <section class="tab-panel" id="tabCoachControl">
         <!-- 🌟 코칭스태프 파견 배정·현장관제 & 정산 통합 센터 (단일 카테고리) -->
         
-        <!-- 🌟 코칭스태프 현장수행 관제 & 활동비 송금·정산 센터 슬림 헤더 -->
-        <div class="panel-card" style="margin-bottom: 16px; border-top: 3.5px solid #059669; padding: 16px 22px;">
+        <!-- 🌟 6-1. 코칭스태프 현장수행 관제 & 활동비 송금·정산 센터 -->
+        <div class="panel-card" id="coachOpsSection" style="margin-bottom: 16px; border-top: 4px solid #245b8e; padding: 16px 22px;">
           <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
             <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="panel-icon" style="background:#eef7f2; color:#059669; font-size:1.4rem; padding:6px 9px; border-radius:10px;">📸</span>
+              <span class="panel-icon" style="background:#eef3f9; color:#245b8e; font-size:1.4rem; padding:6px 9px; border-radius:10px;">📸</span>
               <div>
                 <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">05. 코칭스태프 현장수행 관제 &amp; 활동비 송금·정산 센터</h2>
-                  <span class="badge" style="background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">실시간 현장 검수·송금</span>
+                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-1. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산</h2>
+                  <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">실시간 현장 검수·송금</span>
                 </div>
                 <p style="color: var(--text-muted); font-size: 0.83rem; margin: 3px 0 0;">
                   코칭스태프의 <strong>실시간 현장 활동 상황(도착·완료 스탬프, 사진 3종 &amp; 소감 검수)</strong>과 <strong>활동비 송금 및 정산 내역</strong>을 집중 관리합니다.
@@ -3618,11 +3747,14 @@
               </div>
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-              <button type="button" class="btn-save-setting" onclick="openDispatchModal()" style="background: #059669; color: #ffffff; border: none; font-weight: 850; font-size: 0.82rem; padding: 7px 13px; border-radius: 8px; box-shadow: 0 2px 8px rgba(5,150,105,0.25); display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
+              <button type="button" class="btn-save-setting" onclick="openDispatchModal()" style="background: #245b8e; color: #ffffff; border: none; font-weight: 850; font-size: 0.82rem; padding: 7px 13px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;">
                 <span>➕</span> 신규 배정 등록
               </button>
+              <a href="academy.html" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
+                <span>🎓</span> 아카데미 사이트 ↗
+              </a>
               <a href="coach.html" target="_blank" class="btn-save-setting" style="background: #1e293b; color: #ffffff; text-decoration: none; font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
-                <span>📱</span> 코치 현장앱
+                <span>📱</span> 코치 현장앱 ↗
               </a>
               <button type="button" class="btn-save-setting" onclick="renderCoachControlCenter()" style="background: #ffffff; color: var(--text-main); border: 1px solid var(--border-color); font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 750;">
                 <span>🔄</span> 새로고침
@@ -3747,13 +3879,13 @@
           </div>
         </div>
 
-        <!-- 🏅 05-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리 (통합 배치) -->
+        <!-- 🏅 6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리 -->
         <div class="panel-card" id="coachPoolSection" style="margin-top: 24px;">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
               <span class="panel-icon">🏅</span>
               <div>
-                <h2 class="panel-title" style="font-size: 1.25rem;">05-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리</h2>
+                <h2 class="panel-title" style="font-size: 1.25rem;">6-2. 교육 이수 공인 코칭스태프(Coach) 명단 및 프로필 관리</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
                   여백과 결 아카데미 전문 과정을 이수하고 공인 자격을 획득한 정예 코치 명단입니다. (서비스 배정 툴의 코치 풀로 자동 연동됩니다)
                 </p>
@@ -3791,13 +3923,13 @@
           </div>
         </div>
 
-        <!-- 🎓 05-3. 코칭스태프 양성 아카데미 지원 신청자 명단 (통합 배치) -->
-        <div class="panel-card" style="margin-top: 24px;">
+        <!-- 🎓 6-3. 코칭스태프 양성 아카데미 지원 신청자 명단 -->
+        <div class="panel-card" id="academyApplicantsSection" style="margin-top: 24px;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">🎓</span>
               <div>
-                <h2 class="panel-title" style="font-size: 1.25rem;">05-3. 코칭스태프 양성 아카데미 지원 신청자 명단</h2>
+                <h2 class="panel-title" style="font-size: 1.25rem;">6-3. 코칭스태프 양성 아카데미 지원 신청자 명단</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
                   2026년 [여백과 결] 공식 코칭스태프 입학 상담 및 교육과정 지원자 명단입니다.
                 </p>
@@ -3829,21 +3961,24 @@
 
       </section>
 
-      <!-- ================= 탭 7: 🏛️ 06. 나의 고유한 보물서재 관리 ================= -->
+      <!-- ================= 05. 🏛️ 나의 고유한 서재 관리 (메인 카테고리 5번) ================= -->
       <section class="tab-panel" id="tabArchive">
-        <!-- 1. 나의 서재 신청 명단 및 상담 내용 관리 카드: 사용자 핵심 요구사항 -->
-        <div class="panel-card">
-          <div class="panel-header">
+        <!-- 5-1. 나의 서재 신청 명단 및 상담 내용 관리 -->
+        <div class="panel-card" style="border-top: 4px solid #a87b18;">
+          <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
-              <span class="panel-icon">🏛️</span>
+              <span class="panel-icon" style="background:#fbf3df; color:#a87b18;">🏛️</span>
               <div>
-                <h2 class="panel-title">06-1. 나의 서재 구축 신청 명단 & 전담 코치 상담 내용 관리</h2>
+                <h2 class="panel-title">5-1. 나의 고유한 서재 구축 신청 고객 &amp; 상담 관리</h2>
                 <p style="color: var(--text-muted); font-size: 0.86rem; margin: 4px 0 0;">
-                  나만의 독립 서재 구축, 자서전 구술, 옛 사진 복원, 비움 일기, 엔딩 금고 보관을 신청한 고객 명단 및 상담 진행 일지를 관리합니다.
+                  나만의 독립 서재 구축, 추억 사진전시관, 애장품 전시관, 엔딩 금고 보관을 신청한 고객 명단 및 상담 진행 일지를 관리합니다.
                 </p>
               </div>
             </div>
-            <div style="display: flex; gap: 8px;">
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-save-setting" onclick="selectMemoirFromSidebar('webbooks')" style="background: #1e4d35; color: #f6e7c1; border: none; font-weight: 800;">
+                <span>📱</span> 어르신 모바일 웹북 배포 ➔
+              </button>
               <button class="btn-save-setting" onclick="promptAddRoomClient()" style="background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
                 <span>+</span> 신규 서재 고객 등록
               </button>
@@ -3873,26 +4008,29 @@
           </div>
         </div>
 
-        <!-- 2. 김순옥 어르신 완성 서재 공개 체험 링크 -->
+        <!-- 5-2. 완성 서재 & 독립 서재 라이브 링크 -->
         <div class="panel-card" style="margin-top: 24px;">
           <div class="panel-header">
             <div class="panel-title-wrap">
               <span class="panel-icon">👵</span>
-              <h2 class="panel-title">06-2. 김순옥 어르신 완성 서재 공개 체험 링크</h2>
+              <h2 class="panel-title">5-2. 나의 고유한 서재 공개 체험 &amp; 접속 링크 (yebaekarchive.kr)</h2>
             </div>
           </div>
           <div class="setting-group-card">
             <div class="setting-label-row">
               <span>🔗</span>
-              <span>184쪽 완성 샘플 서재 URL</span>
+              <span>184쪽 완성 샘플 서재 공식 URL</span>
             </div>
-            <input type="text" class="setting-input" value="my-room.html?mode=sample" readonly>
-            <div style="margin-top: 10px; display: flex; gap: 10px;">
+            <input type="text" class="setting-input" value="https://yebaekarchive.kr/my-room.html?mode=sample" readonly>
+            <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
               <a href="my-room.html?mode=sample" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.88rem; padding: 7px 16px;">
-                샘플 서재 직접 열람해보기 ➔
+                👵 김순옥 어르신 샘플 서재 열기 ↗
               </a>
               <a href="my-room.html?mode=user" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.88rem; padding: 7px 16px; background: #ffffff; color: var(--text-main); border: 1.5px solid var(--border-color);">
-                독립 내 서재 체험해보기 ➔
+                🏛️ 고객 독립 서재 열기 ↗
+              </a>
+              <a href="heritage.html?demo=1" target="_blank" class="btn-save-setting" style="text-decoration: none; font-size: 0.88rem; padding: 7px 16px; background: #fef9e7; color: #7a5912; border: 1.5px solid #c9a24b;">
+                👑 VIP 가문 온라인 전시관 체험 ↗
               </a>
             </div>
           </div>
@@ -6202,10 +6340,21 @@
 
     // 탭 전환
         /* ================= ???꾪솚 ================= */
-        /* ================= 탭 전환 및 신규 비즈니스 라이프사이클 라우팅 ================= */
+        /* ================= 탭 전환 및 메인 6대 카테고리 1:1 라우팅 ================= */
+    function syncSidebarAccordions(activeTabId) {
+      var subBiz = document.getElementById('sidebarSubnavBusiness');
+      var subMemoir = document.getElementById('sidebarSubnavMemoir');
+      var subCoach = document.getElementById('sidebarSubnavCoach');
+      if (subBiz) subBiz.classList.toggle('open', activeTabId === 'tabBusinessMaster');
+      if (subMemoir) subMemoir.classList.toggle('open', activeTabId === 'tabMemoirDashboard');
+      if (subCoach) subCoach.classList.toggle('open', activeTabId === 'tabCoachControl');
+    }
+
     function switchTab(tabId, btn) {
       if (tabId === 'tabMemoir') {
         tabId = 'tabMemoirDashboard';
+      } else if (tabId === 'tabAcademy') {
+        tabId = 'tabCoachControl';
       } else if (['tabBusinessMaster', 'tabBeautyCrm', 'tabTest'].indexOf(tabId) !== -1) {
         var mappedBiz = tabId === 'tabBeautyCrm' ? 'beauty' : (tabId === 'tabTest' ? 'wardrobe' : (typeof currentBusinessTab !== 'undefined' ? currentBusinessTab : 'beauty'));
         tabId = 'tabBusinessMaster';
@@ -6218,23 +6367,27 @@
       }
 
       if (!btn) {
-        if (tabId === 'tabCockpit') btn = document.getElementById('navBtnCockpit');
-        else if (tabId === 'tabConsult') btn = document.getElementById('navBtnConsult');
-        else if (tabId === 'tabAcademy') {
-        tabId = 'tabCoachControl';
-        btn = document.getElementById('navBtnCoachControl');
-      }
-        else if (tabId === 'tabCoachControl') btn = document.getElementById('navBtnCoachControl');
-        else if (tabId === 'tabBusinessMaster') btn = document.getElementById('navBtnBusinessMaster');
-        else if (tabId === 'tabMemoirDashboard') btn = document.getElementById('navBtnMemoirDashboard');
-        else if (tabId === 'tabMagazine' || tabId === 'tabLounge' || tabId === 'tabArchive') btn = document.getElementById('navBtnMagazine');
-        else if (tabId === 'tabSettings') btn = document.getElementById('navBtnSettings');
+        var btnMap = {
+          tabCockpit: 'navBtnCockpit',
+          tabConsult: 'navBtnConsult',
+          tabMagazine: 'navBtnMagazine',
+          tabLounge: 'navBtnLounge',
+          tabBusinessMaster: 'navBtnBusinessMaster',
+          tabMemoirDashboard: 'navBtnMemoirDashboard',
+          tabArchive: 'navBtnArchive',
+          tabCoachControl: 'navBtnCoachControl',
+          tabSettings: 'navBtnSettings'
+        };
+        if (btnMap[tabId]) btn = document.getElementById(btnMap[tabId]);
       }
 
-      /* 04. 자서전 출판 관제센터 진입 시 실시간 렌더링 */
+      /* 04. 디지털 자서전 진입 시 실시간 렌더링 */
       if (tabId === 'tabMemoirDashboard') {
         if (typeof renderMemoirDashboard === 'function') renderMemoirDashboard();
+        if (typeof renderPersonalWebbooksTable === 'function') renderPersonalWebbooksTable();
         if (typeof renderPublishedMemoirsTable === 'function') renderPublishedMemoirsTable();
+        if (typeof renderHeritageExhibitionsTable === 'function') renderHeritageExhibitionsTable();
+        if (typeof renderMemoirCostSimulator === 'function') renderMemoirCostSimulator();
       }
 
       var panels = document.querySelectorAll('.tab-panel');
@@ -6250,15 +6403,19 @@
         btns[j].classList.remove('active');
       }
       if (btn) btn.classList.add('active');
+
+      syncSidebarAccordions(tabId);
+
       var tabBreadcrumbMap = {
-        tabCockpit: '<span>📊</span> 01. 종합 관제 홈',
-        tabConsult: '<span>📋</span> 02. 고객 접수 & 상담',
-        tabBusinessMaster: '<span>🌟</span> 03. 4대 비즈니스 관제',
-        tabMemoirDashboard: '<span>📖</span> 04. 자서전 출판 관제',
-        tabCoachControl: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabAcademy: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabMagazine: '<span>📚</span> 06. 여백서재 & 아카이브',
-        tabSettings: '<span>⚙️</span> 07. 환경설정 & 채널연동'
+        tabCockpit: '<span>📊</span> 00. 통합 관제 홈',
+        tabConsult: '<span>📋</span> 통합 고객 접수 · 상담',
+        tabMagazine: '<span>📖</span> 01. 여백의 서재',
+        tabLounge: '<span>💬</span> 02. 비움 한 줄',
+        tabBusinessMaster: '<span>🌿</span> 03. 웰라이프 (4대 방문 케어)',
+        tabMemoirDashboard: '<span>✍️</span> 04. 디지털 자서전 · VIP 전시관',
+        tabArchive: '<span>🏛️</span> 05. 나의 고유한 서재',
+        tabCoachControl: '<span>🎓</span> 06. 코치 아카데미 · 파견·정산',
+        tabSettings: '<span>⚙️</span> 환경설정 &amp; 채널연동'
       };
       var headerTabBadge = document.getElementById('headerCurrentTabBadge');
       if (headerTabBadge && tabBreadcrumbMap[tabId]) {
@@ -6270,17 +6427,22 @@
         if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
       } else if (tabId === 'tabConsult') {
         if (typeof renderDiagReservationTable === 'function') renderDiagReservationTable();
-      } else if (tabId === 'tabAcademy') {
-        if (typeof renderDispatchesTable === 'function') renderDispatchesTable();
-        if (typeof renderCoachesTable === 'function') renderCoachesTable();
-        if (typeof updateAcademyStats === 'function') updateAcademyStats();
+      } else if (tabId === 'tabMagazine') {
+        if (typeof renderArticlesTable === 'function') renderArticlesTable();
+      } else if (tabId === 'tabLounge') {
+        if (typeof renderUnburdenTable === 'function') renderUnburdenTable();
       } else if (tabId === 'tabBusinessMaster') {
         if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
+      } else if (tabId === 'tabArchive') {
+        if (typeof renderArchiveClientsTable === 'function') renderArchiveClientsTable();
       } else if (tabId === 'tabCoachControl') {
         if (typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
         if (typeof renderCoachesTable === 'function') renderCoachesTable();
         if (typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       }
+
+      var mainEl = document.querySelector('.admin-main');
+      if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
 
       /* 모바일인 경우 사이드바 닫기 */
       var sidebar = document.getElementById('adminSidebar');
@@ -6288,6 +6450,27 @@
         sidebar.classList.remove('open');
       }
     }
+
+    function selectCoachSubFromSidebar(subKey) {
+      switchTab('tabCoachControl');
+      var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
+      links.forEach(function(l) { l.classList.remove('active'); });
+      var map = {
+        ops: { target: 'coachOpsSection', btn: 'sideSub_coach_ops' },
+        pool: { target: 'coachPoolSection', btn: 'sideSub_coach_pool' },
+        academy: { target: 'academyApplicantsSection', btn: 'sideSub_coach_academy' }
+      };
+      var sel = map[subKey] || map.ops;
+      var activeBtn = document.getElementById(sel.btn);
+      if (activeBtn) activeBtn.classList.add('active');
+      var targetEl = document.getElementById(sel.target);
+      if (targetEl) {
+        setTimeout(function() {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 80);
+      }
+    }
+    window.selectCoachSubFromSidebar = selectCoachSubFromSidebar;
 
     /* 📊 01. 종합 관제 홈 실시간 데이터 집계 및 렌더링 함수 */
     function refreshCockpitStats() {
@@ -6329,6 +6512,25 @@
         if (memoirElem) memoirElem.innerText = memoirCount + '건';
         var cockpitBizMemoir = document.getElementById('cockpitBizCount_memoir');
         if (cockpitBizMemoir) cockpitBizMemoir.innerText = memoirCount + '건 진행중';
+
+        // 3-2. 메인 6대 카테고리별 실시간 지표 집계
+        var artList = (typeof getArticles === 'function') ? getArticles() : [];
+        var elCatMag = document.getElementById('cockpitCatCount_magazine');
+        if (elCatMag) elCatMag.innerText = artList.length + '편';
+
+        var loungeList = [];
+        try { loungeList = JSON.parse(localStorage.getItem('reset_unburden_posts') || '[]'); } catch (e) {}
+        var elCatLounge = document.getElementById('cockpitCatCount_lounge');
+        if (elCatLounge) elCatLounge.innerText = (Array.isArray(loungeList) ? loungeList.length : 0) + '건';
+
+        var archList = (typeof getArchiveClients === 'function') ? getArchiveClients() : [];
+        var elCatArch = document.getElementById('cockpitCatCount_archive');
+        if (elCatArch) elCatArch.innerText = (Array.isArray(archList) ? archList.length : 0) + '명';
+
+        var coachList = (typeof getCoaches === 'function') ? getCoaches() : [];
+        var appList = (typeof getAcademyApplicants === 'function') ? getAcademyApplicants() : [];
+        var elCatCoach = document.getElementById('cockpitCatCount_coach');
+        if (elCatCoach) elCatCoach.innerText = (coachList.length || 0) + '명 · 지원 ' + (appList.length || 0);
 
         // 4. 최근 현장 파견/활동 요약 5건 렌더링
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
@@ -7092,26 +7294,12 @@
       }
     }
 
-    // 카테고리 필터링
+    // 카테고리 필터링 (버그 수정: 미정의 tabId 참조 제거)
     function filterAdminMagazineCategory(cat, btn) {
       adminBoardCategory = cat;
       const btns = document.querySelectorAll('#adminBoardFilterTabs .filter-tab-btn');
       btns.forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
-      var tabBreadcrumbMap = {
-        tabCockpit: '<span>📊</span> 01. 종합 관제 홈',
-        tabConsult: '<span>📋</span> 02. 고객 접수 & 상담',
-        tabBusinessMaster: '<span>🌟</span> 03. 4대 비즈니스 관제',
-        tabMemoirDashboard: '<span>📖</span> 04. 자서전 출판 관제',
-        tabCoachControl: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabAcademy: '<span>🤝</span> 05. 코치 관제 & 정산',
-        tabMagazine: '<span>📚</span> 06. 여백서재 & 아카이브',
-        tabSettings: '<span>⚙️</span> 07. 환경설정 & 채널연동'
-      };
-      var headerTabBadge = document.getElementById('headerCurrentTabBadge');
-      if (headerTabBadge && tabBreadcrumbMap[tabId]) {
-        headerTabBadge.innerHTML = tabBreadcrumbMap[tabId];
-      }
       renderArticlesTable();
     }
 
@@ -16922,10 +17110,10 @@ ${coachAppUrl}
       var breadcrumbTabBadge = document.getElementById('headerCurrentTabBadge');
       if (breadcrumbTabBadge) {
         var bizNames = {
-          beauty: '<span>💄</span> 03. 4대 비즈니스 > #01 뷰티케어 (180분)',
-          wardrobe: '<span>👗</span> 03. 4대 비즈니스 > #02 공간비움',
-          legacy: '<span>📦</span> 03. 4대 비즈니스 > #03 유품정리',
-          party: '<span>💌</span> 03. 4대 비즈니스 > #04 엔딩파티'
+          beauty: '<span>💄</span> 03. 웰라이프 > 3-1. 뷰티케어 (180분)',
+          wardrobe: '<span>👗</span> 03. 웰라이프 > 3-2. 옷장 &amp; 공간 비움',
+          legacy: '<span>📦</span> 03. 웰라이프 > 3-3. 유품 &amp; 짐 아카이빙',
+          party: '<span>💌</span> 03. 웰라이프 > 3-4. 생전 엔딩 파티'
         };
         if (bizNames[currentBusinessTab]) {
           breadcrumbTabBadge.innerHTML = bizNames[currentBusinessTab];
