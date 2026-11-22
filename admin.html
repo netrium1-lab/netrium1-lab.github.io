@@ -2761,7 +2761,7 @@
               <div>
                 <h3 class="panel-title">실시간 코치 현장수행 &amp; 파견 현황</h3>
                 <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
-                  가장 최근에 배정되거나 현장에서 수행 중인 코치 일정 요약입니다.
+                  파견된 코치의 실제 서비스·진행 단계·현장 도착/완료 스탬프·사진 첨부 현황을 상세하게 표시합니다. <strong>각 행을 클릭하면 해당 신청 건의 진행결과(사진·소감·송금)만 바로 열립니다.</strong>
                 </p>
               </div>
             </div>
@@ -2771,13 +2771,13 @@
             <table class="admin-table">
               <thead>
                 <tr>
-                  <th style="width: 100px;">고객 성함</th>
-                  <th style="width: 140px;">신청 서비스</th>
-                  <th style="width: 140px;">담당 배정 코치</th>
-                  <th style="width: 100px; text-align: center;">진행 상태</th>
-                  <th style="width: 130px; text-align: center;">도착/완료</th>
-                  <th>현장 소감 / 관리 메모</th>
-                  <th style="width: 90px; text-align: center;">바로가기</th>
+                  <th style="width: 115px;">고객 성함</th>
+                  <th style="width: 175px;">신청 서비스 · 지역</th>
+                  <th style="width: 110px;">담당 코치</th>
+                  <th style="width: 105px; text-align: center;">진행 상태</th>
+                  <th style="width: 155px;">방문일시 · 스탬프</th>
+                  <th>현장 수행 내역 (사진 · 소감 · 활동비)</th>
+                  <th style="width: 96px; text-align: center;">진행 결과</th>
                 </tr>
               </thead>
               <tbody id="cockpitRecentDispatchTableBody">
@@ -6469,13 +6469,16 @@
         var consultAllElem = document.getElementById('consultCountAll');
         if (consultAllElem) consultAllElem.innerText = diagList.length;
 
-        // 2. 코치 배정 대기 및 현장 검수·송금 대기 건수
+        // 2. 코치 배정 대기 및 현장 검수·송금 대기 건수 (실제 필드 coach / step 정확 매핑)
         var dispList = (typeof getDispatches === 'function') ? getDispatches() : [];
         var pendingDisp = dispList.filter(function(d) {
-          return !d.coachName || d.status === '배정대기' || d.status === '대기';
+          var c = (d.coach || d.coachName || '').trim();
+          var st = d.step || d.status || '';
+          return !c || c === '미배정' || st === '배정대기' || st === '대기';
         }).length;
         var pendingSettle = dispList.filter(function(d) {
-          return d.status === '서비스완료' || d.isCompleted;
+          var st = d.step || d.status || '';
+          return st === '서비스완료' || d.isCompleted;
         }).length;
 
         var dispElem = document.getElementById('cockpitPendingDispatch');
@@ -6511,27 +6514,72 @@
         var elCatCoach = document.getElementById('cockpitCatCount_coach');
         if (elCatCoach) elCatCoach.innerText = (coachList.length || 0) + '명 · 지원 ' + (appList.length || 0);
 
-        // 4. 최근 현장 파견/활동 요약 5건 렌더링
+        // 4. 최근 현장 파견/활동 상세 현황 렌더링 (실제 데이터 매핑 + 해당 신청 건 진행결과 모달 직결)
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
         if (recentTbody) {
           if (dispList.length === 0) {
             recentTbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:20px; color:#94a3b8;">최근 현장 배정 내역이 없습니다.</td></tr>';
           } else {
-            var top5 = dispList.slice(0, 5);
-            recentTbody.innerHTML = top5.map(function(d) {
-              var sBadge = d.status === '정산완료' ? '<span class="status-badge" style="background:#dcfce7; color:#15803d;">정산완료</span>' :
-                (d.status === '서비스완료' ? '<span class="status-badge" style="background:#fef3c7; color:#b45309;">검수대기</span>' :
-                (d.status === '진행중' ? '<span class="status-badge" style="background:#e0f2fe; color:#0369a1;">진행중</span>' :
-                '<span class="status-badge" style="background:#f1f5f9; color:#475569;">배정완료</span>'));
+            var top8 = dispList.slice(0, 8);
+            recentTbody.innerHTML = top8.map(function(d) {
+              var step = d.step || d.status || '배정완료';
+              var coachLabel = (d.coach || d.coachName || '').trim() || '미배정';
+              var svcLabel = d.serviceType || d.serviceName || d.serviceCategory || '라이프케어';
+              var addrShort = (d.address || '').split(' ').slice(0, 2).join(' ');
+              var feeNum = Number(d.fee) || 0;
+              var feeText = feeNum > 0 ? (feeNum.toLocaleString() + '원') : '';
 
-              return '<tr>' +
-                '<td style="font-weight:800;">' + escapeHtml(d.customerName || '고객') + '</td>' +
-                '<td><span style="font-weight:700; color:var(--accent);">' + escapeHtml(d.serviceName || d.serviceCategory || '라이프케어') + '</span></td>' +
-                '<td><span style="font-weight:800; color:#0284c7;">' + escapeHtml(d.coachName || '미배정') + '</span></td>' +
+              var photoCount =
+                (Array.isArray(d.beforePhotos) ? d.beforePhotos.length : (d.beforePhoto ? 1 : 0)) +
+                (Array.isArray(d.processPhotos) ? d.processPhotos.length : (d.processPhoto ? 1 : 0)) +
+                (Array.isArray(d.afterPhotos) ? d.afterPhotos.length : (d.afterPhoto ? 1 : 0));
+
+              var sBadge = step === '정산완료'
+                ? '<span class="status-badge" style="background:#dcfce7; color:#15803d; white-space:nowrap;">✓ 정산완료</span>'
+                : (step === '서비스완료'
+                  ? '<span class="status-badge" style="background:#fef3c7; color:#b45309; white-space:nowrap;">⚡ 검수대기</span>'
+                  : (step === '진행중'
+                    ? '<span class="status-badge" style="background:#e0f2fe; color:#0369a1; white-space:nowrap;">🏃 진행중</span>'
+                    : '<span class="status-badge" style="background:#f1f5f9; color:#475569; white-space:nowrap;">⏳ 배정완료</span>'));
+
+              var scheduleLine = escapeHtml(d.preferredDate || d.scheduledDate || d.visitDate || '-');
+              var stampParts = [];
+              if (d.arrivalStamp) stampParts.push('📍도착 ' + escapeHtml(d.arrivalStamp));
+              if (d.completionDate) stampParts.push('✓완료 ' + escapeHtml(d.completionDate));
+              var stampHtml = stampParts.length
+                ? '<div style="font-size:0.74rem; color:#0369a1; font-weight:700; margin-top:2px;">' + stampParts.join(' · ') + '</div>'
+                : '<div style="font-size:0.73rem; color:#94a3b8; margin-top:2px;">스탬프 대기</div>';
+
+              var summaryText = (d.coachReport && d.coachReport.trim())
+                ? ('💬 ' + d.coachReport.trim())
+                : (d.notes || d.specialNotes || '특이사항 없음');
+
+              var metaBadges = [];
+              if (photoCount > 0) {
+                metaBadges.push('<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">📷 사진 ' + photoCount + '장</span>');
+              }
+              if (feeText) {
+                metaBadges.push('<span style="background:#fef9e7; color:#8c6610; border:1px solid #ead496; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">💰 ' + feeText + '</span>');
+              }
+
+              var safeId = String(d.id || '').replace(/'/g, '');
+              return '<tr style="cursor:pointer;" onclick="openDispatchReportModal(\'' + safeId + '\')" title="클릭하여 해당 신청 건의 진행결과(사진·소감·정산)를 확인합니다">' +
+                '<td><div style="font-weight:850; color:#0f172a; white-space:nowrap;">' + escapeHtml(d.customerName || '고객') + '</div>' +
+                  (d.phone ? '<div style="font-size:0.73rem; color:#64748b; margin-top:2px;">' + escapeHtml(d.phone) + '</div>' : '') +
+                '</td>' +
+                '<td><div style="font-weight:750; color:var(--accent); font-size:0.84rem;">' + escapeHtml(svcLabel) + '</div>' +
+                  (addrShort ? '<div style="font-size:0.73rem; color:#64748b; margin-top:2px;">📍 ' + escapeHtml(addrShort) + '</div>' : '') +
+                '</td>' +
+                '<td><span style="font-weight:800; color:' + (coachLabel === '미배정' ? '#dc2626' : '#0284c7') + '; white-space:nowrap;">' + escapeHtml(coachLabel) + '</span></td>' +
                 '<td style="text-align:center;">' + sBadge + '</td>' +
-                '<td style="text-align:center; font-size:0.82rem; color:var(--text-muted);">' + escapeHtml(d.scheduledDate || d.visitDate || '-') + '</td>' +
-                '<td style="font-size:0.84rem; color:var(--text-sub); max-width:220px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(d.notes || d.specialNotes || '특이사항 없음') + '</td>' +
-                '<td style="text-align:center;"><button type="button" class="btn-action-sm" onclick="switchTab(\'tabCoachControl\')" style="padding:4px 8px; font-size:0.78rem;">상세보기</button></td>' +
+                '<td style="font-size:0.80rem; color:#334155;"><div>' + scheduleLine + '</div>' + stampHtml + '</td>' +
+                '<td style="font-size:0.82rem; color:var(--text-sub); max-width:260px;">' +
+                  (metaBadges.length ? '<div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px;">' + metaBadges.join('') + '</div>' : '') +
+                  '<div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(summaryText) + '</div>' +
+                '</td>' +
+                '<td style="text-align:center;">' +
+                  '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.77rem; font-weight:800; white-space:nowrap; background:#eef3f9; color:#245b8e; border:1px solid #bfd3ea;">진행결과</button>' +
+                '</td>' +
               '</tr>';
             }).join('');
           }
