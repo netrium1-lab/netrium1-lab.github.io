@@ -287,20 +287,44 @@
     .nav-right-group {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 12px;
       flex-shrink: 0;
       white-space: nowrap;
     }
 
-    /* 실버 친화적 메뉴바 (줄바꿈 방지 및 균형 잡힌 간격) */
+    /* 실버 친화적 메뉴바 (모든 카테고리 균일한 알약 버튼 & 줄바꿈 방지) */
     .nav-menu {
       display: flex;
       align-items: center;
-      gap: 18px;
+      gap: 8px;
       margin: 0;
       padding: 0;
       list-style: none;
       white-space: nowrap;
+    }
+
+    /* 🏠 홈 아이콘 전용 원형 버튼 */
+    .nav-icon-home-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      border: 1.6px solid rgba(94, 107, 82, 0.35);
+      text-decoration: none;
+      transition: all 0.22s ease;
+      flex-shrink: 0;
+    }
+    .nav-icon-home-btn:hover,
+    .nav-icon-home-btn.active {
+      background: var(--accent);
+      color: #ffffff;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(94, 107, 82, 0.26);
     }
 
     .nav-menu li {
@@ -340,22 +364,60 @@
       border-radius: 3px;
     }
 
-    /* 상단 네비게이션 핵심 CTA 강조 뱃지 버튼 (1분 자가진단 & 나의 고유한 서재) */
+    /* 상단 네비게이션 핵심 카테고리 통일 알약(Pill) 버튼 */
     .nav-highlight-btn {
       display: inline-flex !important;
       align-items: center;
-      gap: 6px;
-      padding: 6px 14px !important;
+      gap: 5px;
+      padding: 6px 12px !important;
       border-radius: 999px;
-      font-weight: 850 !important;
-      font-size: 0.98rem;
+      font-weight: 800 !important;
+      font-size: 0.91rem;
       letter-spacing: -0.3px;
       transition: all 0.25s ease;
       white-space: nowrap !important;
       text-decoration: none;
     }
 
-    /* 🎯 1분 자가진단 버튼 (생동감 있는 세이지 그린 & 펄스 뱃지) */
+    /* 📖 여백의 서재 버튼 (깊고 차분한 포레스트 그린) */
+    .nav-magazine-pill {
+      background: rgba(34, 88, 62, 0.09);
+      color: #1f543b !important;
+      border: 1.8px solid #2c6e4e;
+      box-shadow: 0 2px 8px rgba(34, 88, 62, 0.14);
+    }
+    [data-theme="dark"] .nav-magazine-pill {
+      color: #82c9a5 !important;
+      background: rgba(82, 168, 124, 0.16);
+      border-color: #6ab58e;
+    }
+    .nav-magazine-pill:hover {
+      background: #235a3f;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(34, 88, 62, 0.28);
+    }
+
+    /* 💬 비움 한 줄 버튼 (따뜻한 우드 허브티 브라운) */
+    .nav-lounge-pill {
+      background: rgba(154, 98, 48, 0.1);
+      color: #875223 !important;
+      border: 1.8px solid #b27138;
+      box-shadow: 0 2px 8px rgba(154, 98, 48, 0.14);
+    }
+    [data-theme="dark"] .nav-lounge-pill {
+      color: #e6ae7a !important;
+      background: rgba(204, 138, 78, 0.16);
+      border-color: #d89b62;
+    }
+    .nav-lounge-pill:hover {
+      background: #9a5d29;
+      color: #ffffff !important;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(154, 98, 48, 0.28);
+    }
+
+    /* 🌿 웰라이프 버튼 (생동감 있는 세이지 그린) */
     .nav-test-pill {
       background: var(--accent-light);
       color: var(--accent) !important;
@@ -489,33 +551,35 @@
       color: #191816;
     }
 
-    .nav-admin-btn {
+    /* ⚙️ 관리자 전용 은은한 아이콘 버튼 (관리자만 식별) */
+    .nav-admin-icon-btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      border-radius: 999px;
-      background: rgba(197, 155, 39, 0.12);
-      color: var(--accent-gold);
-      font-size: 0.86rem;
-      font-weight: 850;
-      border: 1.5px solid rgba(197, 155, 39, 0.4);
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 1rem;
+      border: 1.2px solid var(--border-color);
       text-decoration: none;
       transition: all 0.2s ease;
-      white-space: nowrap;
       flex-shrink: 0;
+      opacity: 0.72;
     }
-    .nav-admin-btn:hover {
-      background: var(--accent-gold);
-      color: #0b0c0e;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(197, 155, 39, 0.35);
+    .nav-admin-icon-btn:hover {
+      opacity: 1;
+      background: rgba(197, 155, 39, 0.14);
+      color: var(--accent-gold);
+      border-color: rgba(197, 155, 39, 0.55);
+      transform: rotate(25deg);
     }
 
     .nav-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
     }
 
     .theme-toggle, .mobile-menu-btn {
@@ -6670,18 +6734,34 @@
         </div>
       </a>
 
-      <!-- 우측 그룹: 카테고리 메뉴 + 나의 아카이브 옆 로그인 버튼 -->
+      <!-- 우측 그룹: 카테고리 메뉴 + 로그인 및 아이콘 액션 -->
       <div class="nav-right-group">
-        <!-- 실버 친화적 크고 굵은 카테고리 메뉴 (7개) -->
+        <!-- 실버 친화적 통일 카테고리 메뉴 (홈 아이콘 + 6대 핵심 카테고리) -->
         <ul class="nav-menu">
-          <li><a href="#home" class="nav-link active">홈</a></li>
-          <li><a href="#magazine" class="nav-link">여백의 서재</a></li>
-          <li><a href="#lounge" class="nav-link">비움 한 줄</a></li>
           <li>
-            <a href="#test" class="nav-highlight-btn nav-test-pill" title="1분 무료 인생 리셋 자가진단 바로가기">
-              <span>🎯</span>
-              <span>1분 자가진단</span>
-              <span class="nav-pulse-badge" title="지금 진단 가능"></span>
+            <a href="#home" class="nav-icon-home-btn active" title="홈으로 이동" aria-label="홈">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 10.5L12 3l9 7.5"></path>
+                <path d="M5 9.5V20a1 1 0 0 0 1 1h4.5v-6h3v6H18a1 1 0 0 0 1-1V9.5"></path>
+              </svg>
+            </a>
+          </li>
+          <li>
+            <a href="#magazine" class="nav-highlight-btn nav-magazine-pill" title="인생 칼럼과 지혜, 여백의 서재">
+              <span>📖</span>
+              <span>여백의 서재</span>
+            </a>
+          </li>
+          <li>
+            <a href="#lounge" class="nav-highlight-btn nav-lounge-pill" title="따뜻한 마음 쉼터, 비움 한 줄">
+              <span>💬</span>
+              <span>비움 한 줄</span>
+            </a>
+          </li>
+          <li>
+            <a href="#test" class="nav-highlight-btn nav-test-pill" title="4대 웰라이프 실행 케어 바로가기">
+              <span>🌿</span>
+              <span>웰라이프</span>
             </a>
           </li>
           <li>
@@ -6691,55 +6771,48 @@
             </a>
           </li>
           <li>
+            <a href="#archive" class="nav-highlight-btn nav-room-pill" title="어르신 전용 프라이빗 온라인룸 안내 및 입장">
+              <span>🏛️</span>
+              <span>나의 고유한 서재</span>
+            </a>
+          </li>
+          <li>
             <a href="academy.html" class="nav-highlight-btn nav-academy-pill" title="시니어 라이프 리셋 코치 양성 아카데미">
               <span>🎓</span>
               <span>코치 아카데미</span>
             </a>
           </li>
-          <li>
-            <a href="javascript:void(0)" class="nav-highlight-btn nav-room-pill" title="어르신 전용 프라이빗 온라인룸 입장 (로그인)" onclick="openLoginModal(event); return false;">
-              <span>🏛️</span>
-              <span>나의 고유한 서재</span>
-            </a>
-          </li>
         </ul>
 
-        <!-- 상단 관리자 홈 버튼, 독립 로그인 버튼 및 테마 토글 -->
+        <!-- 독립 로그인 버튼, 테마 토글, 관리자 전용 아이콘 -->
         <div class="nav-actions">
-          <a href="coach.html" target="_blank" class="nav-admin-btn" title="현장 코치 전용 파트너 앱 (업무수행 & 정산)" style="display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: 999px; background: rgba(5, 150, 105, 0.12); color: #059669; font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(5, 150, 105, 0.35); text-decoration: none; transition: all 0.2s ease;">
-            <span>📱</span>
-            <span>코치앱</span>
-          </a>
-          <a href="admin.html" onclick="goToAdminHome(event)" class="nav-admin-btn" title="전체 사이트 운영 관리자 홈" style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: 999px; background: rgba(197, 155, 39, 0.12); color: var(--accent-gold); font-size: 0.86rem; font-weight: 850; border: 1.5px solid rgba(197, 155, 39, 0.4); text-decoration: none; transition: all 0.2s ease;">
-            <span>⚙️</span>
-            <span>관리자홈</span>
-          </a>
           <button class="nav-login-btn" onclick="openLoginModal(event)" aria-label="로그인">
-            <span style="font-size: 1.15rem; line-height: 1;">👤</span>
+            <span style="font-size: 1.1rem; line-height: 1;">👤</span>
             <span>로그인</span>
           </button>
           <!-- 화면 모드 전환 -->
           <button class="theme-toggle" id="themeToggle" aria-label="화면 모드 변경" title="화면 모드 변경">🌙</button>
+          <!-- 관리자 전용 아이콘 버튼 (관리자만 식별) -->
+          <a href="admin.html" onclick="goToAdminHome(event)" class="nav-admin-icon-btn" title="관리자 홈" aria-label="관리자 홈">⚙️</a>
           <!-- 모바일 햄버거 메뉴 버튼 -->
           <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="메뉴 열기" onclick="toggleMobileDrawer()">☰</button>
         </div>
     </div>
 
-    <!-- 모바일 전용 가로 스크롤 스티키 카테고리 탭바 -->
+    <!-- 모바일 전용 가로 스크롤 스티키 카테고리 탭바 (메인 카테고리 순서 일치) -->
     <nav class="mobile-category-bar" id="mobileCategoryBar" aria-label="모바일 카테고리 탭">
-      <a href="#home" class="mobile-cat-item active" data-target="home" onclick="handleMobileTabClick('home', event)"><span>🏠</span> <span>홈</span></a>
+      <a href="#home" class="mobile-cat-item active" data-target="home" onclick="handleMobileTabClick('home', event)" title="홈" aria-label="홈"><span>🏠</span></a>
       <a href="#magazine" class="mobile-cat-item" data-target="magazine" onclick="handleMobileTabClick('magazine', event)"><span>📖</span> <span>여백서재</span></a>
       <a href="#lounge" class="mobile-cat-item" data-target="lounge" onclick="handleMobileTabClick('lounge', event)"><span>💬</span> <span>비움한줄</span></a>
-      <a href="#test" class="mobile-cat-item" data-target="test" onclick="handleMobileTabClick('test', event)"><span>🎯</span> <span>자가진단</span></a>
+      <a href="#test" class="mobile-cat-item" data-target="test" onclick="handleMobileTabClick('test', event)"><span>🌿</span> <span>웰라이프</span></a>
       <a href="#memoir" class="mobile-cat-item" data-target="memoir" onclick="handleMobileTabClick('memoir', event)"><span>✍️</span> <span>자서전</span></a>
+      <a href="#archive" class="mobile-cat-item" data-target="archive" onclick="handleMobileTabClick('archive', event)"><span>🏛️</span> <span>나의서재</span></a>
       <a href="academy.html" class="mobile-cat-item" data-target="programs" title="코치 아카데미"><span>🎓</span> <span>아카데미</span></a>
-      <a href="my-room.html?mode=sample" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 800;" title="김순옥 어르신 완성 서재 체험"><span>👵</span> <span>샘플서재</span></a>
-      <a href="javascript:void(0)" onclick="openLoginModal(event)" class="mobile-cat-item" data-target="archive"><span>🏛️</span> <span>나의서재</span></a>
-      <a href="admin.html" onclick="goToAdminHome(event)" class="mobile-cat-item" style="color: var(--accent-gold); font-weight: 850;" title="통합 관리자 홈"><span>⚙️</span> <span>관리자</span></a>
+      <a href="admin.html" onclick="goToAdminHome(event)" class="mobile-cat-item" style="color: var(--text-muted); opacity: 0.78;" title="관리자 홈" aria-label="관리자 홈"><span>⚙️</span></a>
     </nav>
   </header>
 
-  <!-- 모바일 슬라이드 드로어 메뉴 -->
+  <!-- 모바일 슬라이드 드로어 메뉴 (메인 카테고리 순서 일치) -->
   <div class="mobile-drawer-overlay" id="mobileDrawerOverlay" onclick="closeMobileDrawer()"></div>
   <aside class="mobile-drawer" id="mobileDrawer" aria-label="모바일 전체 메뉴">
     <div>
@@ -6768,16 +6841,16 @@
         <a href="#lounge" class="drawer-nav-item" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
             <span class="drawer-icon">💬</span>
-            <span>오늘의 비움 한 줄</span>
+            <span>비움 한 줄</span>
           </div>
           <span class="drawer-arrow">›</span>
         </a>
         <a href="#test" class="drawer-nav-item drawer-item-highlight" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
-            <span class="drawer-icon">🎯</span>
-            <span>1분 자가진단</span>
+            <span class="drawer-icon">🌿</span>
+            <span>웰라이프</span>
           </div>
-          <span class="drawer-badge badge-accent">무료진단</span>
+          <span class="drawer-badge badge-accent">4대 케어</span>
         </a>
         <a href="#memoir" class="drawer-nav-item drawer-item-memoir" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
@@ -6786,12 +6859,12 @@
           </div>
           <span class="drawer-badge badge-memoir">자서전</span>
         </a>
-        <a href="academy.html" class="drawer-nav-item drawer-item-academy">
+        <a href="#archive" class="drawer-nav-item drawer-item-room" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
-            <span class="drawer-icon">🎓</span>
-            <span>코치 아카데미</span>
+            <span class="drawer-icon">🏛️</span>
+            <span>나의 고유한 서재</span>
           </div>
-          <span class="drawer-badge badge-academy">자격과정</span>
+          <span class="drawer-badge badge-room">온라인룸</span>
         </a>
         <a href="my-room.html?mode=sample" class="drawer-nav-item" onclick="closeMobileDrawer()">
           <div class="drawer-item-left">
@@ -6800,33 +6873,12 @@
           </div>
           <span class="drawer-badge" style="background: rgba(197, 155, 39, 0.15); color: var(--accent-gold); border: 1px solid rgba(197, 155, 39, 0.3);">샘플체험</span>
         </a>
-        <a href="javascript:void(0)" class="drawer-nav-item drawer-item-room" onclick="closeMobileDrawer(); openLoginModal(event); return false;">
+        <a href="academy.html" class="drawer-nav-item drawer-item-academy">
           <div class="drawer-item-left">
-            <span class="drawer-icon">🏛️</span>
-            <span>나의 고유한 서재</span>
+            <span class="drawer-icon">🎓</span>
+            <span>코치 아카데미</span>
           </div>
-          <span class="drawer-badge badge-room">온라인룸</span>
-        </a>
-        <a href="coach.html" target="_blank" class="drawer-nav-item" style="background: rgba(5, 150, 105, 0.1); border: 1.5px solid rgba(5, 150, 105, 0.35); margin-top: 6px;">
-          <div class="drawer-item-left">
-            <span class="drawer-icon">📱</span>
-            <span style="color: #059669; font-weight: 850;">현장 코칭 파트너 앱</span>
-          </div>
-          <span class="drawer-badge" style="background: #059669; color: #fff;">COACH</span>
-        </a>
-        <a href="coach-memoir.html" target="_blank" class="drawer-nav-item" style="background: rgba(194, 155, 56, 0.1); border: 1.5px solid rgba(194, 155, 56, 0.35); margin-top: 6px;">
-          <div class="drawer-item-left">
-            <span class="drawer-icon">✍️</span>
-            <span style="color: #936f1c; font-weight: 850;">자서전 코치 글쓰기 앱</span>
-          </div>
-          <span class="drawer-badge" style="background: #c29b38; color: #fff;">MEMOIR</span>
-        </a>
-        <a href="admin.html" onclick="closeMobileDrawer(); goToAdminHome(event);" class="drawer-nav-item" style="background: rgba(197, 155, 39, 0.1); border: 1.5px solid rgba(197, 155, 39, 0.35); margin-top: 6px;">
-          <div class="drawer-item-left">
-            <span class="drawer-icon">⚙️</span>
-            <span style="color: var(--accent-gold); font-weight: 850;">통합 관리자 홈</span>
-          </div>
-          <span class="drawer-badge" style="background: var(--accent-gold); color: #fff;">ADMIN</span>
+          <span class="drawer-badge badge-academy">자격과정</span>
         </a>
         <a href="#login" class="drawer-nav-item drawer-login-btn" onclick="closeMobileDrawer(); openLoginModal(event)">
           <div class="drawer-item-left" style="justify-content: center; width: 100%;">
@@ -6834,6 +6886,9 @@
             <span>로그인 / 회원서재</span>
           </div>
         </a>
+        <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+          <a href="admin.html" onclick="closeMobileDrawer(); goToAdminHome(event);" class="nav-admin-icon-btn" title="관리자 홈" aria-label="관리자 홈">⚙️</a>
+        </div>
       </nav>
     </div>
     <div class="drawer-footer-note">
@@ -6974,23 +7029,23 @@
               </div>
             </a>
 
-            <!-- 03. 자가진단 -->
-            <a href="#test" class="cat-showcase-card" title="03 1분 여백 자가진단">
+            <!-- 03. 웰라이프 -->
+            <a href="#test" class="cat-showcase-card" title="03 웰라이프 4대 실행 케어">
               <div class="cat-showcase-thumb">
-                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80" alt="1분 여백 자가진단" loading="lazy">
+                <img src="images/care-beauty-hero.jpg" alt="웰라이프 4대 라이프케어 쇼케이스" loading="lazy">
                 <span class="cat-showcase-num">03</span>
               </div>
               <div class="cat-showcase-body">
-                <span class="cat-showcase-badge orange">1분 무료 체크</span>
+                <span class="cat-showcase-badge orange">4대 웰라이프 케어</span>
                 <div class="cat-showcase-title">
-                  <span>1분 여백 자가진단</span>
+                  <span>웰라이프</span>
                   <span class="cat-showcase-arrow">→</span>
                 </div>
-                <p class="cat-showcase-desc">뷰티·정리·유품·엔딩 5대 테마 중 내게 가장 필요한 맞춤 솔루션</p>
+                <p class="cat-showcase-desc">시니어 뷰티·옷장 정리·생전 유품·엔딩파티 4대 맞춤 방문 케어</p>
               </div>
             </a>
 
-            <!-- 04. 자서전 -->
+            <!-- 04. 디지털 자서전 -->
             <a href="#memoir" class="cat-showcase-card" title="04 내 인생의 서사, 디지털 자서전">
               <div class="cat-showcase-thumb">
                 <img src="images/showcase-senior-memoir.jpg" alt="디지털 자서전 - 인생 회고록을 읽는 어르신" loading="lazy">
@@ -6999,34 +7054,18 @@
               <div class="cat-showcase-body">
                 <span class="cat-showcase-badge rose">생애사 회고록 & 양장본</span>
                 <div class="cat-showcase-title">
-                  <span>디지털 자서전 제작</span>
+                  <span>디지털 자서전</span>
                   <span class="cat-showcase-arrow">→</span>
                 </div>
                 <p class="cat-showcase-desc">1:1 찾아가는 구술 인터뷰와 옛 사진 복원으로 엮는 가문의 명작</p>
               </div>
             </a>
 
-            <!-- 05. 코치 아카데미 -->
-            <a href="academy.html" class="cat-showcase-card" title="05 라이프 리셋 코치 아카데미">
-              <div class="cat-showcase-thumb">
-                <img src="images/coach-academy-banner.jpg" alt="라이프 리셋 코치 아카데미" loading="lazy">
-                <span class="cat-showcase-num">05</span>
-              </div>
-              <div class="cat-showcase-body">
-                <span class="cat-showcase-badge blue">전문 코치 양성과정</span>
-                <div class="cat-showcase-title">
-                  <span>코치 아카데미</span>
-                  <span class="cat-showcase-arrow">→</span>
-                </div>
-                <p class="cat-showcase-desc">일본 4대 선진 자격 도입, 인생 2막 가장 보람찬 전문 커리어</p>
-              </div>
-            </a>
-
-            <!-- 06. 나의 보물 서재 -->
-            <a href="my-room.html?mode=sample" class="cat-showcase-card" title="06 나의 고유한 보물 서재 (김순옥 어르신 완성 서재 체험)">
+            <!-- 05. 나의 고유한 서재 -->
+            <a href="#archive" class="cat-showcase-card" title="05 나의 고유한 보물 서재 (프라이빗 온라인룸)">
               <div class="cat-showcase-thumb">
                 <img src="images/showcase-senior-happy-book.jpg" alt="나의 고유한 서재 - 자서전을 안고 행복해하는 어르신" loading="lazy">
-                <span class="cat-showcase-num">06</span>
+                <span class="cat-showcase-num">05</span>
               </div>
               <div class="cat-showcase-body">
                 <span class="cat-showcase-badge gold">프라이빗 온라인룸</span>
@@ -7035,6 +7074,22 @@
                   <span class="cat-showcase-arrow">→</span>
                 </div>
                 <p class="cat-showcase-desc">김순옥 어르신의 자서전과 추억 복원관이 담긴 완성 서재 둘러보기</p>
+              </div>
+            </a>
+
+            <!-- 06. 코치 아카데미 (맨 마지막) -->
+            <a href="academy.html" class="cat-showcase-card" title="06 라이프 리셋 코치 아카데미">
+              <div class="cat-showcase-thumb">
+                <img src="images/coach-academy-banner.jpg" alt="라이프 리셋 코치 아카데미" loading="lazy">
+                <span class="cat-showcase-num">06</span>
+              </div>
+              <div class="cat-showcase-body">
+                <span class="cat-showcase-badge blue">전문 코치 양성과정</span>
+                <div class="cat-showcase-title">
+                  <span>코치 아카데미</span>
+                  <span class="cat-showcase-arrow">→</span>
+                </div>
+                <p class="cat-showcase-desc">일본 4대 선진 자격 도입, 인생 2막 가장 보람찬 전문 커리어</p>
               </div>
             </a>
           </div>
@@ -8053,76 +8108,16 @@
       </div>
     </section>
 
-    <!-- 6. [코칭스태프 양성 아카데미] 클릭 시 아카데미로 이동하는 프리미엄 홍보카드 이미지 -->
-    <section id="programs" style="background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 80px 0;">
-      <div class="container">
-        <!-- 모바일 전용 카테고리 랜드마크 배너 -->
-        <div class="mobile-section-badge">
-          <span class="msb-num">CATEGORY 05</span>
-          <span class="msb-title">🎓 라이프 리셋 코치 아카데미</span>
-        </div>
-        <div class="section-header" style="margin-bottom: 36px;">
-          <p class="section-tag" style="color: var(--accent-gold); letter-spacing: 2px;">Coach Academy & Partnership</p>
-          <h2 class="section-title">우아한 라이프 리셋 코칭 아카데미</h2>
-          <p class="section-desc">
-            타인의 삶에 여백과 결을 찾아주는 일, 당신의 인생 2막 가장 품격 있는 전문 커리어가 됩니다.
-          </p>
-        </div>
-
-        <!-- 클릭 시 아카데미(academy.html)로 바로 이동하는 프리미엄 홍보 카드 이미지 -->
-        <a href="academy.html" class="academy-promo-card-link" title="클릭 시 [여백과 결] 코칭 아카데미 공식 웹사이트로 이동합니다">
-          <div class="academy-promo-grid">
-            <!-- 좌측: 고화질 코칭 실사 이미지 -->
-            <div class="academy-promo-img-wrap">
-              <img src="images/coach-academy-banner.jpg" alt="여백과 결 시니어 라이프 리셋 전문 코칭 현장" class="academy-promo-img" loading="lazy">
-              <div class="academy-promo-img-tag">
-                <span>🌿</span> 여백과 결 1:1 방문 코칭 현장
-              </div>
-            </div>
-
-            <!-- 우측: 명확하고 품격 있는 홍보 텍스트 및 액션 -->
-            <div class="academy-promo-content">
-              <div class="academy-promo-badge">
-                <span>🎓</span> 2026년 [여백과 결] 공식 코칭스태프 1기 모집
-              </div>
-
-              <h3 class="academy-promo-title">
-                타인의 삶에 위로와 존엄을,<br>
-                <span>시니어 전문 라이프 코치</span> 양성 과정
-              </h3>
-
-              <p class="academy-promo-desc">
-                초고령사회 일본의 <strong>4대 선진 공인 자격 체계</strong>(뷰티 케어, 공간 비움, 생전 및 유품 정리, 디지털 자서전)를 도입한 4주 완성 실전 과정입니다.<br>
-                수료 즉시 [여백과 결] 플랫폼의 <strong>공식 코칭스태프로 위촉되어 전국 1:1 방문 현장에 파견</strong>됩니다.
-              </p>
-
-              <!-- 4대 트랙 태그 칩 -->
-              <div class="academy-promo-features">
-                <span class="academy-promo-tag">💄 뷰티 웰니스 코치</span>
-                <span class="academy-promo-tag">👗 공간 & 비움 코디네이터</span>
-                <span class="academy-promo-tag">📦 생전정리 & 엔딩 플래너</span>
-                <span class="academy-promo-tag">✍️ 디지털 자서전 에디터</span>
-              </div>
-
-              <div class="academy-promo-btn">
-                <span>👉</span> 코칭 아카데미 상세 커리큘럼 & 입학 신청 바로가기 ➔
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <!-- 7. [6단계] 나의 아카이브 안내 (개인 고유한 서재 온라인룸) -->
+    <!-- 6. [5단계] 나의 고유한 서재 (프라이빗 온라인룸 · 메인 카테고리 5번) -->
     <section id="archive" style="background-color: var(--bg-secondary); padding: 80px 0;">
       <div class="container">
-        <!-- [신설] 카테고리 06 시각적 랜드마크 이미지 배너 -->
+        <!-- [신설] 카테고리 05 시각적 랜드마크 이미지 배너 -->
         <div class="section-landmark-banner">
           <div class="slb-img-wrap">
             <img src="images/showcase-senior-happy-book.jpg" alt="나의 고유한 보물 서재 - 자서전을 안고 행복해하는 어르신" class="slb-img" loading="lazy">
           </div>
           <div class="slb-content">
-            <div class="slb-badge gold">CATEGORY 06 · 🏛️ 프라이빗 온라인룸</div>
+            <div class="slb-badge gold">CATEGORY 05 · 🏛️ 프라이빗 온라인룸</div>
             <h3 class="slb-title">나의 고유한 보물 서재</h3>
             <p class="slb-desc">오직 나와 가족만을 위해 열리는 독립된 인생 보관소입니다. 나의 일상 일기장, 추억 사진전시관, 인생 애장품 전시관, 모바일 웹북을 영구 보관하세요.</p>
           </div>
@@ -8198,6 +8193,66 @@
         </div>
       </div>
     </section>
+
+    <!-- 7. [6단계 · 맨 마지막] 코칭스태프 양성 아카데미 (메인 카테고리 6번) -->
+    <section id="programs" style="background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 80px 0;">
+      <div class="container">
+        <!-- 모바일 전용 카테고리 랜드마크 배너 -->
+        <div class="mobile-section-badge">
+          <span class="msb-num">CATEGORY 06</span>
+          <span class="msb-title">🎓 라이프 리셋 코치 아카데미</span>
+        </div>
+        <div class="section-header" style="margin-bottom: 36px;">
+          <p class="section-tag" style="color: var(--accent-gold); letter-spacing: 2px;">Coach Academy & Partnership</p>
+          <h2 class="section-title">우아한 라이프 리셋 코칭 아카데미</h2>
+          <p class="section-desc">
+            타인의 삶에 여백과 결을 찾아주는 일, 당신의 인생 2막 가장 품격 있는 전문 커리어가 됩니다.
+          </p>
+        </div>
+
+        <!-- 클릭 시 아카데미(academy.html)로 바로 이동하는 프리미엄 홍보 카드 이미지 -->
+        <a href="academy.html" class="academy-promo-card-link" title="클릭 시 [여백과 결] 코칭 아카데미 공식 웹사이트로 이동합니다">
+          <div class="academy-promo-grid">
+            <!-- 좌측: 고화질 코칭 실사 이미지 -->
+            <div class="academy-promo-img-wrap">
+              <img src="images/coach-academy-banner.jpg" alt="여백과 결 시니어 라이프 리셋 전문 코칭 현장" class="academy-promo-img" loading="lazy">
+              <div class="academy-promo-img-tag">
+                <span>🌿</span> 여백과 결 1:1 방문 코칭 현장
+              </div>
+            </div>
+
+            <!-- 우측: 명확하고 품격 있는 홍보 텍스트 및 액션 -->
+            <div class="academy-promo-content">
+              <div class="academy-promo-badge">
+                <span>🎓</span> 2026년 [여백과 결] 공식 코칭스태프 1기 모집
+              </div>
+
+              <h3 class="academy-promo-title">
+                타인의 삶에 위로와 존엄을,<br>
+                <span>시니어 전문 라이프 코치</span> 양성 과정
+              </h3>
+
+              <p class="academy-promo-desc">
+                초고령사회 일본의 <strong>4대 선진 공인 자격 체계</strong>(뷰티 케어, 공간 비움, 생전 및 유품 정리, 디지털 자서전)를 도입한 4주 완성 실전 과정입니다.<br>
+                수료 즉시 [여백과 결] 플랫폼의 <strong>공식 코칭스태프로 위촉되어 전국 1:1 방문 현장에 파견</strong>됩니다.
+              </p>
+
+              <!-- 4대 트랙 태그 칩 -->
+              <div class="academy-promo-features">
+                <span class="academy-promo-tag">💄 뷰티 웰니스 코치</span>
+                <span class="academy-promo-tag">👗 공간 & 비움 코디네이터</span>
+                <span class="academy-promo-tag">📦 생전정리 & 엔딩 플래너</span>
+                <span class="academy-promo-tag">✍️ 디지털 자서전 에디터</span>
+              </div>
+
+              <div class="academy-promo-btn">
+                <span>👉</span> 코칭 아카데미 상세 커리큘럼 & 입학 신청 바로가기 ➔
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
   </main>
 
   <!-- 푸터 -->
@@ -8216,12 +8271,12 @@
         <div class="footer-links">
           <h5>카테고리</h5>
           <ul>
-            <li><a href="#magazine">여백의 서재</a></li>
-            <li><a href="#lounge">오늘의 비움 한 줄</a></li>
-            <li><a href="#test">🎯 1분 자가진단</a></li>
-            <li><a href="#memoir">디지털 자서전</a></li>
-            <li><a href="academy.html" style="color: var(--accent-gold); font-weight: 700;">🎓 코치 양성 아카데미</a></li>
-            <li><a href="javascript:void(0)" onclick="openLoginModal(event); return false;" style="color: var(--accent-gold); font-weight: 700;">🏛️ 나의 고유한 서재</a></li>
+            <li><a href="#magazine">📖 여백의 서재</a></li>
+            <li><a href="#lounge">💬 비움 한 줄</a></li>
+            <li><a href="#test">🌿 웰라이프</a></li>
+            <li><a href="#memoir">✍️ 디지털 자서전</a></li>
+            <li><a href="#archive" style="color: var(--accent-gold); font-weight: 700;">🏛️ 나의 고유한 서재</a></li>
+            <li><a href="academy.html" style="color: var(--accent-gold); font-weight: 700;">🎓 코치 아카데미</a></li>
           </ul>
         </div>
         <div class="footer-links">
@@ -8243,9 +8298,7 @@
       </div>
       <div class="footer-bottom" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
         <p>© 2026 메타큐 라이프 · 여백과 결, 리셋 아카이브 (MetaQ Life). 모든 권리 보유.</p>
-        <a href="admin.html" onclick="goToAdminHome(event)" style="background: none; border: 1px solid var(--border-color); color: var(--text-muted); font-size: 0.78rem; padding: 4px 10px; border-radius: 6px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; font-family: inherit; transition: var(--transition);" title="전체 사이트 운영 관리자 홈">
-          <span>⚙️ 통합 관리자 홈</span>
-        </a>
+        <a href="admin.html" onclick="goToAdminHome(event)" class="nav-admin-icon-btn" title="관리자 홈" aria-label="관리자 홈">⚙️</a>
       </div>
     </div>
   </footer>
@@ -8260,13 +8313,13 @@
       <span class="bottom-nav-icon">🏠</span>
       <span class="bottom-nav-label">홈</span>
     </a>
-    <a href="#test" class="bottom-nav-item bottom-nav-highlight" onclick="document.getElementById('test')?.scrollIntoView({behavior: 'smooth'});" aria-label="1분 자가진단 바로가기">
-      <span class="bottom-nav-icon">🎯</span>
-      <span class="bottom-nav-label">자가진단</span>
+    <a href="#test" class="bottom-nav-item bottom-nav-highlight" onclick="document.getElementById('test')?.scrollIntoView({behavior: 'smooth'});" aria-label="웰라이프 바로가기">
+      <span class="bottom-nav-icon">🌿</span>
+      <span class="bottom-nav-label">웰라이프</span>
     </a>
-    <a href="academy.html" class="bottom-nav-item bottom-nav-academy" aria-label="코치 아카데미 자격과정으로 이동" title="코치 아카데미 바로가기">
-      <span class="bottom-nav-icon">🎓</span>
-      <span class="bottom-nav-label">코치자격</span>
+    <a href="#archive" class="bottom-nav-item bottom-nav-academy" onclick="document.getElementById('archive')?.scrollIntoView({behavior: 'smooth'});" aria-label="나의 고유한 서재로 이동" title="나의 고유한 서재">
+      <span class="bottom-nav-icon">🏛️</span>
+      <span class="bottom-nav-label">나의서재</span>
     </a>
     <button type="button" class="bottom-nav-item" onclick="toggleMobileDrawer()" aria-label="전체 카테고리 메뉴 열기" title="전체 메뉴 열기">
       <span class="bottom-nav-icon">☰</span>
@@ -11146,8 +11199,8 @@
         { id: 'lounge', el: document.getElementById('lounge') },
         { id: 'test', el: document.getElementById('test') },
         { id: 'memoir', el: document.getElementById('memoir') },
-        { id: 'programs', el: document.getElementById('programs') },
-        { id: 'archive', el: document.getElementById('archive') }
+        { id: 'archive', el: document.getElementById('archive') },
+        { id: 'programs', el: document.getElementById('programs') }
       ];
 
       let isThrottled = false;
