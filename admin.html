@@ -2357,6 +2357,7 @@
         <button class="nav-tab-btn active" onclick="switchTab('tabCockpit', this)" id="navBtnCockpit">
           <span class="nav-tab-icon">📊</span>
           <span>00. 통합 관제 홈</span>
+          <span id="sidebarPendingBadge" style="display:none; background: rgba(239, 68, 68, 0.25); color:#fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto; white-space:nowrap; flex-shrink:0;"></span>
         </button>
 
         <button class="nav-tab-btn" onclick="switchTab('tabConsult', this)" id="navBtnConsult">
@@ -2448,26 +2449,21 @@
           <span>05. 나의 고유한 서재</span>
         </button>
 
-        <!-- 06. 🎓 코치 아카데미 & 파견 -->
+        <!-- 06. 🎓 코치 아카데미 (수강생·수료 관리 & 공인 코치 등재 전담) -->
         <button class="nav-tab-btn" onclick="switchTab('tabCoachControl', this)" id="navBtnCoachControl" style="--cat-dot: #6aa7e0;">
           <span class="nav-cat-dot"></span>
           <span class="nav-tab-icon">🎓</span>
-          <span>06. 코치 아카데미·파견</span>
-          <span id="sidebarPendingBadge" style="display:none; background: rgba(239, 68, 68, 0.25); color:#fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); font-size:0.66rem; font-weight:900; padding:1px 6px; border-radius:999px; margin-left:auto; white-space:nowrap; flex-shrink:0;"></span>
+          <span>06. 코치 아카데미</span>
           <span class="nav-tab-chevron">▾</span>
         </button>
         <div class="sidebar-subnav" id="sidebarSubnavCoach">
           <button type="button" class="subnav-link active" id="sideSub_coach_academy" onclick="selectCoachSubFromSidebar('academy')">
             <span class="subnav-icon">🎓</span>
-            <span>6-1. 아카데미 수강 · 수료</span>
+            <span>6-1. 수강생 · 수료 관리</span>
           </button>
           <button type="button" class="subnav-link" id="sideSub_coach_pool" onclick="selectCoachSubFromSidebar('pool')">
             <span class="subnav-icon">🏅</span>
-            <span>6-2. 공인 코칭스태프 명단</span>
-          </button>
-          <button type="button" class="subnav-link" id="sideSub_coach_ops" onclick="selectCoachSubFromSidebar('ops')">
-            <span class="subnav-icon">📸</span>
-            <span>6-3. 현장수행 검수 &amp; 정산</span>
+            <span>6-2. 공인 코치 명단 (배정 풀)</span>
           </button>
         </div>
 
@@ -2541,7 +2537,7 @@
               <button type="button" onclick="refreshCockpitStats()" class="btn-save-setting" style="background: rgba(255,255,255,0.14); color: #ffffff; border: 1px solid rgba(255,255,255,0.3); font-weight: 800; padding: 8px 14px; cursor: pointer;">
                 <span>🔄</span> 현황 새로고침
               </button>
-              <button type="button" onclick="selectCoachSubFromSidebar('ops')" class="btn-save-setting" style="background: linear-gradient(135deg, #d7b25c 0%, #b0892f 100%); color: #102018; border: none; font-weight: 900; padding: 8px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.28);">
+              <button type="button" onclick="focusCockpitSettlementQueue('all')" class="btn-save-setting" style="background: linear-gradient(135deg, #d7b25c 0%, #b0892f 100%); color: #102018; border: none; font-weight: 900; padding: 8px 16px; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.28);">
                 <span>📸</span> 현장관제 · 정산 전체보기 ➔
               </button>
             </div>
@@ -2712,36 +2708,34 @@
               </div>
             </div>
 
-            <!-- 06. 코치 아카데미 & 파견 -->
+            <!-- 06. 코치 아카데미 (수강·수료 & 공인 코치 등록 전담) -->
             <div class="cockpit-cat-card" style="--cc-color: #245b8e;">
               <div class="cockpit-cat-head">
                 <div>
                   <span class="cockpit-cat-num">CATEGORY 06</span>
-                  <h4 class="cockpit-cat-title">🎓 코치 아카데미 · 파견·정산</h4>
+                  <h4 class="cockpit-cat-title">🎓 코치 아카데미</h4>
                 </div>
-                <div class="cockpit-cat-metric" id="cockpitCatCount_coach">0명</div>
+                <div class="cockpit-cat-metric" id="cockpitCatCount_coach">공인 0명</div>
               </div>
-              <p class="cockpit-cat-desc">상담완료 수강생 교육·수료 관리, 수료 후 공인 코치 등재(배정 풀) 및 전체 현장수행·정산 이력 관리</p>
+              <p class="cockpit-cat-desc">상담완료 수강생 교육·수료 관리 및 공인 코치 등재 (등재된 코치만 전 비즈니스 코치 배정 목록에 자동 연동)</p>
               <div class="cockpit-cat-chips">
-                <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('ops')">📸 검수·정산</button>
-                <a href="coach.html" target="_blank" class="cockpit-cat-chip">📱 코치앱 ↗</a>
+                <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료 관리 ➔</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치 명단</button>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 🏁 현장완료 업무카드 검수 · 송금 정산 & 비즈니스 최종 마감 보드 -->
+        <!-- 🏁 현장완료 업무카드 검수 · 송금 정산 & 전체 파견 관제 보드 (통합관제 홈 일원화) -->
         <div class="panel-card" id="cockpitSettlementQueueCard">
           <div class="panel-header" style="flex-wrap: wrap; gap: 10px;">
             <div class="panel-title-wrap">
               <span class="panel-icon" style="background:#fef3c7; color:#b45309;">🏁</span>
               <div>
-                <h3 class="panel-title">현장완료 업무카드 검수 · 송금 정산 &amp; 비즈니스 완료</h3>
+                <h3 class="panel-title">현장완료 업무카드 검수 · 송금 정산 &amp; 전체 파견 관제</h3>
                 <p style="color: var(--text-muted); font-size: 0.84rem; margin: 3px 0 0;">
-                  각 비즈니스에서 배정·진행 후 <strong>코치가 [현장완료] 제출한 건만</strong> 표시합니다. 업무카드(사진·소감)를 확인하고 <strong>[송금·비즈니스완료]</strong>를 누르면 정산과 해당 비즈니스 완료(CRM 이관)가 한 번에 마감됩니다.
+                  코치 현장수행 관제와 송금 마감은 <strong>이곳 통합 관제 홈에서 일원화</strong>합니다. 현장완료 업무카드 확인 후 <strong>[💰 송금·완료]</strong>를 누르면 정산과 비즈니스 완료(CRM 이관)가 한 번에 마감됩니다.
                 </p>
               </div>
             </div>
@@ -2751,6 +2745,15 @@
               </button>
               <button type="button" class="btn-action-sm" id="btnCockpitClosing_settled" onclick="switchCockpitClosingTab('settled')" style="padding: 6px 12px; font-weight: 800; border-radius: 999px; font-size: 0.8rem;">
                 ✓ 송금 · 비즈니스완료 (<span id="cockpitQueueSettledCnt">0</span>)
+              </button>
+              <button type="button" class="btn-action-sm" id="btnCockpitClosing_all" onclick="switchCockpitClosingTab('all')" style="padding: 6px 12px; font-weight: 800; border-radius: 999px; font-size: 0.8rem;">
+                📋 전체 파견·현장 이력 (<span id="cockpitQueueAllCnt">0</span>)
+              </button>
+              <a href="coach.html" target="_blank" class="btn-action-sm" style="padding: 6px 11px; font-size: 0.78rem; font-weight: 800; border-radius: 999px; background: #1e293b; color: #fff; text-decoration: none;">
+                📱 코치앱 ↗
+              </a>
+              <button type="button" class="btn-action-sm" onclick="exportDispatchesCSV()" style="padding: 6px 10px; font-size: 0.78rem; font-weight: 800; border-radius: 999px; background: #fff; color: var(--text-main); border: 1px solid var(--border-color);">
+                📥 CSV
               </button>
             </div>
           </div>
@@ -3837,129 +3840,7 @@
         </div>
         </div>
 
-        <!-- 🌟 6-3. 코칭스태프 현장수행 검수 & 활동비 정산 전체 아카이브 (좌측 6-3 선택 시 단독 표시) -->
-        <div id="coachSubPanel_ops" style="display: none;">
-        <div class="panel-card" id="coachOpsSection" style="margin-bottom: 16px; border-top: 4px solid #245b8e; padding: 16px 22px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <span class="panel-icon" style="background:#eef3f9; color:#245b8e; font-size:1.4rem; padding:6px 9px; border-radius:10px;">📸</span>
-              <div>
-                <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-                  <h2 class="panel-title" style="font-size:1.22rem; font-weight:900; color: #0f172a; margin: 0;">6-3. 코칭스태프 현장수행 검수 &amp; 활동비 송금·정산 이력</h2>
-                  <span class="badge" style="background: #eef3f9; color: #245b8e; border: 1px solid #bfd3ea; font-size: 0.72rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">전체 현장 이력 · 사진 검수</span>
-                </div>
-                <p style="color: var(--text-muted); font-size: 0.83rem; margin: 3px 0 0;">
-                  모든 비즈니스의 파견·현장 수행 사진 3종·정산 이력을 상세 조회합니다. (신규 코치 배정은 <strong>03·04 비즈니스</strong>에서, 현장완료 마감은 <strong>00. 통합관제 홈</strong>에서 진행)
-                </p>
-              </div>
-            </div>
-            <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center;">
-              <button type="button" class="btn-save-setting" onclick="switchTab('tabCockpit'); focusCockpitSettlementQueue('pending');" style="background: #b83354; color: #ffffff; border: none; font-weight: 850; font-size: 0.82rem; padding: 7px 13px; border-radius: 8px; display: inline-flex; align-items: center; gap: 4px; cursor: pointer;" title="통합 관제 홈의 현장완료 송금 마감 보드로 이동">
-                <span>🏁</span> 통합관제 마감 보드 ➔
-              </button>
-              <a href="coach.html" target="_blank" class="btn-save-setting" style="background: #1e293b; color: #ffffff; text-decoration: none; font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 800; display: inline-flex; align-items: center; gap: 4px;">
-                <span>📱</span> 코치 현장앱 ↗
-              </a>
-              <button type="button" class="btn-save-setting" onclick="exportDispatchesCSV()" style="background: #ffffff; color: var(--text-main); border: 1px solid var(--border-color); font-size: 0.82rem; padding: 7px 11px; border-radius: 8px; font-weight: 750;">
-                <span>📥</span> CSV
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 실시간 핵심 KPI 요약 카드 4종 (클릭 시 아래 목록이 즉시 필터링됩니다) -->
-        <div class="control-kpi-grid">
-          <!-- 1. 검수 및 입금 대기 (집중 관리) -->
-          <div class="kpi-card pending" id="kpiControlCard_pending" onclick="filterControlFeed('서비스완료')" style="cursor: pointer; transition: all 0.2s;" title="클릭 시 [검수 및 송금 대기] 건만 즉시 필터링합니다">
-            <div class="kpi-icon-wrap" style="background: #fef3c7; color: #d97706;">⚡</div>
-            <div>
-              <div class="kpi-sub" style="color:#b45309; font-weight:850; display:flex; justify-content:space-between; align-items:center;">
-                <span>📸 검수 및 송금 대기</span>
-                <span style="font-size:0.72rem; color:#b45309; background:rgba(180,83,9,0.1); padding:1px 6px; border-radius:4px;">필터</span>
-              </div>
-              <div class="kpi-val" style="color:#b45309;" id="kpiControlPending">0건 (0원)</div>
-            </div>
-          </div>
-
-          <!-- 2. 실시간 현장 진행 중 -->
-          <div class="kpi-card active" id="kpiControlCard_working" onclick="filterControlFeed('진행중')" style="cursor: pointer; transition: all 0.2s;" title="클릭 시 [실시간 현장 진행 중] 건만 즉시 필터링합니다">
-            <div class="kpi-icon-wrap" style="background: #e0f2fe; color: #0284c7;">🏃</div>
-            <div>
-              <div class="kpi-sub" style="color:#0369a1; font-weight:850; display:flex; justify-content:space-between; align-items:center;">
-                <span>📍 실시간 현장 진행 중</span>
-                <span style="font-size:0.72rem; color:#0369a1; background:rgba(3,105,161,0.1); padding:1px 6px; border-radius:4px;">필터</span>
-              </div>
-              <div class="kpi-val" style="color:#0284c7;" id="kpiControlActive">0건</div>
-            </div>
-          </div>
-
-          <!-- 3. 송금 및 정산 완료 -->
-          <div class="kpi-card settled" id="kpiControlCard_settled" onclick="filterControlFeed('정산완료')" style="cursor: pointer; transition: all 0.2s;" title="클릭 시 [송금 및 정산 완료] 건만 즉시 필터링합니다">
-            <div class="kpi-icon-wrap" style="background: #dcfce7; color: #16a34a;">💰</div>
-            <div>
-              <div class="kpi-sub" style="color:#15803d; font-weight:850; display:flex; justify-content:space-between; align-items:center;">
-                <span>✓ 송금 및 정산 완료</span>
-                <span style="font-size:0.72rem; color:#15803d; background:rgba(21,128,61,0.1); padding:1px 6px; border-radius:4px;">필터</span>
-              </div>
-              <div class="kpi-val" style="color:#16a34a;" id="kpiControlSettled">0건 (0원)</div>
-            </div>
-          </div>
-
-          <!-- 4. 전체 배정 케어 -->
-          <div class="kpi-card" id="kpiControlCard_all" onclick="filterControlFeed('all')" style="cursor: pointer; transition: all 0.2s;" title="클릭 시 [전체 목록]을 표시합니다">
-            <div class="kpi-icon-wrap" style="background: #f1f5f9; color: #475569;">📋</div>
-            <div>
-              <div class="kpi-sub" style="display:flex; justify-content:space-between; align-items:center;">
-                <span>총 배정 및 케어 누적</span>
-                <span style="font-size:0.72rem; color:#475569; background:rgba(71,85,105,0.1); padding:1px 6px; border-radius:4px;">전체</span>
-              </div>
-              <div class="kpi-val" id="kpiControlTotal">0건</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 📋 통합 현장 관제 & 활동비 정산 게시판 -->
-        <div class="panel-card" style="padding: 0; overflow: hidden; margin-bottom: 24px;">
-          <div style="padding: 14px 18px; background: #fafbfc; border-bottom: 1.5px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-            <div id="controlFilterBar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <strong style="font-size: 0.96rem; color: var(--text-main); font-weight: 850;">📋 현장 검수 · 정산 목록</strong>
-              <span id="controlTableCountBadge" style="background: var(--accent-light); color: var(--accent); padding: 2px 9px; border-radius: 999px; font-size: 0.76rem; font-weight: 850;">0건</span>
-              <button type="button" class="btn-action-sm active" id="btnFilterControl_all" onclick="filterControlFeed('all', this)" style="padding: 4px 10px; font-size: 0.78rem; font-weight: 800; border-radius: 999px;">전체</button>
-              <button type="button" class="btn-action-sm" id="btnFilterControl_ready" onclick="filterControlFeed('배정완료', this)" style="padding: 4px 10px; font-size: 0.78rem; font-weight: 800; border-radius: 999px;">⏳ 배정완료</button>
-              <span style="font-size: 0.76rem; color: #64748b;">(위 KPI 카드 클릭으로 상태 필터 · 행 클릭 시 사진/송금 모달)</span>
-            </div>
-            <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <select id="selectControlCoachFilter" onchange="filterControlFeedByCoach(this.value)" class="coach-select-sm" style="padding: 5px 10px; font-size: 0.82rem;">
-                <option value="all">전체 코치</option>
-              </select>
-              <div style="position: relative;">
-                <input type="text" id="inputControlSearch" placeholder="고객명·코치·주소 검색..." oninput="handleControlSearch(this.value)" style="padding: 5px 10px 5px 28px; font-size: 0.82rem; border: 1.3px solid var(--border-color); border-radius: 999px; outline: none; width: 200px; background: #ffffff;">
-                <span style="position: absolute; left: 9px; top: 50%; transform: translateY(-50%); font-size: 0.78rem; color: #94a3b8; pointer-events: none;">🔍</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="admin-table-wrap" style="border: none; border-radius: 0;">
-            <table class="admin-table" id="coachControlTable">
-              <thead>
-                <tr>
-                  <th style="width: 45px; text-align: center;">No</th>
-                  <th style="width: 175px;">담당 코치 &amp; 케어 고객</th>
-                  <th style="width: 145px;">활동 일시 &amp; 장소</th>
-                  <th>현장 활동 수행 상황 (스탬프 &amp; 사진·일지 검수)</th>
-                  <th style="width: 120px; text-align: right;">💰 활동비</th>
-                  <th style="width: 130px; text-align: center;">정산 상태</th>
-                  <th style="width: 155px; text-align: center;">송금 승인 &amp; 안내</th>
-                </tr>
-              </thead>
-              <tbody id="controlTableBody">
-                <!-- JS 동적 렌더링 -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-        </div>
-
+        <!-- 현장수행 검수 · 송금 정산 관제는 00. 통합 관제 홈으로 일원화되었습니다 -->
       </section>
 
       <!-- ================= 05. 🏛️ 나의 고유한 서재 관리 (메인 카테고리 5번) ================= -->
@@ -6435,7 +6316,7 @@
         tabBusinessMaster: '<span>🌿</span> 03. 웰라이프 (4대 방문 케어)',
         tabMemoirDashboard: '<span>✍️</span> 04. 디지털 자서전 · VIP 전시관',
         tabArchive: '<span>🏛️</span> 05. 나의 고유한 서재',
-        tabCoachControl: '<span>🎓</span> 06. 코치 아카데미 · 파견·정산',
+        tabCoachControl: '<span>🎓</span> 06. 코치 아카데미',
         tabSettings: '<span>⚙️</span> 환경설정 &amp; 채널연동'
       };
       var headerTabBadge = document.getElementById('headerCurrentTabBadge');
@@ -6479,14 +6360,19 @@
     var currentCoachSubTab = 'academy';
 
     function switchCoachSubTab(subKey) {
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'ops') ? subKey : 'academy';
+      // 현장수행·정산('ops')은 00. 통합 관제 홈으로 일원화
+      if (subKey === 'ops') {
+        switchTab('tabCockpit');
+        if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
+        return;
+      }
+      currentCoachSubTab = (subKey === 'pool') ? 'pool' : 'academy';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
 
       var map = {
-        academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강 진행 · 수료 관리' },
-        pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코칭스태프 명단' },
-        ops: { panel: 'coachSubPanel_ops', btn: 'sideSub_coach_ops', label: '<span>📸</span> 06. 코치 아카데미 · 6-3 현장수행 검수 &amp; 정산' }
+        academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강생 · 수료 관리' },
+        pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코치 명단 (배정 풀)' }
       };
 
       Object.keys(map).forEach(function(k) {
@@ -6503,7 +6389,6 @@
 
       if (currentCoachSubTab === 'academy' && typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
-      if (currentCoachSubTab === 'ops' && typeof renderCoachControlCenter === 'function') renderCoachControlCenter();
 
       var mainEl = document.querySelector('.admin-main');
       if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6511,21 +6396,28 @@
     window.switchCoachSubTab = switchCoachSubTab;
 
     function selectCoachSubFromSidebar(subKey) {
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'ops') ? subKey : 'academy';
+      if (subKey === 'ops') {
+        switchTab('tabCockpit');
+        if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
+        return;
+      }
+      currentCoachSubTab = (subKey === 'pool') ? 'pool' : 'academy';
       switchTab('tabCoachControl');
       switchCoachSubTab(currentCoachSubTab);
     }
     window.selectCoachSubFromSidebar = selectCoachSubFromSidebar;
 
-    /* 📊 00. 통합 관제 홈 마감 탭 전환 & 스크롤 이동 */
+    /* 📊 00. 통합 관제 홈 마감·전체파견 탭 전환 & 스크롤 이동 */
     var currentCockpitClosingTab = 'pending';
 
     function switchCockpitClosingTab(mode) {
-      currentCockpitClosingTab = (mode === 'settled') ? 'settled' : 'pending';
+      currentCockpitClosingTab = (mode === 'settled' || mode === 'all') ? mode : 'pending';
       var btnP = document.getElementById('btnCockpitClosing_pending');
       var btnS = document.getElementById('btnCockpitClosing_settled');
+      var btnA = document.getElementById('btnCockpitClosing_all');
       if (btnP) btnP.classList.toggle('active', currentCockpitClosingTab === 'pending');
       if (btnS) btnS.classList.toggle('active', currentCockpitClosingTab === 'settled');
+      if (btnA) btnA.classList.toggle('active', currentCockpitClosingTab === 'all');
       refreshCockpitStats();
     }
     window.switchCockpitClosingTab = switchCockpitClosingTab;
@@ -6600,6 +6492,8 @@
         if (qPendingCnt) qPendingCnt.innerText = pendingSettleList.length;
         var qSettledCnt = document.getElementById('cockpitQueueSettledCnt');
         if (qSettledCnt) qSettledCnt.innerText = settledList.length;
+        var qAllCnt = document.getElementById('cockpitQueueAllCnt');
+        if (qAllCnt) qAllCnt.innerText = dispList.length;
 
         // 3. 자서전 출판 프로젝트 수 (상담완료 확정 프로젝트 기준 — 단독 웹북/미완료 제외)
         var memoirList = (typeof getActiveMemoirProjectsForPipeline === 'function')
@@ -6631,22 +6525,28 @@
         var elCatCoach = document.getElementById('cockpitCatCount_coach');
         if (elCatCoach) elCatCoach.innerText = '공인 ' + (coachList.length || 0) + '명 · 수강 ' + activeTrainees + '명';
 
-        // 4. 현장완료 업무카드 검수 · 송금 정산 & 비즈니스 완료 마감 보드 (현장완료 건만 집중 표시!)
+        // 4. 현장완료 업무카드 검수 · 송금 정산 & 전체 파견 관제 보드 (통합관제 홈 일원화)
         var recentTbody = document.getElementById('cockpitRecentDispatchTableBody');
         if (recentTbody) {
           var isSettledMode = currentCockpitClosingTab === 'settled';
-          var targetList = isSettledMode ? settledList : pendingSettleList;
+          var isAllMode = currentCockpitClosingTab === 'all';
+          var targetList = isAllMode ? dispList : (isSettledMode ? settledList : pendingSettleList);
 
           if (targetList.length === 0) {
-            recentTbody.innerHTML = isSettledMode
-              ? '<tr><td colspan="6" style="text-align:center; padding:28px; color:#94a3b8;">아직 송금·비즈니스 완료 마감된 내역이 없습니다.</td></tr>'
-              : '<tr><td colspan="6" style="text-align:center; padding:28px; color:#059669; font-weight:750;">🎉 현재 송금 정산 대기 중인 현장완료 건이 없습니다. 모든 현장완료 비즈니스가 마감되었습니다!</td></tr>';
+            recentTbody.innerHTML = isAllMode
+              ? '<tr><td colspan="6" style="text-align:center; padding:28px; color:#94a3b8;">아직 배정된 현장 파견 내역이 없습니다. 각 비즈니스(03. 웰라이프 · 04. 디지털 자서전)에서 공인 코치를 배정해 주세요.</td></tr>'
+              : (isSettledMode
+                ? '<tr><td colspan="6" style="text-align:center; padding:28px; color:#94a3b8;">아직 송금·비즈니스 완료 마감된 내역이 없습니다.</td></tr>'
+                : '<tr><td colspan="6" style="text-align:center; padding:28px; color:#059669; font-weight:750;">🎉 현재 송금 정산 대기 중인 현장완료 건이 없습니다. 모든 현장완료 비즈니스가 마감되었습니다!</td></tr>');
           } else {
             recentTbody.innerHTML = targetList.map(function(d) {
               var coachLabel = (d.coach || d.coachName || '').trim() || '담당 코치';
               var svcLabel = d.serviceType || d.serviceName || '라이프케어';
               var feeNum = Number(d.fee) || 150000;
               var feeText = feeNum.toLocaleString() + '원';
+              var rowStep = d.step || d.status || '배정완료';
+              var isRowSettled = (rowStep === '정산완료');
+              var isRowPendingSettle = (rowStep === '서비스완료');
 
               var photoCount =
                 (Array.isArray(d.beforePhotos) ? d.beforePhotos.length : (d.beforePhoto ? 1 : 0)) +
@@ -6657,23 +6557,35 @@
               if (d.arrivalStamp) stampLines.push('<div style="color:#0369a1; font-weight:750;">📍 도착: ' + escapeHtml(d.arrivalStamp) + '</div>');
               if (d.completionDate) stampLines.push('<div style="color:#047857; font-weight:850;">🏁 완료: ' + escapeHtml(d.completionDate) + '</div>');
               if (stampLines.length === 0) {
-                stampLines.push('<div style="color:#64748b;">' + escapeHtml(d.preferredDate || '현장 완료 제출') + '</div>');
+                stampLines.push('<div style="color:#64748b;">' + escapeHtml(d.preferredDate || '일정 협의') + '</div>');
               }
 
               var summaryText = (d.coachReport && d.coachReport.trim())
                 ? ('💬 ' + d.coachReport.trim())
-                : (d.notes || '현장 수행 완료 보고');
+                : (d.notes || '현장 수행 기록 대기');
+
+              var stepBadgeHtml = isRowSettled
+                ? '<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">✓ 송금·비즈니스완료</span>'
+                : (isRowPendingSettle
+                  ? '<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">⚡ 현장완료 · 송금대기</span>'
+                  : (rowStep === '진행중'
+                    ? '<span style="background:#e0f2fe; color:#0369a1; border:1px solid #bae6fd; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">🏃 현장 진행중</span>'
+                    : '<span style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">⏳ ' + escapeHtml(rowStep) + '</span>'));
 
               var safeId = String(d.id || '').replace(/'/g, '');
-              var actionCellHtml = isSettledMode
+              var actionCellHtml = isRowSettled
                 ? '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
                     '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#f8fafc; color:#334155; border:1px solid #cbd5e1;">📸 업무카드</button>' +
                     '<button type="button" class="btn-action-sm" onclick="sendSettlementKakaoDirect(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:850; white-space:nowrap; background:#fef01b; color:#181600; border:1px solid #e5d800;" title="코치님께 입금완료 카톡 알림 재전송">💬 입금톡</button>' +
                   '</div>'
-                : '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
-                    '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#eef3f9; color:#245b8e; border:1px solid #bfd3ea;" title="현장 사진과 코치 소감을 검수합니다">📸 업무카드</button>' +
-                    '<button type="button" class="btn-action-sm" onclick="approveCoachSettlementFromCard(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.75rem; font-weight:850; white-space:nowrap; background:#059669; color:#ffffff; border:none; border-radius:6px; box-shadow:0 2px 6px rgba(5,150,105,0.28);" title="활동비 송금 승인 및 연결 비즈니스 완료(CRM 이관) 일괄 마감">💰 송금·완료</button>' +
-                  '</div>';
+                : (isRowPendingSettle
+                  ? '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
+                      '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 9px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#eef3f9; color:#245b8e; border:1px solid #bfd3ea;" title="현장 사진과 코치 소감을 검수합니다">📸 업무카드</button>' +
+                      '<button type="button" class="btn-action-sm" onclick="approveCoachSettlementFromCard(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.75rem; font-weight:850; white-space:nowrap; background:#059669; color:#ffffff; border:none; border-radius:6px; box-shadow:0 2px 6px rgba(5,150,105,0.28);" title="활동비 송금 승인 및 연결 비즈니스 완료(CRM 이관) 일괄 마감">💰 송금·완료</button>' +
+                    '</div>'
+                  : '<div style="display:flex; gap:5px; justify-content:center; flex-wrap:nowrap;">' +
+                      '<button type="button" class="btn-action-sm" onclick="openDispatchReportModal(\'' + safeId + '\'); event.stopPropagation();" style="padding:5px 10px; font-size:0.75rem; font-weight:800; white-space:nowrap; background:#f8fafc; color:#245b8e; border:1px solid #cbd5e1;" title="배정 현황 및 현장 업무카드를 확인합니다">📸 현황·업무카드</button>' +
+                    '</div>');
 
               return '<tr style="cursor:pointer;" onclick="openDispatchReportModal(\'' + safeId + '\')" title="클릭하여 현장 업무카드(사진·소감·송금)를 검수합니다">' +
                 '<td>' +
@@ -6688,9 +6600,7 @@
                 '<td style="font-size:0.82rem; color:var(--text-sub); max-width:270px;">' +
                   '<div style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:4px;">' +
                     '<span style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">📷 현장사진 ' + photoCount + '장</span>' +
-                    (isSettledMode
-                      ? '<span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">✓ 비즈니스완료 · CRM이관</span>'
-                      : '<span style="background:#fef3c7; color:#b45309; border:1px solid #fde68a; padding:1px 6px; border-radius:999px; font-size:0.71rem; font-weight:800;">⚡ 현장완료 · 송금대기</span>') +
+                    stepBadgeHtml +
                   '</div>' +
                   '<div style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">' + escapeHtml(summaryText) + '</div>' +
                 '</td>' +

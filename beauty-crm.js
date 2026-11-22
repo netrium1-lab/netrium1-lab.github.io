@@ -1742,19 +1742,10 @@ window.openLinkedReportOrCockpit = openLinkedReportOrCockpit;
 
 function goToCoachControlForClient(name) {
   if (typeof switchTab === 'function') {
-    switchTab('tabCoachControl');
+    switchTab('tabCockpit');
   }
-  const cleanKeyword = (name || '').replace(/\s*\([^)]*\)/g, '').replace(/어머니|어르신|님|모친/g, '').trim();
-  const searchInput = document.getElementById('inputControlSearch');
-  if (searchInput) {
-    searchInput.value = cleanKeyword || name || '';
-  }
-  if (typeof filterControlFeed === 'function') {
-    const allBtn = document.getElementById('btnFilterControl_all');
-    filterControlFeed('all', allBtn);
-  }
-  if (typeof handleControlSearch === 'function') {
-    handleControlSearch(cleanKeyword || name || '');
+  if (typeof focusCockpitSettlementQueue === 'function') {
+    focusCockpitSettlementQueue('all');
   }
 }
 
