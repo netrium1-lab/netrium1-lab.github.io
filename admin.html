@@ -3056,36 +3056,11 @@
               <button type="button" class="btn-save-setting" onclick="openAiArticleGeneratorModal()" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: #ffffff; border: none; padding: 9px 18px; font-size: 0.88rem; font-weight: 850; box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);">
                 <span>🪄</span> AI 자동 글쓰기
               </button>
-              <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 9px 18px; font-size: 0.88rem; background: #2c5f46; color: #fff;">
+              <button type="button" class="btn-save-setting" onclick="openTistoryEditor()" style="padding: 9px 18px; font-size: 0.88rem; background: #235a3f; color: #fff; border: none; font-weight: 850;">
                 <span>+</span> 직접 글쓰기
               </button>
-              <button type="button" class="btn-save-setting" onclick="exportArticlesJsonFile()" style="background: #0284c7; color: #ffffff; border: none; padding: 9px 16px; font-size: 0.88rem; font-weight: 850; box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);" title="현재 등록된 모든 글을 articles.json 파일로 저장하여 사이트 전체에 영구 배포합니다">
-                <span>🚀 사이트 전체 반영 (articles.json 저장)</span>
-              </button>
-              <button type="button" class="btn-save-setting" onclick="switchTab('tabSettings')" style="background: #f0fdf4; color: #047857; border: 1.5px solid #a7f3d0; padding: 9px 16px; font-size: 0.88rem; font-weight: 800;">
-                <span>⚙️ 블로그 연동 설정</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- 📢 사이트 전체 실시간 반영 및 배포 안내 바 -->
-          <div style="background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 12px; padding: 14px 18px; margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;">
-            <div style="display: flex; align-items: center; gap: 10px;">
-              <span style="font-size: 1.4rem;">💡</span>
-              <div style="font-size: 0.88rem; color: #166534; line-height: 1.5;">
-                <strong>새 글을 발행하거나 수정한 후에는?</strong><br>
-                우측의 <strong>[🚀 사이트 전체 반영]</strong> 버튼을 눌러 <code style="background: #dcfce7; padding: 2px 6px; border-radius: 4px; font-weight: bold;">articles.json</code>을 저장하신 뒤, 폴더 안의 <strong>'배포하기.bat'</strong>을 실행하시면 모든 방문자의 스마트폰과 카카오톡에 즉시 실시간 반영됩니다.
-              </div>
-            </div>
-            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-              <button type="button" onclick="uploadAllArticlesToFirebase()" style="padding: 7px 14px; background: #ea580c; color: #fff; border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 850; cursor: pointer; box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);" title="현재 저장된 모든 칼럼을 Firebase 클라우드 DB에 즉시 일괄 등록합니다">
-                ☁️ Firebase 클라우드 전체 동기화
-              </button>
-              <button type="button" onclick="exportArticlesJsonFile()" style="padding: 7px 14px; background: #16a34a; color: #fff; border: none; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
-                📥 articles.json 저장
-              </button>
-              <button type="button" onclick="syncAdminArticlesFromServer()" style="padding: 7px 14px; background: #fff; color: #166534; border: 1px solid #86efac; border-radius: 8px; font-size: 0.82rem; font-weight: 800; cursor: pointer;">
-                🔄 서버 데이터 불러오기
+              <button type="button" class="btn-save-setting" onclick="uploadAllArticlesToFirebase()" style="background: #ffffff; color: #1e4d35; border: 1.5px solid #bfd3c3; padding: 9px 14px; font-size: 0.86rem; font-weight: 800;" title="현재 작성된 모든 칼럼을 Firebase 클라우드에 실시간 동기화합니다">
+                <span>☁️</span> 클라우드 동기화
               </button>
             </div>
           </div>
@@ -3131,6 +3106,22 @@
               </tbody>
             </table>
           </div>
+
+          <!-- 수동 백업/복구 고급 도구 (필요 시에만 펼침) -->
+          <details style="margin-top: 16px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px;">
+            <summary style="cursor: pointer; font-size: 0.82rem; font-weight: 800; color: #64748b; list-style: none;">
+              🛠️ 고급 수동 백업 · 데이터 복구 도구 (articles.json 백업 / 서버 불러오기 ▾)
+            </summary>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e2e8f0;">
+              <button type="button" onclick="exportArticlesJsonFile()" style="padding: 6px 12px; background: #ffffff; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem; font-weight: 800; cursor: pointer;">
+                📥 articles.json 수동 백업 저장
+              </button>
+              <button type="button" onclick="syncAdminArticlesFromServer()" style="padding: 6px 12px; background: #ffffff; color: #334155; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.8rem; font-weight: 800; cursor: pointer;">
+                🔄 서버 데이터 다시 불러오기
+              </button>
+              <span style="font-size: 0.77rem; color: #64748b;">※ 평소에는 글 발행 시 클라우드에 자동 반영되며, <code>배포하기.bat</code> 실행 시 카톡 공유 페이지까지 자동 생성됩니다.</span>
+            </div>
+          </details>
         </div>
       </section>
 
