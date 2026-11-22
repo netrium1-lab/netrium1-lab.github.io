@@ -2355,9 +2355,30 @@
     // ================= 5. 초기 부팅 & 클라우드 실시간 가격·수익 구독 =================
     document.addEventListener('DOMContentLoaded', function () {
       initDefaultSimCounts('standard');
+
+      // URL 쿼리(?course=track_beauty 등)로 특정 과정 진입 시 해당 4주 커리큘럼 및 신청 드롭다운 자동 선택
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const courseParam = params.get('course');
+        if (courseParam && currentAcademyConfig.courses.some(function (c) { return c.id === courseParam; })) {
+          activeCurriculumId = courseParam;
+        }
+      } catch (e) {}
+
       renderAllAcademyViews();
 
-      // admin.html 6-3에서 수정한 수강료·예상수익을 클라우드에서 실시간 수신하여 즉시 반영
+      // URL 쿼리로 지정된 과정이 있으면 수강신청 드롭다운에도 미리 선택
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const courseParam = params.get('course');
+        const sel = document.getElementById('applyCourse');
+        if (courseParam && sel && currentAcademyConfig.courses.some(function (c) { return c.id === courseParam && c.status !== '모집마감'; })) {
+          sel.value = courseParam;
+          updateApplySelectedCourseBox();
+        }
+      } catch (e) {}
+
+      // admin.html 6-3·6-4에서 수정한 수강료·예상수익·커리큘럼을 클라우드에서 실시간 수신하여 즉시 반영
       if (academyFbDb && window.YebaekAcademyConfig) {
         window.YebaekAcademyConfig.loadFromCloud(academyFbDb, function (remoteCfg) {
           currentAcademyConfig = remoteCfg;
