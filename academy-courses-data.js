@@ -125,7 +125,7 @@
         badge: '4주 단일 정규과정 · 프리미엄 행사',
         accentColor: '#7a3594',
         softBg: '#faf2fd',
-        image: 'images/living-funeral-party-1.jpg',
+        image: 'images/living-funeral-party-card.jpg',
         duration: '4주 정규과정 (총 16시간)',
         sessionTime: '기획 + 행사 당일 디렉팅',
         regularPrice: 550000,
@@ -201,13 +201,17 @@
       merged.courses = base.courses.map(function (defCourse) {
         const found = saved.courses.find(function (c) { return c && c.id === defCourse.id; });
         if (!found) return defCourse;
-        return Object.assign({}, defCourse, found, {
+        const mergedCourse = Object.assign({}, defCourse, found, {
           regularPrice: Math.max(0, Number(found.regularPrice != null ? found.regularPrice : defCourse.regularPrice) || 0),
           salePrice: Math.max(0, Number(found.salePrice != null ? found.salePrice : defCourse.salePrice) || 0),
           coachFeePerCase: Math.max(0, Number(found.coachFeePerCase != null ? found.coachFeePerCase : defCourse.coachFeePerCase) || 0),
           recommendedMonthlyCount: Math.max(1, Number(found.recommendedMonthlyCount != null ? found.recommendedMonthlyCount : defCourse.recommendedMonthlyCount) || 1),
           weeks: (Array.isArray(found.weeks) && found.weeks.length > 0) ? found.weeks : defCourse.weeks
         });
+        if (!mergedCourse.image || mergedCourse.image === 'images/living-funeral-party-1.jpg') {
+          mergedCourse.image = defCourse.image;
+        }
+        return mergedCourse;
       });
     }
     return merged;
@@ -356,7 +360,7 @@
       coachName: '여백과 결 공인 코치팀',
       date: '2026.10',
       summary: '직계 가족 14명이 모인 소규모 프라이빗 라운지에서 어르신의 인생 하이라이트 영상 상영, 자녀 감사 편지 낭독, 축하 꽃다발 헌정식을 따뜻하고 품격 있게 디렉팅했습니다.',
-      photos: ['images/living-funeral-party-1.jpg'],
+      photos: ['images/living-funeral-party-card.jpg'],
       published: true,
       isSample: true,
       createdAt: 1795000002000,
@@ -417,9 +421,10 @@
         delete map[item.id];
       } else {
         const prev = map[item.id] || {};
-        const photos = Array.isArray(item.photos)
+        const photos = (Array.isArray(item.photos)
           ? item.photos.filter(Boolean)
-          : (item.photo ? [item.photo] : (prev.photos || []));
+          : (item.photo ? [item.photo] : (prev.photos || [])))
+          .map(function (p) { return p === 'images/living-funeral-party-1.jpg' ? 'images/living-funeral-party-card.jpg' : p; });
         map[item.id] = Object.assign({}, prev, item, {
           photos: photos,
           published: item.published !== false,

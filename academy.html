@@ -43,7 +43,7 @@
   <!-- Firebase SDK (실시간 수강료·커리큘럼·진행사례 클라우드 반영 + 모바일 수강신청 실시간 접수) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-  <script src="academy-courses-data.js?v=20261122b"></script>
+  <script src="academy-courses-data.js?v=20261123"></script>
 
   <style>
     :root {
@@ -690,82 +690,95 @@
     .business-showcase-stack {
       display: flex;
       flex-direction: column;
-      gap: 28px;
+      gap: 32px;
     }
     .biz-course-card {
+      --course-accent: #1e4d35;
       display: grid;
-      grid-template-columns: 420px 1fr;
+      grid-template-columns: 440px 1fr;
       background: var(--bg-surface);
-      border: 1.3px solid var(--border);
-      border-radius: 24px;
+      border: 1.5px solid var(--border-strong);
+      border-top: 4.5px solid var(--course-accent);
+      border-radius: 22px;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 12px 32px rgba(16, 38, 29, 0.08);
+      transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.24s ease, border-color 0.24s ease;
     }
     .biz-course-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      box-shadow: 0 18px 42px rgba(16, 38, 29, 0.13);
     }
     .biz-course-card.reverse {
-      grid-template-columns: 1fr 420px;
+      grid-template-columns: 1fr 440px;
     }
     .biz-course-card.reverse .biz-media { order: 2; }
     .biz-course-card.reverse .biz-body { order: 1; }
 
+    /* 이미지가 카드 높이를 억지로 늘리지 않도록 절대 배치 + 여백 0% 풀블리드 */
     .biz-media {
       position: relative;
-      min-height: 330px;
+      min-height: 360px;
+      height: 100%;
       background: #14281f;
       overflow: hidden;
     }
     .biz-media img {
+      position: absolute;
+      inset: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      object-position: center;
+      display: block;
       transition: transform 0.55s ease;
     }
     .biz-course-card:hover .biz-media img { transform: scale(1.04); }
     .biz-media-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(16, 38, 29, 0.28) 0%, transparent 45%, rgba(16, 38, 29, 0.72) 100%);
+      z-index: 1;
+      background: linear-gradient(180deg, rgba(16, 38, 29, 0.34) 0%, transparent 32%, transparent 68%, rgba(16, 38, 29, 0.72) 100%);
+      pointer-events: none;
     }
     .biz-code-tag {
       position: absolute;
-      top: 18px;
-      left: 18px;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 6px 13px;
       border-radius: 999px;
-      background: rgba(16, 38, 29, 0.85);
+      background: rgba(16, 38, 29, 0.88);
       backdrop-filter: blur(8px);
       color: #f6e4b4;
-      border: 1px solid rgba(227, 193, 108, 0.45);
+      border: 1px solid rgba(227, 193, 108, 0.5);
       font-size: 0.75rem;
       font-weight: 850;
       letter-spacing: 0.05em;
     }
     .biz-status-pill {
       position: absolute;
-      top: 18px;
-      right: 18px;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
       padding: 5px 11px;
       border-radius: 999px;
       font-size: 0.74rem;
       font-weight: 850;
-      background: rgba(255, 255, 255, 0.94);
+      background: rgba(255, 255, 255, 0.96);
       color: #047857;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
     }
     .biz-status-pill.urgent { background: #fff7ed; color: #c2410c; }
     .biz-status-pill.closed { background: #334155; color: #f8fafc; }
     .biz-media-bottom {
       position: absolute;
-      left: 18px;
-      right: 18px;
-      bottom: 16px;
+      left: 16px;
+      right: 16px;
+      bottom: 14px;
+      z-index: 2;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -776,26 +789,26 @@
       font-size: 0.75rem;
       font-weight: 800;
       color: #ffffff;
-      background: rgba(16, 38, 29, 0.78);
+      background: rgba(16, 38, 29, 0.84);
       backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.24);
-      padding: 5px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.26);
+      padding: 5px 12px;
       border-radius: 999px;
     }
 
     .biz-body {
-      padding: 30px 34px;
+      padding: 28px 32px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 18px;
+      justify-content: center;
+      gap: 16px;
     }
     .biz-meta-row {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .biz-duration-pill {
       font-size: 0.76rem;
@@ -813,35 +826,37 @@
     }
     .biz-title {
       font-family: var(--serif);
-      font-size: 1.48rem;
+      font-size: 1.46rem;
       font-weight: 700;
       color: var(--ink-main);
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       letter-spacing: -0.02em;
     }
     .biz-subtitle {
       font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--brand);
-      margin-bottom: 10px;
+      font-weight: 750;
+      color: var(--course-accent, var(--brand));
+      margin-bottom: 9px;
     }
     .biz-summary {
-      font-size: 0.92rem;
+      font-size: 0.91rem;
       color: var(--ink-sub);
-      line-height: 1.7;
+      line-height: 1.68;
     }
     .biz-deliverable {
-      margin-top: 10px;
+      margin-top: 12px;
       font-size: 0.83rem;
       font-weight: 700;
       color: var(--ink-main);
       background: var(--bg-page);
       border: 1px solid var(--border);
+      border-left: 3.5px solid var(--course-accent, var(--brand));
       border-radius: 10px;
-      padding: 9px 13px;
+      padding: 10px 14px;
+      line-height: 1.5;
     }
 
-    /* Live Tuition & Revenue Strip inside each Business Card */
+    /* Live Tuition Strip inside each Business Card */
     .biz-economics-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -852,9 +867,13 @@
     }
     .econ-box {
       border-radius: 14px;
-      padding: 13px 15px;
-      border: 1.2px solid var(--border);
-      background: var(--bg-page);
+      padding: 14px 16px;
+      border: 1.3px solid rgba(184, 142, 47, 0.34);
+      background: linear-gradient(135deg, #fdfbf6 0%, #f8f2e4 100%);
+    }
+    [data-theme="dark"] .econ-box {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(227, 193, 108, 0.28);
     }
     .econ-box.revenue {
       background: linear-gradient(135deg, rgba(23, 60, 44, 0.06) 0%, rgba(184, 142, 47, 0.09) 100%);
@@ -1608,7 +1627,8 @@
         grid-template-columns: 1fr;
       }
       .biz-course-card.reverse .biz-media, .biz-course-card.reverse .biz-body { order: initial; }
-      .biz-media { min-height: 250px; }
+      .biz-media { min-height: 280px; height: 280px; }
+      .biz-course-card[data-course-id="track_party"] .biz-media { min-height: 360px; height: 360px; }
       .vision-grid, .platform-grid { grid-template-columns: 1fr; }
       .flow-steps, .benefits-grid { grid-template-columns: repeat(2, 1fr); }
     }
@@ -2255,7 +2275,7 @@
         const statusIcon = c.status === '마감임박' ? '🔥 ' : (isClosed ? '🔒 ' : '🟢 ');
 
         return (
-          '<article class="biz-course-card ' + (idx % 2 === 1 ? 'reverse' : '') + '" id="card_' + escapeHtml(c.id) + '">' +
+          '<article class="biz-course-card ' + (idx % 2 === 1 ? 'reverse' : '') + '" id="card_' + escapeHtml(c.id) + '" data-course-id="' + escapeHtml(c.id) + '" style="--course-accent:' + escapeHtml(c.accentColor || '#1e4d35') + ';">' +
             '<div class="biz-media">' +
               '<img src="' + escapeHtml(c.image) + '" alt="' + escapeHtml(c.title) + '" loading="lazy">' +
               '<div class="biz-media-overlay"></div>' +
