@@ -3215,56 +3215,46 @@
             </div>
           </div>
 
-          <!-- 3대 핵심 실행 파이프라인 KPI 카드 (상담 완료·이관 고객 전용, 클릭 시 필터링) -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 18px 0 20px;">
-            <div id="bizKpiCard_step2" class="kpi-filter-card" onclick="switchPipelineStep('step2')" style="border-left: 4px solid #0284c7;" title="클릭 시 ① 코치 배정 (상담완료 이관) 단계로 필터링합니다">
+          <!-- 3대 핵심 실행 파이프라인 KPI 카드 (통합 상담함에서 상담완료된 건만 표시 · 클릭 시 필터) -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 16px 0 14px;">
+            <div id="bizKpiCard_step2" class="kpi-filter-card" onclick="switchPipelineStep(currentPipelineStep === 'step2' ? 'all' : 'step2')" style="border-left: 4px solid #0284c7;" title="클릭 시 ① 코치 배정 단계만 필터링 (다시 클릭 시 전체보기)">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">① 코치 배정 (상담완료 이관)</div>
-                <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+                <span style="font-size: 0.72rem; color: #0284c7; background: #f0f9ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">0건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">상담 완료 확정 · 전담 매칭</div>
+              <div style="font-size: 1.65rem; font-weight: 900; color: #0284c7; margin-top: 4px;" id="bizKpi_assigned">0건</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">상담완료 확정 · 코치배정·카톡알림</div>
             </div>
-            <div id="bizKpiCard_step3" class="kpi-filter-card" onclick="switchPipelineStep('step3')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ② 현장 케어 · 수행/일지 단계로 필터링합니다">
+            <div id="bizKpiCard_step3" class="kpi-filter-card" onclick="switchPipelineStep(currentPipelineStep === 'step3' ? 'all' : 'step3')" style="border-left: 4px solid #2b7a4b;" title="클릭 시 ② 현장 케어 단계만 필터링 (다시 클릭 시 전체보기)">
               <div style="display: flex; justify-content: space-between; align-items: center;">
                 <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">② 현장 케어 · 수행/일지</div>
-                <span style="font-size: 0.72rem; color: #2b7a4b; background: #f0fdf4; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+                <span style="font-size: 0.72rem; color: #2b7a4b; background: #f0fdf4; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">0건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">현장 SOP &amp; 사진 검수</div>
+              <div style="font-size: 1.65rem; font-weight: 900; color: #2b7a4b; margin-top: 4px;" id="bizKpi_done">0건</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">현장 진행 · 완료 후 통합관제 송금</div>
             </div>
-            <div id="bizKpiCard_step4" class="kpi-filter-card" onclick="switchPipelineStep('step4')" style="border-left: 4px solid #8b5cf6;" title="클릭 시 ③ CRM 사후관리 &amp; 리텐션 단계로 필터링합니다">
+            <div id="bizKpiCard_step4" class="kpi-filter-card" onclick="switchPipelineStep(currentPipelineStep === 'step4' ? 'all' : 'step4')" style="border-left: 4px solid #8b5cf6;" title="클릭 시 ③ CRM 사후관리 단계만 필터링 (다시 클릭 시 전체보기)">
               <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ CRM 사후관리 &amp; 리텐션</div>
-                <span style="font-size: 0.72rem; color: #7c3aed; background: #faf5ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터 ➔</span>
+                <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 750;">③ CRM 사후관리 · 리텐션</div>
+                <span style="font-size: 0.72rem; color: #7c3aed; background: #faf5ff; padding: 2px 6px; border-radius: 6px; font-weight: 750;">필터</span>
               </div>
-              <div style="font-size: 1.7rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">0건</div>
-              <div style="font-size: 0.76rem; color: var(--text-secondary); margin-top: 2px;">3·6개월 알림 &amp; 재이용 리텐션</div>
+              <div style="font-size: 1.65rem; font-weight: 900; color: #7c3aed; margin-top: 4px;" id="bizKpi_retention">0건</div>
+              <div style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 2px;">송금·비즈니스완료 · 3·6개월 리텐션</div>
             </div>
           </div>
 
-          <!-- 3단계 실행 파이프라인 필터 바 + 통합 상담함 바로가기 -->
-          <div class="pipeline-step-bar" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 16px 0 18px;">
+          <!-- 심플 1줄 컨트롤 툴바 (중복 파이프라인 버튼·이중 배너·이중 카드 완전 제거) -->
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 8px 2px 12px; border-bottom: 1px solid var(--border-color); margin-bottom: 14px;">
             <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-              <span style="font-size: 0.84rem; font-weight: 850; color: var(--text-primary); margin-right: 4px;">실행 파이프라인:</span>
-              <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')">
+              <button type="button" class="pipeline-step-btn active" id="pipelineStepBtn_all" onclick="switchPipelineStep('all')" style="padding: 5px 12px; font-size: 0.8rem;">
                 전체보기 <span class="pipeline-step-badge" id="pipelineStepBadge_all">0</span>
               </button>
-              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step2" onclick="switchPipelineStep('step2')">
-                ① 코치 배정 <span class="pipeline-step-badge" id="pipelineStepBadge_step2">0</span>
-              </button>
-              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step3" onclick="switchPipelineStep('step3')">
-                ② 현장케어/일지 <span class="pipeline-step-badge" id="pipelineStepBadge_step3">0</span>
-              </button>
-              <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 900;">➔</span>
-              <button type="button" class="pipeline-step-btn" id="pipelineStepBtn_step4" onclick="switchPipelineStep('step4')">
-                ③ CRM 사후 리텐션 <span class="pipeline-step-badge" id="pipelineStepBadge_step4">0</span>
-              </button>
+              <span id="bizCurrentViewLabel" style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700;">
+                통합 고객 접수·상담함에서 <strong>[✓ 상담 완료]</strong> 확정된 건만 표시됩니다. (위 카드 클릭 시 단계별 필터)
+              </span>
             </div>
-            <button type="button" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 800; cursor: pointer; white-space: nowrap;" title="신규 상담 접수·진행·완료 처리는 통합 고객 접수·상담함에서 전담합니다">
-              📋 신규 상담은 통합 상담함에서 완료 시 자동 이관 ➔
+            <button type="button" onclick="switchTab('tabConsult')" style="background: #f8fafc; color: #334155; border: 1px solid #cbd5e1; padding: 5px 11px; border-radius: 999px; font-size: 0.77rem; font-weight: 800; cursor: pointer; white-space: nowrap;">
+              📋 통합 상담함 이동 ➔
             </button>
           </div>
 
@@ -14141,7 +14131,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
     }
     window.editDiagConsultMemo = editDiagConsultMemo;
 
-    // 상담 상태 변경 (완료 선택 시 각 비즈니스 파이프라인으로 자동 이관)
+    // 상담 상태 변경 (완료 선택 시 각 비즈니스 파이프라인으로 자동 이관 / 미완료 복귀 시 이관 해제)
     function setDiagReservationStatus(id, newStatus) {
       if (newStatus === '완료') {
         handoffConsultToBusiness(id, true);
@@ -14151,7 +14141,10 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       const target = list.find(item => item.id === id);
       if (target) {
         target.status = newStatus || '대기';
+        target.handedOffBiz = '';
+        target.handedOffLabel = '';
         saveDiagReservations(list);
+        if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
       }
     }
     window.setDiagReservationStatus = setDiagReservationStatus;
@@ -14321,6 +14314,7 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         let list = getDiagReservations();
         list = list.filter(item => item.id !== id);
         saveDiagReservations(list);
+        if (typeof renderBusinessMasterDashboard === 'function') renderBusinessMasterDashboard();
       }
     }
 
@@ -17790,7 +17784,7 @@ ${coachAppUrl}
       }
     });
   </script>
-  <script src="beauty-crm.js?v=20261122_v4"></script>
+  <script src="beauty-crm.js?v=20261122_v5"></script>
 
   <!-- ==========================================================
        [NEW] 04. Memoir Publication Control Center & AI Engine
