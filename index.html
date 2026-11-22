@@ -10469,9 +10469,9 @@
       }
     };
 
-    // 1. 카카오톡 공유 (Kakao SDK 공식 피드 공유 & 웹 공유기 fallback)
+    // 1. 카카오톡 공유 (Kakao SDK 공식 피드 공유 + 모바일 공유시트 + 클립보드 복사)
     function shareBeautyOnKakao() {
-      const shareUrl = BEAUTY_SHARE_INFO.getShareUrl();
+      const shareUrl = 'https://yebaekarchive.kr/index.html?modal=beauty';
       const shareTitle = BEAUTY_SHARE_INFO.title;
       const shareDesc = BEAUTY_SHARE_INFO.desc;
       const shareImage = BEAUTY_SHARE_INFO.imageUrl;
@@ -10497,7 +10497,7 @@
               },
               buttons: [
                 {
-                  title: '💄 프로그램 안내 보기',
+                  title: '프로그램 안내 보기',
                   link: {
                     mobileWebUrl: shareUrl,
                     webUrl: shareUrl,
@@ -10519,14 +10519,11 @@
         console.warn('[Kakao Share Error]', e);
       }
 
-      // fallback 1: 카카오 웹 공유기 팝업
-      try {
-        const kakaoWebSharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
-        const popup = window.open(kakaoWebSharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (err) {}
+      // fallback 1: 모바일 기본 공유시트 (Web Share API)
+      if (navigator.share) {
+        navigator.share({ title: shareTitle, text: shareDesc, url: shareUrl }).catch(() => copyBeautyShareLink());
+        return;
+      }
 
       // fallback 2: 클립보드 복사
       copyBeautyShareLink();
@@ -12858,29 +12855,14 @@
         console.warn('[Kakao Share SDK execution error]', e);
       }
 
-      // 2. SDK 미지원 또는 팝업 허용 환경: 카카오톡 공식 웹 공유기 팝업 시도
-      try {
-        const kakaoWebSharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
-        const popup = window.open(kakaoWebSharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (popupErr) {
-        console.warn('[Kakao Web Sharer fallback]', popupErr);
+      // 2. SDK 미지원 환경: 모바일 공유시트(Web Share API) 시도
+      if (navigator.share) {
+        navigator.share({ title: shareTitle, text: shareText, url: shareUrl }).catch(() => copyCurrentArticleLink(article.id));
+        return;
       }
 
-      // 3. 브라우저 보안 또는 차단 환경: 안전한 스마트 클립보드 복사 + 카카오톡 앱 즉시 오픈
+      // 3. 브라우저 보안 또는 차단 환경: 안전한 스마트 클립보드 복사
       copyCurrentArticleLink(article.id);
-
-      // 모바일 기기(스마트폰)인 경우 카카오톡 앱 즉시 오픈 시도
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      if (isMobile) {
-        setTimeout(() => {
-          try {
-            window.location.href = 'kakaotalk://';
-          } catch(e) {}
-        }, 500);
-      }
     }
 
 

@@ -1897,15 +1897,35 @@
     // 1. 코치 인증 및 로그인 로직
     // =========================================================================
 
+    function safeParamText(val) {
+      if (!val) return '';
+      try { return decodeURIComponent(val); } catch (e) { return String(val); }
+    }
+
+    function initMemoirKakaoSDK() {
+      try {
+        if (window.Kakao && typeof Kakao.init === 'function') {
+          if (!Kakao.isInitialized()) {
+            Kakao.init('34a3a5001a59423bdbba8969871f0054');
+          }
+          return true;
+        }
+      } catch (e) {
+        console.warn('[CoachMemoir Kakao Init Warn]', e);
+      }
+      return false;
+    }
+
     function initCoachAuth() {
+      initMemoirKakaoSDK();
       // URL 파라미터 확인 (?project=...&coach=...&phone=...)
       const params = new URLSearchParams(window.location.search);
       const urlProj = params.get('project');
-      const urlCoach = params.get('coach');
-      const urlPhone = params.get('phone');
+      const urlCoach = safeParamText(params.get('coach'));
+      const urlPhone = safeParamText(params.get('phone'));
 
-      if (urlCoach) document.getElementById('coachAuthName').value = decodeURIComponent(urlCoach);
-      if (urlPhone) document.getElementById('coachAuthPhone').value = decodeURIComponent(urlPhone);
+      if (urlCoach) document.getElementById('coachAuthName').value = urlCoach;
+      if (urlPhone) document.getElementById('coachAuthPhone').value = urlPhone;
 
       // 세션 확인
       const sessionRaw = sessionStorage.getItem('yebaek_memoir_coach_session');
@@ -1921,8 +1941,8 @@
       const isFromAdmin = params.get('mode') === 'admin' || params.get('view') === 'admin';
       if (isFromAdmin || (urlCoach && urlPhone)) {
         currentCoach = {
-          name: urlCoach ? decodeURIComponent(urlCoach) : '담당 작가코치',
-          phone: urlPhone ? decodeURIComponent(urlPhone) : '010-0000-0000'
+          name: urlCoach || '담당 작가코치',
+          phone: urlPhone || '010-0000-0000'
         };
         sessionStorage.setItem('yebaek_memoir_coach_session', JSON.stringify(currentCoach));
         onCoachAuthSuccess(urlProj);
@@ -2781,15 +2801,59 @@
     function shareFamilyKakaoFlipbook() {
       const projId = currentProject ? currentProject.id : 'demo';
       const elder = currentProject ? currentProject.clientName : '어르신';
-      const url = `${window.location.origin}${window.location.pathname.replace('coach-memoir.html', 'my-room.html')}?memoir=${projId}`;
-
+      const url = `https://yebaekarchive.kr/my-room.html?memoir=${encodeURIComponent(projId)}`;
       const msg = `[여백과 결] 📖 ${elder}님의 생애 디지털 자서전 원고가 완성되었습니다.\n\n아래 가족 전용 온라인 서재 링크에서 부모님의 감동적인 5대 챕터 회고록과 복원 사진을 함께 감상해 보세요:\n${url}`;
 
-      navigator.clipboard.writeText(msg).then(() => {
-        alert(`📋 가족 전용 감상 서재 링크와 카톡 안내문이 클립보드에 복사되었습니다!\n\n가족 단톡방에 [붙여넣기(Ctrl+V)] 하시면 됩니다:\n${url}`);
-      }).catch(() => {
+      // 1) 클립보드에 자동 복사 (안전망)
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).catch(() => {});
+      }
+
+      // 2) 카카오 공식 SDK 피드 카드 전송 시도
+      try {
+        if (window.Kakao) {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+            initMemoirKakaoSDK();
+          }
+          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized() && Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+            Kakao.Share.sendDefault({
+              objectType: 'feed',
+              content: {
+                title: `📖 ${elder}님의 생애 디지털 자서전`,
+                description: '가족 전용 온라인 서재에서 5대 챕터 회고록과 추억 사진을 감상해 보세요.',
+                imageUrl: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
+                imageWidth: 1200,
+                imageHeight: 630,
+                link: { mobileWebUrl: url, webUrl: url }
+              },
+              buttons: [
+                {
+                  title: '가족 서재 열기',
+                  link: { mobileWebUrl: url, webUrl: url }
+                }
+              ]
+            });
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('[CoachMemoir Kakao Share Warn]', e);
+      }
+
+      // 3) 모바일 기본 공유시트 / 클립보드 안내 fallback
+      if (navigator.share) {
+        navigator.share({ title: `📖 ${elder}님의 생애 디지털 자서전`, text: msg, url: url }).catch(() => {});
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(msg).then(() => {
+          alert(`📋 가족 전용 감상 서재 링크와 카톡 안내문이 클립보드에 복사되었습니다!\n\n가족 단톡방에 [붙여넣기(Ctrl+V)] 하시면 됩니다:\n${url}`);
+        }).catch(() => {
+          prompt('아래 가족 전용 서재 링크를 복사하여 카카오톡으로 전송하세요:', url);
+        });
+      } else {
         prompt('아래 가족 전용 서재 링크를 복사하여 카카오톡으로 전송하세요:', url);
-      });
+      }
     }
 
     // =========================================================================

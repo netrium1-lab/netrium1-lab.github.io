@@ -6000,6 +6000,53 @@
     </div>
   </div>
 
+  <!-- ================= 모달 5-B) 💬 카카오톡 링크 전송 · 복사 통합 도우미 ================= -->
+  <div class="cms-modal-overlay" id="adminKakaoSendModal" style="z-index: 9999;" onclick="if(event.target === this) closeAdminKakaoSendModal()">
+    <div class="coach-modal-card" style="max-width: 580px; border-top: 5px solid #fee500;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; border-bottom: 1.5px solid var(--border-color); padding-bottom: 12px;">
+        <div>
+          <h3 id="kakaoHubModalTitle" style="font-family: 'Noto Serif KR', serif; font-size: 1.18rem; font-weight: 850; color: var(--text-main); margin: 0;">
+            💬 카카오톡 링크 전송 도우미
+          </h3>
+          <div id="kakaoHubRecipientSub" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700; margin-top: 3px;"></div>
+        </div>
+        <button type="button" onclick="closeAdminKakaoSendModal()" aria-label="닫기" style="border: 1px solid var(--border-color); background: var(--bg-body); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1rem;">✕</button>
+      </div>
+
+      <div id="kakaoHubStatusBanner" style="background: #ecfdf5; border: 1.2px solid #a7f3d0; color: #065f46; border-radius: 12px; padding: 10px 13px; font-size: 0.82rem; font-weight: 800; margin-bottom: 14px; line-height: 1.5;">
+        ✅ 전체 안내 메시지와 짧은 링크가 클립보드에 자동 복사되었습니다. PC 카톡 대화방에서 바로 <strong>Ctrl+V(붙여넣기)</strong> 하시거나 아래 <strong>카카오톡 친구 선택 전송</strong> 버튼을 누르세요.
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label style="display: block; font-size: 0.75rem; font-weight: 850; color: #475569; margin-bottom: 4px;">🔗 코치/상대방 접속용 단축 링크</label>
+        <div style="display: flex; gap: 6px; align-items: center;">
+          <input type="text" id="kakaoHubUrlInput" readonly onclick="this.select()" style="flex: 1; padding: 8px 11px; border-radius: 9px; border: 1.2px solid #cbd5e1; background: #f8fafc; font-size: 0.8rem; font-weight: 700; color: #1e293b;">
+          <button type="button" onclick="copyKakaoHubUrlOnly()" style="padding: 8px 12px; border-radius: 9px; border: 1.2px solid #cbd5e1; background: #ffffff; color: #0f172a; font-size: 0.78rem; font-weight: 850; cursor: pointer; white-space: nowrap;">🔗 링크만 복사</button>
+          <a id="kakaoHubPreviewLink" href="#" target="_blank" rel="noopener noreferrer" style="padding: 8px 11px; border-radius: 9px; border: 1.2px solid #bfd3ea; background: #eef3f9; color: #245b8e; font-size: 0.78rem; font-weight: 850; text-decoration: none; white-space: nowrap;">열기 ↗</a>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 0.75rem; font-weight: 850; color: #475569; margin-bottom: 4px;">📝 카카오톡 전송용 전체 안내 메시지 (수정 가능)</label>
+        <textarea id="kakaoHubMsgTextarea" rows="7" style="width: 100%; padding: 11px 13px; border-radius: 11px; border: 1.2px solid #cbd5e1; background: #ffffff; font-size: 0.82rem; line-height: 1.6; color: #0f172a; resize: vertical; font-family: inherit;"></textarea>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;">
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+          <button type="button" onclick="triggerKakaoHubSdkPopup()" style="padding: 10px 16px; border-radius: 10px; border: 1.2px solid #e5d800; background: #fee500; color: #191600; font-size: 0.85rem; font-weight: 900; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>💬</span> 카카오톡 친구 선택 전송
+          </button>
+          <button type="button" onclick="copyKakaoHubFullMessage()" style="padding: 10px 15px; border-radius: 10px; border: 1px solid #1e4d35; background: #1e4d35; color: #ffffff; font-size: 0.84rem; font-weight: 850; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;">
+            <span>📋</span> 전체 메시지 다시 복사
+          </button>
+        </div>
+        <button type="button" onclick="closeAdminKakaoSendModal()" style="padding: 10px 16px; border-radius: 10px; border: 1.2px solid var(--border-color); background: #ffffff; color: var(--text-main); font-size: 0.83rem; font-weight: 800; cursor: pointer;">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= 모달 6) 출판 완료된 자서전 및 PDF 등록/수정 모달 ================= -->
   <div class="cms-modal-overlay" id="pubMemoirModal" onclick="closePubMemoirModalOnOverlay(event)">
     <div class="coach-modal-card" style="max-width: 620px;">
@@ -7792,21 +7839,198 @@
       `).join('');
     }
 
-    // 🌟 카카오톡 SDK 초기화 (관리자 화면용)
+    // 🌟 카카오톡 SDK 초기화 & 통합 전송 허브 (관리자 화면 공용)
+    const ADMIN_KAKAO_JS_KEY = '34a3a5001a59423bdbba8969871f0054';
+    const CANONICAL_PUBLIC_ORIGIN = 'https://yebaekarchive.kr';
+    let _activeKakaoHubPayload = null;
+
     function initAdminKakaoSDK() {
       try {
         if (window.Kakao && typeof Kakao.init === 'function') {
           if (!Kakao.isInitialized()) {
-            Kakao.init('34a3a5001a59423bdbba8969871f0054');
+            Kakao.init(ADMIN_KAKAO_JS_KEY);
             console.log('[여백과 결 관리자] 카카오 SDK 초기화 완료');
           }
+          return true;
         }
       } catch (e) {
         console.warn('[Kakao Admin SDK Init Error]', e);
       }
+      return false;
+    }
+    window.initAdminKakaoSDK = initAdminKakaoSDK;
+
+    function toCanonicalPublicUrl(pathOrUrl) {
+      if (!pathOrUrl) return CANONICAL_PUBLIC_ORIGIN + '/';
+      const s = String(pathOrUrl).trim();
+      if (/^https:\/\/yebaekarchive\.kr\b/i.test(s)) return s;
+      if (/^https?:\/\//i.test(s)) {
+        try {
+          const u = new URL(s);
+          return CANONICAL_PUBLIC_ORIGIN + u.pathname + u.search + u.hash;
+        } catch (e) {}
+      }
+      const cleanPath = s.replace(/^\/+/, '');
+      return CANONICAL_PUBLIC_ORIGIN + '/' + cleanPath;
+    }
+    window.toCanonicalPublicUrl = toCanonicalPublicUrl;
+
+    function safeCopyTextToClipboard(text) {
+      const str = String(text || '');
+      if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        return navigator.clipboard.writeText(str).then(() => true).catch(() => fallbackExecCopy(str));
+      }
+      return Promise.resolve(fallbackExecCopy(str));
     }
 
-    // 🌟 카카오톡 대화방 원터치 이미지 카드 공유 (최신 SDK 피드 카드 -> 공식 웹 공유기 -> 클립보드 복사 3중 안전망)
+    function fallbackExecCopy(str) {
+      try {
+        const ta = document.createElement('textarea');
+        ta.value = str;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        ta.style.top = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+        return !!ok;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function tryInvokeKakaoFeedSdk(opts) {
+      try {
+        if (!window.Kakao) return false;
+        if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
+          initAdminKakaoSDK();
+        }
+        if (typeof Kakao.isInitialized !== 'function' || !Kakao.isInitialized()) return false;
+
+        const safeUrl = toCanonicalPublicUrl(opts.url);
+        const safeImg = toCanonicalPublicUrl(opts.imageUrl || 'images/og-share-cover.jpg');
+        const safeTitle = String(opts.title || '여백과 결 안내').trim().slice(0, 48);
+        const safeDesc = String(opts.description || '아래 버튼을 눌러 바로 확인하세요.').trim().slice(0, 96);
+        const safeBtnTitle = String(opts.buttonTitle || '바로 확인하기').trim().slice(0, 14);
+
+        const feedPayload = {
+          objectType: 'feed',
+          content: {
+            title: safeTitle,
+            description: safeDesc,
+            imageUrl: safeImg,
+            imageWidth: 1200,
+            imageHeight: 630,
+            link: {
+              mobileWebUrl: safeUrl,
+              webUrl: safeUrl
+            }
+          },
+          buttons: [
+            {
+              title: safeBtnTitle,
+              link: {
+                mobileWebUrl: safeUrl,
+                webUrl: safeUrl
+              }
+            }
+          ]
+        };
+
+        if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+          Kakao.Share.sendDefault(feedPayload);
+          return true;
+        } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
+          Kakao.Link.sendDefault(feedPayload);
+          return true;
+        }
+      } catch (err) {
+        console.warn('[Kakao Hub SDK Error]', err);
+      }
+      return false;
+    }
+
+    // 🌟 전 카테고리 통합 카카오톡 전송 허브 (자동 복사 + 모달 미리보기 + 공식 카카오 SDK 피드 전송)
+    function dispatchKakaoShareHub(opts) {
+      if (!opts) return;
+      const safeUrl = toCanonicalPublicUrl(opts.url);
+      const fullMsg = opts.fullMessage || ((opts.title || '') + '\n\n' + safeUrl);
+      _activeKakaoHubPayload = Object.assign({}, opts, { url: safeUrl, fullMessage: fullMsg });
+
+      // 1) 클립보드에 전체 메시지 + 단축 링크 자동 복사 (PC 카톡 즉시 Ctrl+V 가능)
+      safeCopyTextToClipboard(fullMsg).then((copied) => {
+        const banner = document.getElementById('kakaoHubStatusBanner');
+        if (banner) {
+          banner.innerHTML = copied
+            ? '✅ <strong>전체 안내 메시지와 단축 링크가 클립보드에 자동 복사되었습니다!</strong><br>PC 카카오톡 대화방에서 <strong>Ctrl+V(붙여넣기)</strong>로 바로 보내거나, 아래 <strong>[💬 카카오톡 친구 선택 전송]</strong>을 이용하세요.'
+            : 'ℹ️ 아래 <strong>[📋 전체 메시지 다시 복사]</strong> 또는 <strong>[💬 카카오톡 친구 선택 전송]</strong> 버튼을 눌러 전송해 주세요.';
+        }
+      });
+
+      // 2) 통합 전송 도우미 모달 표시 (팝업이 차단되거나 웹 로그인 미사용 시에도 100% 안전 전송)
+      const modal = document.getElementById('adminKakaoSendModal');
+      const titleEl = document.getElementById('kakaoHubModalTitle');
+      const subEl = document.getElementById('kakaoHubRecipientSub');
+      const urlInput = document.getElementById('kakaoHubUrlInput');
+      const previewLink = document.getElementById('kakaoHubPreviewLink');
+      const msgTa = document.getElementById('kakaoHubMsgTextarea');
+
+      if (titleEl) titleEl.textContent = opts.modalTitle || '💬 카카오톡 링크 전송 도우미';
+      if (subEl) subEl.textContent = opts.recipientLabel || '복사된 메시지 붙여넣기 또는 카카오 친구 선택 전송';
+      if (urlInput) urlInput.value = safeUrl;
+      if (previewLink) previewLink.href = safeUrl;
+      if (msgTa) msgTa.value = fullMsg;
+      if (modal) modal.classList.add('open');
+
+      // 3) 카카오 공식 SDK 친구 선택 공유창 동시 시도 (blocking alert 없이 부드럽게 실행)
+      if (opts.autoTriggerSdk !== false) {
+        tryInvokeKakaoFeedSdk(_activeKakaoHubPayload);
+      }
+    }
+    window.dispatchKakaoShareHub = dispatchKakaoShareHub;
+
+    function triggerKakaoHubSdkPopup() {
+      if (!_activeKakaoHubPayload) return;
+      const ok = tryInvokeKakaoFeedSdk(_activeKakaoHubPayload);
+      if (!ok) {
+        alert('현재 브라우저 환경에서 카카오 SDK 공유 팝업을 열 수 없습니다.\n이미 복사된 전체 메시지를 카카오톡 대화방에 [Ctrl+V]로 붙여넣어 전송해 주세요.');
+      }
+    }
+    window.triggerKakaoHubSdkPopup = triggerKakaoHubSdkPopup;
+
+    function copyKakaoHubFullMessage() {
+      const msgTa = document.getElementById('kakaoHubMsgTextarea');
+      const text = msgTa ? msgTa.value : (_activeKakaoHubPayload ? _activeKakaoHubPayload.fullMessage : '');
+      safeCopyTextToClipboard(text).then(() => {
+        const banner = document.getElementById('kakaoHubStatusBanner');
+        if (banner) {
+          banner.innerHTML = '📋 <strong>전체 안내 메시지가 다시 복사되었습니다!</strong> 카카오톡 대화방에서 <strong>Ctrl+V</strong> 하세요.';
+        }
+      });
+    }
+    window.copyKakaoHubFullMessage = copyKakaoHubFullMessage;
+
+    function copyKakaoHubUrlOnly() {
+      const urlInput = document.getElementById('kakaoHubUrlInput');
+      const url = urlInput ? urlInput.value : (_activeKakaoHubPayload ? _activeKakaoHubPayload.url : '');
+      safeCopyTextToClipboard(url).then(() => {
+        const banner = document.getElementById('kakaoHubStatusBanner');
+        if (banner) {
+          banner.innerHTML = '🔗 <strong>단축 링크 주소만 클립보드에 복사되었습니다!</strong> (' + escapeHtml(url) + ')';
+        }
+      });
+    }
+    window.copyKakaoHubUrlOnly = copyKakaoHubUrlOnly;
+
+    function closeAdminKakaoSendModal() {
+      const modal = document.getElementById('adminKakaoSendModal');
+      if (modal) modal.classList.remove('open');
+    }
+    window.closeAdminKakaoSendModal = closeAdminKakaoSendModal;
+
+    // 🌟 카카오톡 대화방 원터치 이미지 카드 공유 (공식 SDK 피드 카드 + 통합 전송 허브)
     function shareArticleKakao(id) {
       if (!id) return;
       const articles = getArticles();
@@ -7816,69 +8040,24 @@
         return;
       }
 
-      // canonical 공유 URL 생성 (카카오톡/SNS 봇이 대표이미지와 제목을 100% 읽을 수 있도록 articles/{id}.html 전용 OG 정적 페이지로 연결)
       const canonicalId = (target.id === 'mag_living_funeral_best') ? 'mag_1791111944097' : target.id;
-      let shareUrl = `https://yebaekarchive.kr/articles/${canonicalId}.html`;
-
+      const shareUrl = `https://yebaekarchive.kr/articles/${canonicalId}.html`;
       const shareTitle = target.title;
       const shareDesc = target.excerpt || '여백과 결에서 전하는 인생 2막 라이프 리셋 칼럼입니다.';
       const shareImage = toAbsoluteImageUrl(target.image);
+      const excerptLine = target.excerpt ? `"${target.excerpt}"\n\n` : '';
+      const fullShareMessage = `[여백과 결 칼럼] 🌿 ${shareTitle}\n\n${excerptLine}👉 칼럼 전문 편안하게 읽기:\n${shareUrl}`;
 
-      // 1. 카카오톡 SDK 공식 피드 카드 공유 (이미지+제목+버튼 전송)
-      try {
-        if (window.Kakao) {
-          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
-            initAdminKakaoSDK();
-          }
-          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
-            const feedPayload = {
-              objectType: 'feed',
-              content: {
-                title: shareTitle,
-                description: shareDesc,
-                imageUrl: shareImage,
-                imageWidth: 1200,
-                imageHeight: 630,
-                link: {
-                  mobileWebUrl: shareUrl,
-                  webUrl: shareUrl,
-                },
-              },
-              buttons: [
-                {
-                  title: '📖 칼럼 전문 읽기',
-                  link: {
-                    mobileWebUrl: shareUrl,
-                    webUrl: shareUrl,
-                  },
-                },
-              ],
-            };
-
-            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
-              Kakao.Share.sendDefault(feedPayload);
-              return;
-            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
-              Kakao.Link.sendDefault(feedPayload);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('[Kakao Admin Share Error]', e);
-      }
-
-      // 2. 카카오톡 웹 공유기 팝업 fallback
-      try {
-        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`[여백과 결 칼럼] ${shareTitle}`)}`;
-        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (e) {}
-
-      // 3. 주소 복사로 자동 대체
-      copyArticleShareLink(id);
+      dispatchKakaoShareHub({
+        modalTitle: '💬 칼럼 카카오톡 공유하기',
+        recipientLabel: `칼럼: ${shareTitle}`,
+        title: shareTitle,
+        description: shareDesc,
+        imageUrl: shareImage,
+        url: shareUrl,
+        buttonTitle: '칼럼 전문 읽기',
+        fullMessage: fullShareMessage
+      });
     }
 
     // 칼럼 홍보 및 외부 공유 링크 복사 (카카오톡 최적화 & 크로스 브라우저 동기화)
@@ -17161,13 +17340,9 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       sendCoachKakaoDirect(activeReportMissionId);
     }
 
-    // 🔗 코치 앱(coach.html) 배정 데이터 탑재 URL 생성 유틸 (어느 기기/브라우저에서든 100% 동기화)
+    // 🔗 코치 앱(coach.html) 단축 링크 생성 유틸 (카카오톡 100% 호환 + Firestore 클라우드 실시간 로드)
     function buildCoachAppUrl(targetDispatch) {
-      let baseUrl = window.location.origin ? `${window.location.origin}/coach.html` : 'https://yebaekarchive.kr/coach.html';
-      if (!window.location.origin || window.location.origin === 'null' || window.location.protocol === 'file:') {
-        baseUrl = 'coach.html';
-      }
-
+      const baseUrl = 'https://yebaekarchive.kr/coach.html';
       if (!targetDispatch) return baseUrl;
 
       // 코치 전화번호가 누락되어 있다면 코치 명단에서 찾아 보강
@@ -17182,32 +17357,20 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
         }
       }
 
-      const payload = {
-        id: targetDispatch.id || ('disp_' + Date.now()),
-        customerName: targetDispatch.customerName || '고객',
-        phone: targetDispatch.phone || '',
-        serviceType: targetDispatch.serviceType || '현장 케어 서비스',
-        preferredDate: targetDispatch.preferredDate || '',
-        address: targetDispatch.address || '',
-        coach: targetDispatch.coach || '',
-        coachPhone: coachPhone || '',
-        coachId: targetDispatch.coachId || '',
-        fee: Number(targetDispatch.fee) || 150000,
-        step: targetDispatch.step || '배정완료',
-        notes: targetDispatch.notes || '',
-        arrivalStamp: targetDispatch.arrivalStamp || '',
-        completionDate: targetDispatch.completionDate || ''
-      };
-
+      // Firebase Firestore에 최신 배정 내역 즉시 동기화 (어느 스마트폰에서 링크를 열어도 즉시 수신)
       try {
-        const jsonStr = JSON.stringify(payload);
-        // UTF-8 호환 Base64
-        const b64 = btoa(encodeURIComponent(jsonStr).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
-        return `${baseUrl}?m=${encodeURIComponent(b64)}`;
-      } catch (err) {
-        console.warn('URL 생성 실패, 기본 URL 사용:', err);
-        return baseUrl;
-      }
+        if (typeof syncSingleDispatchToFirestore === 'function' && targetDispatch.id) {
+          syncSingleDispatchToFirestore(targetDispatch);
+        }
+      } catch (e) {}
+
+      // 카카오톡 공유에 최적화된 짧은 URL (?id=...&coach=...&phone=...)
+      const params = [];
+      if (targetDispatch.id) params.push('id=' + encodeURIComponent(targetDispatch.id));
+      const cleanName = (targetDispatch.coach || '').replace(/\s*코치$/, '').trim();
+      if (cleanName) params.push('coach=' + encodeURIComponent(cleanName));
+      if (coachPhone) params.push('phone=' + encodeURIComponent(coachPhone));
+      return params.length ? `${baseUrl}?${params.join('&')}` : baseUrl;
     }
 
     // 카카오톡 코치 알림 메시지 복사 유틸
@@ -17234,80 +17397,30 @@ ${coachAppUrl}
 ※ 현장 도착 시 앱의 [📍 현장 도착 확인] 버튼을 누르고, 작업 전/과정/완료 사진을 등록해 주시면 본사 검수 후 지정일에 활동비가 송금됩니다.`;
     }
 
-    // 🌟 카카오톡 코치 배정 알림 바로 전송 (카카오 공식 SDK 연동 + 클립보드 자동 복사 2중 처리)
+    // 🌟 카카오톡 코치 배정 알림 바로 전송 (단축 링크 + 클라우드 동기화 + 통합 전송 허브)
     function sendCoachKakaoDirect(dispId) {
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
-      if (!target) return;
+      if (!target) {
+        alert('해당 배정 내역을 찾을 수 없습니다.');
+        return;
+      }
 
       const coachAppUrl = buildCoachAppUrl(target);
       const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
+      const fullMsg = generateKakaoMsgText(target);
 
-      // 1. 전문 텍스트 클립보드에 우선 자동 복사 (안전망)
-      copyCoachKakaoMsg(dispId, true);
-
-      // 2. 카카오톡 SDK 공식 공유 팝업 (친구/대화방 선택창 바로 열림)
-      try {
-        if (window.Kakao) {
-          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
-            initAdminKakaoSDK();
-          }
-          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
-            let summaryText = `[여백과 결] 🏅 ${cleanCoachName} 코치님 현장 배정 안내\n\n`
-              + `■ 고객명: ${target.customerName}\n`
-              + `■ 서비스: ${target.serviceType}\n`
-              + `■ 방문일시: ${target.preferredDate}\n`
-              + `■ 방문주소: ${target.address}\n`
-              + `■ 코치 활동비: ${feeStr}원`
-              + (target.notes ? `\n■ 특이사항: ${target.notes}` : '');
-
-            if (summaryText.length > 200) {
-              summaryText = summaryText.slice(0, 195) + '...';
-            }
-
-            const textPayload = {
-              objectType: 'text',
-              text: summaryText,
-              link: {
-                mobileWebUrl: coachAppUrl,
-                webUrl: coachAppUrl
-              },
-              buttons: [
-                {
-                  title: '📱 코치 앱에서 확인 및 수행',
-                  link: {
-                    mobileWebUrl: coachAppUrl,
-                    webUrl: coachAppUrl
-                  }
-                }
-              ]
-            };
-
-            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
-              Kakao.Share.sendDefault(textPayload);
-              return;
-            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
-              Kakao.Link.sendDefault(textPayload);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('[Kakao Coach Direct Share Error]', e);
-      }
-
-      // 3. 웹 공유기 fallback
-      try {
-        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(coachAppUrl)}&text=${encodeURIComponent(`[여백과 결] ${cleanCoachName} 코치님께 ${target.serviceType} 현장 임무가 배정되었습니다.`)}`;
-        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (e) {}
-
-      // 4. 복사 알림 fallback
-      alert(`📋 [${cleanCoachName} 코치] 님께 전달할 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+      dispatchKakaoShareHub({
+        modalTitle: `💬 [${cleanCoachName} 코치님] 현장 배정 카톡 전송`,
+        recipientLabel: `고객: ${target.customerName} · ${target.serviceType} · 활동비 ${feeStr}원`,
+        title: `[여백과 결] ${cleanCoachName} 코치님 현장 배정`,
+        description: `${target.customerName} 고객님 · ${target.serviceType} (${target.preferredDate || '일정 협의'})`,
+        imageUrl: 'https://yebaekarchive.kr/images/coach-academy-banner.jpg',
+        url: coachAppUrl,
+        buttonTitle: '코치 앱 열기',
+        fullMessage: fullMsg
+      });
     }
 
     function copyCoachKakaoMsg(dispId, isSilent = false) {
@@ -17316,13 +17429,13 @@ ${coachAppUrl}
       if (!target) return;
 
       const text = generateKakaoMsgText(target);
-      navigator.clipboard.writeText(text).then(() => {
+      safeCopyTextToClipboard(text).then((ok) => {
         if (!isSilent) {
-          alert(`📋 [${target.coach || '코치'}] 님께 전달할 카카오톡 배정 안내 메시지가 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
-        }
-      }).catch(() => {
-        if (!isSilent) {
-          prompt('아래 카카오톡 배정 안내문을 복사하여 코치님께 전송하세요:', text);
+          if (ok) {
+            alert(`📋 [${target.coach || '코치'}] 님께 전달할 카카오톡 배정 안내 메시지가 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+          } else {
+            prompt('아래 카카오톡 배정 안내문을 복사하여 코치님께 전송하세요:', text);
+          }
         }
       });
     }
@@ -17573,72 +17686,31 @@ ${coachAppUrl}
       const tempD = getDispatchFormData();
       const coachAppUrl = buildCoachAppUrl(tempD);
       const cleanCoachName = (tempD.coach || '코치').replace(/ 코치$/, '');
-      const feeStr = tempD.fee.toLocaleString();
+      const feeStr = (Number(tempD.fee) || 150000).toLocaleString();
+      const fullMsg = generateKakaoMsgText(tempD);
 
-      copyCoachKakaoMsgFromForm(true);
-
-      try {
-        if (window.Kakao) {
-          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
-            initAdminKakaoSDK();
-          }
-          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
-            let summaryText = `[여백과 결] 🏅 ${cleanCoachName} 코치님 현장 배정 안내\n\n`
-              + `■ 고객명: ${tempD.customerName}\n`
-              + `■ 서비스: ${tempD.serviceType}\n`
-              + `■ 방문일시: ${tempD.preferredDate}\n`
-              + `■ 방문주소: ${tempD.address}\n`
-              + `■ 활동비: ${feeStr}원`
-              + (tempD.notes ? `\n■ 특이사항: ${tempD.notes}` : '');
-
-            if (summaryText.length > 200) {
-              summaryText = summaryText.slice(0, 195) + '...';
-            }
-
-            const textPayload = {
-              objectType: 'text',
-              text: summaryText,
-              link: {
-                mobileWebUrl: coachAppUrl,
-                webUrl: coachAppUrl
-              },
-              buttons: [
-                {
-                  title: '📱 코치 앱에서 확인 및 수행',
-                  link: {
-                    mobileWebUrl: coachAppUrl,
-                    webUrl: coachAppUrl
-                  }
-                }
-              ]
-            };
-
-            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
-              Kakao.Share.sendDefault(textPayload);
-              return;
-            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
-              Kakao.Link.sendDefault(textPayload);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('[Kakao Form Direct Share Error]', e);
-      }
-
-      alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
+      dispatchKakaoShareHub({
+        modalTitle: `💬 [${cleanCoachName} 코치님] 현장 배정 카톡 전송`,
+        recipientLabel: `고객: ${tempD.customerName} · ${tempD.serviceType} · 활동비 ${feeStr}원`,
+        title: `[여백과 결] ${cleanCoachName} 코치님 현장 배정`,
+        description: `${tempD.customerName} 고객님 · ${tempD.serviceType} (${tempD.preferredDate || '일정 협의'})`,
+        imageUrl: 'https://yebaekarchive.kr/images/coach-academy-banner.jpg',
+        url: coachAppUrl,
+        buttonTitle: '코치 앱 열기',
+        fullMessage: fullMsg
+      });
     }
 
     function copyCoachKakaoMsgFromForm(isSilent = false) {
       const tempD = getDispatchFormData();
       const text = generateKakaoMsgText(tempD);
-      navigator.clipboard.writeText(text).then(() => {
+      safeCopyTextToClipboard(text).then((ok) => {
         if (!isSilent) {
-          alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
-        }
-      }).catch(() => {
-        if (!isSilent) {
-          prompt('복사하여 전송하세요:', text);
+          if (ok) {
+            alert('📋 작성 중인 배정 안내문이 클립보드에 복사되었습니다!\n카카오톡으로 코치님께 바로 전송하실 수 있습니다.');
+          } else {
+            prompt('복사하여 전송하세요:', text);
+          }
         }
       });
     }
@@ -18889,71 +18961,46 @@ ${coachAppUrl}
       }
     }
 
-    // 🌟 활동비 입금완료 카카오톡 바로 전송 (카카오 공식 SDK 연동 + 클립보드 자동 복사 2중 처리)
+    // 🌟 활동비 입금완료 카카오톡 바로 전송 (단축 링크 + 통합 전송 허브)
     function sendSettlementKakaoDirect(dispId) {
       const dispatches = getDispatches();
       const target = dispatches.find(d => d.id === dispId);
-      if (!target) return;
+      if (!target) {
+        alert('정산 내역을 찾을 수 없습니다.');
+        return;
+      }
 
       const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
       const coachAppUrl = buildCoachAppUrl(target);
+      const fullMsg = `[여백과 결] 현장 코칭 활동비 입금 완료 안내
 
-      copySettlementKakaoMsg(dispId, true);
+안녕하세요, ${cleanCoachName} 코치님!
+여백과 결 본사 운영팀입니다.
 
-      try {
-        if (window.Kakao) {
-          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized()) {
-            initAdminKakaoSDK();
-          }
-          if (typeof Kakao.isInitialized === 'function' && Kakao.isInitialized()) {
-            const summaryText = `[여백과 결] 💰 ${cleanCoachName} 코치님 활동비 입금 완료\n\n`
-              + `■ 고객명: ${target.customerName}\n`
-              + `■ 서비스: ${target.serviceType}\n`
-              + `■ 정산 활동비: ${feeStr}원 (입금완료)\n\n`
-              + `현장 케어를 성심껏 완수해 주셔서 감사드립니다. 코치 앱에서 정산 내역을 확인하세요.`;
+오늘 [${target.customerName}] 고객님의 현장 케어를 정성껏 수행해 주셔서 진심으로 감사드립니다.
+등록해 주신 현장 사진 검수가 완료되어 활동비가 코치님 등록 계좌로 정상 입금되었습니다.
 
-            const textPayload = {
-              objectType: 'text',
-              text: summaryText.length > 200 ? summaryText.slice(0, 195) + '...' : summaryText,
-              link: {
-                mobileWebUrl: coachAppUrl,
-                webUrl: coachAppUrl
-              },
-              buttons: [
-                {
-                  title: '💰 정산 완료 내역 확인',
-                  link: {
-                    mobileWebUrl: coachAppUrl,
-                    webUrl: coachAppUrl
-                  }
-                }
-              ]
-            };
+■ 고객명: ${target.customerName}
+■ 서비스: ${target.serviceType}
+■ 정산 활동비: ${feeStr}원 (입금완료)
 
-            if (Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
-              Kakao.Share.sendDefault(textPayload);
-              return;
-            } else if (Kakao.Link && typeof Kakao.Link.sendDefault === 'function') {
-              Kakao.Link.sendDefault(textPayload);
-              return;
-            }
-          }
-        }
-      } catch (e) {
-        console.warn('[Kakao Settlement Direct Share Error]', e);
-      }
+▶ 코치 앱 정산 내역 확인:
+${coachAppUrl}
 
-      // fallback 웹 공유기
-      try {
-        const sharerUrl = `https://sharer.kakao.com/talk/friends/picker/link?url=${encodeURIComponent(coachAppUrl)}&text=${encodeURIComponent(`[여백과 결 활동비 입금 완료] ${cleanCoachName} 코치님, ${target.customerName} 고객 건 활동비(${feeStr}원)가 송금되었습니다.`)}`;
-        const popup = window.open(sharerUrl, 'kakao_share', 'width=520,height=620,resizable=yes,scrollbars=yes');
-        if (popup && !popup.closed && typeof popup.closed !== 'undefined') {
-          return;
-        }
-      } catch (e) {}
+수고 많으셨습니다. 다음 일정 때 뵙겠습니다!
+- 여백과 결 코칭센터 드림 -`;
 
-      alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+      dispatchKakaoShareHub({
+        modalTitle: `💰 [${cleanCoachName} 코치님] 입금완료 카톡 전송`,
+        recipientLabel: `고객: ${target.customerName} · 정산액 ${feeStr}원 (입금완료)`,
+        title: `[여백과 결] 활동비 ${feeStr}원 입금 완료`,
+        description: `${cleanCoachName} 코치님, ${target.customerName} 고객 건 정산이 완료되었습니다.`,
+        imageUrl: 'https://yebaekarchive.kr/images/coach-academy-banner.jpg',
+        url: coachAppUrl,
+        buttonTitle: '정산 내역 확인',
+        fullMessage: fullMsg
+      });
     }
 
     function copySettlementKakaoMsg(dispId, isSilent = false) {
@@ -18963,6 +19010,7 @@ ${coachAppUrl}
 
       const cleanCoachName = (target.coach || '코치').replace(/ 코치$/, '');
       const feeStr = (Number(target.fee) || 150000).toLocaleString();
+      const coachAppUrl = buildCoachAppUrl(target);
 
       const text = `[여백과 결] 현장 코칭 활동비 입금 완료 안내
 
@@ -18976,16 +19024,19 @@ ${coachAppUrl}
 ■ 서비스: ${target.serviceType}
 ■ 정산 활동비: ${feeStr}원 (입금완료)
 
+▶ 코치 앱 정산 내역 확인:
+${coachAppUrl}
+
 수고 많으셨습니다. 다음 일정 때 뵙겠습니다!
 - 여백과 결 코칭센터 드림 -`;
 
-      navigator.clipboard.writeText(text).then(() => {
+      safeCopyTextToClipboard(text).then((ok) => {
         if (!isSilent) {
-          alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
-        }
-      }).catch(() => {
-        if (!isSilent) {
-          prompt('아래 입금완료 안내문을 복사하여 코치님께 전송하세요:', text);
+          if (ok) {
+            alert(`📋 [${cleanCoachName} 코치] 님께 보낼 '활동비 입금완료 카톡 안내문'이 클립보드에 복사되었습니다!\n\n카카오톡 대화창에서 [붙여넣기(Ctrl+V)] 하시면 됩니다.`);
+          } else {
+            prompt('아래 입금완료 안내문을 복사하여 코치님께 전송하세요:', text);
+          }
         }
       });
     }
@@ -20330,16 +20381,13 @@ ${coachAppUrl}
     var p = projects.find(function(item) { return item.id === projectId; });
     if (!p) return;
 
-    // 카톡 링크 전송 로직 수행
-    sendCoachMemoirKakao(projectId);
-
-    // 공정 단계 전진: coach_assigned ➔ interview_pending (② 현장 구술 인터뷰)
+    // 1) 공정 단계 전진: coach_assigned ➔ interview_pending (② 현장 구술 인터뷰) 먼저 반영
     p.status = 'interview_pending';
     p.statusLabel = '현장 구술 진행중';
     p.updatedAt = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
     saveMemoirProjects(projects);
 
-    // 파견 명부 상태도 실시간 동기화 (coach.html 표준 step = '진행중')
+    // 2) 파견 명부 상태도 실시간 동기화 (coach.html 표준 step = '진행중')
     try {
       var dispatches = (typeof getDispatches === 'function') ? getDispatches() : [];
       var targetDisp = dispatches.find(function(d) { return d.memoirProjectId === projectId || d.id === 'disp_memoir_' + projectId; });
@@ -20354,7 +20402,8 @@ ${coachAppUrl}
     filterMemoirProjects('interview');
     if (typeof refreshCockpitStats === 'function') refreshCockpitStats();
 
-    alert('🚀 [' + (p.coachName || '코치') + '] 님께 카카오톡 현장 파견 및 글쓰기 앱 안내가 발송되었습니다!\n\n프로젝트가 [② 현장 구술 인터뷰] 단계로 전진되었습니다.');
+    // 3) blocking alert() 없이 카톡 전송 허브 + 카카오 SDK 실행 (팝업 차단 방지)
+    sendCoachMemoirKakao(projectId);
   }
   window.sendCoachMemoirKakaoAndAdvance = sendCoachMemoirKakaoAndAdvance;
 
@@ -21292,14 +21341,23 @@ ${coachAppUrl}
       return;
     }
 
-    var coachAppBase = window.location.origin + window.location.pathname.replace('admin.html', 'coach.html');
-    var memoirAppBase = window.location.origin + window.location.pathname.replace('admin.html', 'coach-memoir.html');
-    var memoirShareUrl = memoirAppBase + '?project=' + encodeURIComponent(p.id) + 
-                         '&coach=' + encodeURIComponent(p.coachName || '') + 
-                         '&phone=' + encodeURIComponent(p.coachPhone || '');
+    // Firestore 클라우드 최신 동기화 (코치 스마트폰에서 링크 접속 시 즉시 프로젝트 로드)
+    try {
+      if (typeof syncMemoirProjectToCloud === 'function') {
+        syncMemoirProjectToCloud(p);
+      }
+    } catch (e) {}
+
+    var cleanCoachName = (p.coachName || '코치').replace(/\s*코치$/, '').trim();
+    var coachPhone = p.coachPhone || '';
+    var coachAppUrl = 'https://yebaekarchive.kr/coach.html?id=' + encodeURIComponent('disp_memoir_' + p.id) +
+                      (cleanCoachName ? '&coach=' + encodeURIComponent(cleanCoachName) : '') +
+                      (coachPhone ? '&phone=' + encodeURIComponent(coachPhone) : '');
+    var memoirShareUrl = 'https://yebaekarchive.kr/coach-memoir.html?project=' + encodeURIComponent(p.id) +
+                         (cleanCoachName ? '&coach=' + encodeURIComponent(cleanCoachName) : '') +
+                         (coachPhone ? '&phone=' + encodeURIComponent(coachPhone) : '');
 
     var feeStr = (Number(p.fee) || 150000).toLocaleString();
-    var cleanCoachName = (p.coachName || '코치').replace(/ 코치$/, '');
 
     var msg = '✨ [여백과 결 | ✍️ 디지털 자서전 현장 구술 인터뷰 파견 안내]\n\n' +
               '안녕하세요, ' + cleanCoachName + ' 전문 코치님!\n' +
@@ -21312,53 +21370,32 @@ ${coachAppUrl}
               '💰 활동비: ' + feeStr + '원 (현장 완료 검수 후 즉시 입금)\n' +
               (p.notes ? '📝 특이사항: ' + p.notes + '\n\n' : '\n') +
               '━━━━━━━━━━━━━━━━━━━━━\n' +
-              '📱 [1. 코치 현장 파트너앱 (도착 스탬프 & 정산 관리)]\n' +
-              coachAppBase + '\n\n' +
-              '✍️ [2. 디지털 자서전 글쓰기 스튜디오 (20문항 녹취 & AI 윤문)]\n' +
-              memoirShareUrl + '\n' +
+              '✍️ [1. 디지털 자서전 글쓰기 앱 (20문항 녹취 & AI 윤문)]\n' +
+              memoirShareUrl + '\n\n' +
+              '📱 [2. 코치 현장 파트너앱 (도착 스탬프 & 정산 관리)]\n' +
+              coachAppUrl + '\n' +
               '━━━━━━━━━━━━━━━━━━━━━\n' +
               '* 현장에 도착하시면 코치앱에서 [📍 도착 스탬프]를 찍으신 후,\n' +
               '  자서전 글쓰기 앱에서 원터치 음성 녹음 및 인터뷰를 진행해 주세요.\n' +
               '* 작업 내용은 본사 관리자 화면에 실시간 자동 동기화됩니다.';
 
-    // 카카오톡 SDK 공유 가능 여부 확인
-    if (typeof Kakao !== 'undefined' && Kakao.isInitialized && Kakao.isInitialized()) {
-      try {
-        Kakao.Share.sendDefault({
-          objectType: 'feed',
-          content: {
-            title: '📖 [여백과 결] ' + (p.clientName || '') + ' 어르신 자서전 현장 집필 임무',
-            description: cleanCoachName + '님, 현장 방문 녹취 및 AI 목차/초안 자동 집필을 진행해 주세요.',
-            imageUrl: 'https://yebaekarchive.kr/images/og-share-cover.jpg',
-            link: {
-              mobileWebUrl: memoirShareUrl,
-              webUrl: memoirShareUrl
-            }
-          },
-          buttons: [
-            {
-              title: '✍️ 코치 글쓰기 대시보드 열기',
-              link: {
-                mobileWebUrl: memoirShareUrl,
-                webUrl: memoirShareUrl
-              }
-            }
-          ]
-        });
-      } catch(e) {
-        console.warn('카카오톡 SDK 공유 오류:', e);
-      }
-    }
-
-    // 클립보드 복사 처리
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(msg).then(function() {
-        alert('💬 [' + (p.coachName || '코치') + ' 코치님]께 전송할 카카오톡 현장 파견 안내문과 앱 링크가 클립보드에 복사되었습니다!\n\n카카오톡 대화방에 [붙여넣기]하여 전송해 주세요.\n\n-------------------------\n' + memoirShareUrl);
-      }).catch(function() {
-        prompt('아래 링크와 메시지를 복사하여 코치님 카톡으로 전송하세요:', memoirShareUrl);
+    if (typeof window.dispatchKakaoShareHub === 'function') {
+      window.dispatchKakaoShareHub({
+        modalTitle: '✍️ [' + cleanCoachName + ' 코치님] 자서전 현장 파견 카톡 전송',
+        recipientLabel: '주인공: ' + (p.clientName || '어르신') + ' · 활동비 ' + feeStr + '원',
+        title: '📖 [여백과 결] ' + (p.clientName || '어르신') + ' 자서전 현장 집필',
+        description: cleanCoachName + ' 코치님, 현장 구술 녹취 및 AI 자서전 초안 집필을 진행해 주세요.',
+        imageUrl: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
+        url: memoirShareUrl,
+        buttonTitle: '글쓰기 앱 열기',
+        fullMessage: msg
       });
-    } else {
-      prompt('아래 링크를 복사하여 코치님 카톡으로 전송하세요:', memoirShareUrl);
+    } else if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(msg).then(function() {
+        alert('💬 카톡 현장 파견 안내문과 앱 링크가 클립보드에 복사되었습니다!\n\n' + memoirShareUrl);
+      }).catch(function() {
+        prompt('아래 링크를 복사하여 코치님 카톡으로 전송하세요:', memoirShareUrl);
+      });
     }
   }
 

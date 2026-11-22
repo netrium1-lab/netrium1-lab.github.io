@@ -1398,7 +1398,7 @@
           <p class="fallback-desc">
             현장 통신 상태나 서버 문제로 사진 업로드가 지연될 경우, 당황하지 마시고 <strong>[본사 카톡으로 사진 전송]</strong>을 눌러 관리자 카톡으로 사진을 보내신 후 작업을 정상 진행하세요.
           </p>
-          <a href="https://open.kakao.com/o/gNwCjGPi" target="_blank" class="btn-kakao-emergency">
+          <a href="https://open.kakao.com/o/p79YYjPi" target="_blank" rel="noopener noreferrer" class="btn-kakao-emergency">
             <span>💬 본사 관리자 카톡으로 사진 전송하기</span>
           </a>
         </div>
@@ -1680,23 +1680,44 @@
     }
 
     // -------------------------------------------------------------
-    // 🔗 URL 배정 파라미터 수신 및 스마트 동기화 엔진
+    // 🔗 URL 배정 파라미터 수신 및 스마트 동기화 엔진 (단축 링크 ?id=... + 레거시 ?m=... 동시 지원)
     // -------------------------------------------------------------
     function parseMissionFromUrl() {
       try {
         const params = new URLSearchParams(window.location.search);
         const m = params.get('m') || params.get('mission') || params.get('data');
-        if (!m) return null;
+        if (m) {
+          // 1) 레거시 Base64 페이로드 지원 (이중 decodeURIComponent 오류 방지)
+          const tryDecodeBase64 = (rawStr) => {
+            const bin = atob(rawStr.replace(/\s+/g, '+'));
+            const jsonStr = decodeURIComponent(Array.prototype.map.call(bin, (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+            return JSON.parse(jsonStr);
+          };
+          try {
+            const parsed = tryDecodeBase64(m);
+            if (parsed && typeof parsed === 'object') return parsed;
+          } catch (e1) {
+            try {
+              const parsed = tryDecodeBase64(decodeURIComponent(m));
+              if (parsed && typeof parsed === 'object') return parsed;
+            } catch (e2) {
+              const parsed = JSON.parse(m);
+              if (parsed && typeof parsed === 'object') return parsed;
+            }
+          }
+        }
 
-        try {
-          // Base64 UTF-8 디코딩
-          const jsonStr = decodeURIComponent(Array.prototype.map.call(atob(decodeURIComponent(m)), (c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-          const parsed = JSON.parse(jsonStr);
-          if (parsed && typeof parsed === 'object') return parsed;
-        } catch (e1) {
-          const jsonStr = decodeURIComponent(m);
-          const parsed = JSON.parse(jsonStr);
-          if (parsed && typeof parsed === 'object') return parsed;
+        // 2) 카카오톡 최적화 단축 링크 (?id=disp_...&coach=...&phone=...) 지원
+        const id = (params.get('id') || params.get('disp') || '').trim();
+        const coach = (params.get('coach') || '').trim();
+        const phone = (params.get('phone') || '').trim();
+        if (id || coach) {
+          return {
+            _isShortLink: true,
+            id: id,
+            coach: coach,
+            coachPhone: phone
+          };
         }
       } catch (err) {
         console.warn('URL 배정 데이터 파싱 실패:', err);
@@ -1704,12 +1725,52 @@
       return null;
     }
 
+    // 코치 목록(certifiedCoaches)에 수신된 코치 정보 안전 보강
+    function ensureCoachRegisteredFromLink(coachName, coachPhone, coachId, specialty) {
+      if (!coachName) return;
+      const cleanName = coachName.replace(/\s+|코치$/g, '');
+      const cleanPhone = (coachPhone || '').replace(/[^0-9]/g, '');
+
+      let coaches = [];
+      try {
+        const saved = localStorage.getItem(COACHES_STORAGE_KEY);
+        if (saved) coaches = JSON.parse(saved);
+      } catch (e) {}
+      if (!Array.isArray(coaches) || coaches.length === 0) {
+        coaches = [...DEFAULT_CERTIFIED_COACHES];
+      }
+
+      const found = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanName);
+      if (!found) {
+        coaches.push({
+          id: coachId || ('coach_' + Date.now()),
+          name: cleanName,
+          phone: coachPhone ? formatPhoneInput(coachPhone) : '',
+          specialty: specialty || '현장 케어 전문가'
+        });
+        localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(coaches));
+      } else if (cleanPhone && (!found.phone || found.phone.replace(/[^0-9]/g, '') !== cleanPhone)) {
+        found.phone = formatPhoneInput(cleanPhone);
+        localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(coaches));
+      }
+    }
+
     // 카카오톡으로 전달받은 배정 데이터를 로컬스토리지에 안전하게 동기화/등록
     function syncUrlMissionData() {
       const incoming = parseMissionFromUrl();
-      if (!incoming || !incoming.id) return null;
+      if (!incoming) return null;
 
-      // 1) 배정 데이터(dispatches)에 저장/병합
+      // 단축 링크인 경우: 코치 기본정보 보강 + 로컬/Firestore에서 상세 배정 건 조회
+      if (incoming._isShortLink) {
+        ensureCoachRegisteredFromLink(incoming.coach, incoming.coachPhone, '', '');
+        const dispatches = getDispatches();
+        const localFound = incoming.id ? dispatches.find(d => d.id === incoming.id) : null;
+        return localFound || incoming;
+      }
+
+      if (!incoming.id) return null;
+
+      // 1) 레거시 전체 페이로드 배정 데이터 저장/병합
       const dispatches = getDispatches();
       const existingIdx = dispatches.findIndex(d => d.id === incoming.id);
       if (existingIdx !== -1) {
@@ -1720,60 +1781,71 @@
       saveDispatches(dispatches);
 
       // 2) 코치 목록(certifiedCoaches)에도 해당 코치 자동 등록/보강
-      if (incoming.coach) {
-        const cleanName = incoming.coach.replace(/\s+|코치$/g, '');
-        const cleanPhone = (incoming.coachPhone || '').replace(/[^0-9]/g, '');
-
-        let coaches = [];
-        try {
-          const saved = localStorage.getItem(COACHES_STORAGE_KEY);
-          if (saved) coaches = JSON.parse(saved);
-        } catch (e) {}
-        if (!Array.isArray(coaches) || coaches.length === 0) {
-          coaches = [...DEFAULT_CERTIFIED_COACHES];
-        }
-
-        const found = coaches.find(c => c.name.replace(/\s+|코치$/g, '') === cleanName);
-        if (!found) {
-          coaches.push({
-            id: incoming.coachId || ('coach_' + Date.now()),
-            name: cleanName,
-            phone: incoming.coachPhone ? formatPhoneInput(incoming.coachPhone) : '',
-            specialty: incoming.serviceType || '현장 케어 전문가'
-          });
-          localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(coaches));
-        } else if (cleanPhone && (!found.phone || found.phone.replace(/[^0-9]/g, '') !== cleanPhone)) {
-          found.phone = formatPhoneInput(cleanPhone);
-          localStorage.setItem(COACHES_STORAGE_KEY, JSON.stringify(coaches));
-        }
-      }
+      ensureCoachRegisteredFromLink(incoming.coach, incoming.coachPhone, incoming.coachId, incoming.serviceType);
 
       return incoming;
     }
 
-    // 카톡 링크 접속 시 로그인 안내 배너 설정 및 기본값 세팅
+    function renderIncomingMissionBanner(missionObj) {
+      if (!missionObj) return;
+      const banner = document.getElementById('incomingMissionBanner');
+      const infoEl = document.getElementById('incomingMissionInfo');
+      if (!banner || !infoEl) return;
+
+      const cleanCoach = (missionObj.coach || '코치').replace(/\s*코치$/, '').trim() || '코치';
+      banner.style.display = 'block';
+      if (missionObj.customerName) {
+        infoEl.innerHTML = `
+          <strong>[${escapeHtml(missionObj.customerName)} 고객님 · ${escapeHtml(missionObj.serviceType || '현장 케어')}]</strong><br>
+          담당 <strong>${escapeHtml(cleanCoach)} 코치</strong>님 환영합니다! 본인 확인을 위해 성함과 등록된 휴대폰 번호를 확인 후 로그인해 주세요.
+        `;
+      } else {
+        infoEl.innerHTML = `
+          <strong>[본사 배정 현장 알림 링크로 접속하셨습니다]</strong><br>
+          담당 <strong>${escapeHtml(cleanCoach)} 코치</strong>님, 성함과 등록된 휴대폰 번호로 로그인하시면 배정된 업무카드가 바로 열립니다.
+        `;
+      }
+    }
+
+    // 카톡 링크 접속 시 로그인 안내 배너 설정 및 클라우드 배정 데이터 즉시 로드
     function initIncomingMissionView() {
       const incoming = syncUrlMissionData();
       if (!incoming) return;
 
-      const banner = document.getElementById('incomingMissionBanner');
-      const infoEl = document.getElementById('incomingMissionInfo');
+      renderIncomingMissionBanner(incoming);
+
       const nameInput = document.getElementById('loginName');
       const phoneInput = document.getElementById('loginPhone');
-
-      if (banner && infoEl) {
-        banner.style.display = 'block';
-        infoEl.innerHTML = `
-          <strong>[${escapeHtml(incoming.customerName)} 고객님 · ${escapeHtml(incoming.serviceType)}]</strong><br>
-          담당 <strong>${escapeHtml(incoming.coach || '코치')}</strong> 님 환영합니다! 본인 확인을 위해 코치 성함과 등록된 휴대폰 번호를 입력해 주세요.
-        `;
-      }
-
       if (incoming.coach && nameInput && !nameInput.value) {
         nameInput.value = incoming.coach.replace(/\s+|코치$/g, '');
-        if (phoneInput) {
-          phoneInput.focus();
-        }
+      }
+      if (incoming.coachPhone && phoneInput && !phoneInput.value) {
+        phoneInput.value = formatPhoneInput(incoming.coachPhone);
+      } else if (phoneInput && nameInput && nameInput.value) {
+        phoneInput.focus();
+      }
+
+      // 단축 링크(?id=...)인 경우 Firestore에서 해당 배정 문서를 즉시 직접 조회해 배너·로컬 데이터 최신화
+      if (incoming.id && coachFbDb) {
+        coachFbDb.collection('coach_dispatches').doc(String(incoming.id)).get().then((doc) => {
+          if (doc && doc.exists) {
+            const remote = doc.data();
+            if (remote && remote.id) {
+              const dispatches = getDispatches();
+              const idx = dispatches.findIndex(d => d.id === remote.id);
+              if (idx !== -1) dispatches[idx] = Object.assign({}, dispatches[idx], remote);
+              else dispatches.unshift(remote);
+              saveDispatches(dispatches);
+              ensureCoachRegisteredFromLink(remote.coach, remote.coachPhone, remote.coachId, remote.serviceType);
+              renderIncomingMissionBanner(remote);
+              if (typeof currentCoach !== 'undefined' && currentCoach && typeof renderAllTabs === 'function') {
+                renderAllTabs();
+              }
+            }
+          }
+        }).catch((err) => {
+          console.warn('[Coach ShortLink Cloud Fetch Warn]', err);
+        });
       }
     }
 

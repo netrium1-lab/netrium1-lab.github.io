@@ -8765,26 +8765,45 @@
     }
 
     function shareWebbookKakao() {
-      const shareUrl = getCurrentWebbookShareUrl();
+      let shareUrl = getCurrentWebbookShareUrl();
+      if (shareUrl && !/^https:\/\/yebaekarchive\.kr\b/i.test(shareUrl)) {
+        try {
+          const u = new URL(shareUrl);
+          shareUrl = 'https://yebaekarchive.kr' + u.pathname + u.search + u.hash;
+        } catch (e) {}
+      }
       const cover = webbookPages[0] || {};
+      const wbTitle = `📖 ${cover.title || '여백과 결 모바일 웹북'}`;
+      const wbDesc = cover.subtitle || '지나온 세월의 결을 담은 가족 전용 모바일 자서전 웹북입니다.';
       try {
-        if (typeof Kakao !== 'undefined' && Kakao.isInitialized && Kakao.isInitialized() && Kakao.Share) {
-          Kakao.Share.sendDefault({
-            objectType: 'feed',
-            content: {
-              title: `📖 ${cover.title || '여백과 결 모바일 웹북'}`,
-              description: cover.subtitle || '지나온 세월의 결을 담은 가족 전용 모바일 자서전 웹북입니다.',
-              imageUrl: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
-              link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
-            },
-            buttons: [
-              { title: '📱 모바일 웹북 펼쳐보기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }
-            ]
-          });
-          return;
+        if (typeof Kakao !== 'undefined') {
+          if (typeof Kakao.isInitialized === 'function' && !Kakao.isInitialized() && typeof initKakaoSDK === 'function') {
+            initKakaoSDK();
+          }
+          if (Kakao.isInitialized && Kakao.isInitialized() && Kakao.Share && typeof Kakao.Share.sendDefault === 'function') {
+            Kakao.Share.sendDefault({
+              objectType: 'feed',
+              content: {
+                title: wbTitle.slice(0, 48),
+                description: wbDesc.slice(0, 96),
+                imageUrl: 'https://yebaekarchive.kr/images/showcase-senior-memoir.jpg',
+                imageWidth: 1200,
+                imageHeight: 630,
+                link: { mobileWebUrl: shareUrl, webUrl: shareUrl }
+              },
+              buttons: [
+                { title: '모바일 웹북 열기', link: { mobileWebUrl: shareUrl, webUrl: shareUrl } }
+              ]
+            });
+            return;
+          }
         }
       } catch (err) {
         console.warn('[Kakao Share Fallback]', err);
+      }
+      if (navigator.share) {
+        navigator.share({ title: wbTitle, text: wbDesc, url: shareUrl }).catch(() => copyWebbookUrl());
+        return;
       }
       copyWebbookUrl();
     }
