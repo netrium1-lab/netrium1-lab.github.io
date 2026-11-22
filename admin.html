@@ -2470,6 +2470,10 @@
             <span class="subnav-icon">💰</span>
             <span>6-3. 과정 수강료 · 예상수익</span>
           </button>
+          <button type="button" class="subnav-link" id="sideSub_coach_curriculum" onclick="selectCoachSubFromSidebar('curriculum')">
+            <span class="subnav-icon">📚</span>
+            <span>6-4. 4주 커리큘럼 관리</span>
+          </button>
         </div>
 
         <!-- SYSTEM -->
@@ -2726,7 +2730,8 @@
               <div class="cockpit-cat-chips">
                 <button type="button" class="cockpit-cat-chip primary" onclick="selectCoachSubFromSidebar('academy')">🎓 수강·수료 관리 ➔</button>
                 <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pool')">🏅 공인 코치 명단</button>
-                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pricing')">💰 가격·수익 설정</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('pricing')">💰 가격·수익</button>
+                <button type="button" class="cockpit-cat-chip" onclick="selectCoachSubFromSidebar('curriculum')">📚 커리큘럼</button>
                 <a href="academy.html" target="_blank" class="cockpit-cat-chip">아카데미 ↗</a>
               </div>
             </div>
@@ -3913,6 +3918,54 @@
               <span id="academyPricingLastSaved" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;"></span>
               <button type="button" class="btn-save-setting" onclick="saveAcademyCoursePricingSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; padding: 10px 22px; cursor: pointer;">
                 <span>💾</span> 5대 과정 수강료 · 예상수익 저장 및 즉시 반영
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 📚 6-4. 과정별 4주 집중 커리큘럼 실시간 관리 (academy.html 클라우드 직결) -->
+        <div id="coachSubPanel_curriculum" style="display: none;">
+          <div class="panel-card" id="academyCurriculumSection" style="margin-top: 0; border-top: 4px solid #1e4d35;">
+            <div class="panel-header" style="flex-wrap: wrap; gap: 12px;">
+              <div class="panel-title-wrap">
+                <span class="panel-icon" style="background: #eef4ef; color: #1e4d35; font-size: 1.5rem;">📚</span>
+                <div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <h2 class="panel-title" style="margin: 0;">6-4. 과정별 4주 집중 커리큘럼 관리</h2>
+                    <span class="badge" style="background: #ecfdf5; color: #047857; border: 1px solid #a7f3d0; font-size: 0.74rem; font-weight: 850; padding: 2px 8px; border-radius: 999px;">academy.html 실시간 클라우드 반영</span>
+                  </div>
+                  <p style="color: var(--text-muted); font-size: 0.85rem; margin: 4px 0 0;">
+                    5대 비즈니스 과정별 <strong>소개 문구 · 1~4주차 커리큘럼 주제와 실습 내용</strong>을 자유롭게 수정합니다. 저장 즉시 아카데미 사이트에 반영됩니다.
+                  </p>
+                </div>
+              </div>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+                <a href="academy.html#curriculum" target="_blank" class="btn-save-setting" style="background: #eef3f9; color: #245b8e; border: 1.2px solid #bfd3ea; text-decoration: none; font-weight: 800;">
+                  <span>🎓</span> 커리큘럼 라이브 보기 ↗
+                </a>
+                <button type="button" class="btn-save-setting" onclick="resetSingleCourseCurriculum()" style="background: #ffffff; color: var(--text-main); border: 1.2px solid var(--border-color); font-weight: 750;">
+                  <span>🔄</span> 이 과정 기본값 복원
+                </button>
+                <button type="button" class="btn-save-setting" onclick="saveAcademyCurriculumSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; cursor: pointer;">
+                  <span>💾</span> 저장 &amp; 사이트 즉시 반영
+                </button>
+              </div>
+            </div>
+
+            <!-- 5개 과정 선택 탭 바 -->
+            <div id="acadCurrAdminTabs" style="display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; padding-bottom: 14px; border-bottom: 1px solid var(--border-color);">
+              <!-- JS 동적 렌더링 -->
+            </div>
+
+            <!-- 선택된 과정 기본 정보 & 1~4주차 커리큘럼 편집 영역 -->
+            <div id="acadCurrAdminEditorBody">
+              <!-- JS 동적 렌더링 -->
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-color);">
+              <span id="academyCurriculumLastSaved" style="font-size: 0.78rem; color: var(--text-muted); font-weight: 700;"></span>
+              <button type="button" class="btn-save-setting" onclick="saveAcademyCurriculumSettings()" style="background: linear-gradient(135deg, #14281f 0%, #235a3f 100%); color: #f6e7c1; border: 1px solid #c9a24b; font-weight: 850; padding: 10px 22px; cursor: pointer;">
+                <span>💾</span> 커리큘럼 저장 &amp; 아카데미 사이트 즉시 반영
               </button>
             </div>
           </div>
@@ -6444,14 +6497,15 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing') ? subKey : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum') ? subKey : 'academy';
       var links = document.querySelectorAll('#sidebarSubnavCoach .subnav-link');
       links.forEach(function(l) { l.classList.remove('active'); });
 
       var map = {
         academy: { panel: 'coachSubPanel_academy', btn: 'sideSub_coach_academy', label: '<span>🎓</span> 06. 코치 아카데미 · 6-1 수강생 · 수료 관리' },
         pool: { panel: 'coachSubPanel_pool', btn: 'sideSub_coach_pool', label: '<span>🏅</span> 06. 코치 아카데미 · 6-2 공인 코치 명단 (배정 풀)' },
-        pricing: { panel: 'coachSubPanel_pricing', btn: 'sideSub_coach_pricing', label: '<span>💰</span> 06. 코치 아카데미 · 6-3 과정 수강료 · 예상수익 설정' }
+        pricing: { panel: 'coachSubPanel_pricing', btn: 'sideSub_coach_pricing', label: '<span>💰</span> 06. 코치 아카데미 · 6-3 과정 수강료 · 예상수익 설정' },
+        curriculum: { panel: 'coachSubPanel_curriculum', btn: 'sideSub_coach_curriculum', label: '<span>📚</span> 06. 코치 아카데미 · 6-4 4주 커리큘럼 관리' }
       };
 
       Object.keys(map).forEach(function(k) {
@@ -6469,6 +6523,7 @@
       if (currentCoachSubTab === 'academy' && typeof renderAcademyApplicantsTable === 'function') renderAcademyApplicantsTable();
       if (currentCoachSubTab === 'pool' && typeof renderCoachesTable === 'function') renderCoachesTable();
       if (currentCoachSubTab === 'pricing' && typeof renderAcademyCoursePricingEditor === 'function') renderAcademyCoursePricingEditor();
+      if (currentCoachSubTab === 'curriculum' && typeof renderAcademyCurriculumEditor === 'function') renderAcademyCurriculumEditor();
 
       var mainEl = document.querySelector('.admin-main');
       if (mainEl) mainEl.scrollTo({ top: 0, behavior: 'smooth' });
@@ -6481,7 +6536,7 @@
         if (typeof focusCockpitSettlementQueue === 'function') focusCockpitSettlementQueue('all');
         return;
       }
-      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing') ? subKey : 'academy';
+      currentCoachSubTab = (subKey === 'pool' || subKey === 'pricing' || subKey === 'curriculum') ? subKey : 'academy';
       switchTab('tabCoachControl');
       switchCoachSubTab(currentCoachSubTab);
     }
@@ -14268,11 +14323,13 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       if (_adminAcademyCloudBound || typeof fbDb === 'undefined' || !fbDb) return;
       _adminAcademyCloudBound = true;
 
-      // 1) 과정 가격·수익 설정 클라우드 실시간 수신
+      // 1) 과정 가격·수익·커리큘럼 설정 클라우드 실시간 수신
       if (window.YebaekAcademyConfig) {
         window.YebaekAcademyConfig.loadFromCloud(fbDb, function () {
           if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'pricing') {
             renderAcademyCoursePricingEditor();
+          } else if (typeof currentCoachSubTab !== 'undefined' && currentCoachSubTab === 'curriculum') {
+            renderAcademyCurriculumEditor();
           }
         });
       }
@@ -14446,6 +14503,203 @@ ${webContent ? `- ★ [최우선 반영 필수 지침 / 웹 참고 핵심 내용
       alert('🔄 표준 기본 수강료·예상수익으로 복원되었습니다.');
     }
     window.resetAcademyCoursePricingSettings = resetAcademyCoursePricingSettings;
+
+    // ================= 5-3. 📚 6-4 과정별 4주 집중 커리큘럼 편집 엔진 =================
+    let currentAdminCurrCourseId = 'track_beauty';
+    let workingAdminCurrWeeks = [];
+
+    function renderAcademyCurriculumEditor() {
+      if (!window.YebaekAcademyConfig) return;
+      const cfg = window.YebaekAcademyConfig.getConfig();
+      const courses = cfg.courses || [];
+      if (!courses.length) return;
+
+      let selected = courses.find(c => c.id === currentAdminCurrCourseId) || courses[0];
+      currentAdminCurrCourseId = selected.id;
+      workingAdminCurrWeeks = Array.isArray(selected.weeks)
+        ? selected.weeks.map(w => ({ week: w.week || '', title: w.title || '', desc: w.desc || '' }))
+        : [];
+
+      const elSaved = document.getElementById('academyCurriculumLastSaved');
+      if (elSaved) elSaved.textContent = cfg.updatedAt ? ('마지막 저장: ' + cfg.updatedAt) : '기본 표준 커리큘럼 사용 중';
+
+      const tabsEl = document.getElementById('acadCurrAdminTabs');
+      if (tabsEl) {
+        tabsEl.innerHTML = courses.map(c => {
+          const isAct = c.id === currentAdminCurrCourseId;
+          return `
+            <button type="button" onclick="selectAdminCurriculumCourse('${escapeHtml(c.id)}')" style="display:inline-flex; align-items:center; gap:6px; padding:8px 15px; border-radius:999px; font-size:0.83rem; font-weight:850; cursor:pointer; transition:all 0.16s; ${isAct ? 'background:#14281f; color:#f6e7c1; border:1.5px solid #c9a24b; box-shadow:0 4px 12px rgba(20,40,31,0.22);' : 'background:#ffffff; color:#334155; border:1.2px solid #cbd5e1;'}">
+              <span>${escapeHtml(c.icon || '🎓')}</span>
+              <span>${escapeHtml(c.code)}. ${escapeHtml(c.shortName || c.title)}</span>
+            </button>
+          `;
+        }).join('');
+      }
+
+      const bodyEl = document.getElementById('acadCurrAdminEditorBody');
+      if (!bodyEl) return;
+
+      bodyEl.innerHTML = `
+        <!-- 과정 소개 & 배정 업무 요약 편집 -->
+        <div style="background: #faf9f5; border: 1.3px solid #e5dfd0; border-left: 5px solid ${escapeHtml(selected.accentColor || '#1e4d35')}; border-radius: 14px; padding: 16px 18px; margin-bottom: 18px;">
+          <div style="font-size: 0.88rem; font-weight: 850; color: #14281f; margin-bottom: 12px;">
+            ${escapeHtml(selected.icon || '🎓')} [${escapeHtml(selected.code)}. ${escapeHtml(selected.shortName)}] 과정 소개 · 현장 업무 안내
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">과정 공식 제목</label>
+              <input type="text" id="currEditTitle" class="setting-input" value="${escapeHtml(selected.title || '')}" style="background:#fff; font-weight:800; font-size:0.86rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">교육 기간 표기</label>
+              <input type="text" id="currEditDuration" class="setting-input" value="${escapeHtml(selected.duration || '4주 정규과정 (총 16시간)')}" style="background:#fff; font-size:0.85rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">현장 소요시간 표기</label>
+              <input type="text" id="currEditSessionTime" class="setting-input" value="${escapeHtml(selected.sessionTime || '')}" style="background:#fff; font-size:0.85rem;">
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; margin-bottom: 10px;">
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">과정 부제 (핵심 한 줄)</label>
+              <input type="text" id="currEditSubtitle" class="setting-input" value="${escapeHtml(selected.subtitle || '')}" style="background:#fff; font-size:0.84rem;">
+            </div>
+            <div>
+              <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">연동 IT 도구 배지</label>
+              <input type="text" id="currEditToolBadge" class="setting-input" value="${escapeHtml(selected.toolBadge || '')}" style="background:#fff; font-size:0.84rem;">
+            </div>
+          </div>
+          <div style="margin-bottom: 10px;">
+            <label style="display:block; font-size:0.75rem; font-weight:800; color:#475569; margin-bottom:4px;">과정 상세 설명 (쇼케이스 카드 본문)</label>
+            <textarea id="currEditSummary" class="setting-textarea" rows="2" style="background:#fff; font-size:0.84rem;">${escapeHtml(selected.summary || '')}</textarea>
+          </div>
+          <div>
+            <label style="display:block; font-size:0.75rem; font-weight:800; color:#1e4d35; margin-bottom:4px;">📌 본사 배정 업무 안내 문구</label>
+            <input type="text" id="currEditDeliverable" class="setting-input" value="${escapeHtml(selected.deliverable || '')}" style="background:#fff; font-size:0.84rem;">
+          </div>
+        </div>
+
+        <!-- 주차별 커리큘럼 리스트 -->
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
+          <strong style="font-size: 0.94rem; color: #0f172a;">📅 주차별 집중 커리큘럼 상세 (${workingAdminCurrWeeks.length}주차 구성)</strong>
+          <button type="button" onclick="addAdminCurriculumWeek()" style="padding: 6px 13px; border-radius: 8px; border: 1.2px solid #1e4d35; background: #eef4ef; color: #1e4d35; font-size: 0.78rem; font-weight: 850; cursor: pointer;">
+            ➕ 주차 추가
+          </button>
+        </div>
+        <div id="acadCurrWeeksList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      `;
+
+      renderAdminCurriculumWeeksList();
+    }
+    window.renderAcademyCurriculumEditor = renderAcademyCurriculumEditor;
+
+    function syncWorkingWeeksFromDom() {
+      workingAdminCurrWeeks = workingAdminCurrWeeks.map((w, idx) => ({
+        week: (document.getElementById('currWeekLabel_' + idx)?.value || '').trim() || ((idx + 1) + '주차'),
+        title: (document.getElementById('currWeekTitle_' + idx)?.value || '').trim(),
+        desc: (document.getElementById('currWeekDesc_' + idx)?.value || '').trim()
+      }));
+    }
+
+    function renderAdminCurriculumWeeksList() {
+      const wrap = document.getElementById('acadCurrWeeksList');
+      if (!wrap) return;
+      wrap.innerHTML = workingAdminCurrWeeks.map((w, idx) => `
+        <div style="background: #ffffff; border: 1.4px solid #e2e8f0; border-radius: 14px; padding: 14px 16px;">
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 8px;">
+            <input type="text" id="currWeekLabel_${idx}" value="${escapeHtml(w.week || ((idx + 1) + '주차'))}" class="setting-input" style="width: 96px; text-align: center; font-weight: 900; color: #1e4d35; background: #eef4ef; border-color: #bfd3c3; font-size: 0.84rem;" placeholder="1주차">
+            <input type="text" id="currWeekTitle_${idx}" value="${escapeHtml(w.title || '')}" class="setting-input" style="flex: 1; min-width: 220px; font-weight: 850; font-size: 0.88rem;" placeholder="주차 핵심 교육 주제를 입력하세요">
+            ${workingAdminCurrWeeks.length > 1 ? `<button type="button" onclick="removeAdminCurriculumWeek(${idx})" title="이 주차 삭제" style="padding: 6px 9px; border-radius: 8px; border: 1px solid #fecaca; background: #fff1f2; color: #dc2626; font-size: 0.76rem; font-weight: 800; cursor: pointer;">🗑️ 삭제</button>` : ''}
+          </div>
+          <textarea id="currWeekDesc_${idx}" class="setting-textarea" rows="2" style="font-size: 0.84rem; background: #f8fafc;" placeholder="이론 및 현장 실습 상세 내용을 입력하세요">${escapeHtml(w.desc || '')}</textarea>
+        </div>
+      `).join('');
+    }
+
+    function selectAdminCurriculumCourse(courseId) {
+      currentAdminCurrCourseId = courseId;
+      renderAcademyCurriculumEditor();
+    }
+    window.selectAdminCurriculumCourse = selectAdminCurriculumCourse;
+
+    function addAdminCurriculumWeek() {
+      syncWorkingWeeksFromDom();
+      const nextNo = workingAdminCurrWeeks.length + 1;
+      workingAdminCurrWeeks.push({
+        week: nextNo + '주차',
+        title: '',
+        desc: ''
+      });
+      renderAdminCurriculumWeeksList();
+    }
+    window.addAdminCurriculumWeek = addAdminCurriculumWeek;
+
+    function removeAdminCurriculumWeek(idx) {
+      if (workingAdminCurrWeeks.length <= 1) return;
+      syncWorkingWeeksFromDom();
+      workingAdminCurrWeeks.splice(idx, 1);
+      renderAdminCurriculumWeeksList();
+    }
+    window.removeAdminCurriculumWeek = removeAdminCurriculumWeek;
+
+    async function saveAcademyCurriculumSettings() {
+      if (!window.YebaekAcademyConfig) return;
+      syncWorkingWeeksFromDom();
+
+      const validWeeks = workingAdminCurrWeeks.filter(w => w.title || w.desc);
+      if (validWeeks.length === 0) {
+        alert('최소 1개 이상의 주차 커리큘럼 내용을 입력해 주세요.');
+        return;
+      }
+
+      const cfg = window.YebaekAcademyConfig.getConfig();
+      const target = cfg.courses.find(c => c.id === currentAdminCurrCourseId);
+      if (!target) return;
+
+      target.title = (document.getElementById('currEditTitle')?.value || '').trim() || target.title;
+      target.duration = (document.getElementById('currEditDuration')?.value || '').trim() || target.duration;
+      target.sessionTime = (document.getElementById('currEditSessionTime')?.value || '').trim() || target.sessionTime;
+      target.subtitle = (document.getElementById('currEditSubtitle')?.value || '').trim() || target.subtitle;
+      target.toolBadge = (document.getElementById('currEditToolBadge')?.value || '').trim() || target.toolBadge;
+      target.summary = (document.getElementById('currEditSummary')?.value || '').trim() || target.summary;
+      target.deliverable = (document.getElementById('currEditDeliverable')?.value || '').trim() || target.deliverable;
+      target.weeks = validWeeks;
+
+      const res = await window.YebaekAcademyConfig.saveConfig(cfg, typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAcademyCurriculumEditor();
+      alert(
+        '✅ [' + target.title + '] 4주 집중 커리큘럼이 저장되었습니다!\n\n' +
+        (res.cloudSaved
+          ? '☁️ Firebase 클라우드 동기화 완료 — 아카데미 사이트(PC·모바일)에 즉시 반영됩니다.'
+          : '💾 로컬 저장 완료 — 같은 브라우저의 아카데미 사이트에 즉시 반영됩니다.')
+      );
+    }
+    window.saveAcademyCurriculumSettings = saveAcademyCurriculumSettings;
+
+    async function resetSingleCourseCurriculum() {
+      if (!window.YebaekAcademyConfig) return;
+      const defCourse = (window.YebaekAcademyConfig.DEFAULT_CONFIG.courses || []).find(c => c.id === currentAdminCurrCourseId);
+      if (!defCourse) return;
+      if (!confirm('[' + defCourse.title + '] 과정의 소개 및 1~4주차 커리큘럼만 표준 기본값으로 복원하시겠습니까?\n(6-3에서 설정한 수강료와 예상수익은 그대로 유지됩니다.)')) return;
+
+      const cfg = window.YebaekAcademyConfig.getConfig();
+      const target = cfg.courses.find(c => c.id === currentAdminCurrCourseId);
+      if (!target) return;
+
+      target.title = defCourse.title;
+      target.duration = defCourse.duration;
+      target.sessionTime = defCourse.sessionTime;
+      target.subtitle = defCourse.subtitle;
+      target.toolBadge = defCourse.toolBadge;
+      target.summary = defCourse.summary;
+      target.deliverable = defCourse.deliverable;
+      target.weeks = JSON.parse(JSON.stringify(defCourse.weeks));
+
+      await window.YebaekAcademyConfig.saveConfig(cfg, typeof fbDb !== 'undefined' ? fbDb : null);
+      renderAcademyCurriculumEditor();
+      alert('🔄 [' + target.title + '] 커리큘럼이 표준 기본값으로 복원되었습니다.');
+    }
+    window.resetSingleCourseCurriculum = resetSingleCourseCurriculum;
 
     // ================= 6. 1:1 방문 맞춤 상담 명단 관리 =================
     const CONSULT_KEY = 'yebaek_consult_requests_v1';
