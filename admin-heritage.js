@@ -178,12 +178,10 @@
           <td style="text-align:center;">${lockBadge}</td>
           <td style="font-size:0.8rem; color:#64748b;">${esc(item.publishedAt || '-')}</td>
           <td style="text-align:center;">
-            <div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">
-              <a href="${openHref}" target="_blank" class="btn-action-sm" style="background:#14281f; color:#f6e7c1; text-decoration:none; font-weight:800;">🏛️ 열기</a>
-              <button type="button" class="btn-action-sm" onclick="copyHeritageExhibitionLink('${esc(item.id)}')" style="background:#fef7e6; color:#8c6610; border:1px solid #e6cf8b; font-weight:800;">🔗 URL</button>
-              <button type="button" class="btn-action-sm" onclick="downloadHeritageQrSvg('${esc(item.id)}', '${esc(item.familyName)}')" style="background:#eef7f1; color:#1e4d35; border:1px solid #b8d8c2; font-weight:800;" title="300 DPI 책 인쇄용 벡터(.svg) QR 다운로드">📷 SVG QR</button>
-              <button type="button" class="btn-action-sm" onclick="openHeritageExhibitionModal('${esc(item.id)}')" style="background:var(--accent-light); color:var(--accent); font-weight:800;">✏️ 편집</button>
-              <button type="button" class="btn-action-sm del" onclick="deleteHeritageExhibition('${esc(item.id)}')">🗑️</button>
+            <div style="display:inline-flex; gap:6px; flex-wrap:nowrap; justify-content:center; align-items:center;">
+              <a href="${openHref}" target="_blank" class="btn-action-sm" style="background:#14281f; color:#f6e7c1; text-decoration:none; font-weight:850; padding:6px 11px; white-space:nowrap;" title="VIP 가문 온라인 전시관 실제 화면 열기">🏛️ 열기</a>
+              <button type="button" class="btn-action-sm" onclick="openHeritageExhibitionModal('${esc(item.id)}')" style="background:#f8fafc; color:#1e293b; border:1.2px solid #cbd5e1; font-weight:850; padding:6px 11px; white-space:nowrap;" title="전시관 편집, 가족 링크 복사, 책 인쇄용 QR 다운로드">⚙️ 편집 · 공유</button>
+              <button type="button" class="btn-action-sm del" onclick="deleteHeritageExhibition('${esc(item.id)}')" title="전시관 삭제" style="padding:5px 7px;">🗑️</button>
             </div>
           </td>
         </tr>
@@ -206,10 +204,9 @@
           <td style="text-align:center;"><span style="background:#fef3c7;color:#92400e;padding:2px 8px;border-radius:999px;font-size:0.72rem;font-weight:800;">✨ 체험 샘플</span></td>
           <td style="font-size:0.8rem; color:#64748b;">기본 탑재</td>
           <td style="text-align:center;">
-            <div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">
-              <a href="heritage.html?demo=1" target="_blank" class="btn-action-sm" style="background:#14281f; color:#f6e7c1; text-decoration:none; font-weight:800;">🏛️ 체험 열기</a>
-              <button type="button" class="btn-action-sm" onclick="copyHeritageExhibitionLink('heritage_demo_haesong')" style="background:#fef7e6; color:#8c6610; border:1px solid #e6cf8b; font-weight:800;">🔗 URL</button>
-              <button type="button" class="btn-action-sm" onclick="downloadHeritageQrSvg('heritage_demo_haesong', '해송가문_샘플')" style="background:#eef7f1; color:#1e4d35; border:1px solid #b8d8c2; font-weight:800;">📷 SVG QR</button>
+            <div style="display:inline-flex; gap:6px; flex-wrap:nowrap; justify-content:center; align-items:center;">
+              <a href="heritage.html?demo=1" target="_blank" class="btn-action-sm" style="background:#14281f; color:#f6e7c1; text-decoration:none; font-weight:850; padding:6px 11px; white-space:nowrap;">🏛️ 체험 열기</a>
+              <button type="button" class="btn-action-sm" onclick="copyHeritageExhibitionLink('heritage_demo_haesong')" style="background:#fef7e6; color:#8c6610; border:1.2px solid #e6cf8b; font-weight:850; padding:6px 11px; white-space:nowrap;">🔗 링크 복사</button>
             </div>
           </td>
         </tr>
@@ -244,11 +241,20 @@
 
     const list = getLocalHeritageList();
     const existing = editId ? list.find(x => x.id === editId) : null;
+    const hmShareBox = document.getElementById('hmShareToolsBox');
+    const hmPrevLink = document.getElementById('hmModalPreviewLink');
+    const hmCopyBtn = document.getElementById('hmModalCopyUrlBtn');
+    const hmQrBtn = document.getElementById('hmModalDownloadQrBtn');
 
     if (existing) {
       currentEditingHeritage = JSON.parse(JSON.stringify(existing));
-      document.getElementById('heritageModalTitle').textContent = `🏛️ [${existing.familyName}] VIP 가문 전시관 편집`;
+      document.getElementById('heritageModalTitle').textContent = `🏛️ [${existing.familyName}] VIP 가문 전시관 편집 · 공유`;
+      if (hmShareBox) hmShareBox.style.display = 'block';
+      if (hmPrevLink) hmPrevLink.href = `heritage.html?id=${encodeURIComponent(existing.id)}`;
+      if (hmCopyBtn) hmCopyBtn.onclick = () => copyHeritageExhibitionLink(existing.id);
+      if (hmQrBtn) hmQrBtn.onclick = () => downloadHeritageQrSvg(existing.id, existing.familyName);
     } else {
+      if (hmShareBox) hmShareBox.style.display = 'none';
       const sample = global.YebaekMedia.SAMPLE_HERITAGE_EXHIBITION;
       currentEditingHeritage = {
         id: 'vip_' + Date.now(),

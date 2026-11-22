@@ -3439,7 +3439,7 @@
                   <th style="width: 110px; text-align: center;">수록 분량</th>
                   <th style="width: 125px; text-align: center;">개인 서재 공개</th>
                   <th style="width: 105px;">배포/수정일</th>
-                  <th style="width: 245px; text-align: center;">개인 웹북 관리 &amp; 링크</th>
+                  <th style="width: 215px; text-align: center;">웹북 보기 · 관리</th>
                 </tr>
               </thead>
               <tbody id="personalWebbooksTableBody">
@@ -3525,7 +3525,7 @@
                   <th>가훈 &amp; 탑재 콘텐츠 현황</th>
                   <th style="width: 120px; text-align: center;">접근 보안</th>
                   <th style="width: 100px;">발행일</th>
-                  <th style="width: 280px; text-align: center;">전시관 관리 · 링크 · 300DPI QR</th>
+                  <th style="width: 225px; text-align: center;">전시관 보기 · 관리</th>
                 </tr>
               </thead>
               <tbody id="heritageExhibitionsTableBody">
@@ -5937,6 +5937,19 @@
         <input type="hidden" id="wbEditDocId">
         <input type="hidden" id="wbEditRecordType" value="personal_webbook">
 
+        <!-- 📤 가족 공유 · 책 인쇄용 QR 도구 (기존 웹북 관리 시 표시) -->
+        <div id="wbShareToolsBox" style="display: none; background: #f8fafc; border: 1.4px solid #cbd5e1; border-radius: 12px; padding: 12px 14px;">
+          <div style="font-size: 0.82rem; font-weight: 850; color: #0f172a; margin-bottom: 8px;">📤 가족 공유 &amp; 양장본 인쇄용 QR 도구</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <a id="wbModalPreviewLink" href="#" target="_blank" style="padding: 6px 12px; border-radius: 8px; background: #1e4d35; color: #f6e7c1; text-decoration: none; font-size: 0.78rem; font-weight: 850;">📱 웹북 미리보기 ↗</a>
+            <button type="button" id="wbModalCopyUrlBtn" style="padding: 6px 12px; border-radius: 8px; background: #fef7e6; color: #8c6610; border: 1.2px solid #e6cf8b; font-size: 0.78rem; font-weight: 850; cursor: pointer;">🔗 가족 공유 링크 복사</button>
+            <button type="button" id="wbModalDownloadQrBtn" style="padding: 6px 12px; border-radius: 8px; background: #eef7f1; color: #1e4d35; border: 1.2px solid #b8d8c2; font-size: 0.78rem; font-weight: 850; cursor: pointer;">📷 책 인쇄용 QR 저장 (.svg)</button>
+          </div>
+          <p style="font-size: 0.74rem; color: #64748b; margin: 7px 0 0; line-height: 1.45;">
+            • <strong>가족 공유 링크</strong>: 카톡으로 가족에게 보낼 전용 열람 주소 &nbsp;|&nbsp; <strong>책 인쇄용 QR</strong>: 양장본 속지·표지에 인쇄하는 고해상도 벡터(.svg) 파일
+          </p>
+        </div>
+
         <!-- 0. 기존 출판 프로젝트 / 서재 고객 원클릭 선택 -->
         <div style="background: rgba(194, 155, 56, 0.08); border: 1.3px solid rgba(194, 155, 56, 0.35); border-radius: 12px; padding: 11px 14px;">
           <label style="font-size: 0.82rem; font-weight: 850; color: #8c6610; display: block; margin-bottom: 6px;">
@@ -6096,6 +6109,19 @@
 
       <form onsubmit="handleHeritageExhibitionSubmit(event)" style="display: flex; flex-direction: column; gap: 16px;">
         <input type="hidden" id="hmId">
+
+        <!-- 📤 VIP 전시관 가족 공유 · 책 인쇄용 QR 도구 (기존 전시관 편집 시 표시) -->
+        <div id="hmShareToolsBox" style="display: none; background: #f8fafc; border: 1.4px solid #cbd5e1; border-radius: 12px; padding: 12px 14px;">
+          <div style="font-size: 0.82rem; font-weight: 850; color: #0f172a; margin-bottom: 8px;">📤 가족 공유 &amp; 가문 평전 인쇄용 QR 도구</div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+            <a id="hmModalPreviewLink" href="#" target="_blank" style="padding: 6px 12px; border-radius: 8px; background: #14281f; color: #f6e7c1; text-decoration: none; font-size: 0.78rem; font-weight: 850;">🏛️ 전시관 열기 ↗</a>
+            <button type="button" id="hmModalCopyUrlBtn" style="padding: 6px 12px; border-radius: 8px; background: #fef7e6; color: #8c6610; border: 1.2px solid #e6cf8b; font-size: 0.78rem; font-weight: 850; cursor: pointer;">🔗 가족 공유 링크 복사</button>
+            <button type="button" id="hmModalDownloadQrBtn" style="padding: 6px 12px; border-radius: 8px; background: #eef7f1; color: #1e4d35; border: 1.2px solid #b8d8c2; font-size: 0.78rem; font-weight: 850; cursor: pointer;">📷 책 인쇄용 QR 저장 (.svg)</button>
+          </div>
+          <p style="font-size: 0.74rem; color: #64748b; margin: 7px 0 0; line-height: 1.45;">
+            • <strong>가족 공유 링크</strong>: 가족·후손에게 전달할 영구 전시관 주소 &nbsp;|&nbsp; <strong>책 인쇄용 QR</strong>: 양장본 평전에 넣는 300DPI 고해상도 QR 파일
+          </p>
+        </div>
 
         <!-- 1. 기본 가문 정보 & 가훈 -->
         <div style="background: rgba(20, 40, 31, 0.04); border: 1.3px solid rgba(20, 40, 31, 0.2); border-radius: 12px; padding: 14px;">
@@ -20251,12 +20277,10 @@ ${coachAppUrl}
           '</td>' +
           '<td style="font-size:0.82rem; color:var(--text-muted);">' + escapeHtml(updatedDate) + '</td>' +
           '<td style="text-align:center;">' +
-            '<div style="display:inline-flex; gap:5px; flex-wrap:wrap; justify-content:center;">' +
-              '<a href="' + viewUrl + '" target="_blank" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; text-decoration:none; font-weight:800;" title="모바일 웹북 실제 화면 열기">📱 보기</a>' +
-              '<button type="button" class="btn-action-sm" onclick="copyPersonalWebbookShareLink(\'' + wb.id + '\')" style="background:#fef7e6; color:#8c6610; border:1px solid #e6cf8b; font-weight:800;" title="가족 공유 전용 URL 복사">🔗 URL</button>' +
-              '<button type="button" class="btn-action-sm" onclick="downloadPersonalWebbookQrSvg(\'' + wb.id + '\', \'' + escapeHtml(ownerClean).replace(/'/g, '') + '\')" style="background:#eef7f1; color:#1e4d35; border:1px solid #b8d8c2; font-weight:800;" title="300 DPI 양장본 인쇄용 순수 벡터(.svg) QR 코드 다운로드">📷 SVG QR</button>' +
-              '<button type="button" class="btn-action-sm" onclick="openPersonalWebbookModal(\'' + wb.id + '\')" style="background:var(--accent-light); color:var(--accent); font-weight:800;">✏️ PDF·오디오</button>' +
-              '<button type="button" class="btn-action-sm del" onclick="removePersonalWebbook(\'' + wb.id + '\')" title="개인 서재 웹북 배포 해제 또는 삭제">🗑️</button>' +
+            '<div style="display:inline-flex; gap:6px; flex-wrap:nowrap; justify-content:center; align-items:center;">' +
+              '<a href="' + viewUrl + '" target="_blank" class="btn-action-sm" style="background:#1e4d35; color:#f6e7c1; text-decoration:none; font-weight:850; padding:6px 11px; white-space:nowrap;" title="완성된 모바일 웹북 실제 화면 열기">📱 미리보기</a>' +
+              '<button type="button" class="btn-action-sm" onclick="openPersonalWebbookModal(\'' + wb.id + '\')" style="background:#f8fafc; color:#1e293b; border:1.2px solid #cbd5e1; font-weight:850; padding:6px 11px; white-space:nowrap;" title="PDF·육성 오디오 수정, 가족 링크 복사, 책 인쇄용 QR 다운로드">⚙️ 관리 · 공유</button>' +
+              '<button type="button" class="btn-action-sm del" onclick="removePersonalWebbook(\'' + wb.id + '\')" title="개인 서재 웹북 배포 해제 또는 삭제" style="padding:5px 7px;">🗑️</button>' +
             '</div>' +
           '</td>' +
         '</tr>'
@@ -20581,10 +20605,18 @@ ${coachAppUrl}
 
     var all = getMemoirProjects();
     var existing = docId ? all.find(function(item) { return item.id === docId; }) : null;
+    var shareBox = document.getElementById('wbShareToolsBox');
+    var prevLink = document.getElementById('wbModalPreviewLink');
+    var copyBtn = document.getElementById('wbModalCopyUrlBtn');
+    var qrBtn = document.getElementById('wbModalDownloadQrBtn');
 
     if (existing) {
       var cleanName = normalizeWebbookOwnerName(existing.ownerName || existing.clientName || '');
-      if (titleEl) titleEl.textContent = '📱 [' + (cleanName || '어르신') + '] 개인 서재 모바일 웹북 PDF · 설정';
+      if (shareBox) shareBox.style.display = 'block';
+      if (prevLink) prevLink.href = 'my-room.html?memoir=' + encodeURIComponent(existing.id);
+      if (copyBtn) copyBtn.onclick = function() { copyPersonalWebbookShareLink(existing.id); };
+      if (qrBtn) qrBtn.onclick = function() { downloadPersonalWebbookQrSvg(existing.id, cleanName || '어르신'); };
+      if (titleEl) titleEl.textContent = '📱 [' + (cleanName || '어르신') + '] 개인 서재 모바일 웹북 관리 · 공유';
       document.getElementById('wbEditDocId').value = existing.id;
       document.getElementById('wbEditRecordType').value = existing.recordType || 'memoir_project';
       document.getElementById('wbOwnerName').value = cleanName;
@@ -20626,6 +20658,7 @@ ${coachAppUrl}
         if (hint) hint.style.display = 'block';
       }
     } else {
+      if (shareBox) shareBox.style.display = 'none';
       var presetClean = normalizeWebbookOwnerName(presetOwnerName || '');
       var presetPhone4 = extractWebbookPhoneLast4(presetPhone || '');
       if (titleEl) titleEl.textContent = presetClean ? ('📱 [' + presetClean + '] 어르신 개인 서재 PDF 웹북 올리기') : '📱 완성 자서전 PDF → 개인 서재 모바일 웹북 올리기';
